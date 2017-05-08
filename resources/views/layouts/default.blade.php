@@ -36,7 +36,7 @@
 
             <!-- Authentication Links -->
             @if (Auth::guest())
-                <div class="col-lg-1 col-lg-offset-8 text-center">
+                <div class="col-lg-1 col-lg-offset-8 text-center ">
                     <a class="navbar-title-link" href="{{ route('login') }}">Login</a>
                 </div>
                 <div class="col-lg-1 text-center">
