@@ -18,6 +18,6 @@ Route::get('/','ListPalletController@show')->name('showPallet');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/login', 'Auth\LoginController');
 
-Route::get('/profile', 'ProfileController@show')->name('showProfile');
+Route::get('/home', 'HomeController@index')->name('home');
