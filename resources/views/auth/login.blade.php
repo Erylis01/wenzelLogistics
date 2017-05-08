@@ -32,9 +32,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+                            <label for="password" class="col-lg-4 control-label">Password</label>
 
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
 
                                 @if ($errors->has('password'))
@@ -68,7 +68,7 @@
 
                         <div class="form-group legend-auth" >
                             <div class="col-md-8 col-md-offset-4">
-                            No account ? Create one <a href="creation_user.php" class="link">here</a>.
+                            No account ? Create one <a href="{{ route('register') }}" class="link">here</a>.
                             </div>
                         </div>
                     </form>

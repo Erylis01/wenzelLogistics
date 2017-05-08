@@ -97,7 +97,6 @@
 
                             <div class="col-lg-6">
                                 <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
-
                                 @if ($errors->has('password'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -107,10 +106,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password-confirm" class="col-lg-4 control-label">Confirm Password</label>
-
+                            <label for="password_confirm" class="col-lg-4 control-label">Confirm Password</label>
                             <div class="col-lg-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirm" placeholder="Password" required>
+                                <input id="password_confirm" type="password" class="form-control" name="password_confirm" placeholder="Password" required>
                             </div>
                         </div>
 
