@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/','ListPalletController@show');
+Route::get('/','ListPalletController@show')->name('showPallet');
 
 //function () {
 //    return view('welcome');

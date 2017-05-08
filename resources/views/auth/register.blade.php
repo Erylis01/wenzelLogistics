@@ -106,9 +106,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password_confirm" class="col-lg-4 control-label">Confirm Password</label>
+                            <label for="password_confirmation" class="col-lg-4 control-label">Confirm Password</label>
                             <div class="col-lg-6">
-                                <input id="password_confirm" type="password" class="form-control" name="password_confirm" placeholder="Password" required>
+                                <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="Password" required>
                             </div>
                         </div>
 
