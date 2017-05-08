@@ -43,3 +43,9 @@
 .link:hover{
     color: black;
 }
+
+/*PROFILE*/
+
+.profile-legend{
+    margin-bottom: 10px;
+}

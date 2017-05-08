@@ -5,14 +5,16 @@
     height: 50px;
 }
 
-.navbar-title{
-    background-color: rgba(0,160,0,0.8);
+.navbar-title {
+    background-color: rgba(0, 160, 0, 0.8);
 }
 
-.navbar-title-link{
+.navbar-title-link {
     font-size: 23px;
     color: white;
 }
-.navbar-title-link:hover{
-    color : black;
-    font-weight:bold;}
+
+.navbar-title-link:hover {
+    color: black;
+    font-weight: bold;
+}

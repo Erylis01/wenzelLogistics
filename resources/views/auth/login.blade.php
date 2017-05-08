@@ -21,7 +21,7 @@
                             <label for="username" class="col-lg-4 control-label">Username</label>
 
                             <div class="col-lg-6">
-                                <input id="username" type="username" class="form-control" name="username" value="{{ old('username') }}" placeholder="Username" required autofocus>
+                                <input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" placeholder="Username" required autofocus>
 
                                 @if ($errors->has('username'))
                                     <span class="help-block">
@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="form-group legend-auth" >
-                            <div class="col-md-8 col-md-offset-4">
+                            <div class="col-lg-8 col-lg-offset-4">
                             No account ? Create one <a href="{{ route('register') }}" class="link">here</a>.
                             </div>
                         </div>

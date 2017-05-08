@@ -14,10 +14,10 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4//css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-@yield('stylesheet')
+    @yield('stylesheet')
     <link href="{{asset('css/general.css')}}" rel="stylesheet" type="text/css">
 
-<!-- Scripts -->
+    <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
@@ -30,7 +30,7 @@
 
         <div class="container-fluid">
             <div class="col-lg-2">
-                <img class="img-responsive img-logo" src="{{URL::asset('../../wenzel_logistics.png')}}"
+                <img class="img-responsive img-logo" src="{{URL::asset('../resources/wenzel_logistics.png')}}"
                      alt="Wenzel Logistics logo">
             </div>
 
@@ -43,12 +43,16 @@
                     <a class="navbar-title-link" href="{{ route('register') }}">Register</a>
                 </div>
             @else
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <div class="col-lg-1 col-lg-offset-9 text-center dropdown">
+                    <a href="#" class="dropdown-toggle navbar-title-link " data-toggle="dropdown" role="button"
+                       aria-expanded="false">
                         {{ Auth::user()->lastname }}{{ Auth::user()->firstname }} <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ route('showProfile') }}">Profile</a>
+                        </li>
                         <li>
                             <a href="{{ route('logout') }}"
                                onclick="event.preventDefault();
@@ -62,7 +66,7 @@
                             </form>
                         </li>
                     </ul>
-                </li>
+                </div>
             @endif
 
         </div>
