@@ -11,13 +11,11 @@
 |
 */
 
-Route::get('/','ListPalletController@show')->name('showPallet');
+Route::get('/showPallet','ListPalletController@show')->name('showPallet');
 
 //function () {
 //    return view('welcome');
 
 Auth::routes();
 
-Route::post('/login', 'Auth\LoginController');
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
