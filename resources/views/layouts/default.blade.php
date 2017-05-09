@@ -45,7 +45,7 @@
                     <a class="navbar-title-link" href="{{ route('register') }}">Register</a>
                 </div>
             @else
-                <div class="col-lg-1 col-lg-offset-9 text-center dropdown">
+                <div class="col-lg-2 col-lg-offset-8 text-center dropdown">
                     <a href="#" class="dropdown-toggle navbar-title-link " data-toggle="dropdown" role="button"
                        aria-expanded="false">
                         {{ Auth::user()->lastname }}{{ Auth::user()->firstname }} <span class="caret"></span>
