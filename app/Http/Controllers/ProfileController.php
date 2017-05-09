@@ -86,16 +86,22 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $id=Auth::user()->id;
+//        $actualUser=Auth::user();
+//$infoActualUser=[$actualUser->lastname, $actualUser->firstname, $actualUser->username, $actualUser->email];
+//$infoNewUser=[Input::get('lastname'), Input::get('firstname'), Input::get('username'), Input::get('email')];
+
+//        $allUsers=DB::table('users')->where('id', '<>', $id)->get();
+
         // validate
         // read more on validation at http://laravel.com/docs/validation
         $rules = array(
             'lastname' => 'required|string|max:255',
             'firstname' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:255|unique:users,username,'.$id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$id,
         );
         $validator = Validator::make(Input::all(), $rules);
-dd(Input::get('lastname'));
+
         // process the login
         if ($validator->fails()) {
             return redirect('/profile')
