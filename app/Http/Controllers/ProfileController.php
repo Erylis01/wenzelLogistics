@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
 
 class ProfileController extends Controller
 {
@@ -79,7 +81,7 @@ class ProfileController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(Request $request)
     {
@@ -93,10 +95,10 @@ class ProfileController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
         );
         $validator = Validator::make(Input::all(), $rules);
-
+dd(Input::get('lastname'));
         // process the login
         if ($validator->fails()) {
-            return Redirect::to('/profile')
+            return redirect('/profile')
                 ->withErrors($validator)
                 ->withInput(Input::except('password'));
         } else {
@@ -109,8 +111,8 @@ class ProfileController extends Controller
             $user->save();
 
             // redirect
-            Session::flash('message', 'Successfully updated profile!');
-            return Redirect::to('/profile');
+            session()->flash('messageUpdate', 'Successfully updated profile!');
+            return redirect('/profile');
 
     }}
 
@@ -118,7 +120,7 @@ class ProfileController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy()
     {
@@ -130,7 +132,7 @@ class ProfileController extends Controller
         $user->delete();
 
         // redirect
-        Session::flash('message', 'Successfully deleted the user!');
-        return Redirect::to('/login');
+        session()->flash('messageDelete', 'Successfully deleted the user!');
+        return redirect('/login');
     }
 }

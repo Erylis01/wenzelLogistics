@@ -189,6 +189,9 @@
                     </form>
                 </div>
             </div>
+            @if (Session::has('messageUpdate'))
+                <div class="alert alert-info text-center">{{ Session::get('messageUpdate') }}</div>
+            @endif
         </div>
     </div>
 @endsection

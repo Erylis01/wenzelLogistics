@@ -39,7 +39,6 @@
 .link{
     color: rgb(0,160,0);
     font-weight:bold;
-    vertical-align: middle;
 }
 .link:hover{
     color: black;
@@ -52,6 +51,7 @@
 }
 .profile-link{
     color: rgb(0,160,0);
+    vertical-align: middle;
 }
 
 .profile-link:hover{
