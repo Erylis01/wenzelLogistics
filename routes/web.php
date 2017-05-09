@@ -19,7 +19,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //PROFILE
 Route::get('/profile', 'ProfileController@show')->name('showProfile');
-Route::post('/profile', 'ProfileController@update')->name('updateProfile');
+//Route::post('/profile', 'ProfileController@update')->name('updateProfile');
 //Route::get('/profile', 'ProfileController@delete')->name('deleteProfile');
 
 //PALLETS

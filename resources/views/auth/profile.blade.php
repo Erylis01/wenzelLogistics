@@ -133,6 +133,7 @@
                                     </div>
                                     <div class="modal-body center">
                                         <form method="post" action="">
+                                            {{ csrf_field() }}
                                             {{--{{ route('update') }}--}}
                                             <div class="col-lg-offset-3">
                                                 <button type="submit" class="btn btn-danger btn-modal" value="yes"
@@ -164,6 +165,7 @@
                                     </div>
                                     <div class="modal-body center">
                                         <form method="post" action="">
+                                            {{ csrf_field() }}
                                             {{--{{route('deletePassword')}}--}}
 
                                             <div class="col-lg-offset-3">
