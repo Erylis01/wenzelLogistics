@@ -30,8 +30,10 @@
 
         <div class="container-fluid">
             <div class="col-lg-2">
-                <img class="img-responsive img-logo" src="{{URL::asset('../resources/wenzel_logistics.png')}}"
-                     alt="Wenzel Logistics logo">
+                <a href="{{route('home')}}"> <img class="img-responsive img-logo"
+                                                  src="{{URL::asset('../resources/wenzel_logistics.png')}}"
+                                                  alt="Wenzel Logistics logo"></a>
+
             </div>
 
             <!-- Authentication Links -->
@@ -51,7 +53,7 @@
 
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="{{ route('showProfile') }}">Profile</a>
+                            <a href="{{ route('showProfile') }}">Profile <span class="glyphicon glyphicon-user "></span></a>
                         </li>
                         <li>
                             <a href="{{ route('logout') }}"

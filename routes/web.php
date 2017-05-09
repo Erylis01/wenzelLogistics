@@ -11,13 +11,16 @@
 |
 */
 
-Route::get('/','ListPalletController@show')->name('showPallet');
-
-//function () {
-//    return view('welcome');
-
+//AUTH
 Auth::routes();
-
-Route::post('/login', 'Auth\LoginController');
+Route::get('/', 'LogoutController@showLogout')->name('homeLogout');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//PROFILE
+Route::get('/profile', 'ProfileController@show')->name('showProfile');
+Route::post('/profile', 'ProfileController@update')->name('updateProfile');
+//Route::get('/profile', 'ProfileController@delete')->name('deleteProfile');
+
+//PALLETS
+Route::get('/pallets','ListPalletController@show')->name('showPallet');

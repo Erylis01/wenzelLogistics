@@ -22,7 +22,7 @@
 
 /*BUTTON*/
 
-.btn-form{
+.btn-form, .btn-form:focus{
     background-color: rgba(0,160,0,0.8);
     border-color: rgb(0,160,0) ;
     font-size:18px;
@@ -39,6 +39,7 @@
 .link{
     color: rgb(0,160,0);
     font-weight:bold;
+    vertical-align: middle;
 }
 .link:hover{
     color: black;
@@ -46,6 +47,13 @@
 
 /*PROFILE*/
 
-.profile-legend{
-    margin-bottom: 10px;
+.btn-modal{
+    font-size:18px;
+}
+.profile-link{
+    color: rgb(0,160,0);
+}
+
+.profile-link:hover{
+    color: black;
 }
