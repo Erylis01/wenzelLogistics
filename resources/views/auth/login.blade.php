@@ -76,8 +76,6 @@
             </div>
             @if (Session::has('messageDelete'))
                 <div class="alert alert-info text-center">{{ Session::get('messageDelete') }}</div>
-            @elseif (Session::has('messageLogout'))
-                <div class="alert alert-info text-center">{{ Session::get('messageLogout') }}</div>
             @endif
         </div>
     </div>

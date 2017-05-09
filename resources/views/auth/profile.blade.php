@@ -103,7 +103,7 @@
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-lg-4 control-label">Password :</label>
                             <div class="col-lg-6">
-                                <a class="profile-link" href="{{ route('password.email') }}">Reset here</a>
+                                <a class="profile-link" href="{{ route('password.request') }}">Reset here</a>
                             </div>
                         </div>
 

@@ -15,13 +15,13 @@
 Auth::routes();
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
 //PROFILE
-//Route::resource('/profile', 'ProfileController');
 Route::get('/profile', 'ProfileController@show')->name('showProfile');
 Route::post('/profile', 'ProfileController@update')->name('updateProfile');
 Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
+//Route::get('/password/email','ForgotPasswordController@sendResetLinkEmail')->name('resetPasswordProfile');
 
 //PALLETS
 Route::get('/pallets','ListPalletController@show')->name('showPallet');
