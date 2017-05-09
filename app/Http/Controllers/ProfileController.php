@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
 {
@@ -46,12 +49,15 @@ class ProfileController extends Controller
     public function show()
     {
         if (Auth::check()){
-            $lastname = Auth::user()->lastname;
-            $firstname = Auth::user()->firstname;
-            $username=Auth::user()->username;
-            $email=Auth::user()->email;
+            $user=Auth::user();
+            $id= $user->id;
+            $lastname = $user->lastname;
+            $firstname = $user->firstname;
+            $username=$user->username;
+            $email=$user->email;
             return view('auth.profile', compact('lastname', 'firstname', 'username', 'email'));
         }
+
         else{
             return view('/');
         }
@@ -75,10 +81,38 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
-    }
+        $id=Auth::user()->id;
+        // validate
+        // read more on validation at http://laravel.com/docs/validation
+        $rules = array(
+            'lastname' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        // process the login
+        if ($validator->fails()) {
+            return Redirect::to('/profile')
+                ->withErrors($validator)
+                ->withInput(Input::except('password'));
+        } else {
+            // store
+            $user = User::find($id);
+            $user->lastname       = Input::get('lastname');
+            $user->firstname       = Input::get('firstname');
+            $user->username       = Input::get('username');
+            $user->email      = Input::get('email');
+            $user->save();
+
+            // redirect
+            Session::flash('message', 'Successfully updated profile!');
+            return Redirect::to('/profile');
+
+    }}
 
     /**
      * Remove the specified resource from storage.
@@ -86,8 +120,17 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($username)
+    public function destroy()
     {
-        //
+
+        $id=Auth::user()->id;
+
+        // delete
+        $user = User::find($id);
+        $user->delete();
+
+        // redirect
+        Session::flash('message', 'Successfully deleted the user!');
+        return Redirect::to('/login');
     }
 }

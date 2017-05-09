@@ -53,7 +53,7 @@
 
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="{{ route('showProfile') }}">Profile <span class="glyphicon glyphicon-user "></span></a>
+                            <a href="{{ route('showProfile') }}">Profile <span class="glyphicon glyphicon-user "></span> </a>
                         </li>
                         <li>
                             <a href="{{ route('logout') }}"

@@ -132,9 +132,9 @@
                                         <h4 class="modal-title">Are you sure to update your profile ?</h4>
                                     </div>
                                     <div class="modal-body center">
-                                        <form method="post" action="">
+                                        <form method="post" action="{{ route('updateProfile') }}">
                                             {{ csrf_field() }}
-                                            {{--{{ route('update') }}--}}
+
                                             <div class="col-lg-offset-3">
                                                 <button type="submit" class="btn btn-danger btn-modal" value="yes"
                                                         name="update">
@@ -164,10 +164,9 @@
                                         <h4 class="modal-title">Are you sure to delete your profile ?</h4>
                                     </div>
                                     <div class="modal-body center">
-                                        <form method="post" action="">
+                                        <form method="post" action="{{route('destroyProfile')}}">
+                                            <input type="hidden" name="_method" value="delete">
                                             {{ csrf_field() }}
-                                            {{--{{route('deletePassword')}}--}}
-
                                             <div class="col-lg-offset-3">
                                                 <button type="submit" class="btn btn-danger btn-modal" value="yes"
                                                         name="delete">

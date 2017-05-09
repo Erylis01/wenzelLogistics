@@ -13,14 +13,15 @@
 
 //AUTH
 Auth::routes();
-Route::get('/', 'LogoutController@showLogout')->name('homeLogout');
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 //PROFILE
+//Route::resource('/profile', 'ProfileController');
 Route::get('/profile', 'ProfileController@show')->name('showProfile');
-//Route::post('/profile', 'ProfileController@update')->name('updateProfile');
-//Route::get('/profile', 'ProfileController@delete')->name('deleteProfile');
+Route::post('/profile', 'ProfileController@update')->name('updateProfile');
+Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 
 //PALLETS
 Route::get('/pallets','ListPalletController@show')->name('showPallet');
