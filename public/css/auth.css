@@ -36,7 +36,7 @@
 
 /*LINK*/
 
-.link{
+.link, .link:focus, .link:active{
     color: rgb(0,160,0);
     font-weight:bold;
 }

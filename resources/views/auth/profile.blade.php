@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('title')
-    Login
+    Profile
 @endsection
 
 @section('stylesheet')
@@ -16,10 +16,11 @@
                 <div class="panel-body panel-body-auth">
                     <form class="form-horizontal" role="form" method="POST" action="">
                     {{ csrf_field() }}
+                            <p class="text-center legend-auth">* required field</p>
 
                     <!--lastname-->
                         <div class="form-group {{ $errors->has('lastname') ? ' has-error' : '' }}">
-                            <label for="lastname" class="col-lg-4 control-label">Lastname :</label>
+                            <label for="lastname" class="col-lg-4 control-label"><span>*</span> Lastname :</label>
                             <div class="col-lg-6">
                                 <input id="lastname" type="text" class="form-control" name="lastname"
                                        value="{{ $lastname }}" placeholder="Lastname" required autofocus>
@@ -35,7 +36,7 @@
 
                         <!--firstname-->
                         <div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
-                            <label for="firstname" class="col-lg-4 control-label">Firstname :</label>
+                            <label for="firstname" class="col-lg-4 control-label"><span>*</span> Firstname :</label>
 
                             <div class="col-lg-6">
                                 <input id="firstname" type="text" class="form-control" name="firstname"
@@ -53,7 +54,7 @@
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-lg-4 control-label">
                                 <div type="button" data-toggle="modal" data-target="#username_modal"
-                                     class="glyphicon glyphicon-info-sign link"></div>
+                                     class="glyphicon glyphicon-info-sign link"></div> <span>*</span>
                                 Username :</label>
 
                             <div class="col-lg-6">
@@ -85,7 +86,7 @@
 
                         <!--email-->
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-lg-4 control-label">E-Mail Address :</label>
+                            <label for="email" class="col-lg-4 control-label"><span>*</span> E-Mail Address :</label>
 
                             <div class="col-lg-6">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ $email }}"
@@ -99,11 +100,46 @@
                             </div>
                         </div>
 
+                        <!-------------------------------------------------------------------------------->
+
                         <!--password-->
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-lg-4 control-label">Password :</label>
+                            <label for="password" class="col-lg-4 control-label">Actual
+                                password</label>
+
                             <div class="col-lg-6">
-                                <a class="profile-link" href="{{ route('password.request') }}">Reset here</a>
+                                <input id="password" type="password" class="form-control"
+                                       name="password" placeholder="Actual password">
+                                @if ($errors->has('password'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
+                            <label for="new_password" class="col-lg-4 control-label">New
+                                password</label>
+
+                            <div class="col-lg-6">
+                                <input id="new_password" type="password" class="form-control"
+                                       name="new_password" placeholder="New password">
+                                @if ($errors->has('new_password'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('new_password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new_password_confirmation" class="col-lg-4 control-label">Confirm
+                                password</label>
+                            <div class="col-lg-6">
+                                <input id="new_password_confirmation" type="password"
+                                       class="form-control" name="new_password_confirmation"
+                                       placeholder="Password confirmation">
                             </div>
                         </div>
 
@@ -133,16 +169,16 @@
                                     </div>
                                     <div class="modal-body center">
                                         <form method="post" action="{{ route('updateProfile') }}">
-                                            {{ csrf_field() }}
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
 
                                             <div class="col-lg-offset-3">
-                                                <button type="submit" class="btn btn-danger btn-modal" value="yes"
+                                                <input type="submit" class="btn btn-danger btn-modal" value="Yes"
                                                         name="update">
-                                                    Yes
-                                                </button>
+                                                </input>
                                                 <button type="button" class="btn btn-success btn-modal"
                                                         data-dismiss="modal">No
-                                                </button>
+               .                                 </button>
                                             </div>
                                         </form>
                                     </div>
@@ -191,6 +227,8 @@
             </div>
             @if (Session::has('messageUpdate'))
                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdate') }}</div>
+            @elseif(Session::has('messageUpdatePassword'))
+                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePassword') }}</div>
             @endif
         </div>
     </div>
