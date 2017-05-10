@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserTableSeeder extends Seeder
 {
@@ -15,9 +17,16 @@ class UserTableSeeder extends Seeder
         DB::table('users')->delete();
         User::create(array(
             'lastname'     => 'test',
-            'firstname'=>'test',
+            'firstname'=>'Pierre',
             'username' => 'test',
-            'email'    => 'test@test.com',
+            'email'    => 'coquerelpierre@gmail.com',
+            'password' => Hash::make('test'),
+        ));
+        User::create(array(
+            'lastname'     => 'test',
+            'firstname'=>'Camille',
+            'username' => 'test',
+            'email'    => 'camillesamain.56@gmail.com',
             'password' => Hash::make('test'),
         ));
     }
