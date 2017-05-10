@@ -21,8 +21,11 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/profile', 'ProfileController@show')->name('showProfile');
 Route::post('/profile', 'ProfileController@update')->name('updateProfile');
 Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
-//Route::post('/profile', 'ProfileController@updatePassword')->name('updatePasswordProfile');
+
 //Route::get('/password/email','ForgotPasswordController@sendResetLinkEmail')->name('resetPasswordProfile');
 
 //PALLETS
 Route::get('/pallets','ListPalletController@show')->name('showPallet');
+
+//MAILS
+Route::get('/registerMail', 'MailController@register')->name('mailRegister');

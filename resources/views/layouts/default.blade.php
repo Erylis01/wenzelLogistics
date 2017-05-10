@@ -31,7 +31,7 @@
         <div class="container-fluid">
             <div class="col-lg-2">
                 <a href="{{route('home')}}"> <img class="img-responsive img-logo"
-                                                  src="{{URL::asset('../resources/wenzel_logistics.png')}}"
+                                                  src="{{URL::asset('/image/wenzel_logistics.png')}}"
                                                   alt="Wenzel Logistics logo"></a>
 
             </div>
