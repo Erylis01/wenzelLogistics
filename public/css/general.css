@@ -124,17 +124,23 @@
     margin-right:-90px;
 }
 .table-pallets > thead {
-    background-color: white;
     color: rgb(0, 160, 0);
     font-size:medium;
     border-color:rgb(0, 160, 0) ;
     border-style: solid;
 }
 
-.table-pallets > thead > tr > th, .table-pallets > thead > tr > td {
+.table-pallets > tbody {
+    font-size:small;
+    border-color:rgb(0, 160, 0) ;
+    border-style: solid;
+}
+
+.table-pallets > thead > tr > th, .table-pallets > thead > tr > td, .table>tbody>tr>td, .table>tbody>tr>th {
     vertical-align: middle;
     border-color:rgb(0, 160, 0) ;
     border-style: ridge;
+    height: 25px;
 }
 
 .table-pallets td >a {

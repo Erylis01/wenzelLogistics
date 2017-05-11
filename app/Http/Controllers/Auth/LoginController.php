@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -46,4 +47,13 @@ class LoginController extends Controller
     {
         return 'username';
     }
+
+//    protected function credentials(Request $request)
+//    {
+//        return [
+//            'email' => $request->email,
+//            'password' => $request->password,
+//            'verified' => 1,
+//        ];
+//    }
 }

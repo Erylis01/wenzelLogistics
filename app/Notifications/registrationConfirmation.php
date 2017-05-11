@@ -53,7 +53,8 @@ class registrationConfirmation extends Notification
             ->subject('Registration')
             ->line('Dear'.$this->user->name.',')
             ->line('You have created an account on our website: we are happy to see you here.')
-//            ->line('To validate your registration, please click on the button below :')
-            ->action('Go to site', url('/'));
+            ->line('To validate your registration, please click on the button below :');
+//            ->action('Go to site', url('/'));
+//        ->action('Validate registration', url('/register',$this->token));
     }
 }

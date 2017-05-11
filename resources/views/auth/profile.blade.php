@@ -18,6 +18,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
+            @if (Session::has('messageRegistration'))
+                <div class="alert alert-info">{{ Session::get('messageRegistration') }}</div>
+            @endif
             <div class="panel panel-default panel-auth">
                 <div class="panel-heading">Profile</div>
                 <div class="panel-body panel-body-auth">

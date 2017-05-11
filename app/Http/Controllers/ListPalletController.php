@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 
 
+use App\Pallet;
+use Illuminate\Support\Facades\DB;
+
 class ListPalletController extends Controller
 {
     /**
@@ -13,20 +16,9 @@ class ListPalletController extends Controller
      */
     public function show()
     {
-        $characters = [
-            'Daenerys Targaryen' => 'Emilia Clarke',
-            'Jon Snow'           => 'Kit Harington',
-            'Arya Stark'         => 'Maisie Williams',
-            'Melisandre'         => 'Carice van Houten',
-            'Khal Drogo'         => 'Jason Momoa',
-            'Tyrion Lannister'   => 'Peter Dinklage',
-            'Ramsay Bolton'      => 'Iwan Rheon',
-            'Petyr Baelish'      => 'Aidan Gillen',
-            'Brienne of Tarth'   => 'Gwendoline Christie',
-            'Lord Varys'         => 'Conleth Hill'
-        ];
-
-        return view('pallets', compact('characters'));
+        $listPallets = DB::table('pallets')->where('pt','=','ja')->get();
+        
+        return view('pallets', compact('listPallets'));
     }
 
     /**

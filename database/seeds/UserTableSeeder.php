@@ -16,6 +16,7 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->delete();
         User::create(array(
+            'id'=>1,
             'lastname'     => 'test',
             'firstname'=>'Pierre',
             'username' => 'Erylis01',
@@ -23,8 +24,11 @@ class UserTableSeeder extends Seeder
             'email'    => 'coquerelpierre@gmail.com',
             'password' => Hash::make('test'),
             'activated'=> true,
+            'email_token'=>'1234567890'
+
         ));
         User::create(array(
+            'id'=>2,
             'lastname'     => 'test',
             'firstname'=>'Camille',
             'username' => 'Camille',
@@ -32,8 +36,11 @@ class UserTableSeeder extends Seeder
             'email'    => 'camillesamain.56@gmail.com',
             'password' => Hash::make('test'),
             'activated'=> true,
+            'email_token'=>'1234657089'
+
         ));
         User::create(array(
+            'id'=>3,
             'lastname'     => 'Alala',
             'firstname'=>'A',
             'username' => 'A',
@@ -41,6 +48,7 @@ class UserTableSeeder extends Seeder
             'email'    => 'A@gmail.com',
             'password' => Hash::make('AAAAAA'),
             'activated'=> true,
+            'email_token'=>'0258369147'
         ));
     }
 }

@@ -30,3 +30,4 @@ Route::get('/pallets','ListPalletController@show')->name('showAllPallets');
 //MAILS
     //validate registration
 //Route::get('/login', 'MailController@validateRegistration')->name('validateRegistration');
+//Route::get(‘register/verify/{token}’, ‘RegisterController@verify’)->name('validateRegistration');
