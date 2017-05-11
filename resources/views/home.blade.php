@@ -1,18 +1,26 @@
 @extends('layouts.default')
 
 @section('title')
-    Login
+    Home
 @endsection
 
 @section('stylesheet')
     <link href="{{asset('css/auth.css')}}" rel="stylesheet" type="text/css">
 @endsection
+
+@section('classPallets')
+    class="nonActive"
+@endsection
+@section('classProfile')
+    nonActive
+@endsection
+
 @section('content')
 
     <div class="row">
         <div class="col-lg-14">
             <div class="panel panel-default panel-auth">
-                <div class="panel-heading">Welcome</div>
+                <div class="panel-heading">Welcome {{Auth::user()->username}}</div>
 
                 <div class="panel-body panel-body-auth">
                     <p class="text-center">What do you want to do ?</p>

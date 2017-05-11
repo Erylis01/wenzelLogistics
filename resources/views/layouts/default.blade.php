@@ -45,10 +45,14 @@
                     <a class="navbar-title-link" href="{{ route('register') }}">Register</a>
                 </div>
             @else
-                <div class="col-lg-2 col-lg-offset-8 text-center dropdown">
-                    <a href="#" class="dropdown-toggle navbar-title-link " data-toggle="dropdown" role="button"
+                <div class="col-lg-2 text-center navbar-title-link">
+                    <a @yield('classPallets') href="{{ route('showAllPallets') }}">All pallets</a>
+                </div>
+
+                <div class="col-lg-2 col-lg-offset-6 text-center dropdown">
+                    <a href="#" class="dropdown-toggle navbar-title-link @yield('classProfile') "  data-toggle="dropdown" role="button"
                        aria-expanded="false">
-                        {{ Auth::user()->lastname }}{{ Auth::user()->firstname }} <span class="caret"></span>
+                        {{ Auth::user()->username }} <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu" role="menu">

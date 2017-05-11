@@ -82,7 +82,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-$id=$user->id;
+        $id = $user->id;
         $lastname = Input::get('lastname');
         $firstname = Input::get('firstname');
         $username = Input::get('username');
@@ -90,6 +90,7 @@ $id=$user->id;
         $password = Input::get('password');
         $new_password = Input::get('new_password');
 
+////////PASSWORD//////
         if (isset($password)) {
             // validate
             // read more on validation at http://laravel.com/docs/validation
@@ -112,12 +113,21 @@ $id=$user->id;
             } else {
                 // store
                 $user = User::find($id);
+                $user->lastname = $lastname;
+                $user->firstname = $firstname;
+                $user->username = $username;
+                $initialsLastname = substr($lastname, 0,2);
+                $initialsFirstname = substr($firstname, 0,2);
+                $user->initials = $initialsLastname.$initialsFirstname;
+                $user->email = $email;
                 $user->password = bcrypt($new_password);
                 $user->save();
                 // redirect
-                session()->flash('messageUpdatePassword', 'Successfully updated password profile!');
+                session()->flash('messageUpdatePassword', 'Successfully updated profile with new password!');
                 return redirect('/profile');
             }
+
+////////TOTAL///////
         } else {
             // validate
             // read more on validation at http://laravel.com/docs/validation
@@ -139,11 +149,14 @@ $id=$user->id;
                 $user->lastname = $lastname;
                 $user->firstname = $firstname;
                 $user->username = $username;
+                $initialsLastname = substr($lastname, 0,2);
+                $initialsFirstname = substr($firstname, 0,2);
+                $user->initials = $initialsLastname.$initialsFirstname;
                 $user->email = $email;
                 $user->save();
                 // redirect
                 session()->flash('messageUpdate', 'Successfully updated profile!');
-                return redirect()->back()->with('successMessage', 'lalaa');
+                return redirect()->back();
             }
         }
     }

@@ -64,10 +64,14 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $initialsLastname = substr($data['lastname'], 0,2);
+        $initialsFirstname = substr($data['firstname'], 0,2);
+
         return User::create([
             'lastname' => $data['lastname'],
             'firstname' => $data['firstname'],
             'username' => $data['username'],
+            'initials' => $initialsLastname.$initialsFirstname,
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);

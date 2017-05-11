@@ -19,15 +19,25 @@ class UserTableSeeder extends Seeder
             'lastname'     => 'test',
             'firstname'=>'Pierre',
             'username' => 'Erylis01',
+            'initials'=>'tePi',
             'email'    => 'coquerelpierre@gmail.com',
             'password' => Hash::make('test'),
         ));
         User::create(array(
             'lastname'     => 'test',
             'firstname'=>'Camille',
-            'username' => 'test',
+            'username' => 'Camille',
+            'initials'=>'teCa',
             'email'    => 'camillesamain.56@gmail.com',
             'password' => Hash::make('test'),
+        ));
+        User::create(array(
+            'lastname'     => 'Alala',
+            'firstname'=>'A',
+            'username' => 'A',
+            'initials'=>'AAl',
+            'email'    => 'A@gmail.com',
+            'password' => Hash::make('AAAAAA'),
         ));
     }
 }

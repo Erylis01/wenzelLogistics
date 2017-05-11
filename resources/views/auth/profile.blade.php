@@ -8,6 +8,13 @@
     <link href="{{asset('css/auth.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
+@section('classPallets')
+    class="nonActive"
+    @endsection
+@section('classProfile')
+    active
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">

@@ -8,10 +8,9 @@
 .navbar-title {
     background-color: rgba(0, 160, 0, 0.8);
     vertical-align: middle;
-    width:auto;
 }
 
-.navbar-title-link {
+.navbar-title-link, .navbar-title-link:focus {
     font-size: 22px;
     color: white;
 }
@@ -21,27 +20,18 @@
     font-weight: bold;
 }
 
-
-/*PANEL*/
-
-.panel-auth {
-    border-color: rgb(0, 160, 0);
+.active, .active:focus {
+    color:black ;
+}
+.active:hover{
+    color:black;
 }
 
-.panel-body-auth {
-    font-size: 18px;
+.nonActive, nonActive:focus{
+    color:white;
 }
-
-.legend-auth {
-    font-size: 15px;
-}
-
-/*overwritting*/
-.panel-default > .panel-heading {
-    font-size: 25px;
-    background-color: rgba(0, 210, 0, 0.1);
-    border-color: rgb(0, 160, 0);
-    color: rgb(0, 160, 0);
+.nonActive:hover{
+    color:white;
 }
 
 /*BUTTON*/
@@ -68,6 +58,28 @@
 
 .link:hover {
     color: black;
+}
+
+/*PANEL AUTH*/
+
+.panel-auth {
+    border-color: rgb(0, 160, 0);
+}
+
+.panel-body-auth {
+    font-size: 18px;
+}
+
+.legend-auth {
+    font-size: 15px;
+}
+
+/*overwritting*/
+.panel-default > .panel-heading {
+    font-size: 25px;
+    background-color: rgba(0, 210, 0, 0.1);
+    border-color: rgb(0, 160, 0);
+    color: rgb(0, 160, 0);
 }
 
 /*PROFILE*/
@@ -107,17 +119,22 @@
 
 /*PALLETS*/
 
-.table-pallets{
-    margin-left:-65px;
+.table-pallets-container{
+    margin-left:-90px;
+    margin-right:-90px;
 }
 .table-pallets > thead {
-    background-color: rgba(0, 160, 0, 0.8);
-    color: white;
+    background-color: white;
+    color: rgb(0, 160, 0);
     font-size:medium;
+    border-color:rgb(0, 160, 0) ;
+    border-style: solid;
 }
 
 .table-pallets > thead > tr > th, .table-pallets > thead > tr > td {
     vertical-align: middle;
+    border-color:rgb(0, 160, 0) ;
+    border-style: ridge;
 }
 
 .table-pallets td >a {
