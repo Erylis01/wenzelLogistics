@@ -28,4 +28,5 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 Route::get('/pallets','ListPalletController@show')->name('showAllPallets');
 
 //MAILS
-//Route::get('/registerMail', 'MailController@register')->name('mailRegister');
+    //validate registration
+//Route::get('/login', 'MailController@validateRegistration')->name('validateRegistration');

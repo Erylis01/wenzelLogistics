@@ -22,6 +22,7 @@ class UserTableSeeder extends Seeder
             'initials'=>'tePi',
             'email'    => 'coquerelpierre@gmail.com',
             'password' => Hash::make('test'),
+            'activated'=> true,
         ));
         User::create(array(
             'lastname'     => 'test',
@@ -30,6 +31,7 @@ class UserTableSeeder extends Seeder
             'initials'=>'teCa',
             'email'    => 'camillesamain.56@gmail.com',
             'password' => Hash::make('test'),
+            'activated'=> true,
         ));
         User::create(array(
             'lastname'     => 'Alala',
@@ -38,6 +40,7 @@ class UserTableSeeder extends Seeder
             'initials'=>'AAl',
             'email'    => 'A@gmail.com',
             'password' => Hash::make('AAAAAA'),
+            'activated'=> true,
         ));
     }
 }
