@@ -11,13 +11,14 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-lg-14">
             <div class="panel panel-success">
                 <div class="panel-heading">List of the pallets</div>
+            </div>
 
-            @if(Auth::check())
                 <!-- Table -->
-                    <table class="table">
+                    <table class="table table-hover table-responsive table-bordered table-pallets">
+                        <thead>
                         <tr>
                             <th>ID</th>
                             <th>Ladedatum</th>
@@ -46,18 +47,19 @@
                             <th>Im Klärung</th>
                             <th>Pal Tausch<br>vereinbart ?</th>
                         </tr>
-                        @foreach($characters as $key => $value)
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        @endforeach
+                        </thead>
+                        <tbody>
+                        {{--@foreach($characters as $key => $value)--}}
+                            {{--<tr>--}}
+                                {{--<td></td>--}}
+                                {{--<td></td>--}}
+                            {{--</tr>--}}
+                        {{--@endforeach--}}
+                        </tbody>
                     </table>
-                @endif
             </div>
             @if(Auth::guest())
-                You need to login to see the list 😜😜 >>
+                You need to login to see the content >>
             @endif
-        </div>
     </div>
 @endsection

@@ -2,6 +2,7 @@
     Hello {{$lastname}} {{$firstname}},
 
 We would like to inform you that you have updated your password online.
+    Here is the new password : {{$password}}
 If it wasn't you, click on the button
 
 @component('mail::button', ['url' => ''])

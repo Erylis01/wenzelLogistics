@@ -25,7 +25,7 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 //Route::get('/password/email','ForgotPasswordController@sendResetLinkEmail')->name('resetPasswordProfile');
 
 //PALLETS
-Route::get('/pallets','ListPalletController@show')->name('showPallet');
+Route::get('/pallets','ListPalletController@show')->name('showAllPallets');
 
 //MAILS
-Route::get('/registerMail', 'MailController@register')->name('mailRegister');
+//Route::get('/registerMail', 'MailController@register')->name('mailRegister');
