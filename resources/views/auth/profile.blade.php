@@ -115,7 +115,7 @@
                         <!--password-->
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-lg-4 control-label">Actual
-                                password</label>
+                                password :</label>
 
                             <div class="col-lg-6">
                                 <input id="password" type="password" class="form-control"
@@ -130,7 +130,7 @@
 
                         <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
                             <label for="new_password" class="col-lg-4 control-label">New
-                                password</label>
+                                password :</label>
 
                             <div class="col-lg-6">
                                 <input id="new_password" type="password" class="form-control"
@@ -145,7 +145,7 @@
 
                         <div class="form-group">
                             <label for="new_password_confirmation" class="col-lg-4 control-label">Confirm
-                                password</label>
+                                password :</label>
                             <div class="col-lg-6">
                                 <input id="new_password_confirmation" type="password"
                                        class="form-control" name="new_password_confirmation"

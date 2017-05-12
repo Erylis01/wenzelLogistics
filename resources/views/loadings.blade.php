@@ -1,6 +1,5 @@
 @extends('layouts.default')
 
-
 @section('title')
     All loadings
 @endsection
@@ -28,7 +27,7 @@
     <!-- Table -->
             <div class="loadings-wrapper">
         <div class="table-responsive loadings-container">
-            <table class="table table-hover  table-bordered table-loadings">
+            <table class="table table-hover table-bordered table-loadings">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -68,7 +67,7 @@
                 <tr>
                     {{--<th>'<a href="colis.php?id='.{{$loading->id}}. '">'.{{$loading->id}}.'</a>'</th>--}}
 
-                    <th>{{$loading->id}}</th>
+                    <th><a href="{{route('showDetailsLoading')}}">{{$loading->id}}</a></th>
                     <th>{{$loading->ladedatum}}</th>
                     <th>{{$loading->entladedatum}}</th>
                     <th>{{$loading->disp}}</th>

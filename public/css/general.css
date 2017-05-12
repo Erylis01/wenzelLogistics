@@ -103,6 +103,10 @@
     font-weight: bold;
 }
 
+.form-horizontal .control-label{
+    text-align: left;
+}
+
 /*HOME*/
 
 .menu-title{
@@ -147,7 +151,7 @@
     border-style: solid;
 }
 
-.table-loadings > thead > tr > th, .table-loadings > thead > tr > td, .table>tbody>tr>td, .table>tbody>tr>th {
+.table-loadings > thead > tr > th, .table-loadings > thead > tr > td {
     vertical-align: middle;
     border-color:rgb(0, 160, 0) ;
     border-style: ridge;
@@ -155,12 +159,51 @@
 }
 
 .table-loadings > thead > tr > th{
-    /*position:absolute;*/
     width: auto;
     z-index: 2;
     background-color: white;
 }
 
 .table-loadings td >a {
+    font-weight: bold;
+}
+
+/*LOADING*/
+
+.details-loading{
+    font-weight: normal;
+}
+
+.container-details{
+    margin-left: -70px;
+    margin-right: -70px;
+}
+
+.form-loading{
+    border-bottom-color:rgb(0, 160, 0) ;
+    border-bottom-style: double;
+}
+
+.table-loading-pallets > thead, .table-loading-pallets>tbody {
+    font-size:small;
+    /*border-color:rgb(0, 160, 0) ;*/
+    /*border-style: ridge;*/
+}
+
+.table-loading-pallets > thead > tr > th, .table-loading-pallets > thead > tr > td{
+    vertical-align: middle;
+    /*border-color:rgb(0, 160, 0) ;*/
+    /*border-style: ridge;*/
+    height: 25px;
+}
+
+.table-loading-pallets > thead > tr > th{
+    /*position:absolute;*/
+    width: auto;
+    z-index: 2;
+    background-color: white;
+}
+
+.table-loading-pallets td >a {
     font-weight: bold;
 }
