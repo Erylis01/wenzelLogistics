@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 
 
-use App\Pallet;
+use App\Loading;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class ListPalletController extends Controller
+class ListLoadingsController extends Controller
 {
     /**
      * Display the content.
@@ -16,9 +17,14 @@ class ListPalletController extends Controller
      */
     public function show()
     {
-        $listPallets = DB::table('pallets')->where('pt','=','ja')->get();
-        
-        return view('pallets', compact('listPallets'));
+        $currentDate = Carbon::now();
+        $limitDate=$currentDate->subDays(60)->format('Y-m-d');
+        $listLoadings = DB::table('loadings')->where([
+            ['pt', '=', 'test'],
+            ['ladedatum', '>=', $limitDate],
+])->distinct()->get();
+
+        return view('loadings', compact('listLoadings'));
     }
 
     /**

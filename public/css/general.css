@@ -117,32 +117,32 @@
     font-size: 18px;
 }
 
-/*PALLETS*/
+/*LOADINGS*/
 
-.table-pallets-container{
+.table-loadings-container{
     margin-left:-90px;
     margin-right:-90px;
 }
-.table-pallets > thead {
+.table-loadings > thead {
     color: rgb(0, 160, 0);
     font-size:medium;
     border-color:rgb(0, 160, 0) ;
     border-style: solid;
 }
 
-.table-pallets > tbody {
+.table-loadings > tbody {
     font-size:small;
     border-color:rgb(0, 160, 0) ;
     border-style: solid;
 }
 
-.table-pallets > thead > tr > th, .table-pallets > thead > tr > td, .table>tbody>tr>td, .table>tbody>tr>th {
+.table-loadings > thead > tr > th, .table-loadings > thead > tr > td, .table>tbody>tr>td, .table>tbody>tr>th {
     vertical-align: middle;
     border-color:rgb(0, 160, 0) ;
     border-style: ridge;
     height: 25px;
 }
 
-.table-pallets td >a {
+.table-loadings td >a {
     font-weight: bold;
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePalletsTable extends Migration
+class CreateLoadingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePalletsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pallets', function (Blueprint $table) {
+        Schema::create('loadings', function (Blueprint $table) {
             $table->increments('id');
             $table->date('ladedatum');
             $table->date('entladedatum');
@@ -43,10 +43,11 @@ class CreatePalletsTable extends Migration
             $table->string('subfrächter');
             $table->string('pal');
             $table->string('imKlärung');
-            $table->boolean('palTauschVereinbart');
+            $table->string('palTauschVereinbart');
             $table->timestamps();
         });
-    }
+        }
+
 
     /**
      * Reverse the migrations.
@@ -55,6 +56,6 @@ class CreatePalletsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pallets');
+        Schema::dropIfExists('loadings');
     }
 }

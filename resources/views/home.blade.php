@@ -8,7 +8,7 @@
     <link href="{{asset('css/auth.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
-@section('classPallets')
+@section('classLoadings')
     class="nonActive"
 @endsection
 @section('classProfile')
@@ -25,15 +25,15 @@
                 <div class="panel-body panel-body-auth">
                     <p class="text-center">What do you want to do ?</p>
 
-                    <!-- All pallets -->
-                    <a href="{{ route('showAllPallets') }}">
+                    <!-- All loadings -->
+                    <a href="{{ route('showAllLoadings') }}">
                         <div class="col-lg-3 text-center ">
                             <div class="service-box">
-                                <h3 class="menu-title">Pallets</h3>
-                                <img class="img-responsive"
-                                     src="{{URL::asset('/image/pallets.png')}}"
-                                     alt="pallets image">
-                                <p class="text-muted menu-legend">Show all pallets</p>
+                                <h3 class="menu-title">Loadings</h3>
+                                <img class="img-responsive center-block"
+                                     src="{{URL::asset('/image/details_loading.jpg')}}"
+                                     alt="loading image">
+                                <p class="text-muted menu-legend">Show all loadings</p>
                             </div>
                         </div>
                     </a>

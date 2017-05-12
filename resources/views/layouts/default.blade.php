@@ -46,7 +46,7 @@
                 </div>
             @else
                 <div class="col-lg-2 text-center navbar-title-link">
-                    <a @yield('classPallets') href="{{ route('showAllPallets') }}">All pallets</a>
+                    <a @yield('classLoadings') href="{{ route('showAllLoadings') }}">All loadings</a>
                 </div>
 
                 <div class="col-lg-2 col-lg-offset-6 text-center dropdown">

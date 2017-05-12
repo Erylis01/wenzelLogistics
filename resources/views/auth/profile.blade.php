@@ -8,7 +8,7 @@
     <link href="{{asset('css/auth.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
-@section('classPallets')
+@section('classLoadings')
     class="nonActive"
     @endsection
 @section('classProfile')
