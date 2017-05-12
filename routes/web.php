@@ -15,7 +15,7 @@
 Auth::routes();
 
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 //PROFILE
 Route::get('/profile', 'ProfileController@show')->name('showProfile');
@@ -26,6 +26,7 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 
 //LOADINGS
 Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
+//Route::get('/loadings/{token}', 'ListLoadingsController@refresh')->name('refreshLoadings');
 
 //MAILS
     //validate registration

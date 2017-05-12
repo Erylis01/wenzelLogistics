@@ -21,8 +21,13 @@
         @if(Auth::guest())
             <h4>You need to login to see the content</h4>
         @else
+            <div class="">
+                <a class="btn btn-default btn-modal" href="{{route('showAllLoadings')}}" >Refresh</a>
+            </div>
+
     <!-- Table -->
-        <div class="table-responsive table-loadings-container">
+            <div class="loadings-wrapper">
+        <div class="table-responsive loadings-container">
             <table class="table table-hover  table-bordered table-loadings">
                 <thead>
                 <tr>
@@ -61,25 +66,27 @@
                 <tbody>
                 @foreach($listLoadings as $loading)
                 <tr>
+                    {{--<th>'<a href="colis.php?id='.{{$loading->id}}. '">'.{{$loading->id}}.'</a>'</th>--}}
+
                     <th>{{$loading->id}}</th>
                     <th>{{$loading->ladedatum}}</th>
                     <th>{{$loading->entladedatum}}</th>
                     <th>{{$loading->disp}}</th>
-                    <th>{{$loading->atrNr}}</th>
+                    <th>{{$loading->atrnr}}</th>
                     <th>{{$loading->referenz}}</th>
                     <th>{{$loading->auftraggeber}}</th>
                     <th>{{$loading->beladestelle}}</th>
-                    <th>{{$loading->landB}}</th>
-                    <th>{{$loading->plzB}}</th>
-                    <th>{{$loading->ortB}}</th>
+                    <th>{{$loading->landb}}</th>
+                    <th>{{$loading->plzb}}</th>
+                    <th>{{$loading->ortb}}</th>
                     <th>{{$loading->entladestelle}}</th>
-                    <th>{{$loading->landE}}</th>
-                    <th>{{$loading->plzE}}</th>
-                    <th>{{$loading->ortE}}</th>
+                    <th>{{$loading->lande}}</th>
+                    <th>{{$loading->plze}}</th>
+                    <th>{{$loading->orte}}</th>
                     <th>{{$loading->anzahl}}</th>
-                    <th>{{$loading->TRY1}}</th>
-                    <th>{{$loading->TRY2}}</th>
-                    <th>{{$loading->TRY3}}</th>
+                    <th>{{$loading->try1}}</th>
+                    <th>{{$loading->try2}}</th>
+                    <th>{{$loading->try3}}</th>
                     <th>{{$loading->ware}}</th>
                     <th>{{$loading->gewicht}}</th>
                     <th>{{$loading->umsatz}}</th>
@@ -87,15 +94,15 @@
                     <th>{{$loading->db}}</th>
                     <th>{{$loading->trp}}</th>
                     <th>{{$loading->pt}}</th>
-                    <th>{{$loading->subfrächter}}</th>
+                    <th>{{$loading->subfrachter}}</th>
                     <th>{{$loading->pal}}</th>
-                    <th>{{$loading->imKlärung}}</th>
-                    <th>{{$loading->palTauschVereinbart}}</th>
+                    <th>{{$loading->imklarung}}</th>
+                    <th>{{$loading->paltauschvereinbart}}</th>
                 </tr>
                 @endforeach
                 </tbody>
             </table>
-
+        </div>
         </div>
         @endif
     </div>
