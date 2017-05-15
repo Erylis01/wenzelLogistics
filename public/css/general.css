@@ -123,12 +123,27 @@
 
 /*LOADINGS*/
 
+.btn-refresh, .btn-refresh:focus{
+    margin-bottom : 5px;
+    margin-top: -15px;
+    background-color: rgba(0, 160, 0, 0.8);
+    border-color: rgb(0, 160, 0);
+    color:white;
+}
+
+.btn-refresh:hover {
+    background-color: white;
+    color: rgb(0, 160, 0);
+    border-color: rgb(0, 160, 0);}
+
+
+
 .loadings-wrapper {
     width: auto;
     margin-left:-90px;
     margin-right:-90px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .loadings-container{
@@ -143,6 +158,7 @@
     font-size:medium;
     border-color:rgb(0, 160, 0) ;
     border-style: solid;
+
 }
 
 .table-loadings > tbody {
@@ -151,7 +167,7 @@
     border-style: solid;
 }
 
-.table-loadings > thead > tr > th, .table-loadings > thead > tr > td {
+.table-loadings > thead > tr > th, .table-loadings > thead > tr > td, .table-loadings > tbody > tr > th, .table-loadings > tbody > tr > td {
     vertical-align: middle;
     border-color:rgb(0, 160, 0) ;
     border-style: ridge;
@@ -166,6 +182,7 @@
 
 .table-loadings td >a {
     font-weight: bold;
+    color : rgb(0, 160, 0);
 }
 
 /*LOADING*/
@@ -186,19 +203,16 @@
 
 .table-loading-pallets > thead, .table-loading-pallets>tbody {
     font-size:small;
-    /*border-color:rgb(0, 160, 0) ;*/
-    /*border-style: ridge;*/
 }
 
 .table-loading-pallets > thead > tr > th, .table-loading-pallets > thead > tr > td{
     vertical-align: middle;
-    /*border-color:rgb(0, 160, 0) ;*/
-    /*border-style: ridge;*/
+    border-bottom-color:rgb(0, 160, 0) ;
+    border-bottom-style: ridge;
     height: 25px;
 }
 
 .table-loading-pallets > thead > tr > th{
-    /*position:absolute;*/
     width: auto;
     z-index: 2;
     background-color: white;
@@ -206,4 +220,7 @@
 
 .table-loading-pallets td >a {
     font-weight: bold;
+    color : rgb(0, 160, 0);
 }
+
+

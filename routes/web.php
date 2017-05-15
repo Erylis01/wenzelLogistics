@@ -26,9 +26,13 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 
 //LOADINGS
 Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
-Route::get('/detailsLoading', 'DetailsLoadingController@show')->name('showDetailsLoading');
+Route::get('/detailsLoading/{id}', 'DetailsLoadingController@show')->name('showDetailsLoading');
 
 //MAILS
     //validate registration
 //Route::get('/login', 'MailController@validateRegistration')->name('validateRegistration');
 //Route::get(‘register/verify/{token}’, ‘RegisterController@verify’)->name('validateRegistration');
+
+Route::get('/test', function(){
+    return view('test');
+});

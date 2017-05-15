@@ -20,47 +20,47 @@ class LoadingTableSeeder extends Seeder
 
     public function importData()
     {
-//        $path = 'resources/assets/excel/PalettenKonto2.xlsx';
-//        $data = Excel::load($path, function ($reader) {
-//        })->get();
-//        if (!empty($data)) {
-//            foreach ($data as $row) {
-//
-////                foreach ($sheet as $row) {
-//                    DB::table('loadings')->insert([
-//                        'ladedatum' => $row->ladedatum,
-//                        'entladedatum' => $row->entladedatum,
-//                        'disp' => $row->disp,
-//                        'atrNr' => $row->atrNr,
-//                        'referenz' => $row->referenz,
-//                        'auftraggeber' => $row->auftraggeber,
-//                        'beladestelle' => $row->beladestelle,
-//                        'landB' => $row->landB,
-//                        'plzB' => $row->plzB,
-//                        'ortB' => $row->ortB,
-//                        'entladestelle' => $row->entladestelle,
-//                        'landE' => $row->landE,
-//                        'plzE' => $row->plzE,
-//                        'ortE' => $row->ortE,
-//                        'anzahl' => $row->anzahl,
-//                        'TRY1' => $row->TRY1,
-//                        'TRY2' => $row->TRY2,
-//                        'TRY3' => $row->TRY3,
-//                        'ware' => $row->ware,
-//                        'gewicht' => $row->gewicht,
-//                        'umsatz' => $row->umsatz,
-//                        'aufwand' => $row->aufwand,
-//                        'db' => $row->db,
-//                        'trp' => $row->trp,
-//                        'pt' => $row->pt,
-//                        'subfrächter' => $row->subfrächter,
-//                        'pal' => $row->pal,
-//                        'imKlärung' => $row->imKlärung,
-//                        'palTauschVereinbart' =>$row->palTauschVereinbart,
-//                    ]);
-//                }
-////            }
-//        }
+        $path = 'resources/assets/excel/PalettenKonto2.xlsx';
+        $data = Excel::load($path, function ($reader) {
+        })->get();
+        if (!empty($data)) {
+            foreach ($data as $row) {
+
+//                foreach ($sheet as $row) {
+                Loading::firstOrCreate([
+                        'ladedatum' => $row->ladedatum,
+                        'entladedatum' => $row->entladedatum,
+                        'disp' => $row->disp,
+                        'atrnr' => $row->atrnr,
+                        'referenz' => $row->referenz,
+                        'auftraggeber' => $row->auftraggeber,
+                        'beladestelle' => $row->beladestelle,
+                        'landb' => $row->landb,
+                        'plzb' => $row->plzb,
+                        'ortb' => $row->ortb,
+                        'entladestelle' => $row->entladestelle,
+                        'lande' => $row->lande,
+                        'plze' => $row->plze,
+                        'orte' => $row->orte,
+                        'anzahl' => $row->anzahl,
+                        'try1' => $row->try1,
+                        'try2' => $row->try2,
+                        'try3' => $row->try3,
+                        'ware' => $row->ware,
+                        'gewicht' => $row->gewicht,
+                        'umsatz' => $row->umsatz,
+                        'aufwand' => $row->aufwand,
+                        'db' => $row->db,
+                        'trp' => $row->trp,
+                        'pt' => $row->pt,
+                        'subfrachter' => $row->subfrachter,
+                        'pal' => $row->pal,
+                        'imklarung' => $row->imklarung,
+                        'paltauschvereinbart' =>$row->paltauschvereinbart,
+                ]);
+            }
+//           }
+        }
     }
 
 }
