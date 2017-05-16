@@ -68,11 +68,11 @@
                         </thead>
                         <tbody>
                         @foreach($listLoadings as $loading)
-                            @if($loading->disp=="OK")
+                            @if($loading->state=="OK")
                                 @php($class="success")
-                                @elseif ($loading->disp=="almost OK")
+                                @elseif ($loading->state=="almost OK")
                                 @php($class="warning")
-                                @elseif ($loading->disp=="not OK")
+                                @elseif ($loading->state=="not OK")
                                 @php($class="danger")
                                 @else
                                 @php ($class="default")

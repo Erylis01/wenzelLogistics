@@ -22,19 +22,23 @@
         @else
             <div class="col-lg-14 container-details">
                 <div class="panel panel-default panel-auth">
-                    @if (Session::has('messageSaveLoading'))
-                        <div class="alert alert-success text-alert text-center">{{ Session::get('messageSaveLoading') }}</div>
-                    @endif
-                    {{--@php ($test=2)--}}
-                    {{--@if($test==1)--}}
-                        {{--@php ($state="OK")--}}
-                    {{--@elseif($test==2)--}}
-                        {{--@php ($state="almost OK")--}}
-                    {{--@else--}}
-                        {{--@php ($state="not OK")--}}
-                    {{--@endif--}}
-                    <div class="panel-heading">Details of the loading n°{{ $id }}<span
-                                class="col-lg-offset-8">{{$state}}</span></div>
+                    <div class="panel-heading">Details of the loading n°{{ $id }}
+
+                        @if($state=="OK")
+                            <img class="img-loading col-lg-offset-3"
+                                 src="{{URL::asset('/image/smileySuccess.jpg')}}"
+                                 alt="Loading OK">
+                        @elseif ($state=="almost OK")
+                            <img class="img-loading col-lg-offset-3"
+                                 src="{{URL::asset('/image/smileyWarning.jpg')}}"
+                                 alt="Loading almost OK">
+                        @elseif ($state=="not OK")
+                            <img class="img-loading col-lg-offset-3"
+                                 src="{{URL::asset('/image/smileyDanger.jpg')}}"
+                                 alt="Loading not OK">
+                        @endif
+                        <span
+                                class="col-lg-offset-5">{{$state}}</span></div>
                     <div class="panel-body panel-body-auth">
                         <form class="form-horizontal form-loading" role="form" method="POST"
                               action="">
@@ -210,10 +214,12 @@
                             </div>
                         </form>
                         <form class="form-horizontal form-loading" role="form" method="POST"
-                              action="">
+                              action="{{route('saveDetailsLoading', $id)}}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" value={{$id}}>
-                            {{--"{{route('saveDetailsLoading', $id)}}"--}}
+                            @if (Session::has('messageSaveLoading'))
+                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageSaveLoading') }}</div>
+                        @endif
                         <!--ruckgabewo-->
                             <div class="form-group {{ $errors->has('ruckgabewo') ? ' has-error' : '' }}">
                                 <label for="ruckgabewo" class="col-lg-3 col-lg-offset-1 control-label">Ruckgabe Wo
@@ -248,8 +254,8 @@
                                 <label for="blockierung" class="col-lg-3 col-lg-offset-1 control-label">Blockierung
                                     :</label>
                                 <div class="col-lg-6">
-                                    <input id="blockierung" type="text" class="form-control" name="Blockierung"
-                                           value="{{ $blockierung }}" placeholder="blockierung" autofocus>
+                                    <input id="blockierung" type="text" class="form-control" name="blockierung"
+                                           value="{{ $blockierung }}" placeholder="Blockierung" autofocus>
 
                                     @if ($errors->has('blockierung'))
                                         <span class="help-block">

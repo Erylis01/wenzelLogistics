@@ -27,7 +27,7 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 //LOADINGS
 Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
 Route::get('/detailsLoading/{id}', 'DetailsLoadingController@show')->name('showDetailsLoading');
-//Route::post('/detailsLoading/{id}', 'DetailsLoadingController@save')->name('saveDetailsLoading');
+Route::post('/detailsLoading/{id}', 'DetailsLoadingController@save')->name('saveDetailsLoading');
 
 //MAILS
     //validate registration

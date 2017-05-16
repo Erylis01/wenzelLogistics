@@ -223,4 +223,17 @@
     color : rgb(0, 160, 0);
 }
 
+.panel-heading-success{
+    background-color: #99cb84;
+}
+
+.loading-warning{
+    color:rgb(237, 7, 7) ;
+    margin : 70px;
+}
+
+.img-loading{
+    height:25px;
+}
+
 

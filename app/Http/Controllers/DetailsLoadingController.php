@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Loading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class DetailsLoadingController extends Controller
 {
@@ -61,13 +62,21 @@ class DetailsLoadingController extends Controller
 
     public function save(Request $request, $id)
     {
+        $loading = Loading::find($id);
+        $currentRuckgabewo = $loading->ruckgabewo;
+        $currentMahnung  = $loading->mahnung;
+        $currentBlockierung  = $loading->blockierung;
+        $currentBearbeitungsdatum = $loading->bearbeitungsdatum;
+        $currentPalgebucht = $loading->palgebucht;
+
         $ruckgabewo = Input::get('ruckgabewo');
         $mahnung = Input::get('mahnung');
         $blockierung = Input::get('blockierung');
         $bearbeitungsdatum = Input::get('bearbeitungsdatum');
         $palgebucht = Input::get('palgebucht');
 
-        if (isset($ruckgabewo) || isset($mahnung) || isset($blockierung) || isset($bearbeitungsdatum) || isset($palgebucht)) {
+
+        if ($currentRuckgabewo<>$ruckgabewo ||$currentMahnung<>$mahnung || $currentBlockierung<>$blockierung || $currentBearbeitungsdatum<>$bearbeitungsdatum || $currentPalgebucht<>$palgebucht) {
             // store
             $loading = Loading::find($id);
             $loading->ruckgabewo = $ruckgabewo;
@@ -75,12 +84,16 @@ class DetailsLoadingController extends Controller
             $loading->blockierung = $blockierung;
             $loading->bearbeitungsdatum = $bearbeitungsdatum;
             $loading->palgebucht = $palgebucht;
+            if ($palgebucht=='OK'||$palgebucht=='ok'){
+                $loading->state = 'OK';
+            }elseif($palgebucht=='almost OK'|| $palgebucht=='almost ok'){
+                $loading->state = 'almost OK';
+            }elseif($palgebucht=='not OK'||$palgebucht=='not ok'){
+                $loading->state = 'not OK';
+            }
             $loading->save();
 
-            session()->flash('messageSaveLoading', 'Successfully saved loading');
-            return redirect('/loadings');
-        }else{
-            return redirect()->back();
-        }
+            session()->flash('messageSaveLoading', 'Successfully updated loading');
+        }return redirect()->back();
     }
 }
