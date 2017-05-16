@@ -78,11 +78,7 @@
                                 @php ($class="default")
                                 @endif
                             <tr class={{$class}}>
-                                {{--<th>'<a href="colis.php?id='.{{$loading->id}}. '">'.{{$loading->id}}.'</a>'</th>--}}
-
                                 <td><a href="{{route('showDetailsLoading',$loading->id)}}">{{$loading->id}}</a></td>
-                                {{--<td><a href="{{url('detailsLoading/?id='.$loading->id.'/')}}</a></td>--}}
-
                                 <td>{{date('d-m-Y', strtotime($loading->ladedatum))}}</td>
                                 <td>{{$loading->entladedatum}}</td>
                                 <td>{{$loading->disp}}</td>

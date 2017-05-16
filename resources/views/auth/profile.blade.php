@@ -180,12 +180,10 @@
                                     <div class="modal-body center">
                                         <form method="post" action="{{ route('updateProfile') }}">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-
                                             <div class="col-lg-offset-3">
                                                 <input type="submit" class="btn btn-danger btn-modal" value="Yes"
                                                         name="update">
-                                                </input>
+
                                                 <button type="button" class="btn btn-success btn-modal"
                                                         data-dismiss="modal">No
                .                                 </button>

@@ -59,8 +59,8 @@ class LoadingTableSeeder extends Seeder
                         'paltauschvereinbart' =>$row->paltauschvereinbart,
                 ]);
             }
-//           }
-        }
+          }
+//        }
     }
 
 }

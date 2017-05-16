@@ -22,17 +22,22 @@
         @else
             <div class="col-lg-14 container-details">
                 <div class="panel panel-default panel-auth">
-                    @php ($test=2)
-                    @if($test==1)
-                        @php ($state="OK")
-                        @elseif($test==2)
-                        @php ($state="almost OK")
-                        @else
-                        @php ($state="not OK")
-                        @endif
-                    <div class="panel-heading">Details of the loading n°{{ $id }}<span class="col-lg-offset-8">{{$state}}</span></div>
+                    @if (Session::has('messageSaveLoading'))
+                        <div class="alert alert-success text-alert text-center">{{ Session::get('messageSaveLoading') }}</div>
+                    @endif
+                    {{--@php ($test=2)--}}
+                    {{--@if($test==1)--}}
+                        {{--@php ($state="OK")--}}
+                    {{--@elseif($test==2)--}}
+                        {{--@php ($state="almost OK")--}}
+                    {{--@else--}}
+                        {{--@php ($state="not OK")--}}
+                    {{--@endif--}}
+                    <div class="panel-heading">Details of the loading n°{{ $id }}<span
+                                class="col-lg-offset-8">{{$state}}</span></div>
                     <div class="panel-body panel-body-auth">
-                        <form class="form-horizontal form-loading" role="form" method="POST" action="">
+                        <form class="form-horizontal form-loading" role="form" method="POST"
+                              action="">
                             {{ csrf_field() }}
 
                             <div class="form-group">
@@ -154,17 +159,17 @@
                                 <!--umsatz-->
                                 <div class="col-lg-4">
                                     <label for="umsatz" class="control-label">Umsatz :</label>
-                                    <label for="umsatz" class="details-loading">{{ $umsatz }}</label>
+                                    <label for="umsatz" class="details-loading">{{ $umsatz }} €</label>
                                 </div>
                                 <!--aufwand-->
                                 <div class="col-lg-3">
                                     <label for="aufwand" class="control-label">Aufwand :</label>
-                                    <label for="aufwand" class="details-loading">{{ $aufwand }}</label>
+                                    <label for="aufwand" class="details-loading">{{ $aufwand }} €</label>
                                 </div>
                                 <!--db-->
                                 <div class="col-lg-2">
                                     <label for="db" class="control-label">DB :</label>
-                                    <label for="db" class="details-loading">{{ $db }}</label>
+                                    <label for="db" class="details-loading">{{ $db }} €</label>
                                 </div>
                                 <!--trp-->
                                 <div class="col-lg-2">
@@ -199,19 +204,24 @@
                                 <div class="col-lg-4">
                                     <label for="paltauschvereinbart" class="control-label">Pal Tausch Vereinbart
                                         ?</label>
-                                    <label for="paltauschvereinbart" class="details-loading">{{ $paltauschvereinbart }}</label>
+                                    <label for="paltauschvereinbart"
+                                           class="details-loading">{{ $paltauschvereinbart }}</label>
                                 </div>
                             </div>
                         </form>
-                        <form class="form-horizontal form-loading" role="form" method="POST" action="">
-                        {{ csrf_field() }}
+                        <form class="form-horizontal form-loading" role="form" method="POST"
+                              action="">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="id" value={{$id}}>
+                            {{--"{{route('saveDetailsLoading', $id)}}"--}}
                         <!--ruckgabewo-->
                             <div class="form-group {{ $errors->has('ruckgabewo') ? ' has-error' : '' }}">
-                                <label for="ruckgabewo" class="col-lg-3 col-lg-offset-1 control-label">Ruckgabe Wo ?</label>
+                                <label for="ruckgabewo" class="col-lg-3 col-lg-offset-1 control-label">Ruckgabe Wo
+                                    ?</label>
                                 <div class="col-lg-6">
                                     <input id="ruckgabewo" type="text" class="form-control" name="ruckgabewo"
-                                           value="" placeholder="Ruckgabe Wo" required autofocus>
-                                    {{--{{ $ruckgabewo }}--}}
+                                           value="{{ $ruckgabewo }}" placeholder="Ruckgabe Wo" autofocus>
+
                                     @if ($errors->has('ruckgabewo'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('ruckgabewo') }}</strong>
@@ -224,8 +234,8 @@
                                 <label for="mahnung" class="col-lg-3 col-lg-offset-1 control-label">Mahnung :</label>
                                 <div class="col-lg-6">
                                     <input id="mahnung" type="text" class="form-control" name="mahnung"
-                                           value="" placeholder="Mahnung" required autofocus>
-                                    {{--{{ $mahnung }}--}}
+                                           value="{{ $mahnung }}" placeholder="Mahnung" autofocus>
+
                                     @if ($errors->has('mahnung'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('mahnung') }}</strong>
@@ -235,25 +245,32 @@
                             </div>
                             <!--blockierung-->
                             <div class="form-group {{ $errors->has('blockierung') ? ' has-error' : '' }}">
-                                <label for="blockierung" class="col-lg-3 col-lg-offset-1 control-label">Blockierung :</label>
+                                <label for="blockierung" class="col-lg-3 col-lg-offset-1 control-label">Blockierung
+                                    :</label>
                                 <div class="col-lg-6">
-                                    <input id="blockierung" type="text" class="form-control" name="blockierung"
-                                           value="" placeholder="blockierung" required autofocus>
-                                    {{--{{ $blockierung }}--}}
+                                    <input id="blockierung" type="text" class="form-control" name="Blockierung"
+                                           value="{{ $blockierung }}" placeholder="blockierung" autofocus>
+
                                     @if ($errors->has('blockierung'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('blockierung') }}</strong>
                                     </span>
                                     @endif
                                 </div>
+                                <div class="col-lg-2">
+                                    <input type="submit" class="btn btn-primary btn-block btn-form" value="Save"
+                                           name="save">
+                                </div>
                             </div>
                             <!--bearbeitungsdatum-->
                             <div class="form-group {{ $errors->has('bearbeitungsdatum') ? ' has-error' : '' }}">
-                                <label for="bearbeitungsdatum" class="col-lg-3 col-lg-offset-1 control-label">Bearbeitungsdatum :</label>
+                                <label for="bearbeitungsdatum" class="col-lg-3 col-lg-offset-1 control-label">Bearbeitungsdatum
+                                    :</label>
                                 <div class="col-lg-6">
-                                    <input id="bearbeitungsdatum" type="date" class="form-control" name="bearbeitungsdatum"
-                                           value="" placeholder="bearbeitungsdatum" required autofocus>
-                                    {{--{{ $bearbeitungsdatum }}--}}
+                                    <input id="bearbeitungsdatum" type="date" class="form-control"
+                                           name="bearbeitungsdatum"
+                                           value="{{ $bearbeitungsdatum }}" placeholder="bearbeitungsdatum" autofocus>
+
                                     @if ($errors->has('bearbeitungsdatum'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('bearbeitungsdatum') }}</strong>
@@ -263,11 +280,12 @@
                             </div>
                             <!--palgebucht-->
                             <div class="form-group {{ $errors->has('palgebucht') ? ' has-error' : '' }}">
-                                <label for="palgebucht" class="col-lg-3 col-lg-offset-1 control-label">Pal gebucht ?</label>
+                                <label for="palgebucht" class="col-lg-3 col-lg-offset-1 control-label">Pal gebucht
+                                    ?</label>
                                 <div class="col-lg-6">
                                     <input id="palgebucht" type="text" class="form-control" name="palgebucht"
-                                           value="" placeholder="Pal gebucht" required autofocus>
-                                    {{--{{ $palgebucht }}--}}
+                                           value="{{ $palgebucht }}" placeholder="Pal gebucht" autofocus>
+
                                     @if ($errors->has('palgebucht'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('palgebucht') }}</strong>
@@ -303,27 +321,27 @@
                                 </thead>
                                 <tbody>
 
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
 
                                 </tbody>
                             </table>

@@ -44,6 +44,12 @@ class CreateLoadingsTable extends Migration
             $table->string('pal')->nullable();
             $table->string('imklarung')->nullable();
             $table->string('paltauschvereinbart')->nullable();
+            $table->string('ruckgabewo')->nullable();
+            $table->string('mahnung')->nullable();
+            $table->string('blockierung')->nullable();
+            $table->date('bearbeitungsdatum')->nullable();
+            $table->string('palgebucht')->nullable();
+            $table->string('state')->default('not OK');
             $table->timestamps();
         });
         }
