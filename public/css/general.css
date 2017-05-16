@@ -135,6 +135,14 @@
     /*background-color: white;*/
     /*color: rgb(0, 160, 0);*/
     /*border-color: rgb(0, 160, 0);}*/
+
+.loadings-sorting{
+    color:rgb(0, 160, 0);
+}
+.loadings-sorting:hover{
+    color:black;
+}
+
 .loadings-legend{
     display: inline;;
 }

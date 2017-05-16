@@ -33,9 +33,9 @@ class ListLoadingsController extends Controller
         if (request()->has('sortby') && request()->has('order')) {
             $sortby = $request->get('sortby'); // Order by what column?
             $order = $request->get('order'); // Order direction: asc or desc
-            dd($order,$sortby);
+
             $listLoadings =DB::table('loadings')->orderBy($sortby, $order)->paginate(5);
-            $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->links();
+            $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
         }
         else{
 

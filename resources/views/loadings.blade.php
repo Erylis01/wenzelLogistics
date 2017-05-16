@@ -33,36 +33,126 @@
                     <thead>
                     <tr>
 
-                        <th class="text-center">ID <a href="/loadings?page={{ $listLoadings->currentPage() }}&sortby=id&order=asc }}">up</a><a href="/loadings?page={{ $listLoadings->currentPage() }}&sortby=id&order=desc">down</a></th>
-                        <th class="text-center">Ladedatum</th>
-                        <th class="text-center">Entladedatum</th>
-                        <th class="text-center">Disp.</th>
-                        <th class="text-center">AtrNr</th>
-                        <th class="text-center">Referenz</th>
-                        <th class="text-center">Auftraggeber</th>
-                        <th class="text-center">Beladestelle</th>
-                        <th class="text-center">Land</th>
-                        <th class="text-center">Plz</th>
-                        <th class="text-center">Ort</th>
-                        <th class="text-center">Entladestelle</th>
-                        <th class="text-center">Land</th>
-                        <th class="text-center">Plz</th>
-                        <th class="text-center">Ort</th>
-                        <th class="text-center">Anzahl</th>
-                        <th class="text-center"></th>
-                        <th class="text-center"></th>
-                        <th class="text-center"></th>
-                        <th class="text-center">Ware</th>
-                        <th class="text-center">Gewicht</th>
-                        <th class="text-center">Umsatz</th>
-                        <th class="text-center">Aufwand</th>
-                        <th class="text-center">DB</th>
-                        <th class="text-center">Trp</th>
-                        <th class="text-center">PT</th>
-                        <th class="text-center">Subfrächter</th>
-                        <th class="text-center">Pal</th>
-                        <th class="text-center">Im Klärung</th>
-                        <th class="text-center">Pal Tausch<br>vereinbart ?</th>
+                        <th class="text-center">ID<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                      href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=id&order=desc')}}"></a></th>
+                        <th class="text-center">Ladedatum <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                             href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=desc')}}"></a></th>
+                        <th class="text-center">Entladedatum <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=desc')}}"></a></th>
+                        <th class="text-center">Disp. <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                         href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=desc')}}"></a></th>
+                        <th class="text-center">AtrNr <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                         href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=atrnr&order=desc')}}"></a></th>
+                        <th class="text-center">Referenz <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                            href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=desc')}}"></a></th>
+                        <th class="text-center">Auftraggeber <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=desc')}}"></a></th>
+                        <th class="text-center">Beladestelle <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=desc')}}"></a></th>
+                        <th class="text-center">Land <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                        href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=landb&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=landb&order=desc')}}"></a></th>
+                        <th class="text-center">Plz <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                       href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plzb&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plzb&order=desc')}}"></a></th>
+                        <th class="text-center">Ort<br><a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                       href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ortb&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ortb&order=desc')}}"></a></th>
+                        <th class="text-center">Entladestelle <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=desc')}}"></a></th>
+                        <th class="text-center">Land <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                        href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=lande&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=lande&order=desc')}}"></a></th>
+                        <th class="text-center">Plz<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                      href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plze&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a></th>
+                        <th class="text-center">Ort<br><a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                      href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=orte&order=desc')}}"></a></th>
+                        <th class="text-center">Anzahl <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                          href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=anzahl&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=anzahl&order=desc')}}"></a></th>
+                        <th class="text-center">TRY1<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                   href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=try1&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=try1&order=desc')}}"></a></th>
+                        <th class="text-center">TRY2<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                   href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=try2&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=try2&order=desc')}}"></a></th>
+                        <th class="text-center">TRY3<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                       href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=try3&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=try3&order=desc')}}"></a></th>
+                        <th class="text-center">Ware<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                        href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=desc')}}"></a></th>
+                        <th class="text-center">Gewicht<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                          href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=desc')}}"></a></th>
+                        <th class="text-center">Umsatz<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                         href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=desc')}}"></a></th>
+                        <th class="text-center">Aufwand<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                          href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=desc')}}"></a></th>
+                        <th class="text-center">DB<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                     href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=desc')}}"></a></th>
+                        <th class="text-center">Trp<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                      href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=desc')}}"></a></th>
+                        <th class="text-center">PT<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                     href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=desc')}}"></a></th>
+                        <th class="text-center">Subfrächter<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                              href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=desc')}}"></a></th>
+                        <th class="text-center">Pal<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                      href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pal&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pal&order=desc')}}"></a></th>
+                        <th class="text-center">Im Klärung<a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                             href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=imklarung&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=imklarung&order=desc')}}"></a></th>
+                        <th class="text-center">Pal Tausch Vereinbart ? <a class="glyphicon glyphicon-chevron-up loadings-sorting"
+                                                                          href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=paltauschvereinbart&order=asc')}}"></a><a
+                                    class="glyphicon glyphicon-chevron-down loadings-sorting"
+                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=paltauschvereinbart&order=desc')}}"></a></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -113,7 +203,8 @@
                 </table>
             </div>
         <div class="row">
-            <div class="loadings-pagination text-left">{!! $listLoadings->appends($links)->render() !!}</div>
+            <div class="loadings-pagination text-left">{!! $listLoadings->render() !!}</div>
+            {{--->appends($links)--}}
             @if ($listLoadings->currentPage()==$listLoadings->lastPage())
                 <div class="loadings-legend col-lg-offset-8" >Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 5)  {{$legend1}} to {{$count}} of {{$count}} results</div>
             @else
