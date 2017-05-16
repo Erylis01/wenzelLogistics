@@ -28,42 +28,43 @@
         @else
 
         <!-- Table -->
+            <div class="loadings-pagination text-center"> {!! $listLoadings->render() !!} </div>
             <div class="loadings-wrapper">
                 <div class="table-responsive loadings-container">
                     <table class="table table-hover table-bordered table-loadings">
                         <thead>
                         <tr>
-                            <th>ID</th>
+                            <th class="text-center">ID</th>
                             {{--<a href="/loadings?order=id&dir={{ $dir ? $dir : 'asc' }}">--}}
-                            <th>Ladedatum</th>
-                            <th>Entladedatum</th>
-                            <th>Disp.</th>
-                            <th>AtrNr</th>
-                            <th>Referenz</th>
-                            <th>Auftraggeber</th>
-                            <th>Beladestelle</th>
-                            <th>Land</th>
-                            <th>Plz</th>
-                            <th>Ort</th>
-                            <th>Entladestelle</th>
-                            <th>Land</th>
-                            <th>Plz</th>
-                            <th>Ort</th>
-                            <th>Anzahl</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Ware</th>
-                            <th>Gewicht</th>
-                            <th>Umsatz</th>
-                            <th>Aufwand</th>
-                            <th>DB</th>
-                            <th>Trp</th>
-                            <th>PT</th>
-                            <th>Subfrächter</th>
-                            <th>Pal</th>
-                            <th>Im Klärung</th>
-                            <th>Pal Tausch<br>vereinbart ?</th>
+                            <th class="text-center">Ladedatum</th>
+                            <th class="text-center">Entladedatum</th>
+                            <th class="text-center">Disp.</th>
+                            <th class="text-center">AtrNr</th>
+                            <th class="text-center">Referenz</th>
+                            <th class="text-center">Auftraggeber</th>
+                            <th class="text-center">Beladestelle</th>
+                            <th class="text-center">Land</th>
+                            <th class="text-center">Plz</th>
+                            <th class="text-center">Ort</th>
+                            <th class="text-center">Entladestelle</th>
+                            <th class="text-center">Land</th>
+                            <th class="text-center">Plz</th>
+                            <th class="text-center">Ort</th>
+                            <th class="text-center">Anzahl</th>
+                            <th class="text-center"></th>
+                            <th class="text-center"></th>
+                            <th class="text-center"></th>
+                            <th class="text-center">Ware</th>
+                            <th class="text-center">Gewicht</th>
+                            <th class="text-center">Umsatz</th>
+                            <th class="text-center">Aufwand</th>
+                            <th class="text-center">DB</th>
+                            <th class="text-center">Trp</th>
+                            <th class="text-center">PT</th>
+                            <th class="text-center">Subfrächter</th>
+                            <th class="text-center">Pal</th>
+                            <th class="text-center">Im Klärung</th>
+                            <th class="text-center">Pal Tausch<br>vereinbart ?</th>
                         </tr>
                         </thead>
                         <tbody>

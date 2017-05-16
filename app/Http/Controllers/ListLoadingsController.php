@@ -28,7 +28,7 @@ class ListLoadingsController extends Controller
 //            ['pt', '=', 'test'],
 //            ['ladedatum', '>=', $limitDate],
 //])->distinct()->get();
-        $listLoadings = DB::table('loadings')->get();
+        $listLoadings = DB::table('loadings')->paginate(5);
 
 //        $order = $request->get('order'); // Order by what column?
 //        $dir = $request->get('dir'); // Order direction: asc or desc
