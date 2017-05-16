@@ -135,10 +135,15 @@
     /*background-color: white;*/
     /*color: rgb(0, 160, 0);*/
     /*border-color: rgb(0, 160, 0);}*/
-
+.loadings-legend{
+    display: inline;;
+}
 .loadings-pagination{
-    margin-top:-30px;
-    margin-bottom:-15px;
+    margin-top:5px;
+}
+
+.loadings-pagination> ul.pagination{
+    display: inline;
 }
 
 .loadings-pagination > ul.pagination >li.active >span {
@@ -159,17 +164,20 @@
 
 .loadings-wrapper {
     width: auto;
-    margin-left:-90px;
-    margin-right:-90px;
-    position: relative;
-    overflow: visible;
+    margin-top:-10px;
+    /*margin-left:-80px;*/
+    /*margin-right:-80px;*/
 }
 
 .loadings-container{
-    overflow-y: scroll;
-    height: auto;
-    position: relative;
-    z-index: 0;
+    /*overflow-y: scroll;*/
+    /*height: auto;*/
+    /*position: relative;*/
+    /*z-index: 0;*/
+}
+
+.table-loadings{
+    margin-bottom:5px;
 }
 
 .table-loadings > thead {
@@ -190,14 +198,14 @@
     vertical-align: middle;
     border-color:rgb(0, 160, 0) ;
     border-style: ridge;
-    height: 25px;
+    /*height: 25px;*/
 }
 
-.table-loadings > thead > tr > th{
-    width: auto;
-    z-index: 2;
-    background-color: white;
-}
+/*.table-loadings > thead > tr > th{*/
+    /*width: auto;*/
+    /*z-index: 2;*/
+    /*background-color: white;*/
+/*}*/
 
 .table-loadings td >a {
     font-weight: bold;

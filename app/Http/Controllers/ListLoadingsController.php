@@ -28,14 +28,25 @@ class ListLoadingsController extends Controller
 //            ['pt', '=', 'test'],
 //            ['ladedatum', '>=', $limitDate],
 //])->distinct()->get();
-        $listLoadings = DB::table('loadings')->paginate(5);
 
-//        $order = $request->get('order'); // Order by what column?
-//        $dir = $request->get('dir'); // Order direction: asc or desc
-//        if ($order && $dir) {
-//            $listLoadings = $listLoadings->orderBy($order, $dir);
-//        }
-        return view('loadings', compact('listLoadings'));
+
+        if (request()->has('sortby') && request()->has('order')) {
+            $sortby = $request->get('sortby'); // Order by what column?
+            $order = $request->get('order'); // Order direction: asc or desc
+            dd($order,$sortby);
+            $listLoadings =DB::table('loadings')->orderBy($sortby, $order)->paginate(5);
+            $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->links();
+        }
+        else{
+
+            $listLoadings = DB::table('loadings')->paginate(5);
+            $links='';
+
+        }
+    $count=count(DB::table('loadings')->get());
+
+
+        return view('loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
     }
 
     /**
