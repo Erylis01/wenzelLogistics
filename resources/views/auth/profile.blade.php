@@ -63,7 +63,7 @@
                         <!--username-->
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-lg-4 control-label">
-                                <div type="button" data-toggle="modal" data-target="#username_modal"
+                                <div data-toggle="modal" data-target="#username_modal"
                                      class="glyphicon glyphicon-info-sign link"></div> <span>*</span>
                                 Username :</label>
 

@@ -24,6 +24,7 @@
                 <div class="panel panel-default panel-auth">
                     <div class="panel-heading">Details of the loading n°{{ $id }}
 
+<!--different panel style according to the state of the loading-->
                         @if($state=="OK")
                             <img class="img-loading col-lg-offset-3"
                                  src="{{URL::asset('/image/smileySuccess.jpg')}}"
@@ -40,6 +41,7 @@
                         <span
                                 class="col-lg-offset-5">{{$state}}</span></div>
                     <div class="panel-body panel-body-auth">
+<!--reading form suming up information from the table-->
                         <form class="form-horizontal form-loading" role="form" method="POST"
                               action="">
                             {{ csrf_field() }}
@@ -204,15 +206,80 @@
                                     <label for="imklarung" class="control-label">im Klarung :</label>
                                     <label for="imklarung" class="details-loading">{{ $imklarung }}</label>
                                 </div>
+<!--change pal tausch vereinbart-->
                                 <!--paltauschvereinbart-->
-                                <div class="col-lg-4">
+                                <div class="col-lg-5">
                                     <label for="paltauschvereinbart" class="control-label">Pal Tausch Vereinbart
                                         ?</label>
-                                    <label for="paltauschvereinbart"
-                                           class="details-loading">{{ $paltauschvereinbart }}</label>
+                                    <label for="paltauschvereinbart" class="link" data-toggle="modal"
+                                         data-target="#updatePalTauschVereinbart_modal">{{ $paltauschvereinbart }}</label>
+                                </div>
+
+                                <!-- Modal update pal tausch vereinbart -->
+                                <div class="modal fade" id="updatePalTauschVereinbart_modal" role="dialog">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Why would you like to change the loading into a loading WITHOUT exchange pallets ?</h4>
+                                            </div>
+                                            <div class="modal-body center">
+                                                <form method="post" action="">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <div>
+                                                        <textarea class="form-control" rows="5" id="reasonUpdatePalTauschVereinbart"
+                                                                  name="reasonUpdatePalTauschVereinbart" required autofocus>{{$reasonUpdatePalTauschVereinbart}}</textarea>
+                                                        <button type="submit" class="btn btn-success btn-modal" data-toggle="modal"
+                                                                data-target="#updateValidatePalTauschVereinbart_modal">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Modal update validate pal tausch vereinbart -->
+                                        <div class="modal fade" id="updateValidatePalTauschVereinbart_modal" role="dialog">
+                                            <div class="modal-dialog modal-sm">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">Are you sure that loading is WITHOUT exchange pallets ?</h4>
+                                                    </div>
+                                                    <div class="modal-body center">
+                                                        <h4>If you have made a mistake you can change this information directly on the Excel file</h4>
+                                                        <br>
+                                                        <form method="post" action="{{ route('saveDetailsLoading', $id) }}">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                            <input type="hidden" name="reasonUpdatePalTauschVereinbart" value="{{Input::get('reasonUpdatePalTauschVereinbart')}}">
+                                                            <div class="col-lg-offset-3">
+                                                                <input type="submit" class="btn btn-danger btn-modal" value="Yes"
+                                                                       name="updateValidatePalTauschVereinbart">
+
+                                                                <button type="button" class="btn btn-success btn-modal"
+                                                                        data-dismiss="modal">No</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
+                                                            Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            @if (Session::has('messageUpdatePalTauschVereinbartLoading'))
+                                <div class="alert alert-warning text-alert text-center">{{ Session::get('messageUpdatePalTauschVereinbartLoading') }}</div>
+                            @endif
                         </form>
+
+<!--form to edit loading-->
                         <form class="form-horizontal form-loading" role="form" method="POST"
                               action="{{route('saveDetailsLoading', $id)}}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">

@@ -53,47 +53,53 @@ class DetailsLoadingController extends Controller
         $bearbeitungsdatum = $detailsLoading->bearbeitungsdatum;
         $palgebucht = $detailsLoading->palgebucht;
         $state = $detailsLoading->state;
+        $reasonUpdatePalTauschVereinbart = $detailsLoading->reasonUpdatePalTauschVereinbart;
 
         return view('detailsLoading', compact('id', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
             'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anzahl', 'try1', 'try2', 'try3', 'ware', 'gewicht', 'umsatz', 'aufwand',
-            'db', 'trp', 'pt', 'subfrachter', 'pal', 'imklarung', 'paltauschvereinbart', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht', 'state'
+            'db', 'trp', 'pt', 'subfrachter', 'pal', 'imklarung', 'paltauschvereinbart', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
+            'state', 'reasonUpdatePalTauschVereinbart'
         ));
     }
 
     public function save(Request $request, $id)
     {
         $loading = Loading::find($id);
-        $currentRuckgabewo = $loading->ruckgabewo;
-        $currentMahnung  = $loading->mahnung;
-        $currentBlockierung  = $loading->blockierung;
-        $currentBearbeitungsdatum = $loading->bearbeitungsdatum;
-        $currentPalgebucht = $loading->palgebucht;
 
         $ruckgabewo = Input::get('ruckgabewo');
         $mahnung = Input::get('mahnung');
         $blockierung = Input::get('blockierung');
         $bearbeitungsdatum = Input::get('bearbeitungsdatum');
         $palgebucht = Input::get('palgebucht');
+        $reasonUpdatePalTauschVereinbart = Input::get('reasonUpdatePalTauschVereinbart');
+        $updateValidatePalTauschVereinbart = $request->updateValidatePalTauschVereinbart;
 
 
-        if ($currentRuckgabewo<>$ruckgabewo ||$currentMahnung<>$mahnung || $currentBlockierung<>$blockierung || $currentBearbeitungsdatum<>$bearbeitungsdatum || $currentPalgebucht<>$palgebucht) {
+        if (isset($reasonUpdatePalTauschVereinbart) && isset($updateValidatePalTauschVereinbart)) {
+            $loading->reasonUpdatePalTauschVereinbart = $reasonUpdatePalTauschVereinbart;
+            $loading->paltauschvereinbart = 'nein';
+            $loading->save();
+            session()->flash('messageUpdatePalTauschVereinbartLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
+        } elseif ($loading->ruckgabewo <> $ruckgabewo || $loading->mahnung <> $mahnung || $loading->blockierung <> $blockierung || $loading->bearbeitungsdatum <> $bearbeitungsdatum || $loading->palgebucht <> $palgebucht) {
             // store
-            $loading = Loading::find($id);
             $loading->ruckgabewo = $ruckgabewo;
             $loading->mahnung = $mahnung;
             $loading->blockierung = $blockierung;
             $loading->bearbeitungsdatum = $bearbeitungsdatum;
             $loading->palgebucht = $palgebucht;
-            if ($palgebucht=='OK'||$palgebucht=='ok'){
+            if ($palgebucht == 'OK' || $palgebucht == 'ok') {
                 $loading->state = 'OK';
-            }elseif($palgebucht=='almost OK'|| $palgebucht=='almost ok'){
+            } elseif ($palgebucht == 'almost OK' || $palgebucht == 'almost ok') {
                 $loading->state = 'almost OK';
-            }elseif($palgebucht=='not OK'||$palgebucht=='not ok'){
+            } elseif ($palgebucht == 'not OK' || $palgebucht == 'not ok') {
                 $loading->state = 'not OK';
             }
             $loading->save();
 
             session()->flash('messageSaveLoading', 'Successfully updated loading');
-        }return redirect()->back();
+        } else {
+            return redirect()->back();
+        }
+
     }
 }

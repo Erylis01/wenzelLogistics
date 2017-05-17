@@ -49,7 +49,9 @@ class CreateLoadingsTable extends Migration
             $table->string('blockierung')->nullable();
             $table->date('bearbeitungsdatum')->nullable();
             $table->string('palgebucht')->nullable();
+
             $table->string('state')->default('not OK');
+            $table->string('reasonUpdatePalTauschVereinbart')->nullable();
             $table->timestamps();
         });
         }
