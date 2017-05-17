@@ -19,7 +19,7 @@
 
     <div class="row">
         <div class="col-lg-14">
-            <div class="panel panel-default panel-auth">
+            <div class="panel panel-auth">
                 <div class="panel-heading">Welcome {{Auth::user()->username}}</div>
 
                 <div class="panel-body panel-body-auth">

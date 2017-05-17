@@ -56,7 +56,7 @@ class LoadingTableSeeder extends Seeder
                         'subfrachter' => trim($row->subfrachter),
                         'pal' => trim($row->pal),
                         'imklarung' => trim($row->imklarung),
-                        'paltauschvereinbart' =>trim($row->paltauschvereinbart),
+//                        'paltauschvereinbart' =>trim($row->paltauschvereinbart),
                 ]);
             }
           }

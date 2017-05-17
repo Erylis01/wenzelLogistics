@@ -11,7 +11,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <div class="panel panel-default panel-auth">
+            <div class="panel panel-auth">
                 <div class="panel-heading">Reset Password</div>
                 <div class="panel-body panel-body-auth">
                     @if (session('status'))

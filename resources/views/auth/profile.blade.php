@@ -21,7 +21,7 @@
             @if (Session::has('messageRegistration'))
                 <div class="alert alert-info">{{ Session::get('messageRegistration') }}</div>
             @endif
-            <div class="panel panel-default panel-auth">
+            <div class="panel panel-auth">
                 <div class="panel-heading">Profile</div>
                 <div class="panel-body panel-body-auth">
                     <form class="form-horizontal" role="form" method="POST" action="">
