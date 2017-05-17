@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Loading;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use LoadingTableSeeder;
@@ -21,6 +22,7 @@ class ListLoadingsController extends Controller
      */
     public function show(Request $request)
     {
+        if (Auth::check()) {
         $this->importData();
         $currentDate = Carbon::now();
         $limitDate=$currentDate->subDays(60)->format('Y-m-d');
@@ -47,7 +49,9 @@ class ListLoadingsController extends Controller
 
 
         return view('loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
-    }
+    }else{
+            return view('auth.login');
+        }}
 
     /**
      * Import data from an excel file

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Loading;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
@@ -16,6 +17,7 @@ class DetailsLoadingController extends Controller
      */
     public function show($id)
     {
+        if (Auth::check()) {
         $detailsLoading = DB::table('loadings')->where('id', $id)->first();
 
         $ladedatum = $detailsLoading->ladedatum;
@@ -60,7 +62,9 @@ class DetailsLoadingController extends Controller
             'db', 'trp', 'pt', 'subfrachter', 'pal', 'imklarung', 'paltauschvereinbart', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
             'state', 'reasonUpdatePalTauschVereinbart'
         ));
-    }
+    }else {
+            return view('auth.login');
+        }}
 
     public function save(Request $request, $id)
     {

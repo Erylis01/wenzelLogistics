@@ -58,7 +58,7 @@ class ProfileController extends Controller
             $email = $user->email;
             return view('auth.profile', compact('lastname', 'firstname', 'username', 'email'));
         } else {
-            return view('/');
+            return view('auth.login');
         }
     }
 
