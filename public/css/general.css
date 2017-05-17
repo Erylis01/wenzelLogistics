@@ -62,7 +62,7 @@
 
 /*PANEL AUTH*/
 
-.panel-auth {
+.panel-auth, .panel-default,.panel-warning, .panel-danger  {
     border-color: rgb(0, 160, 0);
 }
 
@@ -74,12 +74,27 @@
     font-size: 15px;
 }
 
-/*overwritting*/
-.panel-default > .panel-heading {
-    font-size: 25px;
+.panel-auth>.panel-heading{
     background-color: rgba(0, 210, 0, 0.1);
+}
+
+.panel-auth > .panel-heading,.panel-warning > .panel-heading, .panel-danger > .panel-heading, .panel-default > .panel-heading  {
+    font-size: 25px;
     border-color: rgb(0, 160, 0);
     color: rgb(0, 160, 0);
+}
+
+/*overwritting*/
+.panel-warning > .panel-heading {
+    background-color: rgba(255, 255, 102, 0.5);
+}
+/*overwritting*/
+.panel-danger > .panel-heading {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+/*overwritting*/
+.panel-default > .panel-heading {
+    background-color: rgba(255, 193, 197, 0.1);
 }
 
 /*PROFILE*/
@@ -238,12 +253,14 @@
 
 .table-loading-pallets > thead, .table-loading-pallets>tbody {
     font-size:small;
+    border-color:rgb(0, 160, 0) ;
+    border-style: ridge;
 }
 
 .table-loading-pallets > thead > tr > th, .table-loading-pallets > thead > tr > td{
     vertical-align: middle;
-    border-bottom-color:rgb(0, 160, 0) ;
-    border-bottom-style: ridge;
+
+
     height: 25px;
 }
 

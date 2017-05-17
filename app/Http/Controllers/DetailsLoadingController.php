@@ -80,6 +80,7 @@ class DetailsLoadingController extends Controller
             $loading->paltauschvereinbart = 'nein';
             $loading->save();
             session()->flash('messageUpdatePalTauschVereinbartLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
+
         } elseif ($loading->ruckgabewo <> $ruckgabewo || $loading->mahnung <> $mahnung || $loading->blockierung <> $blockierung || $loading->bearbeitungsdatum <> $bearbeitungsdatum || $loading->palgebucht <> $palgebucht) {
             // store
             $loading->ruckgabewo = $ruckgabewo;
@@ -97,9 +98,8 @@ class DetailsLoadingController extends Controller
             $loading->save();
 
             session()->flash('messageSaveLoading', 'Successfully updated loading');
-        } else {
-            return redirect()->back();
         }
+        return redirect()->back();
 
     }
 }
