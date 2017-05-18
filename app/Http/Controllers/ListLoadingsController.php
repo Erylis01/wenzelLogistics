@@ -27,7 +27,7 @@ class ListLoadingsController extends Controller
         $currentDate = Carbon::now();
         $limitDate=$currentDate->subDays(60)->format('Y-m-d');
 //        $listLoadings = DB::table('loadings')->where([
-//            ['paltauschvereinbart', '=', 'ja'],
+//            ['pt', '=', 'ja'],
 //            ['ladedatum', '>=', $limitDate],
 //])->distinct()->get();
 
@@ -36,16 +36,16 @@ class ListLoadingsController extends Controller
             $order = $request->get('order'); // Order direction: asc or desc
 
 //            $listLoadings =DB::table('loadings')->orderBy($sortby, $order)->paginate(5);
-            $listLoadings=DB::table('loadings')->where('paltauschvereinbart', '=','ja')->orderBy($sortby, $order)->paginate(5);
+            $listLoadings=DB::table('loadings')->where('pt', '=','JA')->orderBy($sortby, $order)->paginate(5);
             $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
         }
         else{
 
-            $listLoadings = DB::table('loadings')->where('paltauschvereinbart', '=','ja')->paginate(5);
+            $listLoadings = DB::table('loadings')->where('pt', '=','JA')->paginate(5);
             $links='';
 
         }
-    $count=count(DB::table('loadings')->where('paltauschvereinbart', '=','ja')->get());
+    $count=count(DB::table('loadings')->where('pt', '=','JA')->get());
 
 
         return view('loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));

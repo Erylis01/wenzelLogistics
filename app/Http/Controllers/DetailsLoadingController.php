@@ -55,12 +55,12 @@ class DetailsLoadingController extends Controller
         $bearbeitungsdatum = $detailsLoading->bearbeitungsdatum;
         $palgebucht = $detailsLoading->palgebucht;
         $state = $detailsLoading->state;
-        $reasonUpdatePalTauschVereinbart = $detailsLoading->reasonUpdatePalTauschVereinbart;
+        $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
 
         return view('detailsLoading', compact('id', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
             'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anzahl', 'try1', 'try2', 'try3', 'ware', 'gewicht', 'umsatz', 'aufwand',
             'db', 'trp', 'pt', 'subfrachter', 'pal', 'imklarung', 'paltauschvereinbart', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
-            'state', 'reasonUpdatePalTauschVereinbart'
+            'state', 'reasonUpdatePT'
         ));
     }else {
             return view('auth.login');
@@ -75,15 +75,15 @@ class DetailsLoadingController extends Controller
         $blockierung = Input::get('blockierung');
         $bearbeitungsdatum = Input::get('bearbeitungsdatum');
         $palgebucht = Input::get('palgebucht');
-        $reasonUpdatePalTauschVereinbart = Input::get('reasonUpdatePalTauschVereinbart');
-        $updateValidatePalTauschVereinbart = $request->updateValidatePalTauschVereinbart;
+        $reasonUpdatePT = Input::get('reasonUpdatePT');
+        $updateValidatePT = $request->updateValidatePT;
 
 
-        if (isset($reasonUpdatePalTauschVereinbart) && isset($updateValidatePalTauschVereinbart)) {
-            $loading->reasonUpdatePalTauschVereinbart = $reasonUpdatePalTauschVereinbart;
-            $loading->paltauschvereinbart = 'nein';
+        if (isset($reasonUpdatePT) && isset($updateValidatePT)) {
+            $loading->reasonUpdatePT = $reasonUpdatePT;
+            $loading->pt = 'NEIN';
             $loading->save();
-            session()->flash('messageUpdatePalTauschVereinbartLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
+            session()->flash('messageUpdatePTLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
 
         } elseif ($loading->ruckgabewo <> $ruckgabewo || $loading->mahnung <> $mahnung || $loading->blockierung <> $blockierung || $loading->bearbeitungsdatum <> $bearbeitungsdatum || $loading->palgebucht <> $palgebucht) {
             // store

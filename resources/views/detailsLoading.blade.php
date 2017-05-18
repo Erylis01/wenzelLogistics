@@ -32,7 +32,8 @@
                                             <div class="panel panel-default">
                                                 @endif
                                                 <div class="panel-heading">Details of the loading n°{{ $id }}
-                                                    <span class="col-lg-offset-8">{{$state}}</span></div>
+                                                    <span class="col-lg-offset-8">{{$state}}</span>
+                                                </div>
                                                 <div class="panel-body panel-body-auth form-loading">
                                                     <!--reading form suming up information from the table-->
                                                     <form class="form-horizontal" role="form" method="POST"
@@ -211,47 +212,18 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
+                                                            <!--change pt-->
                                                             <!--pt-->
                                                             <div class="col-lg-4">
                                                                 <label for="pt" class="control-label">PT :</label>
-                                                                <label for="pt"
-                                                                       class="details-loading">{{ $pt }}</label>
-                                                            </div>
-                                                            <!--subfrachter-->
-                                                            <div class="col-lg-6">
-                                                                <label for="subfrachter" class="control-label">Subfrachter
-                                                                    :</label>
-                                                                <label for="subfrachter"
-                                                                       class="details-loading">{{ $subfrachter }}</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <!--pal-->
-                                                            <div class="col-lg-4">
-                                                                <label for="pal" class="control-label">Pal :</label>
-                                                                <label for="pal"
-                                                                       class="details-loading">{{ $pal }}</label>
-                                                            </div>
-                                                            <!--imklarung-->
-                                                            <div class="col-lg-3">
-                                                                <label for="imklarung" class="control-label">im Klarung
-                                                                    :</label>
-                                                                <label for="imklarung"
-                                                                       class="details-loading">{{ $imklarung }}</label>
-                                                            </div>
-                                                            <!--change pal tausch vereinbart-->
-                                                            <!--paltauschvereinbart-->
-                                                            <div class="col-lg-5">
-                                                                <label for="paltauschvereinbart" class="control-label">Pal
-                                                                    Tausch Vereinbart
-                                                                    ?</label>
-                                                                <label for="paltauschvereinbart" class="link"
+
+                                                                <label for="pt" class="link"
                                                                        data-toggle="modal"
-                                                                       data-target="#updatePalTauschVereinbart_modal">{{ $paltauschvereinbart }}</label>
+                                                                       data-target="#updatePT_modal">{{ $pt }}</label>
                                                             </div>
 
-                                                            <!-- Modal update pal tausch vereinbart -->
-                                                            <div class="modal fade" id="updatePalTauschVereinbart_modal"
+                                                            <!-- Modal update pt -->
+                                                            <div class="modal fade" id="updatePT_modal"
                                                                  role="dialog">
                                                                 <div class="modal-dialog modal-md">
                                                                     <div class="modal-content">
@@ -267,22 +239,19 @@
                                                                             <form role="form" method="POST" action="">
                                                                                 <input type="hidden" name="_token"
                                                                                        value="{{ csrf_token() }}">
-                                                                                <div>
-                                                        <textarea class="form-control" rows="5"
-                                                                  id="reasonUpdatePalTauschVereinbart"
-                                                                  name="reasonUpdatePalTauschVereinbart" required
-                                                                  autofocus>{{$reasonUpdatePalTauschVereinbart}}</textarea>
-                                                                                    <button type="button"
-                                                                                            class="btn btn-success btn-modal"
-                                                                                            data-toggle="modal"
-                                                                                            data-target="#updateValidatePalTauschVereinbart_modal">
-                                                                                        Update
-                                                                                    </button>
-                                                                                </div>
-
-                                                                                <!-- Modal update validate pal tausch vereinbart -->
+                                                                                <textarea class="form-control" rows="5"
+                                                                                          id="reasonUpdatePT"
+                                                                                          name="reasonUpdatePT" required
+                                                                                          autofocus>{{$reasonUpdatePT}}</textarea>
+                                                                                <button type="button"
+                                                                                        class="btn btn-success btn-modal"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#updateValidatePT_modal">
+                                                                                    Update
+                                                                                </button>
+                                                                                <!-- Modal update validate pt -->
                                                                                 <div class="modal fade"
-                                                                                     id="updateValidatePalTauschVereinbart_modal"
+                                                                                     id="updateValidatePT_modal"
                                                                                      role="dialog">
                                                                                     <div class="modal-dialog modal-sm">
                                                                                         <div class="modal-content">
@@ -312,12 +281,11 @@
                                                                                                     <input type="hidden"
                                                                                                            name="_token"
                                                                                                            value="{{ csrf_token() }}">
-                                                                                                    {{--<input type="hidden" name="reasonUpdatePalTauschVereinbart" value="{{Input::get('reasonUpdatePalTauschVereinbart')}}">--}}
                                                                                                     <div class="col-lg-offset-3">
                                                                                                         <input type="submit"
                                                                                                                class="btn btn-danger btn-modal"
                                                                                                                value="Yes"
-                                                                                                               name="updateValidatePalTauschVereinbart">
+                                                                                                               name="updateValidatePT">
 
                                                                                                         <button type="button"
                                                                                                                 class="btn btn-success btn-modal"
@@ -350,9 +318,44 @@
                                                                 </div>
                                                             </div>
 
-                                                        </div>@if (Session::has('messageUpdatePalTauschVereinbartLoading'))
-                                                            <div class="alert alert-warning text-alert text-center">{{ Session::get('messageUpdatePalTauschVereinbartLoading') }}</div>
-                                                        @endif
+                                                            <!--subfrachter-->
+                                                            <div class="col-lg-6">
+                                                                <label for="subfrachter" class="control-label">Subfrachter
+                                                                    :</label>
+                                                                <label for="subfrachter"
+                                                                       class="details-loading">{{ $subfrachter }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @if (Session::has('messageUpdatePTLoading'))
+                                                                <div class="alert alert-warning text-alert text-center">{{ Session::get('messageUpdatePTLoading') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--pal-->
+                                                            <div class="col-lg-4">
+                                                                <label for="pal" class="control-label">Pal :</label>
+                                                                <label for="pal"
+                                                                       class="details-loading">{{ $pal }}</label>
+                                                            </div>
+                                                            <!--imklarung-->
+                                                            <div class="col-lg-3">
+                                                                <label for="imklarung" class="control-label">im Klarung
+                                                                    :</label>
+                                                                <label for="imklarung"
+                                                                       class="details-loading">{{ $imklarung }}</label>
+                                                            </div>
+
+                                                            <!--paltauschvereinbart-->
+                                                            <div class="col-lg-5">
+                                                                <label for="paltauschvereinbart" class="control-label">Pal
+                                                                    Tausch Vereinbart
+                                                                    ?</label>
+                                                                <label for="paltauschvereinbart"
+                                                                       class="details-loading">{{ $paltauschvereinbart }}</label>
+                                                            </div>
+                                                        </div>
                                                     </form>
                                                 </div>
 

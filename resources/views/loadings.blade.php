@@ -169,7 +169,7 @@
                         <tr class={{$class}}>
                             <td><a href="{{route('showDetailsLoading',$loading->id)}}">{{$loading->id}}</a></td>
                             <td>{{date('d-m-Y', strtotime($loading->ladedatum))}}</td>
-                            <td>{{$loading->entladedatum}}</td>
+                            <td>{{date('d-m-Y', strtotime($loading->entladedatum))}}</td>
                             <td>{{$loading->disp}}</td>
                             <td>{{$loading->atrnr}}</td>
                             <td>{{$loading->referenz}}</td>

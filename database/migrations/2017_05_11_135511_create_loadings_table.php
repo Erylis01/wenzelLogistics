@@ -51,7 +51,7 @@ class CreateLoadingsTable extends Migration
             $table->string('palgebucht')->nullable();
 
             $table->string('state')->default('not OK');
-            $table->string('reasonUpdatePalTauschVereinbart')->nullable();
+            $table->string('reasonUpdatePT')->nullable();
             $table->timestamps();
         });
         }
