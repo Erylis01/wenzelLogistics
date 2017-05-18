@@ -5,10 +5,13 @@
 @endsection
 
 @section('stylesheet')
-    <link href="{{asset('css/auth.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/auth_home.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('classLoadings')
+    class="nonActive"
+@endsection
+@section('classWarehouses')
     class="nonActive"
 @endsection
 @section('classProfile')
@@ -24,9 +27,9 @@
                 @if (Session::has('messageRegistration'))
                     <div class="alert alert-info">{{ Session::get('messageRegistration') }}</div>
                 @endif
-                <div class="panel panel-auth">
+                <div class="panel panel-general">
                     <div class="panel-heading">Profile</div>
-                    <div class="panel-body panel-body-auth">
+                    <div class="panel-body panel-body-general">
                         <form class="form-horizontal" role="form" method="POST" action="">
                             {{ csrf_field() }}
                             <p class="text-center legend-auth">* required field</p>

@@ -1,0 +1,36 @@
+/*PROFILE AUTH*/
+.legend-auth {
+    font-size: 15px;
+}
+
+.profile-link {
+    color: rgb(0, 160, 0);
+    vertical-align: middle;
+}
+
+.profile-link:hover {
+    color: black;
+}
+
+.form-horizontal .control-label{
+    text-align: left;
+}
+
+/*HOME*/
+
+.menu-title{
+    color: rgb(0, 160, 0);
+    vertical-align: middle;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.menu-legend{
+    color: black;
+    font-size: 18px;
+}
+
+.img-home{
+    width: 225px;
+    height:150px;
+}

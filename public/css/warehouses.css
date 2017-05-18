@@ -1,0 +1,64 @@
+/*PANEL WAREHOUSE*/
+
+.panel-warehouses>.panel-heading{
+    padding:5px;
+}
+
+/*TABLE WAREHOUSES*/
+.table-small-warehouses, .table-big-warehouses{
+    margin:-10px;
+}
+
+.table-small-warehouses>table, .table-big-warehouses>table{
+    margin-bottom:0px;
+    /*border-bottom-style: solid;*/
+    /*border-bottom-width: 1px;*/
+    /*border-color:rgb(0, 160, 0);*/
+}
+.table-small-warehouses > table >thead > tr > th, .table-big-warehouses>table>thead>tr>th {
+    font-size: 17px;
+    padding:0px;
+    /*border-bottom-style: solid;*/
+    /*border-bottom-width: 1px;*/
+    /*border-color:rgb(0, 160, 0);*/
+}
+.table-small-warehouses > table >tbody > tr > td, .table-big-warehouses>table>thead>tr>td {
+    font-size: 15px;
+    padding:0px;
+}
+.colTotal{
+    font-weight: bold;
+    min-width:85px;
+}
+.colFakturiert, .colPFM, .colTeamTex, .colSpar{
+    min-width:95px;
+}
+.colVerschenkt{
+    min-width:105px;
+}
+.colECLWolfurt, .colImpex{
+    min-width:110px;
+}
+.colSystempo{
+    min-width:120px;
+}
+.colBenoit{
+    min-width:140px;
+}
+.colAldi{
+    min-width:100px;
+}
+.colDachser, .colSchefknecht{
+    min-width:115px;
+}
+.colBonduelle{
+    min-width:130px;
+}
+.colWildenhofer{
+    min-width:185px;
+}
+.colArinthod{
+    min-width:85px;
+}
+
+

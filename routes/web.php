@@ -29,11 +29,15 @@ Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
 Route::get('/detailsLoading/{id}', 'DetailsLoadingController@show')->name('showDetailsLoading');
 Route::post('/detailsLoading/{id}', 'DetailsLoadingController@save')->name('saveDetailsLoading');
 
+//WAREHOUSES
+Route::get('/allWarehouses', 'WarehousesController@showTotal')->name('showAllWarehouses');
+
+
 //MAILS
     //validate registration
 //Route::get('/login', 'MailController@validateRegistration')->name('validateRegistration');
 //Route::get(‘register/verify/{token}’, ‘RegisterController@verify’)->name('validateRegistration');
 
-Route::get('/test', function(){
-    return view('test');
-});
+//Route::get('/test', function(){
+//    return view('test');
+//});

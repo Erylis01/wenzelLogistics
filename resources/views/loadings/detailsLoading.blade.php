@@ -5,10 +5,13 @@
 @endsection
 
 @section('stylesheet')
-
+    <link href="{{asset('css/loadings.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('classLoadings')
+    class="nonActive"
+@endsection
+@section('classWarehouses')
     class="nonActive"
 @endsection
 @section('classProfile')
@@ -23,7 +26,7 @@
             <div class="col-lg-14 container-details">
                 <!--different panel style according to the state of the loading-->
                 @if($state=="OK")
-                    <div class="panel panel-auth">
+                    <div class="panel panel-general">
                         @elseif($state=="almost OK")
                             <div class="panel panel-warning">
                                 @elseif ($state=="not OK")
@@ -34,7 +37,7 @@
                                                 <div class="panel-heading">Details of the loading n°{{ $id }}
                                                     <span class="col-lg-offset-8">{{$state}}</span>
                                                 </div>
-                                                <div class="panel-body panel-body-auth form-loading">
+                                                <div class="panel-body panel-body-general form-loading">
                                                     <!--reading form suming up information from the table-->
                                                     <form class="form-horizontal" role="form" method="POST"
                                                           action="">
@@ -359,7 +362,7 @@
                                                     </form>
                                                 </div>
 
-                                                <div class="panel-body panel-body-auth form-loading">
+                                                <div class="panel-body panel-body-general form-loading">
                                                     <!--form to edit loading-->
                                                     <form class="form-horizontal" role="form" method="POST"
                                                           action="{{route('saveDetailsLoading', $id)}}">
@@ -469,7 +472,7 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                                <div class="panel-body panel-body-auth">
+                                                <div class="panel-body panel-body-general">
                                                     <div class="table-responsive loadings-container">
                                                         <table class="table table-hover  table-bordered table-loading-pallets">
                                                             <thead>

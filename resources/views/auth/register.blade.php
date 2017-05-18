@@ -5,15 +5,15 @@
     @endsection
 
 @section('stylesheet')
-    <link href="{{asset('css/auth.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/auth_home.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <div class="panel panel-auth">
+            <div class="panel panel-general">
                 <div class="panel-heading">Register</div>
-                <div class="panel-body panel-body-auth">
+                <div class="panel-body panel-body-general">
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 

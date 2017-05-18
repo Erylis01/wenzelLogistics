@@ -57,7 +57,7 @@ class DetailsLoadingController extends Controller
         $state = $detailsLoading->state;
         $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
 
-        return view('detailsLoading', compact('id', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
+        return view('loadings.detailsLoading', compact('id', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
             'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anzahl', 'try1', 'try2', 'try3', 'ware', 'gewicht', 'umsatz', 'aufwand',
             'db', 'trp', 'pt', 'subfrachter', 'pal', 'imklarung', 'paltauschvereinbart', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
             'state', 'reasonUpdatePT'

@@ -49,6 +49,10 @@
     border-color: rgb(0, 160, 0);
 }
 
+.btn-modal {
+    font-size: 18px;
+}
+
 /*LINK*/
 
 .link, .link:focus, .link:active {
@@ -60,25 +64,21 @@
     color: black;
 }
 
-/*PANEL AUTH*/
+/*PANEL*/
 
-.panel-auth, .panel-default,.panel-warning, .panel-danger  {
+.panel-general, .panel-default,.panel-warning, .panel-danger  {
     border-color: rgb(0, 160, 0);
 }
 
-.panel-body-auth {
+.panel-body-general {
     font-size: 18px;
 }
 
-.legend-auth {
-    font-size: 15px;
-}
-
-.panel-auth>.panel-heading{
+.panel-general>.panel-heading{
     background-color: rgba(0, 210, 0, 0.1);
 }
 
-.panel-auth > .panel-heading,.panel-warning > .panel-heading, .panel-danger > .panel-heading, .panel-default > .panel-heading  {
+.panel-general > .panel-heading,.panel-warning > .panel-heading, .panel-danger > .panel-heading, .panel-default > .panel-heading  {
     font-size: 25px;
     border-color: rgb(0, 160, 0);
     color: rgb(0, 160, 0);
@@ -97,195 +97,9 @@
     background-color: rgba(255, 193, 197, 0.1);
 }
 
-/*PROFILE*/
-
-.btn-modal {
-    font-size: 18px;
-}
-
-.profile-link {
-    color: rgb(0, 160, 0);
-    vertical-align: middle;
-}
-
-.profile-link:hover {
-    color: black;
-}
 
 .text-alert {
     color: rgb(0, 160, 0);
     font-size: 18px;
     font-weight: bold;
 }
-
-.form-horizontal .control-label{
-    text-align: left;
-}
-
-/*HOME*/
-
-.menu-title{
-    color: rgb(0, 160, 0);
-    vertical-align: middle;
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.menu-legend{
-    color: black;
-    font-size: 18px;
-}
-
-/*LOADINGS*/
-
-/*.btn-refresh, .btn-refresh:focus{*/
-    /*margin-bottom : 5px;*/
-    /*margin-top: -15px;*/
-    /*background-color: rgba(0, 160, 0, 0.8);*/
-    /*border-color: rgb(0, 160, 0);*/
-    /*color:white;*/
-/*}*/
-
-/*.btn-refresh:hover {*/
-    /*background-color: white;*/
-    /*color: rgb(0, 160, 0);*/
-    /*border-color: rgb(0, 160, 0);}*/
-
-.loadings-sorting{
-    color:rgb(0, 160, 0);
-}
-.loadings-sorting:hover{
-    color:black;
-}
-
-.loadings-legend{
-    display: inline;;
-}
-.loadings-pagination{
-    margin-top:5px;
-}
-
-.loadings-pagination> ul.pagination{
-    display: inline;
-}
-
-.loadings-pagination > ul.pagination >li.active >span {
-    background-color: rgba(0, 160, 0, 0.8);
-    color: white;
-    border-radius: 5px;
-}
-
-.loadings-pagination > ul.pagination >li >a, .loadings-pagination > ul.pagination >li >span{
-    color: black;
-    text-decoration: none;
-}
-
-.loadings-pagination > ul.pagination >li:not(.active) >a:hover, .loadings-pagination > ul.pagination >li:not(.active) >span:hover {
-    background-color: rgba(0, 160, 0, 0.1);
-    border-radius: 5px;
-}
-
-.loadings-wrapper {
-    width: auto;
-    margin-top:-10px;
-    /*margin-left:-80px;*/
-    /*margin-right:-80px;*/
-}
-
-.loadings-container{
-    /*overflow-y: scroll;*/
-    /*height: auto;*/
-    /*position: relative;*/
-    /*z-index: 0;*/
-}
-
-.table-loadings{
-    margin-bottom:5px;
-}
-
-.table-loadings > thead {
-    color: rgb(0, 160, 0);
-    font-size:medium;
-    border-color:rgb(0, 160, 0) ;
-    border-style: solid;
-
-}
-
-.table-loadings > tbody {
-    font-size:small;
-    border-color:rgb(0, 160, 0) ;
-    border-style: solid;
-}
-
-.table-loadings > thead > tr > th, .table-loadings > thead > tr > td, .table-loadings > tbody > tr > th, .table-loadings > tbody > tr > td {
-    vertical-align: middle;
-    border-color:rgb(0, 160, 0) ;
-    border-style: ridge;
-    /*height: 25px;*/
-}
-
-/*.table-loadings > thead > tr > th{*/
-    /*width: auto;*/
-    /*z-index: 2;*/
-    /*background-color: white;*/
-/*}*/
-
-.table-loadings td >a {
-    font-weight: bold;
-    color : rgb(0, 160, 0);
-}
-
-/*LOADING*/
-
-.details-loading{
-    font-weight: normal;
-}
-
-.container-details{
-    margin-left: -70px;
-    margin-right: -70px;
-}
-
-.form-loading{
-    border-bottom-color:rgb(0, 160, 0) ;
-    border-bottom-style: double;
-}
-
-.table-loading-pallets > thead, .table-loading-pallets>tbody {
-    font-size:small;
-    border-color:rgb(0, 160, 0) ;
-    border-style: ridge;
-}
-
-.table-loading-pallets > thead > tr > th, .table-loading-pallets > thead > tr > td{
-    vertical-align: middle;
-
-
-    height: 25px;
-}
-
-.table-loading-pallets > thead > tr > th{
-    width: auto;
-    z-index: 2;
-    background-color: white;
-}
-
-.table-loading-pallets td >a {
-    font-weight: bold;
-    color : rgb(0, 160, 0);
-}
-
-.panel-heading-success{
-    background-color: #99cb84;
-}
-
-.loading-warning{
-    color:rgb(237, 7, 7) ;
-    margin : 70px;
-}
-
-.img-loading{
-    height:25px;
-}
-
-

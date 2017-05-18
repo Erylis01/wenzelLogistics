@@ -48,7 +48,7 @@ class ListLoadingsController extends Controller
     $count=count(DB::table('loadings')->where('pt', '=','JA')->get());
 
 
-        return view('loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
+        return view('loadings.loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
     }else{
             return view('auth.login');
         }}
