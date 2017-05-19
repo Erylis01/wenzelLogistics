@@ -9,6 +9,11 @@
     margin:-10px;
 }
 
+.table-big-warehouses{
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
 .table-small-warehouses>table, .table-big-warehouses>table{
     margin-bottom:0px;
     /*border-bottom-style: solid;*/
@@ -16,49 +21,52 @@
     /*border-color:rgb(0, 160, 0);*/
 }
 .table-small-warehouses > table >thead > tr > th, .table-big-warehouses>table>thead>tr>th {
-    font-size: 17px;
+    font-size: 18px;
     padding:0px;
     /*border-bottom-style: solid;*/
     /*border-bottom-width: 1px;*/
     /*border-color:rgb(0, 160, 0);*/
 }
-.table-small-warehouses > table >tbody > tr > td, .table-big-warehouses>table>thead>tr>td {
-    font-size: 15px;
-    padding:0px;
+.table-small-warehouses > table >tbody > tr > td, .table-big-warehouses>table>tbody>tr>td {
+    font-size: 16px;
+}
+
+.colRefLoading{
+    min-width:160px;
 }
 .colTotal{
     font-weight: bold;
-    min-width:85px;
+    min-width:90px;
 }
 .colFakturiert,  .colTeamTex, .colSpar{
-    min-width:95px;
+    min-width:100px;
 }
 .colVerschenkt, .colImpexEUX, .colImpexEUY{
-    min-width:105px;
-}
-.colECLWolfurt{
     min-width:110px;
 }
+.colECLWolfurt{
+    min-width:115px;
+}
 .colSystempo{
-    min-width:120px;
+    min-width:125px;
 }
 .colBenoit{
-    min-width:140px;
+    min-width:145px;
 }
 .colAldiDAG, .colAldiDOM, .colAldiSWB{
     min-width:100px;
 }
 .colDachser, .colSchefknecht{
-    min-width:115px;
+    min-width:120px;
 }
 .colBonduelle{
-    min-width:130px;
+    min-width:135px;
 }
 .colWildenhofer{
-    min-width:185px;
+    min-width:195px;
 }
 .colArinthod, .colPFM{
-    min-width:80px;
+    min-width:85px;
 }
 
 

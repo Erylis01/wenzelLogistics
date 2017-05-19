@@ -74,6 +74,7 @@ class LoadingTableSeeder extends Seeder
                                 'pal' => trim($row->pal),
                                 'imklarung' => trim($row->imklarung),
                                 'paltauschvereinbart' => trim($row->paltauschvereinbart),
+                                'warehouse_id'=>trim($row->warehouse_id),
                             ]);
                         }
                     } else {
@@ -108,6 +109,7 @@ class LoadingTableSeeder extends Seeder
                             'pal' => trim($row->pal),
                             'imklarung' => trim($row->imklarung),
                             'paltauschvereinbart' => trim($row->paltauschvereinbart),
+                            'warehouse_id'=>trim($row->warehouse_id),
                         ]);
                     }
 

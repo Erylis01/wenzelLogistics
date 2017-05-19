@@ -52,6 +52,8 @@ class CreateLoadingsTable extends Migration
 
             $table->string('state')->default('not OK');
             $table->string('reasonUpdatePT')->nullable();
+
+            $table->integer('warehouse_id')->nullable();
             $table->timestamps();
         });
         }

@@ -500,27 +500,17 @@
                                                             </thead>
                                                             <tbody>
 
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
+
+                                                                    <tr>
+                                                                        <td class="text-center colTotal">{{$anzahl}}</td>
+                                                                        @foreach($warehouses as $warehouse)
+                                                                            @if($warehouse->id == $warehouse_id)
+                                                                                <td class="text-center">{{$anzahl}}</td>
+                                                                            @else
+                                                                                <td class="text-center"></td>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </tr>
 
                                                             </tbody>
                                                         </table>

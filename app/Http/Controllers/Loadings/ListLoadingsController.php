@@ -57,7 +57,9 @@ class ListLoadingsController extends Controller
      * Import data from an excel file
      */
     public function importData(){
-        Artisan::call('db:seed');
+        Artisan::queue('db:seed');
+//        Artisan::call('db:seed', [
+//            'class' => 'LoadingTableSeeder',]);
     }
 
     /**

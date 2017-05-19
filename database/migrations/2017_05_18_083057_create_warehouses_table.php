@@ -15,12 +15,18 @@ class CreateWarehousesTable extends Migration
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('adresse')->nullable();
             $table->integer('palanzahl')->nullable();
-            $table->integer('idLoading')->unsigned();
+            $table->string('telefonnummer', 15)->nullable();
+            $table->string('kontakt')->nullable();
+//            $table->integer('idLoading')->unsigned();
             $table->timestamps();
         });
+
+//        Schema::table('loadings', function(Blueprint $table) {
+//            $table->integer('Warehouse_id')->unsigned()->index();
+//        });
     }
 
     /**

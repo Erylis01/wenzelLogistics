@@ -17,32 +17,25 @@ class WarehousesController extends Controller
     public function showTotal(Request $request)
     {
         if (Auth::check()) {
-            //table 1
+//table 1
             $totalpalanzahl =DB::table('warehouses')->sum('palanzahl');
-            $warehousesPalAnzahl = Warehouse::pluck('palanzahl','name');
-            $warehousesName = Warehouse::pluck('name','id');
-            $warehouses=DB::table('warehouses')->select('name', 'palanzahl')->get();
 
-//            $totalpalanzahlFakturiert=DB::table('warehouses')->where('name', '=', 'Fakturiert')->sum('palanzahl');
-//            $totalpalanzahlVerschenkt=DB::table('warehouses')->where('name', '=', 'Verschenkt')->sum('palanzahl');
-//            $totalpalanzahlECLWolfurt=DB::table('warehouses')->where('name', '=', 'ECL Wolfurt')->sum('palanzahl');
-//            $totalpalanzahlSystempoAT=DB::table('warehouses')->where('name', '=', 'Systempo AT')->sum('palanzahl');
-//            $totalpalanzahlSBenoitValerie=DB::table('warehouses')->where('name', '=', 'Benoit & Valerie')->sum('palanzahl');
-//            $totalpalanzahlSPFMFR=DB::table('warehouses')->where('name', '=', 'PFM - FR')->sum('palanzahl');
-//            $totalpalanzahlTeamTex=DB::table('warehouses')->where('name', '=', 'Team Tex')->sum('palanzahl');
-//            $totalpalanzahlALDISWB=DB::table('warehouses')->where('name', '=', 'ALDI SWB')->sum('palanzahl');
-//            $totalpalanzahlALDIDAG=DB::table('warehouses')->where('name', '=', 'ALDI DAG')->sum('palanzahl');
-//            $totalpalanzahlALDIDOM=DB::table('warehouses')->where('name', '=', 'ALDI DOM')->sum('palanzahl');
-//            $totalpalanzahlDachserF51=DB::table('warehouses')->where('name', '=', 'Dachser F51 Reims')->sum('palanzahl');
-//            $totalpalanzahlImpexEUY=DB::table('warehouses')->where('name', '=', 'Impex-EUY')->sum('palanzahl');
-//            $totalpalanzahlBonduelleF80=DB::table('warehouses')->where('name', '=', 'Bonduelle F80')->sum('palanzahl');
-//            $totalpalanzahlSchefknecht=DB::table('warehouses')->where('name', '=', 'Schefknecht')->sum('palanzahl');
-//            $totalpalanzahlWildenhoferSalzburg=DB::table('warehouses')->where('name', '=', 'Wildenhofer Salzburg')->sum('palanzahl');
-//            $totalpalanzahlIMPEXEUX=DB::table('warehouses')->where('name', '=', 'IMPEX-EUX')->sum('palanzahl');
-//            $totalpalanzahlArinthod=DB::table('warehouses')->where('name', '=', 'Arinthod')->sum('palanzahl');
-//            $totalpalanzahlSparWels=DB::table('warehouses')->where('name', '=', 'Spar Wels')->sum('palanzahl');
 
-            //table2
+//            if (request()->has('sortby') && request()->has('order')) {
+//                $sortby = $request->get('sortby'); // Order by what column?
+//                $order = $request->get('order'); // Order direction: asc or desc
+
+                //table2
+                $warehouses=Warehouse::with(array('loadings' => function($query) {
+                    $query->orderBy('referenz', 'ASC');
+                }))->get();
+
+//                $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
+//            }
+//            else{
+//                //table2
+//                $warehouses=Warehouse::with('loadings')->get();
+
 
             return view('warehouses.allWarehouses', compact('totalpalanzahl', 'warehouses','warehousesPalAnzahl', 'warehousesName'));
         }else{
