@@ -30,13 +30,13 @@
     font-weight: bold;
     min-width:85px;
 }
-.colFakturiert, .colPFM, .colTeamTex, .colSpar{
+.colFakturiert,  .colTeamTex, .colSpar{
     min-width:95px;
 }
-.colVerschenkt{
+.colVerschenkt, .colImpexEUX, .colImpexEUY{
     min-width:105px;
 }
-.colECLWolfurt, .colImpex{
+.colECLWolfurt{
     min-width:110px;
 }
 .colSystempo{
@@ -45,7 +45,7 @@
 .colBenoit{
     min-width:140px;
 }
-.colAldi{
+.colAldiDAG, .colAldiDOM, .colAldiSWB{
     min-width:100px;
 }
 .colDachser, .colSchefknecht{
@@ -57,8 +57,10 @@
 .colWildenhofer{
     min-width:185px;
 }
-.colArinthod{
-    min-width:85px;
+.colArinthod, .colPFM{
+    min-width:80px;
 }
+
+
 
 

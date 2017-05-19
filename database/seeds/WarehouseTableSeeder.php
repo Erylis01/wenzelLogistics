@@ -52,7 +52,7 @@ class WarehouseTableSeeder extends Seeder
         ));
         Warehouse::create(array(
             'id'=>5,
-            'name'     => 'PFM - FR',
+            'name'     => 'PFM-FR',
             'adresse'=>'testAdresse2',
             'palanzahl' => 5,
             'idLoading'=>3,
@@ -87,7 +87,7 @@ class WarehouseTableSeeder extends Seeder
         ));
         Warehouse::create(array(
             'id'=>10,
-            'name'     => 'Dachser F51 Reims',
+            'name'     => 'Dachser F51',
             'adresse'=>'testAdresse2',
             'palanzahl' => 10,
             'idLoading'=>3,
@@ -122,7 +122,7 @@ class WarehouseTableSeeder extends Seeder
         ));
         Warehouse::create(array(
             'id'=>15,
-            'name'     => 'IMPEX-EUX',
+            'name'     => 'Impex-EUX',
             'adresse'=>'testAdresse2',
             'palanzahl' => 15,
             'idLoading'=>3,
