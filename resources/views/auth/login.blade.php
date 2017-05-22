@@ -76,6 +76,10 @@
             </div>
             @if (Session::has('messageDelete'))
                 <div class="alert alert-info text-center">{{ Session::get('messageDelete') }}</div>
+            @elseif (Session::has('messageSuccessRegistration'))
+                <div class="alert alert-success text-center">{{ Session::get('messageSuccessRegistration') }}</div>
+            @elseif (Session::has('messageRegistration'))
+                <div class="alert alert-success text-center">{{ Session::get('messageRegistration') }}</div>
             @endif
         </div>
     </div>

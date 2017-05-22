@@ -15,11 +15,15 @@
                 <div class="panel-heading">Reset Password</div>
                 <div class="panel-body panel-body-general">
 
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    {{--@if (session('status'))--}}
+                        {{--<div class="alert alert-success">--}}
+                            {{--{{ session('status') }}--}}
+                        {{--</div>--}}
+                    {{--@endif--}}
+
+                        @if (Session::has('messageResetPassword'))
+                            <div class="alert alert-success text-center">{{ Session::get('messageResetPassword') }}</div>
+                        @endif
 
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('password.email') }}">
                         {{ csrf_field() }}

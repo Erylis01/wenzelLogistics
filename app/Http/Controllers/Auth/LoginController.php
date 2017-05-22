@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -48,12 +48,12 @@ class LoginController extends Controller
         return 'username';
     }
 
-//    protected function credentials(Request $request)
-//    {
-//        return [
-//            'email' => $request->email,
-//            'password' => $request->password,
-//            'verified' => 1,
-//        ];
-//    }
+    protected function credentials(Request $request)
+    {
+        return [
+            'username' => $request->username,
+            'password' => $request->password,
+            'activated' => 1,
+        ];
+    }
 }

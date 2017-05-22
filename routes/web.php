@@ -22,8 +22,6 @@ Route::get('/profile', 'ProfileController@show')->name('showProfile');
 Route::post('/profile', 'ProfileController@update')->name('updateProfile');
 Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 
-//Route::get('/password/email','ForgotPasswordController@sendResetLinkEmail')->name('resetPasswordProfile');
-
 //LOADINGS
 Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
 Route::get('/detailsLoading/{id}', 'DetailsLoadingController@show')->name('showDetailsLoading');
@@ -35,9 +33,5 @@ Route::get('/allWarehouses', 'WarehousesController@showTotal')->name('showAllWar
 
 //MAILS
     //validate registration
-//Route::get('/login', 'MailController@validateRegistration')->name('validateRegistration');
-//Route::get(‘register/verify/{token}’, ‘RegisterController@verify’)->name('validateRegistration');
+Route::get('auth/registerVerify/{email_token}', 'Auth\RegisterController@verify')->name('validateRegistration');
 
-//Route::get('/test', function(){
-//    return view('test');
-//});

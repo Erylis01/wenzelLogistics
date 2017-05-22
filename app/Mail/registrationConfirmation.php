@@ -2,12 +2,14 @@
 
 namespace App\Mail;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\DB;
 
-class resetPasswordConfirmation extends Mailable
+class registrationConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,11 +18,10 @@ class resetPasswordConfirmation extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
     }
-
     /**
      * Build the message.
      *
@@ -28,6 +29,8 @@ class resetPasswordConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mails.resetPasswordConfirmation');
+        $user=DB::table('users')->where([['username', '=',request()->username],['email','=',request()->email]])->first();
+
+        return $this->view('mails.registrationConfirmation', compact('user'));
     }
 }

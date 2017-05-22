@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Notifications\registrationConfirmation;
+
+
+use App\Mail\registrationConfirmation;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -87,6 +90,7 @@ class RegisterController extends Controller
         // The verified method has been added to the user model and chained here
         // for better readability
         User::where('email_token', $token)->firstOrFail()->verified();
+        Session::flash('messageSuccessRegistration', 'You are now well registered');
         return redirect('/login');
 
     }
@@ -104,14 +108,15 @@ class RegisterController extends Controller
         try
         {
             $user = $this->create($request->all());
-            // After creating the user send an email with the random token generated in the create method above
-            $user->notify(new registrationConfirmation($user));
 
-//            $email = new EmailVerification(new User(['email_token' => $user->email_token, 'name' => $user->name]));
-//            Mail::to($user->email)->send($email);
+            // After creating the user send an email with the random token generated in the create method above
+//            $user->notify(new registrationConfirmation($data));
+
+            $email = new registrationConfirmation(new User(['email_token' => $user->email_token, 'username' => $user->username]));
+            Mail::to($user->email)->send($email);
             DB::commit();
-            Session::flash('messageRegistration', 'We have sent you a verification email!');
-            return back();
+            Session::flash('messageRegistration', 'We have sent you a verification email !');
+            return redirect('/login');
         }
         catch(Exception $e)
         {
