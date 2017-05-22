@@ -60,17 +60,13 @@ class ListLoadingsController extends Controller
         $path = 'resources/assets/excel/PalettenKonto2.xlsx';
         $data = Excel::load($path, function ($reader) {
         })->get();
+
         if (!empty($data)) {
             foreach ($data as $sheet) {
-
                 foreach ($sheet as $row) {
-
                     $loadingsTest = DB::table('loadings')->where('referenz', '=', trim($row->referenz))->get();
-
                     $count = count($loadingsTest);
-
                     if (!$loadingsTest->isEmpty()) {
-
                         $k = 0;
                         while ($k < $count && $k <> -199) {
                             if (date('Y-m-d H:i:s', strtotime($loadingsTest[$k]->ladedatum)) <> trim($row->ladedatum) || date('Y-m-d H:i:s', strtotime($loadingsTest[$k]->entladedatum)) <> trim($row->entladedatum) || $loadingsTest[$k]->disp <> trim($row->disp) || $loadingsTest[$k]->atrnr <> trim($row->atrnr) || $loadingsTest[$k]->auftraggeber <> trim($row->auftraggeber) || $loadingsTest[$k]->beladestelle <> trim($row->beladestelle) || $loadingsTest[$k]->landb <> trim($row->landb) || $loadingsTest[$k]->plzb <> trim($row->plzb) || $loadingsTest[$k]->ortb <> trim($row->ortb) || $loadingsTest[$k]->entladestelle <> trim($row->entladestelle) || $loadingsTest[$k]->lande <> trim($row->lande) || $loadingsTest[$k]->plze <> trim($row->plze) || $loadingsTest[$k]->orte <> trim($row->orte) || $loadingsTest[$k]->anzahl <> trim($row->anzahl) || $loadingsTest[$k]->try1 <> trim($row->try1) || $loadingsTest[$k]->try2 <> trim($row->try2) || $loadingsTest[$k]->try3 <> trim($row->try3) || $loadingsTest[$k]->ware <> trim($row->ware) || $loadingsTest[$k]->gewicht <> trim($row->gewicht) || $loadingsTest[$k]->umsatz <> trim($row->umsatz) || $loadingsTest[$k]->aufwand <> trim($row->aufwand) || $loadingsTest[$k]->db <> trim($row->db) || $loadingsTest[$k]->trp <> trim($row->trp) || $loadingsTest[$k]->pt <> trim($row->pt) || $loadingsTest[$k]->subfrachter <> trim($row->subfrachter) || $loadingsTest[$k]->pal <> trim($row->pal) || $loadingsTest[$k]->imklarung <> trim($row->imklarung)) {
