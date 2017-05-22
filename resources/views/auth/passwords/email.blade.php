@@ -14,6 +14,7 @@
             <div class="panel panel-general">
                 <div class="panel-heading">Reset Password</div>
                 <div class="panel-body panel-body-general">
+
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
