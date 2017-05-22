@@ -121,7 +121,7 @@
 
                             <!-------------------------------------------------------------------------------->
 
-                            passwordsword-->
+                            <!--password-->
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                 <label for="password" class="col-lg-4 control-label">Actual
                                     password :</label>

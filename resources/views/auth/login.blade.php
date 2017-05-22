@@ -31,13 +31,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('passwords') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-lg-4 control-label">Password</label>
 
                             <div class="col-lg-6">
                                 <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
 
-                                @if ($errors->has('passwords'))
+                                @if ($errors->has('password'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
