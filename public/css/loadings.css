@@ -121,3 +121,20 @@
     font-weight: bold;
     color : rgb(0, 160, 0);
 }
+
+/*PANELS DETAILS LOADING*/
+.subpanel{
+    size:20px;
+    border-color:rgb(0, 160, 0);
+    border-style:solid;
+    border-width: 1px;
+}
+
+.subpanel:hover >div>a, .subpanel:focus >div>a, .subpanel:active >div>a{
+    color: rgb(0, 160, 0);
+}
+
+.subpanel >div>a{
+    color: black;
+}
+

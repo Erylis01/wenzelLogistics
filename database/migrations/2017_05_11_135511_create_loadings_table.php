@@ -14,11 +14,10 @@ class CreateLoadingsTable extends Migration
     public function up()
     {
         Schema::create('loadings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('atrnr')->unsigned()->unique();
             $table->date('ladedatum');
             $table->date('entladedatum');
             $table->string('disp');
-            $table->integer('atrnr')->unsigned();
             $table->string('referenz');
             $table->string('auftraggeber');
             $table->string('beladestelle');
@@ -29,21 +28,22 @@ class CreateLoadingsTable extends Migration
             $table->string('lande');
             $table->integer('plze')->unsigned();
             $table->string('orte');
-            $table->string('anzahl');
-            $table->string('try1');
-            $table->string('try2');
-            $table->string('try3');
+            $table->string('anz');
+            $table->string('art');
             $table->string('ware');
             $table->double('gewicht')->unsigned();
+            $table->integer('vol')->unsigned()->nullable();
+            $table->double('ldm')->unsigned();
             $table->double('umsatz')->unsigned();
             $table->double('aufwand')->unsigned();
             $table->double('db');
             $table->integer('trp');
             $table->string('pt');
             $table->string('subfrachter');
-            $table->string('pal')->nullable();
-            $table->string('imklarung')->nullable();
-            $table->string('paltauschvereinbart')->nullable();
+            $table->string('kennzeichen')->nullable();
+            $table->string('zusladestellen')->nullable();
+
+
             $table->string('ruckgabewo')->nullable();
             $table->string('mahnung')->nullable();
             $table->string('blockierung')->nullable();
