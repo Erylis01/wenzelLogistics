@@ -384,8 +384,8 @@
                                                                                                                     directly
                                                                                                                     on
                                                                                                                     the
-                                                                                                                    Excel
-                                                                                                                    file</h4>
+                                                                                                                    database
+                                                                                                                    </h4>
                                                                                                                 <br>
                                                                                                                 <form role="form"
                                                                                                                       method="POST"
