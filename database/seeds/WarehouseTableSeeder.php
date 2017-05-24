@@ -1,5 +1,6 @@
 <?php
 
+use App\PalletsAccount;
 use App\Warehouse;
 use Illuminate\Database\Seeder;
 
@@ -14,164 +15,56 @@ class WarehouseTableSeeder extends Seeder
     {
         DB::table('warehouses')->delete();
         Warehouse::create(array(
-            'id'=>1,
-            'name'     => 'Fakturiert',
-            'adresse'=>'testAdresse',
-            'palanzahl' => 1,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
+            'id' => 1,
+            'name' => 'warehouse1',
+            'adress' => 'adress1',
+            'zipcode' => 1,
+            'town' => 'town1',
+            'country' => 'country1',
+            'phone'=>'phone1',
+            'fax'=>'fax1',
+            'email'=>'email1',
+            'namecontact'=>'contact1',
         ));
         Warehouse::create(array(
-        'id'=>2,
-        'name'     => 'Verschenkt',
-        'adresse'=>'testAdresse2',
-        'palanzahl' =>2,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-    ));
-
-        Warehouse::create(array(
-            'id'=>3,
-            'name'     => 'ECL Wolfurt',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 3,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>44,
-            'name'     => 'Systempo AT',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 44,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
+            'id' => 2,
+            'name' => 'warehouse2',
+            'adress' => 'adress2',
+            'zipcode' => 2,
+            'town' => 'town2',
+            'country' => 'country2',
+            'phone'=>'phone2',
+            'fax'=>'fax2',
+            'email'=>'email2',
+            'namecontact'=>'contact2',
         ));
 
         Warehouse::create(array(
-            'id'=>4,
-            'name'     => 'Benoit & Valerie',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 4,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
+            'id' => 3,
+            'name' => 'warehouse3',
+            'adress' => 'adress3',
+            'zipcode' => 3,
+            'town' => 'town3',
+            'country' => 'country3',
+            'phone'=>'phone3',
+            'fax'=>'fax3',
+            'email'=>'email3',
+            'namecontact'=>'contact3',
+        ));
 
-        ));
         Warehouse::create(array(
-            'id'=>5,
-            'name'     => 'PFM-FR',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 5,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
+            'id' => 44,
+            'name' => 'warehouse44',
+            'adress' => 'adress44',
+            'zipcode' => 44,
+            'town' => 'town44',
+            'country' => 'country44',
+            'phone'=>'phone44',
+            'fax'=>'fax44',
+            'email'=>'email44',
+            'namecontact'=>'contact44',
+        ));
 
-        ));
-        Warehouse::create(array(
-            'id'=>6,
-            'name'     => 'Team Tex',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 6,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>7,
-            'name'     => 'ALDI SWB',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 7,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-        'id'=>8,
-        'name'     => 'ALDI DAG',
-        'adresse'=>'testAdresse2',
-        'palanzahl' => 8,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-    ));
-        Warehouse::create(array(
-            'id'=>9,
-            'name'     => 'ALDI DOM',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 9,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>10,
-            'name'     => 'Dachser F51',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 10,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>11,
-            'name'     => 'Impex-EUY',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 11,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>12,
-            'name'     => 'Bonduelle F80',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 12,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>13,
-            'name'     => 'Schefknecht',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 13,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-
-        ));
-        Warehouse::create(array(
-            'id'=>14,
-            'name'     => 'Wildenhofer Salzburg',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 14,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-        ));
-        Warehouse::create(array(
-            'id'=>15,
-            'name'     => 'Impex-EUX',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 15,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-        ));
-        Warehouse::create(array(
-            'id'=>16,
-            'name'     => 'Arinthod',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 16,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-        ));
-        Warehouse::create(array(
-            'id'=>17,
-            'name'     => 'Spar Wels',
-            'adresse'=>'testAdresse2',
-            'palanzahl' => 17,
-            'telefonnummer'=>'0604458759',
-            'kontakt'=>'camille',
-        ));
 
     }
 }

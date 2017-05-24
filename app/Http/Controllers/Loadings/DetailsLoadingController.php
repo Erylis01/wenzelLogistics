@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Loading;
-use App\Warehouse;
+use App\PalletsAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +20,7 @@ class DetailsLoadingController extends Controller
     {
         if (Auth::check()) {
             $detailsLoading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();
-            $warehouses = Warehouse::with('loadings')->get();
+            $warehouses = PalletsAccount::with('loadings')->get();
 
             $ladedatum = $detailsLoading->ladedatum;
             $entladedatum = $detailsLoading->entladedatum;

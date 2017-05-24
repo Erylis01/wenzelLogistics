@@ -2,44 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Warehouse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WarehousesController extends Controller
 {
-    /**
-     * Display the content.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showTotal(Request $request)
-    {
-        if (Auth::check()) {
-//table 1
-            $totalpalanzahl =DB::table('warehouses')->sum('palanzahl');
+   public function showAll(Request $request)
+   {
+       if (request()->has('sortby') && request()->has('order')) {
+           $sortby = $request->get('sortby'); // Order by what column?
+           $order = $request->get('order'); // Order direction: asc or desc
+           $listWarehouses=DB::table('warehouses')->orderBy($sortby, $order)->paginate(10);
+           $links=$listWarehouses->appends(['sortby'=>$sortby, 'order'=>$order])->render();
+       }else{
+           $listWarehouses = DB::table('warehouses')->paginate(10);
+           $links='';
+       }
+       $count=count(DB::table('warehouses')->get());
 
+       return view('warehouses.allWarehouses', compact('listWarehouses','sortby', 'order', 'links', 'count'));
+   }
 
-//            if (request()->has('sortby') && request()->has('order')) {
-//                $sortby = $request->get('sortby'); // Order by what column?
-//                $order = $request->get('order'); // Order direction: asc or desc
+   public function save(){
 
-                //table2
-                $warehouses=Warehouse::with(array('loadings' => function($query) {
-                    $query->orderBy('referenz', 'ASC');
-                }))->get();
+   }
 
-//                $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
-//            }
-//            else{
-//                //table2
-//                $warehouses=Warehouse::with('loadings')->get();
+   public function showDetails(){
 
-
-            return view('warehouses.allWarehouses', compact('totalpalanzahl', 'warehouses','warehousesPalAnzahl', 'warehousesName'));
-        }else{
-            return view('auth.login');
-        }}
-
+   }
 }

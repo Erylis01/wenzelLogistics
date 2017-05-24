@@ -9,9 +9,12 @@
 @endsection
 
 @section('classLoadings')
-    class="nonActive"
+    class="active"
 @endsection
 @section('classWarehouses')
+    class="nonActive"
+@endsection
+@section('classPalletsAccounts')
     class="nonActive"
 @endsection
 @section('classProfile')
