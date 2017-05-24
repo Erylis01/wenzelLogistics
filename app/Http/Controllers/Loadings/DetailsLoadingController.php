@@ -20,7 +20,6 @@ class DetailsLoadingController extends Controller
     {
         if (Auth::check()) {
             $detailsLoading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();
-            $warehouses = PalletsAccount::with('loadings')->get();
 
             $ladedatum = $detailsLoading->ladedatum;
             $entladedatum = $detailsLoading->entladedatum;
@@ -57,9 +56,9 @@ class DetailsLoadingController extends Controller
             $palgebucht = $detailsLoading->palgebucht;
             $state = $detailsLoading->state;
             $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
-            $warehouse_id = $detailsLoading->warehouse_id;
 
-            return view('loadings.detailsLoading', compact('warehouse_id', 'warehouses', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
+
+            return view('loadings.detailsLoading', compact(  'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
                 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'vol', 'ldm', 'ware', 'gewicht', 'umsatz', 'aufwand',
                 'db', 'trp', 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
                 'state', 'reasonUpdatePT'

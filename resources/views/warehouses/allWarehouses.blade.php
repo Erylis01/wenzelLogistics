@@ -103,9 +103,9 @@
                                 <tbody>
                                 @foreach($listWarehouses as $warehouse)
                                     <tr class="text-center">
-                                        {{--<td><a href="{{route('showDetailsWarehouse',$warehouse->id)}}">{{$warehouse->id}}</a>--}}
-                                        {{--</td>--}}
-                                        <td>{{$warehouse->id}}</td>
+                                        <td><a href="{{route('showDetailsWarehouse',$warehouse->id)}}">{{$warehouse->id}}</a>
+                                        </td>
+                                        {{--<td>{{$warehouse->id}}</td>--}}
                                         <td>{{$warehouse->name}}</td>
                                         <td>{{$warehouse->adress}}</td>
                                         <td>{{$warehouse->zipcode}}</td>
