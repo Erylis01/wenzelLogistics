@@ -16,16 +16,15 @@ class DetailsLoadingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($atrnr)
     {
         if (Auth::check()) {
-            $detailsLoading = DB::table('loadings')->where('id', $id)->first();
+            $detailsLoading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();
             $warehouses = Warehouse::with('loadings')->get();
 
             $ladedatum = $detailsLoading->ladedatum;
             $entladedatum = $detailsLoading->entladedatum;
             $disp = $detailsLoading->disp;
-            $atrnr = $detailsLoading->atrnr;
             $referenz = $detailsLoading->referenz;
             $auftraggeber = $detailsLoading->auftraggeber;
             $beladestelle = $detailsLoading->beladestelle;
@@ -36,21 +35,21 @@ class DetailsLoadingController extends Controller
             $lande = $detailsLoading->lande;
             $plze = $detailsLoading->plze;
             $orte = $detailsLoading->orte;
-            $anzahl = $detailsLoading->anzahl;
-            $try1 = $detailsLoading->try1;
-            $try2 = $detailsLoading->try2;
-            $try3 = $detailsLoading->try3;
+            $anz = $detailsLoading->anz;
+            $art = $detailsLoading->art;
             $ware = $detailsLoading->ware;
             $gewicht = $detailsLoading->gewicht;
+            $vol = $detailsLoading->vol;
+            $ldm = $detailsLoading->ldm;
             $umsatz = $detailsLoading->umsatz;
             $aufwand = $detailsLoading->aufwand;
             $db = $detailsLoading->db;
             $trp = $detailsLoading->trp;
             $pt = $detailsLoading->pt;
             $subfrachter = $detailsLoading->subfrachter;
-            $pal = $detailsLoading->pal;
-            $imklarung = $detailsLoading->imklarung;
-            $paltauschvereinbart = $detailsLoading->paltauschvereinbart;
+            $kennzeichen = $detailsLoading->kennzeichen;
+            $zusladestellen = $detailsLoading->zusladestellen;
+
             $ruckgabewo = $detailsLoading->ruckgabewo;
             $mahnung = $detailsLoading->mahnung;
             $blockierung = $detailsLoading->blockierung;
@@ -60,9 +59,9 @@ class DetailsLoadingController extends Controller
             $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
             $warehouse_id = $detailsLoading->warehouse_id;
 
-            return view('loadings.detailsLoading', compact('warehouse_id', 'warehouses', 'id', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
-                'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anzahl', 'try1', 'try2', 'try3', 'ware', 'gewicht', 'umsatz', 'aufwand',
-                'db', 'trp', 'pt', 'subfrachter', 'pal', 'imklarung', 'paltauschvereinbart', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
+            return view('loadings.detailsLoading', compact('warehouse_id', 'warehouses', 'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
+                'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'vol', 'ldm', 'ware', 'gewicht', 'umsatz', 'aufwand',
+                'db', 'trp', 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
                 'state', 'reasonUpdatePT'
             ));
         } else {
@@ -70,9 +69,10 @@ class DetailsLoadingController extends Controller
         }
     }
 
-    public function save(Request $request, $id)
+    public function save(Request $request, $atrnr)
     {
-        $loading = Loading::find($id);
+
+        $loading = DB::table('loadings')->where('atrnr', $atrnr)->first();
 
         $ruckgabewo = Input::get('ruckgabewo');
         $mahnung = Input::get('mahnung');
@@ -84,26 +84,25 @@ class DetailsLoadingController extends Controller
 
 
         if (isset($reasonUpdatePT) && isset($updateValidatePT)) {
-            $loading->reasonUpdatePT = $reasonUpdatePT;
-            $loading->pt = 'NEIN';
-            $loading->save();
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['reasonUpdatePT'=>$reasonUpdatePT]);
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['pt'=>'NEIN']);
             session()->flash('messageUpdatePTLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
 
         } elseif ($loading->ruckgabewo <> $ruckgabewo || $loading->mahnung <> $mahnung || $loading->blockierung <> $blockierung || $loading->bearbeitungsdatum <> $bearbeitungsdatum || $loading->palgebucht <> $palgebucht) {
             // store
-            $loading->ruckgabewo = $ruckgabewo;
-            $loading->mahnung = $mahnung;
-            $loading->blockierung = $blockierung;
-            $loading->bearbeitungsdatum = $bearbeitungsdatum;
-            $loading->palgebucht = $palgebucht;
             if ($palgebucht == 'OK' || $palgebucht == 'ok') {
-                $loading->state = 'OK';
+                $state = 'OK';
             } elseif ($palgebucht == 'almost OK' || $palgebucht == 'almost ok') {
-                $loading->state = 'almost OK';
+                $state = 'almost OK';
             } elseif ($palgebucht == 'not OK' || $palgebucht == 'not ok') {
-                $loading->state = 'not OK';
+                $state = 'not OK';
             }
-            $loading->save();
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['ruckgabewo'=>$ruckgabewo]);
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['mahnung'=>$mahnung]);
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['blockierung'=>$blockierung]);
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['bearbeitungsdatum'=>$bearbeitungsdatum]);
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['palgebucht'=>$palgebucht]);
+            DB::table('loadings')->where('atrnr', $atrnr)->update(['state'=>$state]);
 
             session()->flash('messageSaveLoading', 'Successfully updated loading');
         }

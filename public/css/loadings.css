@@ -86,8 +86,16 @@
 
 /*LOADING*/
 
-.details-loading{
+.details-loading > input{
     font-weight: normal;
+    text-align: center;
+    font-size:16px;
+}
+
+.details-loading > label{
+    font-weight: bold;
+    text-align: center;
+    font-size:18px;
 }
 
 .container-details{
@@ -124,7 +132,6 @@
 
 /*PANELS DETAILS LOADING*/
 .subpanel{
-    size:20px;
     border-color:rgb(0, 160, 0);
     border-style:solid;
     border-width: 1px;
@@ -136,5 +143,6 @@
 
 .subpanel >div>a{
     color: black;
+    font-size:20px;
 }
 

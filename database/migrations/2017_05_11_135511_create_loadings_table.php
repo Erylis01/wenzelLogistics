@@ -32,7 +32,7 @@ class CreateLoadingsTable extends Migration
             $table->string('art');
             $table->string('ware');
             $table->double('gewicht')->unsigned();
-            $table->integer('vol')->unsigned()->nullable();
+            $table->double('vol')->unsigned()->nullable();
             $table->double('ldm')->unsigned();
             $table->double('umsatz')->unsigned();
             $table->double('aufwand')->unsigned();

@@ -35,8 +35,8 @@
                                         @else
                                             <div class="panel panel-default">
                                                 @endif
-                                                <div class="panel-heading">Details of the loading n°{{ $id }}
-                                                    <span class="col-lg-offset-8">{{$state}}</span>
+                                                <div class="panel-heading">Details of the loading n°{{ $atrnr }}
+                                                    <span class="col-lg-offset-7">{{$state}}</span>
                                                 </div>
                                                 <div class="panel-body panel-body-general form-loading">
                                                     <div class="panel-group">
@@ -55,214 +55,258 @@
                                                                         <div class="form-group">
                                                                             <!--ladedatum-->
                                                                             <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="ladedatum"
-                                                                                       class="control-label">Ladedatum
+                                                                                       class="input-group-addon">Ladedatum
                                                                                     :</label>
-                                                                                <label for="ladedatum"
-                                                                                       class="details-loading">{{ $ladedatum }}</label>
-
+                                                                                <input type="date" name="ladedatum"
+                                                                                       class="form-control" value="{{ $ladedatum }}" placeholder="ladedatum" required>
+                                                                            </div>
                                                                             </div>
                                                                             <!--entladedatum-->
-                                                                            <div class="col-lg-3">
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="entladedatum"
-                                                                                       class="control-label">Entladedatum
+                                                                                       class="input-group-addon">Entladedatum
                                                                                     :</label>
-                                                                                <label for="entladedatum"
-                                                                                       class="details-loading">{{ $entladedatum }}</label>
+                                                                                <input type="date" name="entladedatum"
+                                                                                       class="form-control" value="{{ $entladedatum }}" placeholder="entladedatum" required>
+                                                                            </div>
                                                                             </div>
                                                                             <!--disp-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="disp" class="control-label">Disp
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="disp" class="input-group-addon">Disp
                                                                                     :</label>
-                                                                                <label for="disp"
-                                                                                       class="details-loading">{{ $disp }}</label>
+                                                                                <input type="text" name="disp"
+                                                                                       class="form-control" value="{{ $disp }}" placeholder="disp" required>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <!--atrnr-->
-                                                                            <div class="col-lg-4">
-                                                                                <label for="atrnr"
-                                                                                       class="control-label">AtrNr
-                                                                                    :</label>
-                                                                                <label for="atrnr"
-                                                                                       class="details-loading">{{ $atrnr }}</label>
-                                                                            </div>
                                                                             <!--referenz-->
-                                                                            <div class="col-lg-3">
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="referenz"
-                                                                                       class="control-label">Referenz
+                                                                                       class="input-group-addon">Referenz
                                                                                     :</label>
-                                                                                <label for="referenz"
-                                                                                       class="details-loading">{{ $referenz }}</label>
+                                                                                <input type="text" name="referenz"
+                                                                                       class="form-control" value="{{ $referenz }}" placeholder="referenz" required >
+                                                                            </div>
                                                                             </div>
                                                                             <!--auftraggeber-->
-                                                                            <div class="col-lg-5">
+                                                                            <div class="col-lg-8">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="auftraggeber"
-                                                                                       class="control-label">Auftraggeber
-                                                                                    :</label>
-                                                                                <label for="auftraggeber"
-                                                                                       class="details-loading">{{ $auftraggeber }}</label>
+                                                                                       class="input-group-addon">Auftraggeber
+                                                                                    :</label> <input type="text" name="auftraggeber"
+                                                                                       class="form-control" value="{{ $auftraggeber }}" placeholder="auftraggeber" required>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <!--beladestelle-->
                                                                             <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="beladestelle"
-                                                                                       class="control-label">Beladestelle
+                                                                                       class="input-group-addon">Beladestelle
                                                                                     :</label>
-                                                                                <label for="beladestelle"
-                                                                                       class="details-loading">{{ $beladestelle }}</label>
+                                                                                <input type="text" name="beladestelle"
+                                                                                       class="form-control" value="{{ $beladestelle }}" placeholder="beladestelle" required>
                                                                             </div>
-                                                                            <!--land-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="landb"
-                                                                                       class="control-label">Land
+                                                                            </div>
+                                                                            <!--ort-->
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="ortb" class="input-group-addon">Ort
                                                                                     :</label>
-                                                                                <label for="landb"
-                                                                                       class="details-loading">{{ $landb }}</label>
+                                                                                <input type="text" for="ortb"
+                                                                                       class="form-control" value="{{ $ortb }}" placeholder="ort" required>
+                                                                            </div>
                                                                             </div>
                                                                             <!--plz-->
                                                                             <div class="col-lg-2">
-                                                                                <label for="plzb" class="control-label">Plz
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="plzb" class="input-group-addon">Plz
                                                                                     :</label>
-                                                                                <label for="plzb"
-                                                                                       class="details-loading">{{ $plzb }}</label>
+                                                                                <input type="number" name="plzb"
+                                                                                       class="form-control" value="{{ $plzb }}" placeholder="plz" min="0" required>
                                                                             </div>
-                                                                            <!--ort-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="ortb" class="control-label">Ort
+                                                                            </div>
+                                                                            <!--land-->
+                                                                            <div class="col-lg-2">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="landb"
+                                                                                       class="input-group-addon">Land
                                                                                     :</label>
-                                                                                <label for="ortb"
-                                                                                       class="details-loading">{{ $ortb }}</label>
+                                                                                <input type="text" name="landb"
+                                                                                       class="form-control" value="{{ $landb }}" placeholder="land" required>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <!--entladestelle-->
                                                                             <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="entladestelle"
-                                                                                       class="control-label">Entladestelle
+                                                                                       class="input-group-addon">Entladestelle
                                                                                     :</label>
-                                                                                <label for="entladestelle"
-                                                                                       class="details-loading">{{ $entladestelle }}</label>
+                                                                                <input type="text" name="entladestelle"
+                                                                                       class="form-control" value="{{ $entladestelle }}" placeholder="entladestelle" required>
                                                                             </div>
-                                                                            <!--land-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="lande"
-                                                                                       class="control-label">Land
+                                                                            </div>
+                                                                            <!--ort-->
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="orte" class="input-group-addon">Ort
                                                                                     :</label>
-                                                                                <label for="lande"
-                                                                                       class="details-loading">{{ $lande }}</label>
+                                                                                <input type="text" name="orte"
+                                                                                       class="form-control" value="{{ $orte }}" placeholder="ort" required>
+                                                                            </div>
                                                                             </div>
                                                                             <!--plz-->
                                                                             <div class="col-lg-2">
-                                                                                <label for="plze" class="control-label">Plz
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="plze" class="input-group-addon">Plz
                                                                                     :</label>
-                                                                                <label for="plze"
-                                                                                       class="details-loading">{{ $plze }}</label>
+                                                                                <input type="number" name="plze"
+                                                                                       class="form-control" value="{{ $plze }}" placeholder="plz" min="0" required>
                                                                             </div>
-                                                                            <!--ort-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="orte" class="control-label">Ort
+                                                                            </div>
+                                                                            <!--land-->
+                                                                            <div class="col-lg-2">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="lande"
+                                                                                       class="input-group-addon">Land
                                                                                     :</label>
-                                                                                <label for="orte"
-                                                                                       class="details-loading">{{ $orte }}</label>
+                                                                                <input type="text" name="lande"
+                                                                                       class="form-control" value="{{ $lande }}" placeholder="land" required>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <!--anzahl-->
                                                                             <div class="col-lg-4">
-                                                                                <label for="anzahl"
-                                                                                       class="control-label">Anzahl
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="anz"
+                                                                                       class="input-group-addon">Anzahl
                                                                                     :</label>
-                                                                                <label for="anzahl"
-                                                                                       class="details-loading">{{ $anzahl }}</label>
+                                                                                <input type="number" name="anz"
+                                                                                       class="form-control" value="{{ $anz }}" placeholder="anzahl" min="0" required>
                                                                             </div>
-                                                                            <!---->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="" class="control-label">
-                                                                                    :</label>
-                                                                                <label for=""
-                                                                                       class="details-loading">{{ $try1 }}</label>
                                                                             </div>
-                                                                            <!---->
-                                                                            <div class="col-lg-2">
-                                                                                <label for="" class="control-label">
+                                                                            <!--art-->
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="art" class="input-group-addon">
+                                                                                   Art :</label>
+                                                                                <input type="text" name="art"
+                                                                                       class="form-control" value="{{ $art }}" placeholder="art" required>
+                                                                            </div>
+                                                                            </div>
+                                                                            <!--ware-->
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="ware" class="input-group-addon">Ware
                                                                                     :</label>
-                                                                                <label for=""
-                                                                                       class="details-loading">{{ $try2 }}</label>
+                                                                                <input type="text" name="ware"
+                                                                                       class="form-control" value="{{ $ware }}" placeholder="ware" required>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <!---->
-                                                                            <div class="col-lg-4">
-                                                                                <label for="" class="control-label">
-                                                                                    :</label>
-                                                                                <label for=""
-                                                                                       class="details-loading">{{ $try3 }}</label>
-                                                                            </div>
-                                                                            <!--ware-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="ware" class="control-label">Ware
-                                                                                    :</label>
-                                                                                <label for="ware"
-                                                                                       class="details-loading">{{ $ware }}</label>
-                                                                            </div>
                                                                             <!--gewicht-->
-                                                                            <div class="col-lg-2">
+                                                                            <div class="col-lg-4">
+                                                                            <div class="input-group details-loading">
                                                                                 <label for="gewicht"
-                                                                                       class="control-label">Gewicht
+                                                                                       class="input-group-addon">Gewicht (Kg)
                                                                                     :</label>
-                                                                                <label for="gewicht"
-                                                                                       class="details-loading">{{ $gewicht }}</label>
+                                                                                <input type="number" name="gewicht"
+                                                                                       class="form-control" value="{{$gewicht}}" placeholder="gewicht" min="0" required>
+                                                                            </div>
+                                                                            </div>
+                                                                            <!--vol-->
+                                                                            <div class="col-lg-4">
+                                                                            <div class="input-group details-loading">
+                                                                                <label for="vol" class="input-group-addon">
+                                                                                   Vol :</label>
+                                                                                <input type="number" step="0.1" name="vol"
+                                                                                       class="form-control" value="{{ $vol }}" placeholder="vol" min="0">
+                                                                            </div>
+                                                                            </div>
+                                                                            <!--ldm-->
+                                                                            <div class="col-lg-4">
+                                                                            <div class="input-group details-loading">
+                                                                                <label for="ldm" class="input-group-addon">
+                                                                                    LDM :</label>
+                                                                                <input type="number" step="0.1" name="ldm"
+                                                                                       class="form-control" value="{{ $ldm }}" placeholder="ldm" min="0" required>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <!--umsatz-->
                                                                             <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="umsatz"
-                                                                                       class="control-label">Umsatz
+                                                                                       class="input-group-addon">Umsatz (€)
                                                                                     :</label>
-                                                                                <label for="umsatz"
-                                                                                       class="details-loading">{{ $umsatz }}
-                                                                                    €</label>
+                                                                                <input type="number" step="0.1" name="umsatz"
+                                                                                       class="form-control" value="{{ $umsatz }}" placeholder="umsatz" min="0" required>
+                                                                            </div>
                                                                             </div>
                                                                             <!--aufwand-->
-                                                                            <div class="col-lg-3">
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
                                                                                 <label for="aufwand"
-                                                                                       class="control-label">Aufwand
+                                                                                       class="input-group-addon">Aufwand (€)
                                                                                     :</label>
-                                                                                <label for="aufwand"
-                                                                                       class="details-loading">{{ $aufwand }}
-                                                                                    €</label>
+                                                                                <input type="number" step="0.1" name="aufwand"
+                                                                                       class="form-control" value="{{ $aufwand }}" placeholder="aufwand" min="0"required>
+                                                                            </div>
                                                                             </div>
                                                                             <!--db-->
-                                                                            <div class="col-lg-2">
-                                                                                <label for="db" class="control-label">DB
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="db" class="input-group-addon">DB (€)
                                                                                     :</label>
-                                                                                <label for="db"
-                                                                                       class="details-loading">{{ $db }}
-                                                                                    €</label>
+                                                                                <input type="number" step="0.1" name="db"
+                                                                                       class="form-control" value="{{ $db }}" placeholder="db" required>
                                                                             </div>
-                                                                            <!--trp-->
-                                                                            <div class="col-lg-2">
-                                                                                <label for="trp" class="control-label">Trp
-                                                                                    :</label>
-                                                                                <label for="trp"
-                                                                                       class="details-loading">{{ $trp }}</label>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
+                                                                            <!--subfrachter-->
+                                                                            <div class="col-lg-8">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="subfrachter"
+                                                                                       class="input-group-addon">Subfrachter
+                                                                                    :</label>
+                                                                                <input type="text" name="subfrachter"
+                                                                                       class="form-control" value="{{ $subfrachter }}" placeholder="subfrachter" required>
+                                                                            </div>
+                                                                            </div>
+                                                                            <!--trp-->
+                                                                            <div class="col-lg-2">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="trp" class="input-group-addon">Trp
+                                                                                    :</label>
+                                                                                <input type="number" name="trp"
+                                                                                       class="form-control" value="{{ $trp }}" placeholder="trp" required>
+                                                                            </div>
+                                                                            </div>
                                                                             <!--change pt-->
                                                                             <!--pt-->
-                                                                            <div class="col-lg-4">
-                                                                                <label for="pt" class="control-label">PT
+                                                                            <div class="col-lg-2">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="pt" class="input-group-addon">PT
                                                                                     :</label>
 
-                                                                                <label for="pt" class="link"
+                                                                                <input type="text" readonly name="pt" class="form-control link"
                                                                                        data-toggle="modal"
-                                                                                       data-target="#updatePT_modal">{{ $pt }}</label>
+                                                                                       data-target="#updatePT_modal" value="{{ $pt }}">
                                                                             </div>
-
+                                                                            </div>
                                                                             <!-- Modal update pt -->
                                                                             <div class="modal fade" id="updatePT_modal"
                                                                                  role="dialog">
@@ -345,7 +389,7 @@
                                                                                                                 <br>
                                                                                                                 <form role="form"
                                                                                                                       method="POST"
-                                                                                                                      action="{{ route('saveDetailsLoading', $id) }}">
+                                                                                                                      action="{{ route('saveDetailsLoading', $atrnr) }}">
                                                                                                                     <input type="hidden"
                                                                                                                            name="_token"
                                                                                                                            value="{{ csrf_token() }}">
@@ -385,15 +429,6 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-
-                                                                            <!--subfrachter-->
-                                                                            <div class="col-lg-6">
-                                                                                <label for="subfrachter"
-                                                                                       class="control-label">Subfrachter
-                                                                                    :</label>
-                                                                                <label for="subfrachter"
-                                                                                       class="details-loading">{{ $subfrachter }}</label>
-                                                                            </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             @if (Session::has('messageUpdatePTLoading'))
@@ -402,30 +437,24 @@
                                                                             @endif
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <!--pal-->
+                                                                            <!--kennzeichen-->
                                                                             <div class="col-lg-4">
-                                                                                <label for="pal" class="control-label">Pal
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="kennzeichen" class="input-group-addon">Kennzeichen
                                                                                     :</label>
-                                                                                <label for="pal"
-                                                                                       class="details-loading">{{ $pal }}</label>
+                                                                                <input type="number" name="kennzeichen"
+                                                                                       class="form-control" value="{{ $kennzeichen }}" placeholder="kennzeichen" min="0">
                                                                             </div>
-                                                                            <!--imklarung-->
-                                                                            <div class="col-lg-3">
-                                                                                <label for="imklarung"
-                                                                                       class="control-label">im Klarung
+                                                                            </div>
+                                                                            <!--zusladestellen-->
+                                                                            <div class="col-lg-4">
+                                                                                <div class="input-group details-loading">
+                                                                                <label for="zusladestellen"
+                                                                                       class="input-group-addon">Zus. Ladestellen
                                                                                     :</label>
-                                                                                <label for="imklarung"
-                                                                                       class="details-loading">{{ $imklarung }}</label>
+                                                                                <input type="text" name="zusladestellen"
+                                                                                       class="form-control" value="{{ $zusladestellen }}" placeholder="zus ladestellen">
                                                                             </div>
-
-                                                                            <!--paltauschvereinbart-->
-                                                                            <div class="col-lg-5">
-                                                                                <label for="paltauschvereinbart"
-                                                                                       class="control-label">Pal
-                                                                                    Tausch Vereinbart
-                                                                                    ?</label>
-                                                                                <label for="paltauschvereinbart"
-                                                                                       class="details-loading">{{ $paltauschvereinbart }}</label>
                                                                             </div>
                                                                         </div>
                                                                     </form>
@@ -442,10 +471,10 @@
                                                                     <!--form to edit loading-->
                                                                     <form class="form-horizontal" role="form"
                                                                           method="POST"
-                                                                          action="{{route('saveDetailsLoading', $id)}}">
+                                                                          action="{{route('saveDetailsLoading', $atrnr)}}">
                                                                         <input type="hidden" name="_token"
                                                                                value="{{ csrf_token() }}">
-                                                                        <input type="hidden" name="id" value={{$id}}>
+                                                                        <input type="hidden" name="id" value={{$atrnr}}>
                                                                         @if (Session::has('messageSaveLoading'))
                                                                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageSaveLoading') }}</div>
                                                                     @endif
@@ -598,10 +627,10 @@
 
 
                                                                             <tr>
-                                                                                <td class="text-center colTotal">{{$anzahl}}</td>
+                                                                                <td class="text-center colTotal">{{$anz}}</td>
                                                                                 @foreach($warehouses as $warehouse)
                                                                                     @if($warehouse->id == $warehouse_id)
-                                                                                        <td class="text-center">{{$anzahl}}</td>
+                                                                                        <td class="text-center">{{$anz}}</td>
                                                                                     @else
                                                                                         <td class="text-center"></td>
                                                                                     @endif
