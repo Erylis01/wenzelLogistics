@@ -13,7 +13,7 @@
 
 //AUTH
 Auth::routes();
-
+Route::post('auth/register', 'Auth\RegisterController@fillDolibarr')->name('fillDolibarr');
 
 Route::get('/', 'HomeController@index')->name('home');
 

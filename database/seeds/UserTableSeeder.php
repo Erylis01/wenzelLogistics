@@ -14,8 +14,8 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->delete();
-        User::create(array(
+
+        User::firstOrCreate(array(
             'id'=>1,
             'lastname'     => 'test',
             'firstname'=>'Pierre',
@@ -27,7 +27,7 @@ class UserTableSeeder extends Seeder
             'email_token'=>'1234567890'
 
         ));
-        User::create(array(
+        User::firstOrCreate(array(
             'id'=>2,
             'lastname'     => 'test',
             'firstname'=>'Camille',
@@ -39,7 +39,7 @@ class UserTableSeeder extends Seeder
             'email_token'=>'1234657089'
 
         ));
-        User::create(array(
+        User::firstOrCreate(array(
             'id'=>3,
             'lastname'     => 'Alala',
             'firstname'=>'A',

@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -93,6 +94,24 @@ class RegisterController extends Controller
         Session::flash('messageSuccessRegistration', 'You are now well registered');
         return redirect('/login');
 
+    }
+
+    public function fillDolibarr(){
+        $username=Input::get('username');
+        $userDolibarr=DB::table('llx_user')->where('login', '=', $username)->first();
+
+        if($userDolibarr==null){
+            Session::flash('dolibarr', null);
+            Session::flash('messageFillDolibarrError', "This username doesn't match any login from Dolibarr");
+            return view('auth.register');
+        }else{
+            $lastname=$userDolibarr->lastname;
+            $firstname=$userDolibarr->firstname;
+            $email=$userDolibarr->email;
+            Session::flash('dolibarr', true);
+            return view('auth.register', compact( 'username', 'lastname', 'firstname', 'email'));
+
+        }
     }
 
     public function register(Request $request)
