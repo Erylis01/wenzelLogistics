@@ -29,9 +29,9 @@
             <div class="col-lg-10 col-lg-offset-1">
 
                 <div class="panel panel-general">
-                    <div class="panel-heading">Details of the warehouse {{ $name }}</div>
+                    <div class="panel-heading">Details of the warehouse : {{$id}} - {{ $name }}</span></div>
                     <div class="panel-body panel-body-general">
-                        <form class="form-horizontal text-right" role="form" method="POST" action="">
+                        <form class="form-horizontal text-right" role="form" method="POST" action="{{route('updateWarehouse', $id)}}">
                             {{ csrf_field() }}
                             <p class="text-center legend-auth">* required field</p>
 
@@ -143,11 +143,50 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-lg-8 col-lg-offset-3">
+                                <div class="col-lg-4 col-lg-offset-3">
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Update"
                                            name="updateWarehouse">
+                                </div>
+
+                                <div class="col-lg-3 col-lg-offset-1">
+                                    <button type="button" class="btn btn-primary btn-block btn-form"
+                                            data-toggle="modal"
+                                            data-target="#deleteWarehouse_modal">Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Modal Delete -->
+                            <div class="modal fade" id="deleteWarehouse_modal" role="dialog">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title text-center">Are you sure to delete this warehouse ?</h4>
+                                        </div>
+                                        <div class="modal-body center">
+                                            <form method="post" action="{{route('deleteWarehouse',$id)}}">
+                                                <input type="hidden" name="_method" value="delete">
+                                                {{ csrf_field() }}
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-danger btn-modal" value="yes"
+                                                            name="deleteWarehouse">
+                                                        Yes
+                                                    </button>
+                                                    <button type="button" class="btn btn-success btn-modal"
+                                                            data-dismiss="modal">No
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default btn-modal"
+                                                    data-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -156,6 +195,8 @@
 
                 @if (Session::has('messageUpdateWarehouse'))
                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateWarehouse') }}</div>
+                    @elseif(Session::has('messageDeleteWarehouse'))
+                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeleteWarehouse') }}</div>
                 @endif
             </div>
         @endif

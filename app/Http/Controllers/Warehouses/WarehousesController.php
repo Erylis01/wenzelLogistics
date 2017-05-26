@@ -8,7 +8,12 @@ use Illuminate\Support\Facades\Input;
 
 class WarehousesController extends Controller
 {
-   public function showAll(Request $request)
+    /**
+     * show all warehouses in a table. You can order the different columns
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showAll(Request $request)
    {
        if (request()->has('sortby') && request()->has('order')) {
            $sortby = $request->get('sortby'); // Order by what column?
@@ -24,28 +29,42 @@ class WarehousesController extends Controller
        return view('warehouses.allWarehouses', compact('listWarehouses','sortby', 'order', 'links', 'count'));
    }
 
-   public function add(){
+    /**
+     * add a new wharehouse to the list
+     */
+    public function add(){
 
    }
 
-   public function showDetails($id){
-       $detailsWarehouse = DB::table('warehouses')->where('id', '=', $id)->first();
+    /**
+     * show one specific warehouse according to its ID
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showDetails($id){
+       $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
 
-       $name=$detailsWarehouse->name;
-       $adress=$detailsWarehouse->adress;
-       $zipcode=$detailsWarehouse->zipcode;
-       $town=$detailsWarehouse->town;
-       $country=$detailsWarehouse->country;
-       $phone=$detailsWarehouse->phone;
-       $fax=$detailsWarehouse->fax;
-       $email=$detailsWarehouse->email;
-       $namecontact=$detailsWarehouse->namecontact;
+       $name=$warehouse->name;
+       $adress=$warehouse->adress;
+       $zipcode=$warehouse->zipcode;
+       $town=$warehouse->town;
+       $country=$warehouse->country;
+       $phone=$warehouse->phone;
+       $fax=$warehouse->fax;
+       $email=$warehouse->email;
+       $namecontact=$warehouse->namecontact;
 
-       return view('warehouses.detailsWarehouse', compact('name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact'));
+       return view('warehouses.detailsWarehouse', compact('id','name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact'));
    }
 
-   public function update(Request $request, $id){
-       $warehouse = DB::table('warehouses')->where('id', $id)->first();
+    /**
+     * update the warehouse n° ID
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id){
+//       $warehouse = DB::table('warehouses')->where('id', $id)->first();
 
        $name=Input::get('name');
        $adress=Input::get('adress');
@@ -57,18 +76,26 @@ class WarehousesController extends Controller
        $email=Input::get('email');
        $namecontact=Input::get('namecontact');
 
-       DB::table('warehouse')->where('id', $id)->update(['name'=>$name]);
-       DB::table('warehouse')->where('id', $id)->update(['mahnung'=>$adress]);
-       DB::table('warehouse')->where('id', $id)->update(['zipcode'=>$zipcode]);
-       DB::table('warehouse')->where('id', $id)->update(['town'=>$town]);
-       DB::table('warehouse')->where('id', $id)->update(['country'=>$country]);
-       DB::table('warehouse')->where('id', $id)->update(['phone'=>$phone]);
-       DB::table('warehouse')->where('id', $id)->update(['fax'=>$fax]);
-       DB::table('warehouse')->where('id', $id)->update(['email'=>$email]);
-       DB::table('warehouse')->where('id', $id)->update(['namecontact'=>$namecontact]);
+       DB::table('warehouses')->where('id', $id)->update(['name'=>$name]);
+       DB::table('warehouses')->where('id', $id)->update(['adress'=>$adress]);
+       DB::table('warehouses')->where('id', $id)->update(['zipcode'=>$zipcode]);
+       DB::table('warehouses')->where('id', $id)->update(['town'=>$town]);
+       DB::table('warehouses')->where('id', $id)->update(['country'=>$country]);
+       DB::table('warehouses')->where('id', $id)->update(['phone'=>$phone]);
+       DB::table('warehouses')->where('id', $id)->update(['fax'=>$fax]);
+       DB::table('warehouses')->where('id', $id)->update(['email'=>$email]);
+       DB::table('warehouses')->where('id', $id)->update(['namecontact'=>$namecontact]);
 
        session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
 
        return redirect()->back();
+   }
+
+   public function delete($id){
+       DB::table('warehouses')->where('id', $id)->delete();
+
+       // redirect
+       session()->flash('messageDeleteWarehouse', 'Successfully deleted the warehouse!');
+       return redirect('/allWarehouses');
    }
 }

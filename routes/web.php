@@ -30,6 +30,8 @@ Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@save')->name('s
 //WAREHOUSES
 Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWarehouses');
 Route::get('/detailsWarehouses/{id}', 'WarehousesController@showDetails')->name('showDetailsWarehouse');
+Route::post('/detailsWarehouses/{id}', 'WarehousesController@update')->name('updateWarehouse');
+Route::delete('/detailsWarehouses/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
 //Route::get('/addWarehouses', 'WarehousesController@add')->name('addWarehouse');
 
 //PALLETS ACCOUNTS
