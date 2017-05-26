@@ -53,6 +53,7 @@ class WarehousesController extends Controller
         $fax = Input::get('fax');
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
+        $namepalletaccount=Input::get('namepalletaccount');
 
         $rules = array(
             'zipcode' => 'required|',
@@ -60,6 +61,7 @@ class WarehousesController extends Controller
             'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
+
         );
         $validator = Validator::make(Input::all(), $rules);
         // process the login
@@ -78,18 +80,20 @@ class WarehousesController extends Controller
 
                     return redirect('/allWarehouses');
                 } elseif (isset($refuseAddWarehouse)) {
+                    for($k=0; $k<11; $k++){
+                        $listPalletsAccounts[]=$k;
+                    }
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
-                    return view('warehouses.addWarehouse', compact('name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
                 } else {
+                    for($k=0; $k<11; $k++){
+                        $listPalletsAccounts[]=$k;
+                    }
                     session()->flash('testZipcode', true);
-                    return view('warehouses.addWarehouse', compact('zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts','zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
                 }
 
-
             } else {
-
-//    session()->flash('testZipcode', false);
-
                 DB::table('warehouses')->insertGetId(
                     ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                 );
@@ -102,7 +106,11 @@ class WarehousesController extends Controller
     public function showAdd()
     {
         if (Auth::check()) {
-            return view('warehouses.addWarehouse');
+            for($k=0; $k<11; $k++){
+                $listPalletsAccounts[]=$k;
+            }
+
+            return view('warehouses.addWarehouse', compact('listPalletsAccounts'));
         } else {
             return view('auth.login');
         }

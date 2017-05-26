@@ -74,11 +74,11 @@
                                         <input id="adress" type="text" class="form-control" name="adress"
                                                value="{{old('adress')}}" placeholder="Adress" required autofocus>
                                     @endif
-                                        @if ($errors->has('adress'))
-                                            <span class="help-block">
+                                    @if ($errors->has('adress'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -95,11 +95,11 @@
                                         <input id="zipcode" type="number" class="form-control" name="zipcode"
                                                value="{{old('zipcode')}}" placeholder="Zip Code" required autofocus>
                                     @endif
-                                        @if ($errors->has('zipcode'))
-                                            <span class="help-block">
+                                    @if ($errors->has('zipcode'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('zipcode') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                                 <!--town-->
                                 <div class="col-lg-2">
@@ -113,11 +113,11 @@
                                         <input id="town" type="text" class="form-control" name="town"
                                                value="{{old('town')}}" placeholder="Town" required autofocus>
                                     @endif
-                                        @if ($errors->has('town'))
-                                            <span class="help-block">
+                                    @if ($errors->has('town'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('town') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -135,11 +135,11 @@
                                         <input id="country" type="text" class="form-control" name="country"
                                                value="{{old('country')}}" placeholder="Country" required autofocus>
                                     @endif
-                                        @if ($errors->has('country'))
-                                            <span class="help-block">
+                                    @if ($errors->has('country'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('country') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -156,11 +156,11 @@
                                         <input id="phone" type="text" class="form-control" name="phone"
                                                value="{{old('phone')}}" placeholder="Phone" autofocus>
                                     @endif
-                                        @if ($errors->has('phone'))
-                                            <span class="help-block">
+                                    @if ($errors->has('phone'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('phone') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                                 <!--fax-->
                                 <div class="col-lg-2">
@@ -174,11 +174,11 @@
                                         <input id="fax" type="text" class="form-control" name="fax"
                                                value="{{old('fax')}}" placeholder="Fax" autofocus>
                                     @endif
-                                        @if ($errors->has('fax'))
-                                            <span class="help-block">
+                                    @if ($errors->has('fax'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('fax') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -196,11 +196,11 @@
                                         <input id="email" type="text" class="form-control" name="email"
                                                value="{{old('email')}}" placeholder="Email" autofocus>
                                     @endif
-                                        @if ($errors->has('email'))
-                                            <span class="help-block">
+                                    @if ($errors->has('email'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -217,28 +217,43 @@
                                         <input id="namecontact" type="text" class="form-control" name="namecontact"
                                                value="{{old('namecontact')}}" placeholder="Contact Name" autofocus>
                                     @endif
-                                        @if ($errors->has('namecontact'))
-                                            <span class="help-block">
+                                    @if ($errors->has('namecontact'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('namecontact') }}</strong>
                                     </span>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Pallet Account :</label>
+                                    <label for="namecontact" class="control-label"><span>*</span> Pallet Account
+                                        :</label>
                                 </div>
                                 <div class="col-lg-8">
                                     @if(isset($namepalletaccount))
-                                        <input id="namepalletaccount" type="text" class="form-control"
-                                               name="namepalletaccount"
-                                               value="{{$namepalletaccount}}" placeholder="Pallet Account">
+
+                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                                data-live-search="true" data-live-search-style="startsWith"
+                                                title="Pallets Account" name="namepalletaccount">
+                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                @if($palletsAccount==$namepalletaccount)
+                                                    @php($option='selected')
+                                                    <option {{$option}}>{{$palletsAccount}}</option>
+                                                @else
+                                                    <option>{{$palletsAccount}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     @else
-                                        <input id="namepalletaccount" type="text" class="form-control"
-                                               name="namepalletaccount"
-                                               value="{{old('namepalletaccount')}}" placeholder="Pallet Account">
+                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                                data-live-search="true" data-live-search-style="startsWith"
+                                                title="Pallets Account" name="namepalletaccount">
+                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                <option>{{$palletsAccount}}</option>
+                                            @endforeach
+                                        </select>
                                     @endif
                                 </div>
                             </div>
