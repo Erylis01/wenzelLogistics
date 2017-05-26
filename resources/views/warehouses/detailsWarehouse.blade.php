@@ -29,7 +29,7 @@
             <div class="col-lg-10 col-lg-offset-1">
 
                 <div class="panel panel-general">
-                    <div class="panel-heading">Details of the warehouse : {{$id}} - {{ $name }}</span></div>
+                    <div class="panel-heading">Details of the warehouse : {{$id}} - {{ $name }}</div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST" action="{{route('updateWarehouse', $id)}}">
                             {{ csrf_field() }}
@@ -138,7 +138,7 @@
                                 </div>
                                 {{--<div class="col-lg-8">--}}
                                     {{--<input id="namepalletaccount" type="text" class="form-control" name="namepalletaccount"--}}
-                                           {{--value="{{ $namepalletaccount }}" readonly>--}}
+                                           {{--value="{{ $namepalletaccount }}" >--}}
                                 {{--</div>--}}
                             </div>
 
@@ -195,8 +195,6 @@
 
                 @if (Session::has('messageUpdateWarehouse'))
                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateWarehouse') }}</div>
-                    @elseif(Session::has('messageDeleteWarehouse'))
-                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeleteWarehouse') }}</div>
                 @endif
             </div>
         @endif

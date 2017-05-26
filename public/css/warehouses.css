@@ -8,3 +8,18 @@
     /*max-height: 500px;*/
     /*overflow-y: scroll;*/
 /*}*/
+
+/*BUTTON*/
+.btn-add, .btn-add:focus, btn-add:active{
+border-style: solid;
+    border-width: 1px;
+    border-color: rgb(0, 160, 0);
+    font-size: 18px;
+    color:white;
+    background-color: rgba(0, 160, 0, 0.8);
+}
+
+.btn-add:hover{
+    color:rgb(0, 160, 0);
+    background-color: white;
+}

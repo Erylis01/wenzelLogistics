@@ -29,9 +29,20 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general panel-warehouses">
-                    <div class="panel-heading">List of all warehouses</div>
+                    <div class="panel-heading">List of all warehouses <span class="col-lg-offset-7">
+                            <a href="{{route('showAddWarehouse')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
+                        </span></div>
 
                     <div class="panel-body panel-body-general">
+
+                        @if(Session::has('messageDeleteWarehouse'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeleteWarehouse') }}</div>
+                            @elseif(Session::has('messageAddWarehouse'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddWarehouse') }}</div>
+                        @endif
+
+
+
                         <!-- Table -->
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered">

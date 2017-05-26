@@ -32,7 +32,9 @@ Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWareh
 Route::get('/detailsWarehouses/{id}', 'WarehousesController@showDetails')->name('showDetailsWarehouse');
 Route::post('/detailsWarehouses/{id}', 'WarehousesController@update')->name('updateWarehouse');
 Route::delete('/detailsWarehouses/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
-//Route::get('/addWarehouses', 'WarehousesController@add')->name('addWarehouse');
+Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
+Route::get('addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
+
 
 //PALLETS ACCOUNTS
 //Route::get('/allWarehouses', 'WarehousesController@showTotal')->name('showAllWarehouses');
