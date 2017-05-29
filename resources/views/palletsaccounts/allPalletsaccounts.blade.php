@@ -41,10 +41,12 @@
                                 @if($totalpallets<0)
                                     @php($class="text-alert")
                                 @elseif($totalpallets>0)
+                                    @php($class="text-warning")
+                                    @else
                                     @php($class="text-success")
                                 @endif
                                 <tr>
-                                    <th class="text-center colName"><a href="#total-collapse" data-toggle="collapse"
+                                    <th class="text-center colName"><a href="{{route('showTotalPalletsaccounts')}}"
                                                                        class="link">TOTAL</a></th>
                                     <th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span>
                                     </th>

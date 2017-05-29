@@ -41,7 +41,7 @@ Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('sh
 Route::get('/detailsPalletsaccount/{id}', 'PalletsaccountsController@showDetails')->name('showDetailsPalletsaccount');
 Route::post('/detailsPalletsaccount/{id}', 'PalletsaccountsController@update')->name('updatePalletsaccount');
 Route::delete('/detailsPalletsaccount/{id}', 'PalletsaccountsController@delete')->name('deletePalletsaccount');
-//Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name('showTotalPalletsaccounts');
+Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name('showTotalPalletsaccounts');
 
 
 //MAILS

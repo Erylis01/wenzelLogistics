@@ -64,6 +64,31 @@ class PalletsaccountsController extends Controller
     }
 
     /**
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showTotal()
+    {
+        if (Auth::check()) {
+            $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
+//            $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
+//
+//            for ($k = 0; $k < 11; $k++) {
+//                $listWarehouses[] = 'w'.$k;
+//            }
+//
+//            $name = $palletsaccount->name;
+//            $numberPallets=$palletsaccount->numberPallets;
+//            $warehousesAssociated=['w1', 'w3','w5' ];
+//
+//            return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
+            return view('palletsaccounts.totalPalletsaccounts', compact('totalpallets'));
+        } else {
+            return view('auth.login');
+        }
+    }
+
+    /**
      * update the pallets account n° ID
      * @param Request $request
      * @param $id
@@ -71,7 +96,6 @@ class PalletsaccountsController extends Controller
      */
     public function update(Request $request, $id)
     {
-dd(request());
         $rules = array(
             'name' => 'required|string|max:255|unique:warehouses',
             'numberPallets' => 'required|integer',
