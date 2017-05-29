@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class PalletsaccountsController
+ * @package App\Http\Controllers
+ */
 class PalletsaccountsController extends Controller
 {
     /**
@@ -36,6 +40,10 @@ class PalletsaccountsController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showDetails($id)
     {
         if (Auth::check()) {
@@ -53,6 +61,49 @@ class PalletsaccountsController extends Controller
         } else {
             return view('auth.login');
         }
+    }
+
+    /**
+     * update the pallets account n° ID
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id)
+    {
+dd(request());
+        $rules = array(
+            'name' => 'required|string|max:255|unique:warehouses',
+            'numberPallets' => 'required|integer',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        // process the login
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $name = Input::get('name');
+            $numberPallets = Input::get('numberPallets');
+
+            //ATTENTION UPDATE WAREHOUSES ASSOCIATED
+
+            DB::table('palletsaccounts')->where('id', $id)->update(['name' => $name]);
+            DB::table('palletsaccounts')->where('id', $id)->update(['numberPallets' => $numberPallets]);
+
+            session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
+
+            return redirect()->back();
+        }
+    }
+
+    public function delete($id)
+    {
+        DB::table('palletsaccounts')->where('id', $id)->delete();
+
+        // redirect
+        session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
+        return redirect('/allPalletsaccounts');
     }
 
 }

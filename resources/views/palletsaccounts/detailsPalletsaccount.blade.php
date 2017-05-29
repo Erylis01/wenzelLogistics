@@ -31,7 +31,7 @@
                 <div class="panel panel-general">
                     <div class="panel-heading">Details of the account n° {{$id}} : {{$name}}</div>
                     <div class="panel-body panel-body-general">
-                        <form class="form-horizontal text-right" role="form" method="POST" action="">
+                        <form class="form-horizontal text-right" role="form" method="POST" action="{{route('updatePalletsaccount', $id)}}">
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <!--name-->
@@ -65,23 +65,29 @@
                             <div class="form-group">
                                 <!--warehouses associated-->
                                 <div class="col-lg-3">
-                                    <label for="warehousesAssociated" class="control-label">Warehouses associated :</label>
+                                    <label for="warehousesAssociated" class="control-label">Warehouses associated
+                                        :</label>
                                 </div>
                                 <div class="col-lg-6">
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Warehouses Associated" name="warehousesAssociated" multiple>
+
                                         @foreach($listWarehouses as $warehouse )
+                                            @php($list[]=null)
                                             @foreach($warehousesAssociated as $warehouseA)
-                                            @if($warehouse==$warehouseA)
-                                                @php($option='selected')
-                                                <option {{$option}}>{{$warehouse}}</option>
-                                            @else
-                                                <option>{{$warehouse}}</option>
+                                                @if($warehouse==$warehouseA)
+                                                    @php($option='selected')
+                                                    <option {{$option}}>{{$warehouse}}</option>
+                                                    @php($list[]=$warehouse)
+                                                @endif
+                                            @endforeach
+                                        @if(!in_array($warehouse, $list))
+                                            <option>{{$warehouse}}</option>
                                             @endif
-                                                @endforeach
                                         @endforeach
                                     </select>
+
                                 </div>
                             </div>
 
@@ -100,16 +106,18 @@
                                     </button>
                                 </div>
                             </div>
+                        </form>
                             <!-- Modal Delete -->
                             <div class="modal fade" id="deletePalletsaccount_modal" role="dialog">
                                 <div class="modal-dialog modal-sm">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title text-center">Are you sure to delete this pallets account ?</h4>
+                                            <h4 class="modal-title text-center">Are you sure to delete this pallets
+                                                account ?</h4>
                                         </div>
                                         <div class="modal-body center">
-                                            <form method="post" action="">
+                                            <form method="post" action="{{route('deletePalletsaccount', $id)}}">
                                                 <input type="hidden" name="_method" value="delete">
                                                 {{ csrf_field() }}
                                                 <div class="text-center">
@@ -132,8 +140,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
-<br>
+
+                        <br>
                         <div class="table-responsive ">
                             <table class="table table-hover table-bordered table-details-palletsaccount">
                                 <thead>
@@ -145,11 +153,6 @@
                                 </thead>
                                 <tbody>
                                 {{--@foreach($warehouse->loadings as $loading)--}}
-                                    <tr>
-                                        <td class="text-center">reference1</td>
-                                        <td class="text-center">date1</td>
-                                        <td class="text-center">number1</td>
-                                    </tr>
                                 <tr>
                                     <td class="text-center">reference1</td>
                                     <td class="text-center">date1</td>
@@ -204,19 +207,28 @@
                                     <td class="text-center">reference1</td>
                                     <td class="text-center">date1</td>
                                     <td class="text-center">number1</td>
-                                </tr><tr>
+                                </tr>
+                                <tr>
                                     <td class="text-center">reference1</td>
                                     <td class="text-center">date1</td>
                                     <td class="text-center">number1</td>
-                                </tr><tr>
+                                </tr>
+                                <tr>
                                     <td class="text-center">reference1</td>
                                     <td class="text-center">date1</td>
                                     <td class="text-center">number1</td>
-                                </tr><tr>
+                                </tr>
+                                <tr>
                                     <td class="text-center">reference1</td>
                                     <td class="text-center">date1</td>
                                     <td class="text-center">number1</td>
-                                </tr><tr>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">reference1</td>
+                                    <td class="text-center">date1</td>
+                                    <td class="text-center">number1</td>
+                                </tr>
+                                <tr>
                                     <td class="text-center">reference1</td>
                                     <td class="text-center">date1</td>
                                     <td class="text-center">number1</td>

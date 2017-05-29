@@ -191,6 +191,7 @@
                                     </button>
                                 </div>
                             </div>
+                        </form>
                             <!-- Modal Delete -->
                             <div class="modal fade" id="deleteWarehouse_modal" role="dialog">
                                 <div class="modal-dialog modal-sm">
@@ -223,7 +224,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+
                     </div>
                 </div>
 

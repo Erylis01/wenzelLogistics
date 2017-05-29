@@ -32,7 +32,9 @@
                     <div class="panel-heading">Total of pallets by account</div>
 
                     <div class="panel-body">
-
+                        @if (Session::has('messageDeletePalletsaccount'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeletePalletsaccount') }}</div>
+                        @endif
                         <div class="table-responsive table-palletsaccounts">
                             <table class="table table-hover table-bordered">
                                 <thead>
