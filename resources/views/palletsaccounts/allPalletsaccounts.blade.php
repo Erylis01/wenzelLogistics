@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('title')
-    Total warehouses
+    All pallets accounts
 @endsection
 
 @section('stylesheet')
@@ -56,8 +56,16 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
-                                    <th class="text-center colName">Name</th>
-                                    <th class="text-center colTotal">Total</th>
+                                    <th class="text-center colName">Name<br><a
+                                                class="glyphicon glyphicon-chevron-up"
+                                                href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down"
+                                                href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a></th>
+                                    <th class="text-center colTotal">Total<br><a
+                                                class="glyphicon glyphicon-chevron-up"
+                                                href="{{url('/allPalletsaccounts?sortby=numberPallets&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down"
+                                                href="{{url('/allPalletsaccounts?sortby=numberPallets&order=desc')}}"></a></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -74,6 +82,7 @@
                         </div>
                     </div>
                 </div>
+
                 @foreach($listPalletsaccounts as $palletsaccount)
                 <div id="{{str_replace(' ', '', $palletsaccount->name)}}-collapse" class="panel panel-general col-lg-8 col-lg-offset-1 panel-palletsaccounts-details collapse">
                     <div class="panel-heading">Account n° {{$palletsaccount->id}} : {{$palletsaccount->name}}</div>
@@ -104,7 +113,7 @@
 
                             <div class="form-group">
                                 <div class="col-lg-offset-5 col-lg-6">
-                                    <a href="" class="btn btn-form btn-block">Details pallets transferts</a>
+                                    <a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}" class="btn btn-form btn-block">Details pallets transferts</a>
                                 </div>
                             </div>
                         </form>

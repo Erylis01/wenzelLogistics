@@ -16,38 +16,43 @@ class PalletsaccountsController extends Controller
     public function showAll(Request $request)
     {
         if (Auth::check()) {
-//table 1
-            $totalpallets =DB::table('palletsaccounts')->sum('numberPallets');
 
+            $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
 
-//
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
-$listPalletsaccounts=DB::table('palletsaccounts')->orderBy($sortby, $order)->get();
+
+                $listPalletsaccounts = DB::table('palletsaccounts')->orderBy($sortby, $order)->get();
+
+//                $links = $listPalletsaccounts->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
                 $listPalletsaccounts = DB::table('palletsaccounts')->get();
+//                $links = '';
             }
-            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order'));
+            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'links'));
         } else {
             return view('auth.login');
         }
-//                //table2
-//                $warehouses=PalletsAccount::with(array('loadings' => function($query) {
-//                    $query->orderBy('referenz', 'ASC');
-//                }))->get();
-//
-////                $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
-////            }
-////            else{
-////                //table2
-////                $warehouses=Warehouse::with('loadings')->get();
-//
-//
-//            return view('palletsAccounts.allPalletsAccounts', compact('totalpalanzahl', 'warehouses','warehousesPalAnzahl', 'warehousesName'));
-//        }else{
-//            return view('auth.login');
-//        }
-}
+    }
+
+    public function showDetails($id)
+    {
+        if (Auth::check()) {
+            $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
+
+            for ($k = 0; $k < 11; $k++) {
+                $listWarehouses[] = 'w'.$k;
+            }
+
+            $name = $palletsaccount->name;
+            $numberPallets=$palletsaccount->numberPallets;
+            $warehousesAssociated=['w1', 'w3','w5' ];
+
+            return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
+        } else {
+            return view('auth.login');
+        }
+    }
 
 }

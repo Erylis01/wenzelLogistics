@@ -29,15 +29,17 @@ Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@save')->name('s
 
 //WAREHOUSES
 Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWarehouses');
-Route::get('/detailsWarehouses/{id}', 'WarehousesController@showDetails')->name('showDetailsWarehouse');
-Route::post('/detailsWarehouses/{id}', 'WarehousesController@update')->name('updateWarehouse');
-Route::delete('/detailsWarehouses/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
+Route::get('/detailsWarehouse/{id}', 'WarehousesController@showDetails')->name('showDetailsWarehouse');
+Route::post('/detailsWarehouse/{id}', 'WarehousesController@update')->name('updateWarehouse');
+Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
 Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
 Route::get('addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
 
 //PALLETS ACCOUNTS
 Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
+Route::get('/detailsPalletsaccount/{id}', 'PalletsaccountsController@showDetails')->name('showDetailsPalletsaccount');
+Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name('showTotalPalletsaccounts');
 
 
 //MAILS
