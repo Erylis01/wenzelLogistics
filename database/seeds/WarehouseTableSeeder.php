@@ -1,8 +1,8 @@
 <?php
 
-use App\PalletsAccount;
 use App\Warehouse;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseTableSeeder extends Seeder
 {

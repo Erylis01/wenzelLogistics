@@ -265,7 +265,7 @@
                                                                                        class="input-group-addon">Aufwand (€)
                                                                                     :</label>
                                                                                 <input type="number" step="0.1" name="aufwand"
-                                                                                       class="form-control" value="{{ $aufwand }}" placeholder="aufwand" min="0"required>
+                                                                                       class="form-control" value="{{ $aufwand }}" placeholder="aufwand" min="0" required>
                                                                             </div>
                                                                             </div>
                                                                             <!--db-->
@@ -274,7 +274,7 @@
                                                                                 <label for="db" class="input-group-addon">DB (€)
                                                                                     :</label>
                                                                                 <input type="number" step="0.1" name="db"
-                                                                                       class="form-control" value="{{ $db }}" placeholder="db" required>
+                                                                                       class="form-control" value="{{$db}}" placeholder="db" required>
                                                                             </div>
                                                                             </div>
                                                                         </div>
@@ -631,13 +631,13 @@
 
                                                                             <tr>
                                                                                 <td class="text-center colTotal">{{$anz}}</td>
-                                                                                @foreach($warehouses as $warehouse)
-                                                                                    @if($warehouse->id == $warehouse_id)
-                                                                                        <td class="text-center">{{$anz}}</td>
-                                                                                    @else
-                                                                                        <td class="text-center"></td>
-                                                                                    @endif
-                                                                                @endforeach
+                                                                                {{--@foreach($warehouses as $warehouse)--}}
+                                                                                    {{--@if($warehouse->id == $warehouse_id)--}}
+                                                                                        {{--<td class="text-center">{{$anz}}</td>--}}
+                                                                                    {{--@else--}}
+                                                                                        {{--<td class="text-center"></td>--}}
+                                                                                    {{--@endif--}}
+                                                                                {{--@endforeach--}}
                                                                             </tr>
 
                                                                             </tbody>

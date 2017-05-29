@@ -43,7 +43,11 @@
                                     <div class="col-lg-8">
                                         <input id="name" type="text" class="form-control" name="name"
                                                value="{{ $name }}" placeholder="Name" required autofocus>
-
+                                        @if ($errors->has('name'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                             </div>
 
@@ -55,6 +59,11 @@
                                     <div class="col-lg-8">
                                         <input id="adress" type="text" class="form-control" name="adress"
                                                value="{{ $adress }}" placeholder="Adress" required autofocus>
+                                        @if ($errors->has('adress'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('adress') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                             </div>
 
@@ -64,8 +73,13 @@
                                     <label for="zipcode" class="control-label"><span>*</span> Zip Code :</label>
                                 </div>
                                     <div class="col-lg-3">
-                                        <input id="zipcode" type="number" class="form-control" name="zipcode"
+                                        <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
                                                value="{{ $zipcode }}" placeholder="Zip Code" required autofocus>
+                                        @if ($errors->has('zipcode'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('zipcode') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 <!--town-->
                                 <div class="col-lg-2">
@@ -74,6 +88,11 @@
                                 <div class="col-lg-3">
                                     <input id="town" type="text" class="form-control" name="town"
                                            value="{{ $town }}" placeholder="Town" required autofocus>
+                                    @if ($errors->has('town'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('town') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -86,6 +105,11 @@
                                     <div class="col-lg-8">
                                         <input id="country" type="text" class="form-control" name="country"
                                                value="{{ $country }}" placeholder="country" required autofocus>
+                                        @if ($errors->has('country'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('country') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                             </div>
 
@@ -136,10 +160,20 @@
                                 <div class="col-lg-3">
                                     <label for="namecontact" class="control-label">Pallet Account :</label>
                                 </div>
-                                {{--<div class="col-lg-8">--}}
-                                    {{--<input id="namepalletaccount" type="text" class="form-control" name="namepalletaccount"--}}
-                                           {{--value="{{ $namepalletaccount }}" >--}}
-                                {{--</div>--}}
+                                <div class="col-lg-8">
+                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                                data-live-search="true" data-live-search-style="startsWith"
+                                                title="Pallets Account" name="namepalletaccount">
+                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                @if($palletsAccount==$namepalletaccount)
+                                                    @php($option='selected')
+                                                    <option {{$option}}>{{$palletsAccount}}</option>
+                                                @else
+                                                    <option>{{$palletsAccount}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                </div>
                             </div>
 
                             <div class="form-group">

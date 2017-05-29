@@ -37,7 +37,7 @@ Route::get('addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehou
 
 
 //PALLETS ACCOUNTS
-//Route::get('/allWarehouses', 'WarehousesController@showTotal')->name('showAllWarehouses');
+Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
 
 
 //MAILS

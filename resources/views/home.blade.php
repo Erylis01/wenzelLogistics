@@ -14,6 +14,9 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
+@section('classPalletsAccounts')
+    class="nonActive"
+@endsection
 @section('classProfile')
     nonActive
 @endsection
@@ -50,6 +53,19 @@
                                      src="{{URL::asset('/image/warehouse2.jpg')}}"
                                      alt="warehouse image">
                                 <p class="text-muted menu-legend">Show all warehouses</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- All pallets accounts -->
+                    <a href="{{ route('showAllPalletsaccounts') }}">
+                        <div class="col-lg-3 text-center ">
+                            <div class="service-box">
+                                <h3 class="menu-title">Pallets Accounts</h3>
+                                <img class="img-responsive img-home center-block"
+                                     src="{{URL::asset('/image/account2.jpg')}}"
+                                     alt="warehouse image">
+                                <p class="text-muted menu-legend">Show all pallets accounts</p>
                             </div>
                         </div>
                     </a>

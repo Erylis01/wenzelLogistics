@@ -1,0 +1,95 @@
+
+.panel-palletsaccounts-details{
+    font-size:18px;
+}
+
+.info-palletsaccounts{
+    font-size:16px;
+}
+
+/*PANELS*/
+
+.panel-palletsaccounts{
+    width:350px;
+    padding:0px;
+}
+
+.panel-palletsaccounts>.panel-heading, .panel-palletsaccounts-details>.panel-heading{
+    padding:5px;
+}
+
+.panel-palletsaccounts-details{
+    width:700px;
+    padding:0px;
+}
+
+/*TABLE WAREHOUSES*/
+.table-palletsaccounts{
+    margin:-10px;
+    font-size:18px;
+}
+
+.table-palletsaccounts>table{
+    width: 100%;
+
+}
+
+.table-palletsaccounts>table>thead{
+    display: inline-block;
+    width: 100%;
+}
+
+.table-palletsaccounts>table>tbody{
+     font-size:16px;
+    width: 100%;
+    max-height: 450px;
+    overflow: auto;
+    display: inline-block;
+ }
+
+.colName{
+    min-width:258px;
+}
+
+.colTotal{
+    min-width:60px;
+}
+
+/*.colRefLoading{*/
+    /*min-width:160px;*/
+/*}*/
+
+/*.colFakturiert,  .colTeamTex, .colSpar{*/
+    /*min-width:100px;*/
+/*}*/
+/*.colVerschenkt, .colImpexEUX, .colImpexEUY{*/
+    /*min-width:110px;*/
+/*}*/
+/*.colECLWolfurt{*/
+    /*min-width:115px;*/
+/*}*/
+/*.colSystempo{*/
+    /*min-width:125px;*/
+/*}*/
+/*.colBenoit{*/
+    /*min-width:145px;*/
+/*}*/
+/*.colAldiDAG, .colAldiDOM, .colAldiSWB{*/
+    /*min-width:100px;*/
+/*}*/
+/*.colDachser, .colSchefknecht{*/
+    /*min-width:120px;*/
+/*}*/
+/*.colBonduelle{*/
+    /*min-width:135px;*/
+/*}*/
+/*.colWildenhofer{*/
+    /*min-width:195px;*/
+/*}*/
+/*.colArinthod, .colPFM{*/
+    /*min-width:85px;*/
+/*}*/
+
+
+
+

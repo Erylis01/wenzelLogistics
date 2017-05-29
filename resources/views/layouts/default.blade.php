@@ -52,7 +52,7 @@
                     <a @yield('classWarehouses') href="{{ route('showAllWarehouses') }}">Warehouses</a>
                 </div>
                 <div class="col-lg-2 text-center navbar-title-link">
-                    <a @yield('classPalletsAccounts') href="">Pallets Accounts</a>
+                    <a @yield('classPalletsAccounts') href="{{ route('showAllPalletsaccounts') }}">Pallets Accounts</a>
                 </div>
 
                 <div class="col-lg-2 col-lg-offset-2 text-center dropdown">

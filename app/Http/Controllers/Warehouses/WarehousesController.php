@@ -126,6 +126,10 @@ class WarehousesController extends Controller
         if (Auth::check()) {
             $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
 
+            for($k=0; $k<11; $k++){
+                $listPalletsAccounts[]=$k;
+            }
+
             $name = $warehouse->name;
             $adress = $warehouse->adress;
             $zipcode = $warehouse->zipcode;
@@ -135,8 +139,9 @@ class WarehousesController extends Controller
             $fax = $warehouse->fax;
             $email = $warehouse->email;
             $namecontact = $warehouse->namecontact;
+            $namepalletaccount='4';
 
-            return view('warehouses.detailsWarehouse', compact('id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact'));
+            return view('warehouses.detailsWarehouse', compact('listPalletsAccounts','id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
         } else {
             return view('auth.login');
         }
@@ -152,29 +157,45 @@ class WarehousesController extends Controller
     {
 //       $warehouse = DB::table('warehouses')->where('id', $id)->first();
 
-        $name = Input::get('name');
-        $adress = Input::get('adress');
-        $zipcode = Input::get('zipcode');
-        $town = Input::get('town');
-        $country = Input::get('country');
-        $phone = Input::get('phone');
-        $fax = Input::get('fax');
-        $email = Input::get('email');
-        $namecontact = Input::get('namecontact');
+        $rules = array(
+            'zipcode' => 'required|',
+            'name' => 'required|string|max:255|unique:warehouses',
+            'adress' => 'required|string|max:255',
+            'town' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
 
-        DB::table('warehouses')->where('id', $id)->update(['name' => $name]);
-        DB::table('warehouses')->where('id', $id)->update(['adress' => $adress]);
-        DB::table('warehouses')->where('id', $id)->update(['zipcode' => $zipcode]);
-        DB::table('warehouses')->where('id', $id)->update(['town' => $town]);
-        DB::table('warehouses')->where('id', $id)->update(['country' => $country]);
-        DB::table('warehouses')->where('id', $id)->update(['phone' => $phone]);
-        DB::table('warehouses')->where('id', $id)->update(['fax' => $fax]);
-        DB::table('warehouses')->where('id', $id)->update(['email' => $email]);
-        DB::table('warehouses')->where('id', $id)->update(['namecontact' => $namecontact]);
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        // process the login
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $name = Input::get('name');
+            $adress = Input::get('adress');
+            $zipcode = Input::get('zipcode');
+            $town = Input::get('town');
+            $country = Input::get('country');
+            $phone = Input::get('phone');
+            $fax = Input::get('fax');
+            $email = Input::get('email');
+            $namecontact = Input::get('namecontact');
 
-        session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
+            DB::table('warehouses')->where('id', $id)->update(['name' => $name]);
+            DB::table('warehouses')->where('id', $id)->update(['adress' => $adress]);
+            DB::table('warehouses')->where('id', $id)->update(['zipcode' => $zipcode]);
+            DB::table('warehouses')->where('id', $id)->update(['town' => $town]);
+            DB::table('warehouses')->where('id', $id)->update(['country' => $country]);
+            DB::table('warehouses')->where('id', $id)->update(['phone' => $phone]);
+            DB::table('warehouses')->where('id', $id)->update(['fax' => $fax]);
+            DB::table('warehouses')->where('id', $id)->update(['email' => $email]);
+            DB::table('warehouses')->where('id', $id)->update(['namecontact' => $namecontact]);
 
-        return redirect()->back();
+            session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
+
+            return redirect()->back();
+        }
     }
 
     public function delete($id)
