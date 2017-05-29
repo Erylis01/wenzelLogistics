@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class PalletsaccountsController
@@ -40,6 +42,50 @@ class PalletsaccountsController extends Controller
         }
     }
 
+    public function showAdd()
+    {
+        if (Auth::check()) {
+            for ($k = 0; $k < 11; $k++) {
+                $listWarehouses[] = 'w' . $k;
+            }
+
+            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses'));
+        } else {
+            return view('auth.login');
+        }
+    }
+
+    /**
+     * add a new pallets account to the list
+     */
+    public function add(Request $request)
+    {
+        $name = Input::get('name');
+        $numberPallets = Input::get('numberPallets');
+        $validateAddWarehouse = $request->validateAddWarehouse;
+        $refuseAddWarehouse = $request->refuseAddWarehouse;
+
+        $namepalletaccount = Input::get('nameswarehouses');
+
+        $rules = array(
+            'name' => 'required|string|max:255|unique:palletsaccounts',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        // process the login
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            DB::table('palletsaccounts')->insertGetId(
+                ['name' => $name, 'numberPallets' => $numberPallets]
+            );
+            session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
+            return redirect('/allPalletsaccounts');
+        }
+    }
+
+
     /**
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -50,12 +96,12 @@ class PalletsaccountsController extends Controller
             $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
 
             for ($k = 0; $k < 11; $k++) {
-                $listWarehouses[] = 'w'.$k;
+                $listWarehouses[] = 'w' . $k;
             }
 
             $name = $palletsaccount->name;
-            $numberPallets=$palletsaccount->numberPallets;
-            $warehousesAssociated=['w1', 'w3','w5' ];
+            $numberPallets = $palletsaccount->numberPallets;
+            $warehousesAssociated = ['w1', 'w3', 'w5'];
 
             return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
         } else {

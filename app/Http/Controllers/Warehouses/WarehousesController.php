@@ -56,7 +56,7 @@ class WarehousesController extends Controller
         $namepalletaccount=Input::get('namepalletaccount');
 
         $rules = array(
-            'zipcode' => 'required|',
+            'zipcode' => 'required',
             'name' => 'required|string|max:255|unique:warehouses',
             'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
@@ -97,7 +97,7 @@ class WarehousesController extends Controller
                 DB::table('warehouses')->insertGetId(
                     ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                 );
-
+                session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                 return redirect('/allWarehouses');
             }
         }
@@ -115,6 +115,8 @@ class WarehousesController extends Controller
             return view('auth.login');
         }
     }
+
+
 
     /**
      * show one specific warehouse according to its ID
