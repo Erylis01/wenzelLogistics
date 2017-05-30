@@ -89,8 +89,8 @@ class PalletstransfersController extends Controller
             );
 
             //valable que si state=OK
-//            $actualPalletsNumber=DB::table('palletsaccounts')->where('name',$palletsAccount)->value('numberPallets');
-//            DB::table('palletsaccounts')->where('name',$palletsAccount)->update(['numberPallets' => $actualPalletsNumber+$palletsNumber]);
+            $actualPalletsNumber=DB::table('palletsaccounts')->where('name',$palletsAccount)->value('numberPallets');
+            DB::table('palletsaccounts')->where('name',$palletsAccount)->update(['numberPallets' => $actualPalletsNumber+$palletsNumber]);
 
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
             return redirect('/allPalletstransfers');
