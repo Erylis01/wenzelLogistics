@@ -158,9 +158,9 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Pallet Account :</label>
+                                    <label for="namecontact" class="control-label">Pallets Account :</label>
                                 </div>
-                                <div class="col-lg-8">
+                                <div class="col-lg-6">
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Pallets Account" name="namepalletaccount">
@@ -173,6 +173,10 @@
                                                 @endif
                                             @endforeach
                                         </select>
+                                </div>
+                                <div class="col-lg-3 text-left">
+                                    <a href="{{route('showAddPalletsaccount')}}" class="link"><span
+                                                class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
 

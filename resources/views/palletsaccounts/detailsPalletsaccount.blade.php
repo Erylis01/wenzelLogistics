@@ -81,7 +81,7 @@
                                             <div class="col-lg-6">
                                                 <select class="selectpicker show-tick form-control" data-size="5"
                                                         data-live-search="true" data-live-search-style="startsWith"
-                                                        title="Warehouses Associated" name="warehousesAssociated"
+                                                        title="Warehouses Associated" name="warehousesAssociated[]"
                                                         multiple>
 
                                                     @foreach($listWarehouses as $warehouse )
@@ -98,7 +98,10 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-
+                                            </div>
+                                            <div class="col-lg-3 text-left">
+                                                <a href="{{route('showAddWarehouse')}}" class="link"><span
+                                                            class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
                                             </div>
                                         </div>
 

@@ -62,10 +62,11 @@ class PalletsaccountsController extends Controller
     {
         $name = Input::get('name');
         $numberPallets = Input::get('numberPallets');
-        $validateAddWarehouse = $request->validateAddWarehouse;
-        $refuseAddWarehouse = $request->refuseAddWarehouse;
+        $warehousesAssociated=Input::get('warehousesAssociated');
 
-        $namepalletaccount = Input::get('nameswarehouses');
+//        $validateAddWarehouse = $request->validateAddWarehouse;
+//        $refuseAddWarehouse = $request->refuseAddWarehouse;
+//        $namepalletaccount = Input::get('nameswarehouses');
 
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
@@ -86,6 +87,7 @@ class PalletsaccountsController extends Controller
     }
 
 
+
     /**
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -94,6 +96,7 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
+            $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
 
             for ($k = 0; $k < 11; $k++) {
                 $listWarehouses[] = 'w' . $k;
@@ -103,7 +106,7 @@ class PalletsaccountsController extends Controller
             $numberPallets = $palletsaccount->numberPallets;
             $warehousesAssociated = ['w1', 'w3', 'w5'];
 
-            return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
+            return view('palletsaccounts.detailsPalletsaccount', compact('totalpallets','listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
         } else {
             return view('auth.login');
         }
@@ -155,6 +158,7 @@ class PalletsaccountsController extends Controller
         } else {
             $name = Input::get('name');
             $numberPallets = Input::get('numberPallets');
+            $warehousesAssociated=Input::get('warehousesAssociated');
 
             //ATTENTION UPDATE WAREHOUSES ASSOCIATED
 

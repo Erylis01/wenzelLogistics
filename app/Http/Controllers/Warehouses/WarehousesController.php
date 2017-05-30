@@ -105,6 +105,7 @@ class WarehousesController extends Controller
 
     public function showAdd()
     {
+//        dd(request());
         if (Auth::check()) {
             for($k=0; $k<11; $k++){
                 $listPalletsAccounts[]=$k;

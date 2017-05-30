@@ -231,7 +231,7 @@
                                     <label for="namecontact" class="control-label"><span>*</span> Pallet Account
                                         :</label>
                                 </div>
-                                <div class="col-lg-8">
+                                <div class="col-lg-6">
                                     @if(isset($namepalletaccount))
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
@@ -254,6 +254,10 @@
                                             @endforeach
                                         </select>
                                     @endif
+                                </div>
+                                <div class="col-lg-3 text-left">
+                                    <a href="{{route('showAddPalletsaccount')}}" class="link"><span
+                                                class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
 
