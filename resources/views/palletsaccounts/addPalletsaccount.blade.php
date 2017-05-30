@@ -75,35 +75,35 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">
-                                    @if(isset($warehouseA))
-                                        <select class="selectpicker show-tick form-control" data-size="5"
-                                                data-live-search="true" data-live-search-style="startsWith"
-                                                title="Warehouses Associated" name="warehousesAssociated"
-                                                multiple>
-                                            @foreach($listWarehouses as $warehouse )
-                                                @php($list[]=null)
-                                                @foreach($warehousesAssociated as $warehouseA)
-                                                    @if($warehouse==$warehouseA)
-                                                        @php($option='selected')
-                                                        <option {{$option}}>{{$warehouse}}</option>
-                                                        @php($list[]=$warehouse)
-                                                    @endif
-                                                @endforeach
-                                                @if(!in_array($warehouse, $list))
-                                                    <option>{{$warehouse}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    @else
+                                    {{--@if(isset($warehouseA))--}}
+                                        {{--<select class="selectpicker show-tick form-control" data-size="5"--}}
+                                                {{--data-live-search="true" data-live-search-style="startsWith"--}}
+                                                {{--title="Warehouses Associated" name="warehousesAssociated"--}}
+                                                {{--multiple>--}}
+                                            {{--@foreach($listWarehouses as $warehouse )--}}
+                                                {{--@php($list[]=null)--}}
+                                                {{--@foreach($warehousesAssociated as $warehouseA)--}}
+                                                    {{--@if($warehouse->name==$warehouseA->name)--}}
+                                                        {{--@php($option='selected')--}}
+                                                        {{--<option {{$option}}>{{$warehouse->name}}</option>--}}
+                                                        {{--@php($list[]=$warehouse)--}}
+                                                    {{--@endif--}}
+                                                {{--@endforeach--}}
+                                                {{--@if(!in_array($warehouse, $list))--}}
+                                                    {{--<option>{{$warehouse->name}}</option>--}}
+                                                {{--@endif--}}
+                                            {{--@endforeach--}}
+                                        {{--</select>--}}
+                                    {{--@else--}}
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Warehouses Associated" name="warehousesAssociated[]"
                                                 multiple>
                                             @foreach($listWarehouses as $warehouse )
-                                                <option>{{$warehouse}}</option>
+                                                <option>{{$warehouse->name}}</option>
                                             @endforeach
                                         </select>
-                                    @endif
+                                    {{--@endif--}}
                                 </div>
                                 <div class="col-lg-3 text-left">
                                     <a href="{{route('showAddWarehouse')}}" class="link"><span
@@ -122,10 +122,6 @@
                         </form>
                     </div>
                 </div>
-
-                @if (Session::has('messageUpdatePalletsaccount'))
-                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
-                @endif
             </div>
         @endif
     </div>

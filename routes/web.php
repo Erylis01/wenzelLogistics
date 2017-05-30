@@ -47,6 +47,8 @@ Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name
 
 //PALLETS TRANSFERS
 Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
+Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');
+Route::get('addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
 
 //MAILS
     //validate registration

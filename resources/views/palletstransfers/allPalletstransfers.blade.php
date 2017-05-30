@@ -33,14 +33,14 @@
             <div class="col-lg-14">
                 <div class="panel panel-general">
                     <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-7">
-                            <a href="" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add transfers</a>
+                            <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add transfers</a>
                         </span></div>
 
                     <div class="panel-body panel-body-general">
-                        @if(Session::has('messageDeleteTransfer'))
-                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeleteTransfer') }}</div>
-                        @elseif(Session::has('messageAddTransfer'))
-                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddTransfer') }}</div>
+                        @if(Session::has('messageDeletePalletstransfer'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeletePalletstransfer') }}</div>
+                        @elseif(Session::has('messageAddPalletstransfer'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddPalletstransfer') }}</div>
                     @endif
 
 
@@ -82,11 +82,11 @@
                                     {{--</th>--}}
                                 {{--</tr>--}}
                                 <tr>
-                                    <th class="text-center">ID</th>
-                                    <th class="text-center">Date</th>
-                                    <th class="text-center">Loading Reference</th>
-                                    <th class="text-center">Pallets Account</th>
-                                    <th class="text-center">Pallets Number</th>
+                                    <th class="text-center colID">ID</th>
+                                    <th class="text-center colDate">Date</th>
+                                    <th class="text-center colRef">Loading Reference</th>
+                                    <th class="text-center colAccount">Pallets Account</th>
+                                    <th class="text-center colNumber">Pallets Number</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -103,11 +103,11 @@
                                     <tr class={{$class}}>
                                         {{--<td><a href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>--}}
                                         {{--</td>--}}
-                                        <td class="text-center">{{$transfer->id}}</td>
-                                        <td class="text-center">{{date('d-m-Y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center">{{$transfer->loadingRef}}</td>
-                                        <td class="text-center">{{$transfer->palletsAccount}}</td>
-                                        <td class="text-center">{{$transfer->palletsNumber}}</td>
+                                        <td class="text-center colID">{{$transfer->id}}</td>
+                                        <td class="text-center colDate">{{date('d-m-Y', strtotime($transfer->date))}}</td>
+                                        <td class="text-center colRef">{{$transfer->loadingRef}}</td>
+                                        <td class="text-center colAccount">{{$transfer->palletsAccount}}</td>
+                                        <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

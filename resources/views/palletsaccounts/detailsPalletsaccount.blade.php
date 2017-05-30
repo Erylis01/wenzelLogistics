@@ -90,14 +90,14 @@
                                                     @foreach($listWarehouses as $warehouse )
                                                         @php($list[]=null)
                                                         @foreach($warehousesAssociated as $warehouseA)
-                                                            @if($warehouse==$warehouseA)
+                                                            @if($warehouse->name==$warehouseA)
                                                                 @php($option='selected')
-                                                                <option {{$option}}>{{$warehouse}}</option>
+                                                                <option {{$option}}>{{$warehouse->name}}</option>
                                                                 @php($list[]=$warehouse)
                                                             @endif
                                                         @endforeach
                                                         @if(!in_array($warehouse, $list))
-                                                            <option>{{$warehouse}}</option>
+                                                            <option>{{$warehouse->name}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>

@@ -107,9 +107,7 @@ class WarehousesController extends Controller
     {
 //        dd(request());
         if (Auth::check()) {
-            for($k=0; $k<11; $k++){
-                $listPalletsAccounts[]=$k;
-            }
+            $listPalletsAccounts=DB::table('palletsaccounts')->get();
 
             return view('warehouses.addWarehouse', compact('listPalletsAccounts'));
         } else {
@@ -129,9 +127,7 @@ class WarehousesController extends Controller
         if (Auth::check()) {
             $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
 
-            for($k=0; $k<11; $k++){
-                $listPalletsAccounts[]=$k;
-            }
+            $listPalletsAccounts=DB::table('palletsaccounts')->get();
 
             $name = $warehouse->name;
             $adress = $warehouse->adress;

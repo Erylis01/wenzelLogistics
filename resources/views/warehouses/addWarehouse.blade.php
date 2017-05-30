@@ -240,11 +240,11 @@
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Pallets Account" name="namepalletaccount">
                                             @foreach($listPalletsAccounts as $palletsAccount )
-                                                @if($palletsAccount==$namepalletaccount)
+                                                @if($palletsAccount->name==$namepalletaccount)
                                                     @php($option='selected')
-                                                    <option {{$option}}>{{$palletsAccount}}</option>
+                                                    <option {{$option}}>{{$palletsAccount->name}}</option>
                                                 @else
-                                                    <option>{{$palletsAccount}}</option>
+                                                    <option>{{$palletsAccount->name}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -253,7 +253,7 @@
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Pallets Account" name="namepalletaccount">
                                             @foreach($listPalletsAccounts as $palletsAccount )
-                                                <option>{{$palletsAccount}}</option>
+                                                <option>{{$palletsAccount->name}}</option>
                                             @endforeach
                                         </select>
                                     @endif

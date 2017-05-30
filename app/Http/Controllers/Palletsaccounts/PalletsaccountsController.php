@@ -39,9 +39,7 @@ class PalletsaccountsController extends Controller
     public function showAdd()
     {
         if (Auth::check()) {
-            for ($k = 0; $k < 11; $k++) {
-                $listWarehouses[] = 'w' . $k;
-            }
+            $listWarehouses=DB::table('warehouses')->get();
 
             return view('palletsaccounts.addPalletsaccount', compact('listWarehouses'));
         } else {
@@ -92,13 +90,11 @@ class PalletsaccountsController extends Controller
             $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
             $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
 
-            for ($k = 0; $k < 11; $k++) {
-                $listWarehouses[] = 'w' . $k;
-            }
+            $listWarehouses=DB::table('warehouses')->get();
 
             $name = $palletsaccount->name;
             $numberPallets = $palletsaccount->numberPallets;
-            $warehousesAssociated = ['w1', 'w3', 'w5'];
+            $warehousesAssociated = ['warehouse1', 'warehouse3', 'warehouse5'];
 
             return view('palletsaccounts.detailsPalletsaccount', compact('totalpallets','listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
         } else {
