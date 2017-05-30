@@ -598,6 +598,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+
                                                         <div class="panel subpanel">
                                                             <div class="panel-heading ">
                                                                 <a data-toggle="collapse" href="#Pan3collapse">Recap pallets chart</a>

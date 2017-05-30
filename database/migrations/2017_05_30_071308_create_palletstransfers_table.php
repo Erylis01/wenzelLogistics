@@ -19,7 +19,12 @@ class CreatePalletstransfersTable extends Migration
             $table->string('palletsAccount');
             $table->string('loadingRef');
             $table->date('date');
-            $table->string('state')->default('not OK');
+            $table->integer('realPalletsNumber')->nullable();
+            $table->boolean('documents')->default(false);
+            $table->boolean('state')->default(false);
+            $table->date('dateLastReminder')->nullable();
+            $table->integer('remindersNumber')->nullable();
+            $table->string('reminderEmail')->nullable();
             $table->timestamps();
         });
     }

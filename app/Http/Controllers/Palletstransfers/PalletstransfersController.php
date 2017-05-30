@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Palletsaccount;
+use App\Palletstransfer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,13 +84,7 @@ class PalletstransfersController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            DB::table('palletstransfers')->insertGetId(
-                ['date' => $date, 'loadingRef' => $loadingRef,'palletsAccount' =>$palletsAccount, 'palletsNumber'=>$palletsNumber]
-            );
-
-            //valable que si state=OK
-            $actualPalletsNumber=DB::table('palletsaccounts')->where('name',$palletsAccount)->value('numberPallets');
-            DB::table('palletsaccounts')->where('name',$palletsAccount)->update(['numberPallets' => $actualPalletsNumber+$palletsNumber]);
+            Palletstransfer::create(['date' => $date, 'loadingRef' => $loadingRef,'palletsAccount' =>$palletsAccount, 'palletsNumber'=>$palletsNumber]);
 
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
             return redirect('/allPalletstransfers');
@@ -110,8 +106,14 @@ class PalletstransfersController extends Controller
             $palletsNumber = $palletsTransfer->palletsNumber;
             $palletsAccount = $palletsTransfer->palletsAccount;
             $state=$palletsTransfer->state;
+            $realPalletsNumber=$palletsTransfer->realPalletsNumber;
+            $documents=$palletsTransfer->documents;
+            $dateLastReminder=$palletsTransfer->dateLastReminder;
+            $remindersNumber=$palletsTransfer->remindersNumber;
+            $reminderEmail=$palletsTransfer->reminderEmail;
+            $listEmails=['achanger1', 'achanger2', 'achanger3'];
 
-            return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts','date','loadingRef', 'id', 'palletsNumber', 'palletsAccount', 'state'));
+            return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts','date','loadingRef', 'id', 'palletsNumber', 'palletsAccount', 'state', 'realPalletsNumber', 'documents', 'dateLastReminder','remindersNumber', 'reminderEmail', 'listEmails' ));
         } else {
             return view('auth.login');
         }
@@ -128,7 +130,6 @@ class PalletstransfersController extends Controller
         $rules = array(
             'loadingRef' => 'required|string|max:255',
             'date'=>'required|date',
-
         );
         $validator = Validator::make(Input::all(), $rules);
         // process the login
@@ -142,13 +143,12 @@ class PalletstransfersController extends Controller
             $palletsNumber = Input::get('palletsNumber');
             $palletsAccount=Input::get('palletsAccount');
 
-            DB::table('palletstransfers')->where('id', $id)->update(['date' => $date]);
-            DB::table('loadingRef')->where('id', $id)->update(['loadingRef' => $loadingRef]);
-            DB::table('palletstransfers')->where('id', $id)->update(['palletsNumber' => $palletsNumber]);
-            DB::table('palletsAccount')->where('id', $id)->update(['palletsAccount' => $palletsAccount]);
+            Palletstransfer::where('id', $id)->update(['date' => $date]);
+            Palletstransfer::where('id', $id)->update(['loadingRef' => $loadingRef]);
+            Palletstransfer::where('id', $id)->update(['palletsNumber' => $palletsNumber]);
+            Palletstransfer::where('id', $id)->update(['palletsAccount' => $palletsAccount]);
 
             session()->flash('messageUpdatePalletstransfer', 'Successfully updated pallets transfer');
-
             return redirect()->back();
         }
     }
@@ -161,4 +161,31 @@ class PalletstransfersController extends Controller
         session()->flash('messageDeletePalletstransfer', 'Successfully deleted the pallets transfer!');
         return redirect('/allPalletstransfers');
     }
+
+    public function saveVerification($id, $palletsAccount)
+    {
+
+            $realPalletsNumber = Input::get('realPalletsNumber');
+            $documents=Input::get('documents');
+            $state = Input::get('state');
+            $dateLastReminder=Input::get('dateLastReminder');
+            $remindersNumber = Input::get('remindersNumber');
+            $reminderEmail=Input::get('reminderEmail');
+
+            Palletstransfer::where('id', $id)->update(['realPalletsNumber' => $realPalletsNumber]);
+            Palletstransfer::where('id', $id)->update(['documents' => $documents]);
+            Palletstransfer::where('id', $id)->update(['state' => $state]);
+            Palletstransfer::where('id', $id)->update(['dateLastReminder' => $dateLastReminder]);
+            Palletstransfer::where('id', $id)->update(['remindersNumber' => $remindersNumber]);
+            Palletstransfer::where('id', $id)->update(['reminderEmail' => $reminderEmail]);
+
+if($state==true){
+    $actualPalletsNumber=DB::table('palletsaccounts')->where('name',$palletsAccount)->value('numberPallets');
+    DB::table('palletsaccounts')->where('name',$palletsAccount)->update(['numberPallets' => $actualPalletsNumber+$realPalletsNumber]);
+}
+
+// redirect
+            session()->flash('messageSaveVerificationPalletstransfer', 'Successfully saved the pallets transfer verification !');
+            return redirect()->back();
+        }
 }
