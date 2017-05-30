@@ -231,7 +231,7 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label"><span>*</span> Pallet Account
+                                    <label for="namecontact" class="control-label">Pallet Account
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">

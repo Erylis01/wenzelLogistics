@@ -98,7 +98,7 @@
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Warehouses Associated" name="warehousesAssociated[]"
-                                                multiple>
+                                                multiple required>
                                             @foreach($listWarehouses as $warehouse )
                                                 <option>{{$warehouse->name}}</option>
                                             @endforeach

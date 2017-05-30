@@ -62,6 +62,7 @@ class PalletsaccountsController extends Controller
 
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
+            'warehousesAssociated'=> 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
         // process the login
@@ -89,14 +90,24 @@ class PalletsaccountsController extends Controller
         if (Auth::check()) {
             $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
             $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
-
             $listWarehouses=DB::table('warehouses')->get();
-
             $name = $palletsaccount->name;
             $numberPallets = $palletsaccount->numberPallets;
             $warehousesAssociated = ['warehouse1', 'warehouse3', 'warehouse5'];
 
-            return view('palletsaccounts.detailsPalletsaccount', compact('totalpallets','listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
+            if (request()->has('sortby') && request()->has('order')) {
+                $sortby = request()->get('sortby'); // Order by what column?
+                $order = request()->get('order'); // Order direction: asc or desc
+                $listPalletstransfers=DB::table('palletstransfers')->where('palletsAccount', $name)->orderBy($sortby, $order)->paginate(10);
+                $links = $listPalletstransfers->appends(['sortby' => $sortby, 'order' => $order])->render();
+            } else {
+                $listPalletstransfers=DB::table('palletstransfers')->where('palletsAccount', $name)->paginate(10);
+                $links = '';
+            }
+
+            $count = count(DB::table('palletstransfers')->where('palletsAccount', $name)->get());
+
+            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated', 'count', 'links'));
         } else {
             return view('auth.login');
         }
@@ -138,6 +149,8 @@ class PalletsaccountsController extends Controller
         $rules = array(
             'name' => 'required|string|max:255|unique:warehouses',
             'numberPallets' => 'required|integer',
+            'warehousesAssociated'=>'required',
+
         );
         $validator = Validator::make(Input::all(), $rules);
         // process the login

@@ -162,103 +162,54 @@
                                     </div>
 
                                     <br>
-                                    <div class="table-responsive ">
-                                        <table class="table table-hover table-bordered table-details-palletsaccount">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered">
                                             <thead>
                                             <tr>
-                                                <th class="text-center">Reference Loading</th>
-                                                <th class="text-center">Date Loading</th>
-                                                <th class="text-center">Pallets Number</th>
+                                                <th class="text-center">Date transfer<br><a
+                                                            class="glyphicon glyphicon-chevron-up"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
+                                                            class="glyphicon glyphicon-chevron-down"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a></th>
+                                                <th class="text-center">Reference Loading<br><a
+                                                            class="glyphicon glyphicon-chevron-up"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loadingRef&order=asc')}}"></a><a
+                                                            class="glyphicon glyphicon-chevron-down"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loadingRef&order=desc')}}"></a></th>
+                                                <th class="text-center">Pallets Number<br><a
+                                                            class="glyphicon glyphicon-chevron-up"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
+                                                            class="glyphicon glyphicon-chevron-down"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a></th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {{--@foreach($warehouse->loadings as $loading)--}}
+                                            @foreach($listPalletstransfers as $transfer)
                                             <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
+                                                <td class="text-center">{{$transfer->date}}</td>
+                                                <td class="text-center">{{$transfer->loadingRef}}</td>
+                                                <td class="text-center">{{$transfer->palletsNumber}}</td>
                                             </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">reference1</td>
-                                                <td class="text-center">date1</td>
-                                                <td class="text-center">number1</td>
-                                            </tr>
-
-                                            {{--@endforeach--}}
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div class="row">
+                                        <div class=" text-left">{!! $listPalletstransfers->render() !!}</div>
 
+                                        @if ($listPalletstransfers->currentPage()==$listPalletstransfers->lastPage())
+                                            <div class="col-lg-offset-8">
+                                                Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
+                                                to {{$count}} of {{$count}} results
+                                            </div>
+                                        @else
+                                            <div class="col-lg-offset-8">
+                                                Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
+                                                to @php($legend2= $listPalletstransfers->currentPage() * 5) {{$legend2}} of {{$count}}
+                                                results
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
 
