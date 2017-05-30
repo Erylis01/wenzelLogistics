@@ -17,6 +17,9 @@
 @section('classPalletsAccounts')
     class="nonActive"
 @endsection
+@section('classPalletsTransfers')
+    class="nonActive"
+@endsection
 @section('classProfile')
     nonActive
 @endsection
@@ -66,6 +69,19 @@
                                      src="{{URL::asset('/image/account2.jpg')}}"
                                      alt="warehouse image">
                                 <p class="text-muted menu-legend">Show all pallets accounts</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- All pallets transfers -->
+                    <a href="{{ route('showAllPalletstransfers') }}">
+                        <div class="col-lg-3 text-center ">
+                            <div class="service-box">
+                                <h3 class="menu-title">Pallets Transfers</h3>
+                                <img class="img-responsive img-home center-block"
+                                     src="{{URL::asset('/image/pallets.png')}}"
+                                     alt="warehouse image">
+                                <p class="text-muted menu-legend">Show all pallets transfers</p>
                             </div>
                         </div>
                     </a>

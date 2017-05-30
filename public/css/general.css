@@ -54,6 +54,20 @@
     font-size: 18px;
 }
 
+.btn-add, .btn-add:focus, btn-add:active{
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(0, 160, 0);
+    font-size: 18px;
+    color:white;
+    background-color: rgba(0, 160, 0, 0.8);
+}
+
+.btn-add:hover{
+    color:rgb(0, 160, 0);
+    background-color: white;
+}
+
 /*LINK*/
 
 .link, .link:focus, .link:active {

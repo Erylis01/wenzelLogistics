@@ -17,6 +17,9 @@
 @section('classPalletsAccounts')
     class="nonActive"
 @endsection
+@section('classPalletsTransfers')
+    class="nonActive"
+@endsection
 @section('classProfile')
     nonActive
 @endsection
@@ -218,35 +221,35 @@
                                         @php ($class="default")
                                     @endif
                                     <tr class={{$class}}>
-                                        <td><a href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a>
+                                        <td class="text-center"><a href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a>
                                         </td>
-                                        <td>{{date('d-m-Y', strtotime($loading->ladedatum))}}</td>
-                                        <td>{{date('d-m-Y', strtotime($loading->entladedatum))}}</td>
-                                        <td>{{$loading->disp}}</td>
-                                        <td>{{$loading->referenz}}</td>
-                                        <td>{{$loading->auftraggeber}}</td>
-                                        <td>{{$loading->beladestelle}}</td>
-                                        <td>{{$loading->landb}}</td>
-                                        <td>{{$loading->plzb}}</td>
-                                        <td>{{$loading->ortb}}</td>
-                                        <td>{{$loading->entladestelle}}</td>
-                                        <td>{{$loading->lande}}</td>
-                                        <td>{{$loading->plze}}</td>
-                                        <td>{{$loading->orte}}</td>
-                                        <td>{{$loading->anz}}</td>
-                                        <td>{{$loading->art}}</td>
-                                        <td>{{$loading->ware}}</td>
-                                        <td>{{$loading->gewicht}}</td>
-                                        <td>{{$loading->vol}}</td>
-                                        <td>{{$loading->ldm}}</td>
-                                        <td>{{$loading->umsatz}}</td>
-                                        <td>{{$loading->aufwand}}</td>
-                                        <td>{{$loading->db}}</td>
-                                        <td>{{$loading->trp}}</td>
-                                        <td>{{$loading->pt}}</td>
-                                        <td>{{$loading->subfrachter}}</td>
-                                        <td>{{$loading->kennzeichen}}</td>
-                                        <td>{{$loading->zusladestellen}}</td>
+                                        <td class="text-center">{{date('d-m-Y', strtotime($loading->ladedatum))}}</td>
+                                        <td class="text-center">{{date('d-m-Y', strtotime($loading->entladedatum))}}</td>
+                                        <td class="text-center">{{$loading->disp}}</td>
+                                        <td class="text-center">{{$loading->referenz}}</td>
+                                        <td class="text-center">{{$loading->auftraggeber}}</td>
+                                        <td class="text-center">{{$loading->beladestelle}}</td>
+                                        <td class="text-center">{{$loading->landb}}</td>
+                                        <td class="text-center">{{$loading->plzb}}</td>
+                                        <td class="text-center">{{$loading->ortb}}</td>
+                                        <td class="text-center">{{$loading->entladestelle}}</td>
+                                        <td class="text-center">{{$loading->lande}}</td>
+                                        <td class="text-center">{{$loading->plze}}</td>
+                                        <td class="text-center">{{$loading->orte}}</td>
+                                        <td class="text-center">{{$loading->anz}}</td>
+                                        <td class="text-center">{{$loading->art}}</td>
+                                        <td class="text-center">{{$loading->ware}}</td>
+                                        <td class="text-center">{{$loading->gewicht}}</td>
+                                        <td class="text-center">{{$loading->vol}}</td>
+                                        <td class="text-center">{{$loading->ldm}}</td>
+                                        <td class="text-center">{{$loading->umsatz}}</td>
+                                        <td class="text-center">{{$loading->aufwand}}</td>
+                                        <td class="text-center">{{$loading->db}}</td>
+                                        <td class="text-center">{{$loading->trp}}</td>
+                                        <td class="text-center">{{$loading->pt}}</td>
+                                        <td class="text-center">{{$loading->subfrachter}}</td>
+                                        <td class="text-center">{{$loading->kennzeichen}}</td>
+                                        <td class="text-center">{{$loading->zusladestellen}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

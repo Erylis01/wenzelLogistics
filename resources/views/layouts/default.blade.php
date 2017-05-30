@@ -54,8 +54,11 @@
                 <div class="col-lg-2 text-center navbar-title-link">
                     <a @yield('classPalletsAccounts') href="{{ route('showAllPalletsaccounts') }}">Pallets Accounts</a>
                 </div>
+                <div class="col-lg-2 text-center navbar-title-link">
+                    <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}">Pallets Transfers</a>
+                </div>
 
-                <div class="col-lg-2 col-lg-offset-2 text-center dropdown">
+                <div class="col-lg-2 text-center dropdown">
                     <a href="#" class="dropdown-toggle navbar-title-link @yield('classProfile') "  data-toggle="dropdown" role="button"
                        aria-expanded="false">
                         {{ Auth::user()->username }} <span class="caret"></span>

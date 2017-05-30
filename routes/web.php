@@ -35,16 +35,18 @@ Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('de
 Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
 Route::get('addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
-
 //PALLETS ACCOUNTS
 Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
 Route::get('/detailsPalletsaccount/{id}', 'PalletsaccountsController@showDetails')->name('showDetailsPalletsaccount');
 Route::post('/detailsPalletsaccount/{id}', 'PalletsaccountsController@update')->name('updatePalletsaccount');
 Route::delete('/detailsPalletsaccount/{id}', 'PalletsaccountsController@delete')->name('deletePalletsaccount');
-Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name('showTotalPalletsaccounts');
 Route::post('/addPalletsaccount', 'PalletsaccountsController@add')->name('addPalletsaccount');
 Route::get('addPalletsaccount', 'PalletsaccountsController@showAdd')->name('showAddPalletsaccount');
 
+Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name('showTotalPalletsaccounts');
+
+//PALLETS TRANSFERS
+Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
 
 //MAILS
     //validate registration

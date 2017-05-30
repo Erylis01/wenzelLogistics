@@ -23,10 +23,6 @@ class ListLoadingsController extends Controller
         $this->importData();
         $currentDate = Carbon::now();
         $limitDate=$currentDate->subDays(60)->format('Y-m-d');
-//        $listLoadings = DB::table('loadings')->where([
-//            ['pt', '=', 'ja'],
-//            ['ladedatum', '>=', $limitDate],
-//])->distinct()->get();
 
         if (request()->has('sortby') && request()->has('order')) {
             $sortby = $request->get('sortby'); // Order by what column?
@@ -48,7 +44,10 @@ class ListLoadingsController extends Controller
             $links='';
 
         }
-    $count=count(DB::table('loadings')->where('pt', '=','JA')->get());
+    $count=count(DB::table('loadings')->where([
+        ['pt', '=', 'ja'],
+        ['ladedatum', '>=', $limitDate],
+    ])->get());
 
 
         return view('loadings.loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));

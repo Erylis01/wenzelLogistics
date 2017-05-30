@@ -17,6 +17,9 @@
 @section('classPalletsAccounts')
     class="nonActive"
 @endsection
+@section('classPalletsTransfers')
+    class="nonActive"
+@endsection
 @section('classProfile')
     active
 @endsection
