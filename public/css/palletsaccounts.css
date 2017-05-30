@@ -26,6 +26,9 @@
 
 /*TABLE*/
 
+.col1{
+    max-width: 70px;
+}
 
 .table-palletsaccounts{
     margin:-10px;

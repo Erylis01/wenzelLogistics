@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('title')
-    Details loading
+    Loading details
 @endsection
 
 @section('stylesheet')

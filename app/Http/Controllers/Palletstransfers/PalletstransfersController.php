@@ -74,8 +74,6 @@ class PalletstransfersController extends Controller
         $rules = array(
             'loadingRef' => 'required|string|max:255',
             'date'=>'required|date',
-            'palletsAccount'=>'required|string',
-            'palletsNumber'=>'required|integer',
         );
         $validator = Validator::make(Input::all(), $rules);
         // process the login
@@ -95,5 +93,72 @@ class PalletstransfersController extends Controller
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
             return redirect('/allPalletstransfers');
         }
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showDetails($id)
+    {
+        if (Auth::check()) {
+            $listPalletsaccounts=DB::table('palletsaccounts')->get();
+
+            $palletsTransfer=DB::table('palletstransfers')->where('id', $id)->first();
+            $date = $palletsTransfer->date;
+            $loadingRef=$palletsTransfer->loadingRef;
+            $palletsNumber = $palletsTransfer->palletsNumber;
+            $palletsAccount = $palletsTransfer->palletsAccount;
+            $state=$palletsTransfer->state;
+
+            return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts','date','loadingRef', 'id', 'palletsNumber', 'palletsAccount', 'state'));
+        } else {
+            return view('auth.login');
+        }
+    }
+
+    /**
+     * update the pallets transfer n° ID
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = array(
+            'loadingRef' => 'required|string|max:255',
+            'date'=>'required|date',
+
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        // process the login
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $date = Input::get('date');
+            $loadingRef=Input::get('loadingRef');
+            $palletsNumber = Input::get('palletsNumber');
+            $palletsAccount=Input::get('palletsAccount');
+
+            DB::table('palletstransfers')->where('id', $id)->update(['date' => $date]);
+            DB::table('loadingRef')->where('id', $id)->update(['loadingRef' => $loadingRef]);
+            DB::table('palletstransfers')->where('id', $id)->update(['palletsNumber' => $palletsNumber]);
+            DB::table('palletsAccount')->where('id', $id)->update(['palletsAccount' => $palletsAccount]);
+
+            session()->flash('messageUpdatePalletstransfer', 'Successfully updated pallets transfer');
+
+            return redirect()->back();
+        }
+    }
+
+    public function delete($id)
+    {
+        DB::table('palletstransfers')->where('id', $id)->delete();
+
+        // redirect
+        session()->flash('messageDeletePalletstransfer', 'Successfully deleted the pallets transfer!');
+        return redirect('/allPalletstransfers');
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('title')
-    Details pallets account
+    Add pallets account
 @endsection
 
 @section('stylesheet')

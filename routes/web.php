@@ -49,6 +49,9 @@ Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name
 Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
 Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');
 Route::get('addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
+Route::get('/detailsPalletstransfer/{id}', 'PalletstransfersController@showDetails')->name('showDetailsPalletstransfer');
+Route::post('/detailsPalletstransfer/{id}', 'PalletstransfersController@update')->name('updatePalletstransfer');
+Route::delete('/detailsPalletstransfer/{id}', 'PalletstransfersController@delete')->name('deletePalletstransfer');
 
 //MAILS
     //validate registration

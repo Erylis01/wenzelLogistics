@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('title')
-    Details warehouse
+    Warehouse details
 @endsection
 
 @section('stylesheet')

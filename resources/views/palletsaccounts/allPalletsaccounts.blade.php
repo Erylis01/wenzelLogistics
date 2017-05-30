@@ -67,14 +67,14 @@
                                 <thead>
                                 <tr>
                                     <th class="text-center colName">Name<br><a
-                                                class="glyphicon glyphicon-chevron-up"
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down"
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a></th>
                                     <th class="text-center colTotal">Total<br><a
-                                                class="glyphicon glyphicon-chevron-up"
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=numberPallets&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down"
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=numberPallets&order=desc')}}"></a>
                                     </th>
                                 </tr>
