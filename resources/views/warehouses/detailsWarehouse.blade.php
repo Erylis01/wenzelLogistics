@@ -130,6 +130,11 @@
                                 <div class="col-lg-3">
                                     <input id="phone" type="text" class="form-control" name="phone"
                                            value="{{ $phone }}" placeholder="Phone" autofocus>
+                                    @if ($errors->has('phone'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <!--fax-->
                                 <div class="col-lg-2">
@@ -138,6 +143,11 @@
                                 <div class="col-lg-3">
                                     <input id="fax" type="text" class="form-control" name="fax"
                                            value="{{ $fax }}" placeholder="Fax" autofocus>
+                                    @if ($errors->has('fax'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('fax') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -149,6 +159,11 @@
                                 <div class="col-lg-8">
                                     <input id="email" type="text" class="form-control" name="email"
                                            value="{{ $email }}" placeholder="Email" autofocus>
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
                                 </div>
                             </div>
 
