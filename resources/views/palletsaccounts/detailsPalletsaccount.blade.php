@@ -123,6 +123,9 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        @if (Session::has('messageUpdatePalletsaccount'))
+                                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
+                                        @endif
                                     </form>
                                     <!-- Modal Delete -->
                                     <div class="modal fade" id="deletePalletsaccount_modal" role="dialog">
@@ -212,10 +215,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            @if (Session::has('messageUpdatePalletsaccount'))
-                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
-                            @endif
                     </div>
                 @endif
             </div>

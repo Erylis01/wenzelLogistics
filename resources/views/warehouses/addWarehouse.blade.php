@@ -124,7 +124,6 @@
                                 </div>
                             </div>
 
-
                             <div class="form-group">
                                 <!--country-->
                                 <div class="col-lg-3">
@@ -184,7 +183,6 @@
                                     {{--@endif--}}
                                 </div>
                             </div>
-
 
                             <div class="form-group">
                                 <!--email-->
@@ -290,7 +288,6 @@
                                             </div>
                                             <div class="modal-body center">
                                                 <form role="form" method="POST" action="{{route('addWarehouse')}}">
-                                                    {{--<input type="hidden" name="_method" value="delete">--}}
                                                     {{ csrf_field() }}
                                                     @if(count($zipcodeWarehouses)==1)
                                                         <p class="text-left">

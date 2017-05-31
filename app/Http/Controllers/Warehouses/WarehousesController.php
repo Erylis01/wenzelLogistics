@@ -74,6 +74,7 @@ class WarehousesController extends Controller
                     Warehouse::create(
                         ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                     );
+                    session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                     return redirect('/allWarehouses');
                 } elseif (isset($refuseAddWarehouse)) {
                     $listPalletsAccounts=DB::table('palletsaccounts')->get();
@@ -146,6 +147,20 @@ class WarehousesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validateUpdateWarehouse = $request->validateUpdateWarehouse;
+        $refuseUpdateWarehouse = $request->refuseUpdateWarehouse;
+        $namepalletaccount=Input::get('namepalletaccount');
+        $name = Input::get('name');
+        $adress = Input::get('adress');
+        $zipcode = Input::get('zipcode');
+        $zipcodeWarehouses = DB::table('warehouses')->where('zipcode', '=', $zipcode)->get();
+        $town = Input::get('town');
+        $country = Input::get('country');
+        $phone = Input::get('phone');
+        $fax = Input::get('fax');
+        $email = Input::get('email');
+        $namecontact = Input::get('namecontact');
+
         $rules = array(
             'zipcode' => 'required|',
             'name' => 'required|string|max:255|unique:warehouses,name,'.$id,
@@ -159,20 +174,25 @@ class WarehousesController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $name = Input::get('name');
-            $adress = Input::get('adress');
-            $zipcode = Input::get('zipcode');
-            $town = Input::get('town');
-            $country = Input::get('country');
-            $phone = Input::get('phone');
-            $fax = Input::get('fax');
-            $email = Input::get('email');
-            $namecontact = Input::get('namecontact');
-
-            Warehouse::where('id', $id)->update(['name' => $name,'adress' => $adress, 'zipcode' => $zipcode,'town' => $town,'country' => $country, 'phone' => $phone,'fax' => $fax,'email' => $email, 'namecontact' => $namecontact]);
-
-            session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
-            return redirect()->back();
+            if (!$zipcodeWarehouses->isEmpty()) {
+                if (isset($validateUpdateWarehouse)) {
+                    Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                    session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
+                    return redirect()->back();
+                } elseif (isset($refuseUpdateWarehouse)) {
+                    $listPalletsAccounts=DB::table('palletsaccounts')->get();
+                    session()->flash('messageRefuseUpdateWarehouse', 'Please change the warehouse');
+                    return view('warehouses.detailsWarehouse', compact( 'listPalletsAccounts','id','name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
+                } else {
+                    $listPalletsAccounts=DB::table('palletsaccounts')->get();
+                    session()->flash('testZipcode', true);
+                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts','id','zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
+                }
+            } else {
+                Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
+                return redirect()->back();
+            }
         }
     }
 

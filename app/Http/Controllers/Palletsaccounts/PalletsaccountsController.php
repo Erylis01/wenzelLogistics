@@ -148,7 +148,7 @@ class PalletsaccountsController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'name' => 'required|string|max:255|unique:warehouses',
+            'name' => 'required|string|max:255|unique:palletsaccounts,name,'.$id,
             'numberPallets' => 'required|integer',
             'warehousesAssociated'=>'required',
         );
