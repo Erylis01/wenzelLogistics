@@ -88,20 +88,6 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-5">
-                                    {{--@if(isset($palletsAccount))--}}
-                                        {{--<select class="selectpicker show-tick form-control" data-size="5"--}}
-                                                {{--data-live-search="true" data-live-search-style="startsWith"--}}
-                                                {{--title="Pallets Account" name="palletsAccount" required>--}}
-                                            {{--@foreach($listPalletsaccounts as $account )--}}
-                                                {{--@if($account->name==$palletsAccount)--}}
-                                                    {{--@php($option='selected')--}}
-                                                    {{--<option {{$option}}>{{$account->name}}</option>--}}
-                                                {{--@else--}}
-                                                    {{--<option>{{$account->name}}</option>--}}
-                                                {{--@endif--}}
-                                            {{--@endforeach--}}
-                                        {{--</select>--}}
-                                    {{--@else--}}
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Pallets Account" name="palletsAccount" required>
@@ -109,7 +95,6 @@
                                                 <option>{{$account->name}}</option>
                                             @endforeach
                                         </select>
-                                    {{--@endif--}}
                                 </div>
                             </div>
 
@@ -125,9 +110,7 @@
                                     <a href="{{route('showAddPalletsaccount')}}" class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
-
                             </div>
-
                         </form>
                     </div>
 

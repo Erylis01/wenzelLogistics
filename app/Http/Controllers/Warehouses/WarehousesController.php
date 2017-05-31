@@ -105,10 +105,8 @@ class WarehousesController extends Controller
 
     public function showAdd()
     {
-//        dd(request());
         if (Auth::check()) {
             $listPalletsAccounts=DB::table('palletsaccounts')->get();
-
             return view('warehouses.addWarehouse', compact('listPalletsAccounts'));
         } else {
             return view('auth.login');
@@ -126,7 +124,6 @@ class WarehousesController extends Controller
     {
         if (Auth::check()) {
             $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
-
             $listPalletsAccounts=DB::table('palletsaccounts')->get();
 
             $name = $warehouse->name;
@@ -154,11 +151,9 @@ class WarehousesController extends Controller
      */
     public function update(Request $request, $id)
     {
-//       $warehouse = DB::table('warehouses')->where('id', $id)->first();
-
         $rules = array(
             'zipcode' => 'required|',
-            'name' => 'required|string|max:255|unique:warehouses',
+            'name' => 'required|string|max:255|unique:warehouses,name,'.$id,
             'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
@@ -171,6 +166,7 @@ class WarehousesController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+
             $name = Input::get('name');
             $adress = Input::get('adress');
             $zipcode = Input::get('zipcode');

@@ -84,14 +84,12 @@
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletstransfers as $transfer)
-                                    @if($transfer->state=="OK")
+                                    @if($transfer->state==true && $transfer->documents==true && $transfer->realPalletsNumber==$transfer->palletsNumber)
                                         @php($class="success")
-                                    @elseif ($transfer->state=="almost OK")
-                                        @php($class="warning")
-                                    @elseif ($transfer->state=="not OK")
+                                    @elseif ($transfer->state==false && $transfer->documents==false && $transfer->realPalletsNumber<>$transfer->palletsNumber)
                                         @php($class="danger")
                                     @else
-                                        @php ($class="default")
+                                        @php ($class="warning")
                                     @endif
                                     <tr class={{$class}}>
                                         <td class="text-center"><a href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>

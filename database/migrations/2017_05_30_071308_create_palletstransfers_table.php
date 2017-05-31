@@ -24,7 +24,7 @@ class CreatePalletstransfersTable extends Migration
             $table->boolean('state')->default(false);
             $table->date('dateLastReminder')->nullable();
             $table->integer('remindersNumber')->nullable();
-            $table->string('reminderEmail')->nullable();
+            $table->string('reminderWarehouse')->nullable();
             $table->timestamps();
         });
     }
