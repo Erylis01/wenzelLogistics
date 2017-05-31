@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class PalletstransfersController extends Controller
 {
     /**
-     * Display the content.
+     * Display the content - only the last 2 months
      *
      * @return \Illuminate\Http\Response
      */
@@ -160,6 +160,11 @@ class PalletstransfersController extends Controller
         }
     }
 
+    /**
+     * delete the transfer from the database
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function delete($id)
     {
         DB::table('palletstransfers')->where('id', $id)->delete();
@@ -169,9 +174,14 @@ class PalletstransfersController extends Controller
         return redirect('/allPalletstransfers');
     }
 
+    /**
+     * Verificate the transfer and send reminders if necessary
+     * @param $id
+     * @param $palletsAccount
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function saveVerification($id, $palletsAccount)
     {
-
         $realPalletsNumber = Input::get('realPalletsNumber');
         $remindersNumber=Input::get('remindersNumber');
         if (Input::get('documents') == 'false') {

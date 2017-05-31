@@ -27,8 +27,6 @@ class ListLoadingsController extends Controller
         if (request()->has('sortby') && request()->has('order')) {
             $sortby = $request->get('sortby'); // Order by what column?
             $order = $request->get('order'); // Order direction: asc or desc
-
-//            $listLoadings =DB::table('loadings')->orderBy($sortby, $order)->paginate(5);
             $listLoadings=DB::table('loadings')->where([
                 ['pt', '=', 'ja'],
                 ['ladedatum', '>=', $limitDate],
@@ -36,13 +34,11 @@ class ListLoadingsController extends Controller
             $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
         }
         else{
-
             $listLoadings = DB::table('loadings')->where([
                 ['pt', '=', 'ja'],
                 ['ladedatum', '>=', $limitDate],
             ])->paginate(5);
             $links='';
-
         }
     $count=count(DB::table('loadings')->where([
         ['pt', '=', 'ja'],

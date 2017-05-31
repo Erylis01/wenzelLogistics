@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,6 @@ class WarehousesController extends Controller
                 $links = '';
             }
             $count = count(DB::table('warehouses')->get());
-
             return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count'));
         } else {
             return view('auth.login');
@@ -61,10 +61,8 @@ class WarehousesController extends Controller
             'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-
         );
         $validator = Validator::make(Input::all(), $rules);
-        // process the login
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
@@ -72,29 +70,22 @@ class WarehousesController extends Controller
         } else {
 
             if (!$zipcodeWarehouses->isEmpty()) {
-
                 if (isset($validateAddWarehouse)) {
-                    DB::table('warehouses')->insertGetId(
+                    Warehouse::create(
                         ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                     );
-
                     return redirect('/allWarehouses');
                 } elseif (isset($refuseAddWarehouse)) {
-                    for($k=0; $k<11; $k++){
-                        $listPalletsAccounts[]=$k;
-                    }
+                    $listPalletsAccounts=DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
                     return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
                 } else {
-                    for($k=0; $k<11; $k++){
-                        $listPalletsAccounts[]=$k;
-                    }
+                    $listPalletsAccounts=DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
                     return view('warehouses.addWarehouse', compact('listPalletsAccounts','zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletaccount'));
                 }
-
             } else {
-                DB::table('warehouses')->insertGetId(
+                Warehouse::create(
                     ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                 );
                 session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
@@ -103,6 +94,10 @@ class WarehousesController extends Controller
         }
     }
 
+    /**
+     * show the add form
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showAdd()
     {
         if (Auth::check()) {
@@ -157,16 +152,13 @@ class WarehousesController extends Controller
             'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-
         );
         $validator = Validator::make(Input::all(), $rules);
-        // process the login
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $name = Input::get('name');
             $adress = Input::get('adress');
             $zipcode = Input::get('zipcode');
@@ -177,26 +169,21 @@ class WarehousesController extends Controller
             $email = Input::get('email');
             $namecontact = Input::get('namecontact');
 
-            DB::table('warehouses')->where('id', $id)->update(['name' => $name]);
-            DB::table('warehouses')->where('id', $id)->update(['adress' => $adress]);
-            DB::table('warehouses')->where('id', $id)->update(['zipcode' => $zipcode]);
-            DB::table('warehouses')->where('id', $id)->update(['town' => $town]);
-            DB::table('warehouses')->where('id', $id)->update(['country' => $country]);
-            DB::table('warehouses')->where('id', $id)->update(['phone' => $phone]);
-            DB::table('warehouses')->where('id', $id)->update(['fax' => $fax]);
-            DB::table('warehouses')->where('id', $id)->update(['email' => $email]);
-            DB::table('warehouses')->where('id', $id)->update(['namecontact' => $namecontact]);
+            Warehouse::where('id', $id)->update(['name' => $name,'adress' => $adress, 'zipcode' => $zipcode,'town' => $town,'country' => $country, 'phone' => $phone,'fax' => $fax,'email' => $email, 'namecontact' => $namecontact]);
 
             session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
-
             return redirect()->back();
         }
     }
 
+    /**
+     * delete the warehouse
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function delete($id)
     {
         DB::table('warehouses')->where('id', $id)->delete();
-
         // redirect
         session()->flash('messageDeleteWarehouse', 'Successfully deleted the warehouse!');
         return redirect('/allWarehouses');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Palletsaccount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,6 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             $listWarehouses=DB::table('warehouses')->get();
-
             return view('palletsaccounts.addPalletsaccount', compact('listWarehouses'));
         } else {
             return view('auth.login');
@@ -72,15 +72,13 @@ class PalletsaccountsController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            DB::table('palletsaccounts')->insertGetId(
+            Palletsaccount::create(
                 ['name' => $name, 'numberPallets' => $numberPallets]
             );
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
             return redirect('/allPalletsaccounts');
         }
     }
-
-
 
     /**
      * @param $id
@@ -99,7 +97,6 @@ class PalletsaccountsController extends Controller
             $currentDate = Carbon::now();
             $limitDate=$currentDate->subDays(60)->format('Y-m-d');
 
-
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = request()->get('sortby'); // Order by what column?
                 $order = request()->get('order'); // Order direction: asc or desc
@@ -111,7 +108,6 @@ class PalletsaccountsController extends Controller
             }
 
             $count = count(DB::table('palletstransfers')->where([['palletsAccount', $name],['date', '>=', $limitDate]])->get());
-
             return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated', 'count', 'links'));
         } else {
             return view('auth.login');
@@ -155,7 +151,6 @@ class PalletsaccountsController extends Controller
             'name' => 'required|string|max:255|unique:warehouses',
             'numberPallets' => 'required|integer',
             'warehousesAssociated'=>'required',
-
         );
         $validator = Validator::make(Input::all(), $rules);
         // process the login
@@ -170,11 +165,9 @@ class PalletsaccountsController extends Controller
 
             //ATTENTION UPDATE WAREHOUSES ASSOCIATED
 
-            DB::table('palletsaccounts')->where('id', $id)->update(['name' => $name]);
-            DB::table('palletsaccounts')->where('id', $id)->update(['numberPallets' => $numberPallets]);
+            Palletsaccount::where('id', $id)->update(['name' => $name, 'numberPallets' => $numberPallets]);
 
             session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
-
             return redirect()->back();
         }
     }
@@ -182,7 +175,6 @@ class PalletsaccountsController extends Controller
     public function delete($id)
     {
         DB::table('palletsaccounts')->where('id', $id)->delete();
-
         // redirect
         session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
         return redirect('/allPalletsaccounts');

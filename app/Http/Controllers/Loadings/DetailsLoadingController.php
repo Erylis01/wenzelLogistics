@@ -57,7 +57,6 @@ class DetailsLoadingController extends Controller
             $state = $detailsLoading->state;
             $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
 
-
             return view('loadings.detailsLoading', compact(  'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
                 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'vol', 'ldm', 'ware', 'gewicht', 'umsatz', 'aufwand',
                 'db', 'trp', 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
@@ -70,9 +69,7 @@ class DetailsLoadingController extends Controller
 
     public function save(Request $request, $atrnr)
     {
-
         $loading = DB::table('loadings')->where('atrnr', $atrnr)->first();
-
         $ruckgabewo = Input::get('ruckgabewo');
         $mahnung = Input::get('mahnung');
         $blockierung = Input::get('blockierung');
@@ -81,12 +78,9 @@ class DetailsLoadingController extends Controller
         $reasonUpdatePT = Input::get('reasonUpdatePT');
         $updateValidatePT = $request->updateValidatePT;
 
-
         if (isset($reasonUpdatePT) && isset($updateValidatePT)) {
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['reasonUpdatePT'=>$reasonUpdatePT]);
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['pt'=>'NEIN']);
+            Loading::where('atrnr', $atrnr)->update(['reasonUpdatePT'=>$reasonUpdatePT,'pt'=>'NEIN']);
             session()->flash('messageUpdatePTLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
-
         } elseif ($loading->ruckgabewo <> $ruckgabewo || $loading->mahnung <> $mahnung || $loading->blockierung <> $blockierung || $loading->bearbeitungsdatum <> $bearbeitungsdatum || $loading->palgebucht <> $palgebucht) {
             // store
             if ($palgebucht == 'OK' || $palgebucht == 'ok') {
@@ -96,16 +90,9 @@ class DetailsLoadingController extends Controller
             } elseif ($palgebucht == 'not OK' || $palgebucht == 'not ok') {
                 $state = 'not OK';
             }
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['ruckgabewo'=>$ruckgabewo]);
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['mahnung'=>$mahnung]);
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['blockierung'=>$blockierung]);
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['bearbeitungsdatum'=>$bearbeitungsdatum]);
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['palgebucht'=>$palgebucht]);
-            DB::table('loadings')->where('atrnr', $atrnr)->update(['state'=>$state]);
-
+            Loading::where('atrnr', $atrnr)->update(['ruckgabewo'=>$ruckgabewo,'mahnung'=>$mahnung, 'blockierung'=>$blockierung,'bearbeitungsdatum'=>$bearbeitungsdatum, 'palgebucht'=>$palgebucht,'state'=>$state] );
             session()->flash('messageSaveLoading', 'Successfully updated loading');
         }
         return redirect()->back();
-
     }
 }
