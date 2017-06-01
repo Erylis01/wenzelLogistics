@@ -24,7 +24,7 @@ class PalletsaccountsController extends Controller
     public function showAll(Request $request)
     {
         if (Auth::check()) {
-            $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
+            $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
@@ -54,7 +54,7 @@ class PalletsaccountsController extends Controller
     public function add(Request $request)
     {
         $name = Input::get('name');
-        $numberPallets = Input::get('numberPallets');
+        $realNumberPallets = Input::get('realNumberPallets');
         $warehousesAssociated=Input::get('warehousesAssociated');
 
 //        $validateAddWarehouse = $request->validateAddWarehouse;
@@ -73,7 +73,7 @@ class PalletsaccountsController extends Controller
                 ->withInput();
         } else {
             Palletsaccount::create(
-                ['name' => $name, 'numberPallets' => $numberPallets]
+                ['name' => $name, 'realNumberPallets' => $realNumberPallets]
             );
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
             return redirect('/allPalletsaccounts');
@@ -88,10 +88,10 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
-            $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
+            $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
             $listWarehouses=DB::table('warehouses')->get();
             $name = $palletsaccount->name;
-            $numberPallets = $palletsaccount->numberPallets;
+            $realNumberPallets = $palletsaccount->realNumberPallets;
             $warehousesAssociated = ['warehouse1', 'warehouse3', 'warehouse5'];
 
             $currentDate = Carbon::now();
@@ -108,7 +108,7 @@ class PalletsaccountsController extends Controller
             }
 
             $count = count(DB::table('palletstransfers')->where([['palletsAccount', $name],['date', '>=', $limitDate]])->get());
-            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated', 'count', 'links'));
+            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'warehousesAssociated', 'count', 'links'));
         } else {
             return view('auth.login');
         }
@@ -121,7 +121,7 @@ class PalletsaccountsController extends Controller
     public function showTotal()
     {
         if (Auth::check()) {
-            $totalpallets = DB::table('palletsaccounts')->sum('numberPallets');
+            $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
 //            $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
 //
 //            for ($k = 0; $k < 11; $k++) {
@@ -129,10 +129,10 @@ class PalletsaccountsController extends Controller
 //            }
 //
 //            $name = $palletsaccount->name;
-//            $numberPallets=$palletsaccount->numberPallets;
+//            $realNumberPallets=$palletsaccount->realNumberPallets;
 //            $warehousesAssociated=['w1', 'w3','w5' ];
 //
-//            return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'numberPallets', 'warehousesAssociated'));
+//            return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'realNumberPallets', 'warehousesAssociated'));
             return view('palletsaccounts.totalPalletsaccounts', compact('totalpallets'));
         } else {
             return view('auth.login');
@@ -149,7 +149,7 @@ class PalletsaccountsController extends Controller
     {
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts,name,'.$id,
-            'numberPallets' => 'required|integer',
+            'realNumberPallets' => 'required|integer',
             'warehousesAssociated'=>'required',
         );
         $validator = Validator::make(Input::all(), $rules);
@@ -160,12 +160,12 @@ class PalletsaccountsController extends Controller
                 ->withInput();
         } else {
             $name = Input::get('name');
-            $numberPallets = Input::get('numberPallets');
+            $realNumberPallets = Input::get('realNumberPallets');
             $warehousesAssociated=Input::get('warehousesAssociated');
 
             //ATTENTION UPDATE WAREHOUSES ASSOCIATED
 
-            Palletsaccount::where('id', $id)->update(['name' => $name, 'numberPallets' => $numberPallets]);
+            Palletsaccount::where('id', $id)->update(['name' => $name, 'realNumberPallets' => $realNumberPallets]);
 
             session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
             return redirect()->back();

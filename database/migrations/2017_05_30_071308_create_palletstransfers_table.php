@@ -14,10 +14,10 @@ class CreatePalletstransfersTable extends Migration
     public function up()
     {
         Schema::create('palletstransfers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unique();
+            $table->integer('loading_atrnr')->unsigned()->index();
             $table->integer('palletsNumber');
             $table->string('palletsAccount');
-            $table->integer('loading_atrnr')->unsigned()->index();
             $table->date('date');
             $table->integer('realPalletsNumber')->nullable();
             $table->boolean('documents')->default(false);

@@ -14,9 +14,9 @@ class CreatePalletsaccountsTable extends Migration
     public function up()
     {
         Schema::create('palletsaccounts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->integer('numberPallets');
+            $table->increments('id')->unique();
+            $table->string('name')->unique();
+            $table->integer('realNumberPallets');
             $table->timestamps();
         });
     }

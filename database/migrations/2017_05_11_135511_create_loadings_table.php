@@ -48,9 +48,6 @@ class CreateLoadingsTable extends Migration
             $table->timestamps();
         });
 
-//        Schema::create('palletstransfers', function (Blueprint $table) {
-//            $table->string('loading_referenz');
-//        });
         }
 
 

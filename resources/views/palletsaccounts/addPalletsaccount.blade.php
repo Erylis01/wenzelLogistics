@@ -56,12 +56,12 @@
                                 </div>
                                 <!--number of pallets-->
                                 <div class="col-lg-2">
-                                    <label for="numberPallets" class="control-label">Pallets Number
+                                    <label for="realNumberPallets" class="control-label">Pallets Number
                                         :</label>
                                 </div>
                                 <div class="col-lg-1">
-                                    <input id="numberPallets" type="number" class="form-control"
-                                           name="numberPallets"
+                                    <input id="realNumberPallets" type="number" class="form-control"
+                                           name="realNumberPallets"
                                            value="0" placeholder="Pallets number"
                                            required autofocus>
                                 </div>

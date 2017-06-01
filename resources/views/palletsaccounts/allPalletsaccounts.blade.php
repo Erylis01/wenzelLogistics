@@ -73,9 +73,9 @@
                                                 href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a></th>
                                     <th class="text-center colTotal">Total<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=numberPallets&order=asc')}}"></a><a
+                                                href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=numberPallets&order=desc')}}"></a>
+                                                href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=desc')}}"></a>
                                     </th>
                                 </tr>
                                 </thead>
@@ -86,7 +86,7 @@
                                                     href="#{{str_replace(' ', '', $palletsaccount->name)}}-collapse"
                                                     data-toggle="collapse"
                                                     class="link">{{$palletsaccount->name}}</a></td>
-                                        <td class="text-center colTotal">{{$palletsaccount->numberPallets}}</td>
+                                        <td class="text-center colTotal">{{$palletsaccount->realNumberPallets}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -107,12 +107,12 @@
                             <form class="form-horizontal" role="form" method="POST" action="">
                                 <div class="form-group">
                                     <div class="col-lg-5">
-                                        <label for="numberPallets" class="control-label legend-palletsaccounts">Number
+                                        <label for="realNumberPallets" class="control-label legend-palletsaccounts">Number
                                             of pallets :</label>
                                     </div>
                                     <div class="col-lg-6">
-                                        <input id="numberPallets" type="number"
-                                               class="form-control info-palletsaccounts" name="numberPallets"
+                                        <input id="realNumberPallets" type="number"
+                                               class="form-control info-palletsaccounts" name="realNumberPallets"
                                                value="" placeholder="Pallets number" readonly>
                                     </div>
                                 </div>

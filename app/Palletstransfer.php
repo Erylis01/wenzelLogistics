@@ -11,7 +11,6 @@ class Palletstransfer extends Model
     ];
 
     public function loading(){
-//        return $this->belongsTo('App\Palletstransfer', 'atrnr','loading_atrnr');
         return $this->belongsTo('App\Loading', 'loading_atrnr','atrnr');
     }
 }

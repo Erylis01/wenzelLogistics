@@ -58,17 +58,17 @@
                                                     </div>
                                                     <!--number of pallets-->
                                                     <div class="col-lg-2">
-                                                        <label for="numberPallets" class="control-label">Pallets Number
+                                                        <label for="realNumberPallets" class="control-label">Pallets Number
                                                             :</label>
                                                     </div>
                                                     <div class="col-lg-1">
-                                                        <input id="numberPallets" type="number" class="form-control"
-                                                               name="numberPallets"
-                                                               value="{{ $numberPallets }}" placeholder="Pallets number"
+                                                        <input id="realNumberPallets" type="number" class="form-control"
+                                                               name="realNumberPallets"
+                                                               value="{{ $realNumberPallets }}" placeholder="Pallets number"
                                                                required autofocus>
-                                                        @if ($errors->has('numberPallets'))
+                                                        @if ($errors->has('realNumberPallets'))
                                                             <span class="help-block">
-                                        <strong>{{ $errors->first('numberPallets') }}</strong>
+                                        <strong>{{ $errors->first('realNumberPallets') }}</strong>
                                     </span>
                                                         @endif
                                                     </div>

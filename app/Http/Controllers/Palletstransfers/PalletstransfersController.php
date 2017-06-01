@@ -239,8 +239,8 @@ class PalletstransfersController extends Controller
 
         //Transfer validated
         elseif ($state == true && $documents==true) {
-            $actualPalletsNumber = DB::table('palletsaccounts')->where('name', $palletsAccount)->value('numberPallets');
-            DB::table('palletsaccounts')->where('name', $palletsAccount)->update(['numberPallets' => $actualPalletsNumber + $realPalletsNumber]);
+            $actualPalletsNumber = DB::table('palletsaccounts')->where('name', $palletsAccount)->value('realNumberPallets');
+            DB::table('palletsaccounts')->where('name', $palletsAccount)->update(['realNumberPallets' => $actualPalletsNumber + $realPalletsNumber]);
 
             $theoricalPalletNumber=DB::table('palletstransfers')->where('id',$id)->value('palletsNumber');
             if($realPalletsNumber==$theoricalPalletNumber){
