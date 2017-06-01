@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Palletsaccount;
+use App\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -95,6 +96,7 @@ class PalletsaccountsController extends Controller
 
             $name = $palletsaccount->name;
             $realNumberPallets = $palletsaccount->realNumberPallets;
+            $theoricalNumberPallets=$palletsaccount->theoricalNumberPallets;
             $warehousesAssociated = Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get();
             $currentDate = Carbon::now();
             $limitDate=$currentDate->subDays(60)->format('Y-m-d');
@@ -110,7 +112,7 @@ class PalletsaccountsController extends Controller
             }
 
             $count = count(DB::table('palletstransfers')->where([['palletsAccount', $name],['date', '>=', $limitDate]])->get());
-            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'warehousesAssociated', 'count', 'links'));
+            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'theoricalNumberPallets','warehousesAssociated', 'count', 'links'));
         } else {
             return view('auth.login');
         }
@@ -163,11 +165,12 @@ class PalletsaccountsController extends Controller
         } else {
             $name = Input::get('name');
             $realNumberPallets = Input::get('realNumberPallets');
-            $warehousesAssociated=Input::get('warehousesAssociated');
+            Palletsaccount::where('id', $id)->update(['name' => $name]);
 
-            //ATTENTION UPDATE WAREHOUSES ASSOCIATED
-
-            Palletsaccount::where('id', $id)->update(['name' => $name, 'realNumberPallets' => $realNumberPallets]);
+            $warehousesAssociatedName=Input::get('warehousesAssociated');
+            foreach($warehousesAssociatedName as $warehouseAName){
+                Warehouse::where('name',$warehouseAName)->update(['palletsaccount_name'=>$name]);
+            }
 
             session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
             return redirect()->back();

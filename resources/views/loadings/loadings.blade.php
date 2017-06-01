@@ -265,6 +265,10 @@
                                     Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 5)  {{$legend1}}
                                     to {{$count}} of {{$count}} results
                                 </div>
+                            @elseif($listLoadings->isEmpty())
+                                <div class="general-legend col-lg-offset-9">
+                                    Showing 0 to 0 of 0 results
+                                </div>
                             @else
                                 <div class="general-legend col-lg-offset-8">
                                     Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 5)  {{$legend1}}

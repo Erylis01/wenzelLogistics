@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Warehouse extends Model
 {
     protected $fillable = [
-        'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact',
+        'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact','palletsaccount_name'
     ];
 
     public function palletsaccount(){

@@ -42,12 +42,13 @@
                                             <form class="form-horizontal text-right" role="form" method="POST"
                                                   action="{{route('updatePalletsaccount', $id)}}">
                                                 {{ csrf_field() }}
+
                                                 <div class="form-group">
                                                     <!--name-->
                                                     <div class="col-lg-3">
                                                         <label for="name" class="control-label">Name :</label>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-7">
                                                         <input id="name" type="text" class="form-control" name="name"
                                                                value="{{ $name }}" placeholder="Name" required autofocus>
                                                         @if ($errors->has('name'))
@@ -56,41 +57,55 @@
                                     </span>
                                                         @endif
                                                     </div>
-                                                    <!--number of pallets-->
-                                                    <div class="col-lg-2">
-                                                        <label for="realNumberPallets" class="control-label">Pallets Number
-                                                            :</label>
-                                                    </div>
-                                                    <div class="col-lg-1">
-                                                        <input id="realNumberPallets" type="number" class="form-control"
-                                                               name="realNumberPallets"
-                                                               value="{{ $realNumberPallets }}" placeholder="Pallets number"
-                                                               required autofocus>
-                                                        @if ($errors->has('realNumberPallets'))
-                                                            <span class="help-block">
+                                                </div>
+                                                    <div class="form-group">
+                                                        <!--real number of pallets-->
+                                                        <div class="col-lg-3">
+                                                            <label for="realNumberPallets" class="control-label">Real Pallets Number
+                                                                :</label>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <input id="realNumberPallets" type="number" class="form-control"
+                                                                   name="realNumberPallets"
+                                                                   value="{{ $realNumberPallets }}" placeholder="Real pallets number"
+                                                                   required readonly autofocus>
+                                                            @if ($errors->has('realNumberPallets'))
+                                                                <span class="help-block">
                                         <strong>{{ $errors->first('realNumberPallets') }}</strong>
                                     </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
+                                                            @endif
+                                                        </div>
 
-                                                <div class="form-group">
+                                                        <!--theorical number of pallets-->
+                                                        <div class="col-lg-3">
+                                                            <label for="theoricalNumberPallets" class="control-label">Theorical Pallets Number
+                                                                :</label>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <input id="theoricalNumberPallets" type="number" class="form-control"
+                                                                   name="theoricalNumberPallets"
+                                                                   value="{{ $theoricalNumberPallets }}" placeholder="Theorical pallets number"
+                                                                   readonly required autofocus>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
                                                     <!--warehouses associated-->
                                                     <div class="col-lg-3">
                                                         <label for="warehousesAssociated" class="control-label">Warehouses
                                                             associated
                                                             :</label>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-7">
                                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                                 data-live-search="true" data-live-search-style="startsWith"
                                                                 title="Warehouses Associated" name="warehousesAssociated[]"
                                                                 multiple>
-
                                                             @foreach($listWarehouses as $warehouse )
                                                                 @php($list[]=null)
                                                                 @foreach($warehousesAssociated as $warehouseA)
-                                                                    @if($warehouse->name==$warehouseA)
+
+                                                                    @if($warehouse->name==$warehouseA->name)
                                                                         @php($option='selected')
                                                                         <option {{$option}}>{{$warehouse->name}}</option>
                                                                         @php($list[]=$warehouse)
@@ -101,15 +116,16 @@
                                                                 @endif
                                                             @endforeach
                                                         </select>
+
                                                     </div>
-                                                    <div class="col-lg-3 text-left">
+                                                    <div class="col-lg-2 text-left">
                                                         <a href="{{route('showAddWarehouse')}}" class="link"><span
                                                                     class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <div class="col-lg-4 col-lg-offset-3">
+                                                    <div class="col-lg-3 col-lg-offset-3">
                                                         <input type="submit"
                                                                class="btn btn-primary btn-block btn-form"
                                                                value="Update"
@@ -169,7 +185,12 @@
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th class="text-center col1">Date transfer <a
+                                                        <th class="text-center col1">ID <a
+                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a></th>
+                                                        <th class="text-center">Date transfer <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
@@ -179,7 +200,12 @@
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a></th>
-                                                        <th class="text-center col1">Pallets Number <a
+                                                        <th class="text-center">Real pallets Number <a
+                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=asc')}}"></a><a
+                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=desc')}}"></a></th>
+                                                        <th class="text-center">Theorical pallets Number <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
@@ -189,9 +215,11 @@
                                                     <tbody>
                                                     @foreach($listPalletstransfers as $transfer)
                                                         <tr>
-                                                            <td class="text-center col1">{{$transfer->date}}</td>
-                                                            <td class="text-center">{{$transfer->loading_atrnr}}</td>
-                                                            <td class="text-center col1">{{$transfer->palletsNumber}}</td>
+                                                            <td class="text-center col1"><a href="{{route('showDetailsPalletstransfer', $transfer->id)}}" class="link">{{$transfer->id}}</a></td>
+                                                            <td class="text-center">{{$transfer->date}}</td>
+                                                            <td class="text-center"><a href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}" class="link">{{$transfer->loading_atrnr}}</a></td>
+                                                            <td class="text-center">{{$transfer->realPalletsNumber}}</td>
+                                                            <td class="text-center">{{$transfer->palletsNumber}}</td>
                                                         </tr>
                                                     @endforeach
                                                     </tbody>
@@ -204,6 +232,10 @@
                                                     <div class="general-legend col-lg-offset-8">
                                                         Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
                                                         to {{$count}} of {{$count}} results
+                                                    </div>
+                                                @elseif($listPalletstransfers->isEmpty())
+                                                    <div class="general-legend col-lg-offset-9">
+                                                        Showing 0 to 0 of 0 results
                                                     </div>
                                                 @else
                                                     <div class="general-legend col-lg-offset-8">
