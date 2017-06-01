@@ -174,11 +174,11 @@
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a></th>
-                                                        <th class="text-center">Reference Loading <a
+                                                        <th class="text-center">Atrnr Loading <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_referenz&order=asc')}}"></a><a
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_referenz&order=desc')}}"></a></th>
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a></th>
                                                         <th class="text-center col1">Pallets Number <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
@@ -190,7 +190,7 @@
                                                     @foreach($listPalletstransfers as $transfer)
                                                         <tr>
                                                             <td class="text-center col1">{{$transfer->date}}</td>
-                                                            <td class="text-center">{{$transfer->loading_referenz}}</td>
+                                                            <td class="text-center">{{$transfer->loading_atrnr}}</td>
                                                             <td class="text-center col1">{{$transfer->palletsNumber}}</td>
                                                         </tr>
                                                     @endforeach

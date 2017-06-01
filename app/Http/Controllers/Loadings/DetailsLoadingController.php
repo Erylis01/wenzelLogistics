@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Loading;
 use App\PalletsAccount;
+use App\Palletstransfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,8 @@ class DetailsLoadingController extends Controller
     public function show($atrnr)
     {
 
-//        dd(Loading::where('atrnr', $atrnr)->first()->palletstransfer);
-//dd(Palletstransfer::all()->get('loading'));
+        dd(Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers);
+//dd(Palletstransfer::all()->loading());
 
         if (Auth::check()) {
             //table 1

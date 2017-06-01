@@ -20,6 +20,8 @@ class PalletstransfersController extends Controller
      */
     public function showAll(Request $request)
     {
+
+
         if (Auth::check()) {
             $totalpallets = DB::table('palletstransfers')->sum('palletsNumber');
             $currentDate = Carbon::now();
@@ -69,12 +71,12 @@ class PalletstransfersController extends Controller
     {
 
         $date = Input::get('date');
-        $loading_referenz = Input::get('loading_referenz');
+        $loading_atrnr = Input::get('loading_atrnr');
         $palletsAccount = Input::get('palletsAccount');
         $palletsNumber = Input::get('palletsNumber');
 
         $rules = array(
-            'loading_referenz' => 'required|string|max:255',
+            'loading_atrnr' => 'required|string|max:255',
             'date' => 'required|date',
         );
         $validator = Validator::make(Input::all(), $rules);
@@ -84,7 +86,7 @@ class PalletstransfersController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            Palletstransfer::create(['date' => $date, 'loading_referenz' => $loading_referenz, 'palletsAccount' => $palletsAccount, 'palletsNumber' => $palletsNumber]);
+            Palletstransfer::create(['date' => $date, 'loading_atrnr' => $loading_atrnr, 'palletsAccount' => $palletsAccount, 'palletsNumber' => $palletsNumber]);
 
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
             return redirect('/allPalletstransfers');
@@ -102,7 +104,7 @@ class PalletstransfersController extends Controller
 
             $palletsTransfer = DB::table('palletstransfers')->where('id', $id)->first();
             $date = $palletsTransfer->date;
-            $loading_referenz = $palletsTransfer->loading_referenz;
+            $loading_atrnr = $palletsTransfer->loading_atrnr;
             $palletsNumber = $palletsTransfer->palletsNumber;
             $palletsAccount = $palletsTransfer->palletsAccount;
             $state = $palletsTransfer->state;
@@ -120,7 +122,7 @@ class PalletstransfersController extends Controller
                 session()->flash('messageBlockedAccount', 'BE CAREFUL ! The account '.$palletsAccount.' will be blocked until '.$limitDate.' (45 days)');
             }
 
-            return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts', 'date', 'loading_referenz', 'id', 'palletsNumber', 'palletsAccount', 'state', 'realPalletsNumber', 'documents', 'dateLastReminder', 'remindersNumber', 'reminderWarehouse', 'listWarehouses'));
+            return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts', 'date', 'loading_atrnr', 'id', 'palletsNumber', 'palletsAccount', 'state', 'realPalletsNumber', 'documents', 'dateLastReminder', 'remindersNumber', 'reminderWarehouse', 'listWarehouses'));
         } else {
             return view('auth.login');
         }
@@ -135,7 +137,7 @@ class PalletstransfersController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'loading_referenz' => 'required|string|max:255',
+            'loading_atrnr' => 'required|string|max:255',
             'date' => 'required|date',
         );
         $validator = Validator::make(Input::all(), $rules);
@@ -146,12 +148,12 @@ class PalletstransfersController extends Controller
                 ->withInput();
         } else {
             $date = Input::get('date');
-            $loading_referenz = Input::get('loading_referenz');
+            $loading_atrnr = Input::get('loading_atrnr');
             $palletsNumber = Input::get('palletsNumber');
             $palletsAccount = Input::get('palletsAccount');
 
             Palletstransfer::where('id', $id)->update(['date' => $date]);
-            Palletstransfer::where('id', $id)->update(['loading_referenz' => $loading_referenz]);
+            Palletstransfer::where('id', $id)->update(['loading_atrnr' => $loading_atrnr]);
             Palletstransfer::where('id', $id)->update(['palletsNumber' => $palletsNumber]);
             Palletstransfer::where('id', $id)->update(['palletsAccount' => $palletsAccount]);
 

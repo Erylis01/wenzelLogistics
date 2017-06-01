@@ -11,6 +11,6 @@ class Loading extends Model
     ];
 
     public function palletstransfers(){
-        return $this->hasMany('App\Loading','loading_referenz', 'referenz');
+        return $this->hasMany('App\Palletstransfer','loading_atrnr', 'atrnr');
     }
 }

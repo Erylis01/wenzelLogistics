@@ -62,11 +62,11 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Loading Reference <a
+                                    <th class="text-center">Loading Atrnr <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_referenz&order=asc')}}"></a><a
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_referenz&order=desc')}}"></a>
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
                                     </th>
                                     <th class="text-center">Pallets Account <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
@@ -96,7 +96,7 @@
                                         </td>
                                         {{--<td class="text-center colID">{{$transfer->id}}</td>--}}
                                         <td class="text-center colDate">{{date('d-m-Y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center colRef">{{$transfer->loading_referenz}}</td>
+                                        <td class="text-center colRef">{{$transfer->loading_atrnr}}</td>
                                         <td class="text-center colAccount">{{$transfer->palletsAccount}}</td>
                                         <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
                                     </tr>

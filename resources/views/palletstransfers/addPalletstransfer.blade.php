@@ -53,16 +53,16 @@
                                     @endif
                                 </div>
 
-                                <!--loading reference-->
+                                <!--loading atrnr-->
                                 <div class="col-lg-3">
-                                    <label for="loading_referenz" class="control-label">Loading reference :</label>
+                                    <label for="loading_atrnr" class="control-label">Loading atrnr :</label>
                                 </div>
                                 <div class="col-lg-5">
-                                    <input id="loading_referenz" type="text" class="form-control" name="loading_referenz"
-                                           value="" placeholder="Loading reference" required autofocus>
-                                    @if ($errors->has('loading_referenz'))
+                                    <input id="loading_atrnr" type="number" min="0" class="form-control" name="loading_atrnr"
+                                           value="" placeholder="Loading atrnr" required autofocus>
+                                    @if ($errors->has('loading_atrnr'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('loading_referenz') }}</strong>
+                                        <strong>{{ $errors->first('loading_atrnr') }}</strong>
                                     </span>
                                     @endif
                                 </div>
