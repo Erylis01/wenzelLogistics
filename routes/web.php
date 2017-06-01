@@ -25,7 +25,7 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 //LOADINGS
 Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
 Route::get('/detailsLoading/{atrnr}', 'DetailsLoadingController@show')->name('showDetailsLoading');
-Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@save')->name('saveDetailsLoading');
+Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@update')->name('updateDetailsLoading');
 
 //WAREHOUSES
 Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWarehouses');
@@ -55,6 +55,6 @@ Route::post('/detailsPalletstransfer/{id}/{palletsAccount}', 'PalletstransfersCo
 Route::delete('/detailsPalletstransfer/{id}', 'PalletstransfersController@delete')->name('deletePalletstransfer');
 
 //MAILS
-    //validate registration
+//validate registration
 Route::get('auth/registerVerify/{email_token}', 'Auth\RegisterController@verify')->name('validateRegistration');
 

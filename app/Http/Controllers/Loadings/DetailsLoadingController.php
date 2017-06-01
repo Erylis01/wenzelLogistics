@@ -18,9 +18,13 @@ class DetailsLoadingController extends Controller
      */
     public function show($atrnr)
     {
-        if (Auth::check()) {
-            $detailsLoading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();
 
+//        dd(Loading::where('atrnr', $atrnr)->first()->palletstransfer);
+//dd(Palletstransfer::all()->get('loading'));
+
+        if (Auth::check()) {
+            //table 1
+            $detailsLoading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();
             $ladedatum = $detailsLoading->ladedatum;
             $entladedatum = $detailsLoading->entladedatum;
             $disp = $detailsLoading->disp;
@@ -48,51 +52,71 @@ class DetailsLoadingController extends Controller
             $subfrachter = $detailsLoading->subfrachter;
             $kennzeichen = $detailsLoading->kennzeichen;
             $zusladestellen = $detailsLoading->zusladestellen;
-
-            $ruckgabewo = $detailsLoading->ruckgabewo;
-            $mahnung = $detailsLoading->mahnung;
-            $blockierung = $detailsLoading->blockierung;
-            $bearbeitungsdatum = $detailsLoading->bearbeitungsdatum;
-            $palgebucht = $detailsLoading->palgebucht;
-            $state = $detailsLoading->state;
             $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
+
+            //table pallets
 
             return view('loadings.detailsLoading', compact(  'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
                 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'vol', 'ldm', 'ware', 'gewicht', 'umsatz', 'aufwand',
-                'db', 'trp', 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht',
-                'state', 'reasonUpdatePT'
+                'db', 'trp', 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen','reasonUpdatePT'
             ));
         } else {
             return view('auth.login');
         }
     }
 
-    public function save(Request $request, $atrnr)
+    public function update(Request $request, $atrnr)
     {
-        $loading = DB::table('loadings')->where('atrnr', $atrnr)->first();
-        $ruckgabewo = Input::get('ruckgabewo');
-        $mahnung = Input::get('mahnung');
-        $blockierung = Input::get('blockierung');
-        $bearbeitungsdatum = Input::get('bearbeitungsdatum');
-        $palgebucht = Input::get('palgebucht');
-        $reasonUpdatePT = Input::get('reasonUpdatePT');
-        $updateValidatePT = $request->updateValidatePT;
+        $ladedatum=Input::get('ladedatum');
+        $entladedatum=Input::get('entladedatum');
+        $disp=Input::get('disp');
+        $referenz=Input::get('referenz');
+        $auftraggeber=Input::get('auftraggeber');
+        $beladestelle=Input::get('beladestelle');
+        $ortb=Input::get('ortb');
+        $plzb=Input::get('plzb');
+        $landb=Input::get('landb');
+        $entladestelle=Input::get('entladestelle');
+        $orte=Input::get('orte');
+        $plze=Input::get('plze');
+        $lande=Input::get('lande');
+        $anz=Input::get('anz');
+        $art=Input::get('art');
+        $ware=Input::get('ware');
+        $gewicht=Input::get('gewicht');
+        $vol=Input::get('vol');
+        $ldm=Input::get('ldm');
+        $umsatz=Input::get('umsatz');
+        $aufwand=Input::get('aufwand');
+        $db=$umsatz-$aufwand;
+        $subfrachter=Input::get('subfrachter');
+        $trp=Input::get('trp');
+//        $pt=Input::get('pt');
+        $kennzeichen=Input::get('kennzeichen');
+        $zusladestellen=Input::get('zusladestellen');
 
-        if (isset($reasonUpdatePT) && isset($updateValidatePT)) {
-            Loading::where('atrnr', $atrnr)->update(['reasonUpdatePT'=>$reasonUpdatePT,'pt'=>'NEIN']);
-            session()->flash('messageUpdatePTLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
-        } elseif ($loading->ruckgabewo <> $ruckgabewo || $loading->mahnung <> $mahnung || $loading->blockierung <> $blockierung || $loading->bearbeitungsdatum <> $bearbeitungsdatum || $loading->palgebucht <> $palgebucht) {
-            // store
-            if ($palgebucht == 'OK' || $palgebucht == 'ok') {
-                $state = 'OK';
-            } elseif ($palgebucht == 'almost OK' || $palgebucht == 'almost ok') {
-                $state = 'almost OK';
-            } elseif ($palgebucht == 'not OK' || $palgebucht == 'not ok') {
-                $state = 'not OK';
+        $reasonUpdatePT = Input::get('reasonUpdatePT');
+
+        $rules = array(
+            'disp' => 'required|string|max:4',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        // process the login
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            if (isset($reasonUpdatePT) && isset($request->updateValidatePT)) {
+                Loading::where('atrnr', $atrnr)->update(['reasonUpdatePT' => $reasonUpdatePT, 'pt' => 'NEIN']);
+                session()->flash('messageUpdatePTLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
+            } elseif (isset($request->update)) {
+                Loading::where('atrnr', $atrnr)->update(['ladedatum' => $ladedatum, 'entladedatum' => $entladedatum, 'disp' => $disp, 'referenz' => $referenz, 'auftraggeber' => $auftraggeber, 'beladestelle' => $beladestelle,
+                    'ortb' => $ortb, 'plzb' => $plzb, 'landb' => $landb, 'entladestelle' => $entladestelle, 'orte' => $orte, 'plze' => $plze, 'lande' => $lande, 'anz' => $anz, 'art' => $art, 'ware' => $ware, 'gewicht' => $gewicht,
+                    'vol' => $vol, 'ldm' => $ldm, 'umsatz' => $umsatz, 'aufwand' => $aufwand, 'db' => $db, 'subfrachter' => $subfrachter, 'trp' => $trp, 'kennzeichen' => $kennzeichen, 'zusladestellen' => $zusladestellen]);
+                session()->flash('messageUpdateLoading', 'Successfully updated loading');
             }
-            Loading::where('atrnr', $atrnr)->update(['ruckgabewo'=>$ruckgabewo,'mahnung'=>$mahnung, 'blockierung'=>$blockierung,'bearbeitungsdatum'=>$bearbeitungsdatum, 'palgebucht'=>$palgebucht,'state'=>$state] );
-            session()->flash('messageSaveLoading', 'Successfully updated loading');
+            return redirect()->back();
         }
-        return redirect()->back();
     }
 }

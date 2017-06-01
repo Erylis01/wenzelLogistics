@@ -55,14 +55,14 @@
 
                                 <!--loading reference-->
                                 <div class="col-lg-3">
-                                    <label for="loadingRef" class="control-label">Loading reference :</label>
+                                    <label for="loading_referenz" class="control-label">Loading reference :</label>
                                 </div>
                                 <div class="col-lg-5">
-                                    <input id="loadingRef" type="text" class="form-control" name="loadingRef"
+                                    <input id="loading_referenz" type="text" class="form-control" name="loading_referenz"
                                            value="" placeholder="Loading reference" required autofocus>
-                                    @if ($errors->has('loadingRef'))
+                                    @if ($errors->has('loading_referenz'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('loadingRef') }}</strong>
+                                        <strong>{{ $errors->first('loading_referenz') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -88,13 +88,13 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-5">
-                                        <select class="selectpicker show-tick form-control" data-size="5"
-                                                data-live-search="true" data-live-search-style="startsWith"
-                                                title="Pallets Account" name="palletsAccount" required>
-                                            @foreach($listPalletsaccounts as $account )
-                                                <option>{{$account->name}}</option>
-                                            @endforeach
-                                        </select>
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Pallets Account" name="palletsAccount" required>
+                                        @foreach($listPalletsaccounts as $account )
+                                            <option>{{$account->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 

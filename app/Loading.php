@@ -10,8 +10,7 @@ class Loading extends Model
         'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle', 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'ware', 'gewicht','vol', 'ldm', 'umsatz', 'aufwand', 'db', 'trp', 'pt', 'subfrachter','kennzeichen', 'zusladestellen', 'ruckgabewo', 'mahnung', 'blockierung', 'bearbeitungsdatum', 'palgebucht', 'state','reasonUpdatePT'
     ];
 
-//    //loading-> warehouse
-//    public function warehouse(){
-//        return $this->belongsTo(PalletsAccount::class);
-//    }
+    public function palletstransfers(){
+        return $this->hasMany('App\Loading','loading_referenz', 'referenz');
+    }
 }

@@ -43,19 +43,14 @@ class CreateLoadingsTable extends Migration
             $table->string('kennzeichen')->nullable();
             $table->string('zusladestellen')->nullable();
 
-
-            $table->string('ruckgabewo')->nullable();
-            $table->string('mahnung')->nullable();
-            $table->string('blockierung')->nullable();
-            $table->date('bearbeitungsdatum')->nullable();
-            $table->string('palgebucht')->nullable();
-
-            $table->string('state')->default('not OK');
             $table->string('reasonUpdatePT')->nullable();
 
-            $table->integer('warehouse_id')->nullable();
             $table->timestamps();
         });
+
+//        Schema::create('palletstransfers', function (Blueprint $table) {
+//            $table->string('loading_referenz');
+//        });
         }
 
 

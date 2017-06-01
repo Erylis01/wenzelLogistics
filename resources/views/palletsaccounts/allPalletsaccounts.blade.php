@@ -92,10 +92,10 @@
                                 </tbody>
                             </table>
                         </div>
-                            <div class="col-lg-offset-2 col-lg-8">
-                                <a href="{{route('showAddPalletsaccount')}}" class="btn btn-add btn-block"><span
-                                            class="glyphicon glyphicon-plus-sign"></span> Add account</a>
-                            </div>
+                        <div class="col-lg-offset-2 col-lg-8">
+                            <a href="{{route('showAddPalletsaccount')}}" class="btn btn-add btn-block"><span
+                                        class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                        </div>
                     </div>
                 </div>
 

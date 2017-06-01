@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Loading;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -20,34 +21,34 @@ class ListLoadingsController extends Controller
     public function show(Request $request)
     {
         if (Auth::check()) {
-        $this->importData();
-        $currentDate = Carbon::now();
-        $limitDate=$currentDate->subDays(60)->format('Y-m-d');
+            $this->importData();
+            $currentDate = Carbon::now();
+            $limitDate=$currentDate->subDays(60)->format('Y-m-d');
 
-        if (request()->has('sortby') && request()->has('order')) {
-            $sortby = $request->get('sortby'); // Order by what column?
-            $order = $request->get('order'); // Order direction: asc or desc
-            $listLoadings=DB::table('loadings')->where([
+            if (request()->has('sortby') && request()->has('order')) {
+                $sortby = $request->get('sortby'); // Order by what column?
+                $order = $request->get('order'); // Order direction: asc or desc
+                $listLoadings=DB::table('loadings')->where([
+                    ['pt', '=', 'ja'],
+                    ['ladedatum', '>=', $limitDate],
+                ])->orderBy($sortby, $order)->paginate(10);
+                $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
+            }
+            else{
+                $listLoadings = DB::table('loadings')->where([
+                    ['pt', '=', 'ja'],
+                    ['ladedatum', '>=', $limitDate],
+                ])->paginate(10);
+                $links='';
+            }
+            $count=count(DB::table('loadings')->where([
                 ['pt', '=', 'ja'],
                 ['ladedatum', '>=', $limitDate],
-            ])->orderBy($sortby, $order)->paginate(5);
-            $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
-        }
-        else{
-            $listLoadings = DB::table('loadings')->where([
-                ['pt', '=', 'ja'],
-                ['ladedatum', '>=', $limitDate],
-            ])->paginate(5);
-            $links='';
-        }
-    $count=count(DB::table('loadings')->where([
-        ['pt', '=', 'ja'],
-        ['ladedatum', '>=', $limitDate],
-    ])->get());
+            ])->get());
 
 
-        return view('loadings.loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
-    }else{
+            return view('loadings.loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
+        }else{
             return view('auth.login');
         }}
 

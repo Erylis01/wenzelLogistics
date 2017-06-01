@@ -17,7 +17,7 @@ class CreatePalletstransfersTable extends Migration
             $table->increments('id');
             $table->integer('palletsNumber');
             $table->string('palletsAccount');
-            $table->string('loadingRef');
+            $table->string('loading_referenz');
             $table->date('date');
             $table->integer('realPalletsNumber')->nullable();
             $table->boolean('documents')->default(false);
@@ -26,6 +26,8 @@ class CreatePalletstransfersTable extends Migration
             $table->integer('remindersNumber')->nullable();
             $table->string('reminderWarehouse')->nullable();
             $table->timestamps();
+
+            $table->foreign('loading_referenz')->references('referenz')->on('loadings');
         });
     }
 

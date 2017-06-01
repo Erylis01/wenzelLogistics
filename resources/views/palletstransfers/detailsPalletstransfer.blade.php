@@ -64,18 +64,18 @@
 
                                                     <!--loading reference-->
                                                     <div class="col-lg-3">
-                                                        <label for="loadingRef" class="control-label">Loading
+                                                        <label for="loading_referenz" class="control-label">Loading
                                                             reference :</label>
                                                     </div>
                                                     <div class="col-lg-5">
-                                                        <input id="loadingRef" type="text" class="form-control"
-                                                               name="loadingRef"
-                                                               value="{{$loadingRef}}"
+                                                        <input id="loading_referenz" type="text" class="form-control"
+                                                               name="loading_referenz"
+                                                               value="{{$loading_referenz}}"
                                                                placeholder="Loading reference" required
                                                                autofocus>
-                                                        @if ($errors->has('loadingRef'))
+                                                        @if ($errors->has('loading_referenz'))
                                                             <span class="help-block">
-                                        <strong>{{ $errors->first('loadingRef') }}</strong>
+                                        <strong>{{ $errors->first('loading_referenz') }}</strong>
                                     </span>
                                                         @endif
                                                     </div>
@@ -215,14 +215,14 @@
 
                                                             @if (Session::has('messageSaveVerificationPalletstransfer'))
                                                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageSaveVerificationPalletstransfer') }}</div>
-                                                        @endif
+                                                            @endif
 
                                                         <!--pallets number-->
                                                             <div class="form-group">
                                                                 <div class="col-lg-3 col-lg-offset-1 text-right">
                                                                     @if($realPalletsNumber<>$palletsNumber)
                                                                         <span class="text-danger glyphicon glyphicon-remove"></span>
-                                                                   @else
+                                                                    @else
                                                                         <span class="text-success glyphicon glyphicon-ok"></span>
                                                                     @endif
                                                                     <label for="realPalletsNumber"
@@ -257,13 +257,13 @@
                                                                 <!--documents-->
                                                                 <div class=" col-lg-3 col-lg-offset-1 text-right">
                                                                     @if($documents==true)
-                                                                <span class="text-success glyphicon glyphicon-ok"></span>
+                                                                        <span class="text-success glyphicon glyphicon-ok"></span>
                                                                     @else
                                                                         <span class="text-danger glyphicon glyphicon-remove"></span>
-                                                                        @endif
-                                                                <label for="documents"
-                                                                       class="control-label">Documents
-                                                                    ?</label>
+                                                                    @endif
+                                                                    <label for="documents"
+                                                                           class="control-label">Documents
+                                                                        ?</label>
                                                                 </div>
                                                                 <div class="col-lg-2 text-center">
                                                                     @if($documents==true)
@@ -296,10 +296,10 @@
                                                                     @else
                                                                         <span class="text-danger glyphicon glyphicon-remove"></span>
                                                                     @endif
-                                                                <label for="state"
-                                                                       class="control-label">Transfer
-                                                                    validated ?
-                                                                </label>
+                                                                    <label for="state"
+                                                                           class="control-label">Transfer
+                                                                        validated ?
+                                                                    </label>
                                                                 </div>
                                                                 <div class="col-lg-2 text-center">
                                                                     @if($state==true)
@@ -328,7 +328,7 @@
                                                             @if (Session::has('messageValidatedPalletstransfer'))
                                                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageValidatedPalletstransfer') }}</div>
                                                             @endif
-                                                            <!--reminders-->
+                                                        <!--reminders-->
                                                             <div class="form-group">
                                                                 <label for="dateLastReminder"
                                                                        class="col-lg-4 control-label">Date last reminder
@@ -351,8 +351,8 @@
                                                                            autofocus readonly>
                                                                 </div>
                                                             </div>
-                                                            @if (Session::has('messageBlockedAccount'))
-                                                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageBlockedAccount') }}</div>
+                                                            @if (Session::has('messageValidatedPalletstransfer'))
+                                                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageValidatedPalletstransfer') }}</div>
                                                             @endif
 
                                                             <div class="form-group">
