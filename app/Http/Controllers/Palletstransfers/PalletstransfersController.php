@@ -21,6 +21,7 @@ class PalletstransfersController extends Controller
     public function showAll(Request $request)
     {
 
+//        dd(Palletstransfer::all()->loading);
 
         if (Auth::check()) {
             $totalpallets = DB::table('palletstransfers')->sum('palletsNumber');

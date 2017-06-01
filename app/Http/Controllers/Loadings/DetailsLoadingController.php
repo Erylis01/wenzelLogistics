@@ -19,10 +19,6 @@ class DetailsLoadingController extends Controller
      */
     public function show($atrnr)
     {
-
-//        dd(Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->sum('palletsNumber'));
-//dd(Palletstransfer::all()->loading());
-
         if (Auth::check()) {
             //table 1
             $detailsLoading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();

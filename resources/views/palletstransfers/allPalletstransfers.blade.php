@@ -84,6 +84,8 @@
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletstransfers as $transfer)
+                                    {{--@php(dd(\App\Palletstransfer::find($transfer->id)->with('loading')->first()->loading))--}}
+
                                     @if($transfer->state==true && $transfer->documents==true && $transfer->realPalletsNumber==$transfer->palletsNumber)
                                         @php($class="success")
                                     @elseif ($transfer->state==false && $transfer->documents==false && $transfer->realPalletsNumber<>$transfer->palletsNumber)
