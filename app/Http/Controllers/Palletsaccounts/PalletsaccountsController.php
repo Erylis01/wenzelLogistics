@@ -23,6 +23,7 @@ class PalletsaccountsController extends Controller
      */
     public function showAll(Request $request)
     {
+
         if (Auth::check()) {
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
             if (request()->has('sortby') && request()->has('order')) {
@@ -88,12 +89,13 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
+
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
             $listWarehouses=DB::table('warehouses')->get();
+
             $name = $palletsaccount->name;
             $realNumberPallets = $palletsaccount->realNumberPallets;
-            $warehousesAssociated = ['warehouse1', 'warehouse3', 'warehouse5'];
-
+            $warehousesAssociated = Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get();
             $currentDate = Carbon::now();
             $limitDate=$currentDate->subDays(60)->format('Y-m-d');
 

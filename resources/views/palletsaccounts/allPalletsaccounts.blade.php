@@ -106,15 +106,23 @@
                         <div class="panel-body">
                             <form class="form-horizontal" role="form" method="POST" action="">
                                 <div class="form-group">
-                                    <div class="col-lg-5">
-                                        <label for="realNumberPallets" class="control-label legend-palletsaccounts">Number
-                                            of pallets :</label>
+                                    <div class="table-responsive table-palletsNumber">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Real pallets number</th>
+                                                <th class="text-center">Theorical pallets number</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="text-center">{{$palletsaccount->realNumberPallets}}</td>
+                                                <td class="text-center">{{$palletsaccount->theoricalNumberPallets}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <input id="realNumberPallets" type="number"
-                                               class="form-control info-palletsaccounts" name="realNumberPallets"
-                                               value="" placeholder="Pallets number" readonly>
-                                    </div>
+
                                 </div>
                                 <div class="form-group">
                                     <div class="col-lg-5">
@@ -122,8 +130,12 @@
                                             associated :</label>
                                     </div>
                                     <div class="col-lg-6 info-palletsaccounts">
+
+                                        @php($listWarehouses=App\Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get())
                                         <ul>
-                                            <li>lalal</li>
+                                            @foreach($listWarehouses as $warehouse)
+                                                <li><a href="{{route('showDetailsWarehouse', $warehouse->id)}}" class="link">{{$warehouse->name}}</a></li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                     {{--id="warehousesAssociated" type="text" class="form-control" name="warehousesAssociated"--}}
@@ -131,11 +143,12 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="col-lg-offset-5 col-lg-6">
+                                    <div class="col-lg-6">
                                         <a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}"
-                                           class="btn btn-form btn-block">Details pallets transferts</a>
+                                           class="btn btn-form btn-block">Pallets transfers details</a>
                                     </div>
                                 </div>
+
                             </form>
                         </div>
                     </div>

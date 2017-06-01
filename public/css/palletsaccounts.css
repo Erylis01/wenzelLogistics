@@ -56,41 +56,6 @@
     min-width:60px;
 }
 
-/*.colRefLoading{*/
-    /*min-width:160px;*/
-/*}*/
-
-/*.colFakturiert,  .colTeamTex, .colSpar{*/
-    /*min-width:100px;*/
-/*}*/
-/*.colVerschenkt, .colImpexEUX, .colImpexEUY{*/
-    /*min-width:110px;*/
-/*}*/
-/*.colECLWolfurt{*/
-    /*min-width:115px;*/
-/*}*/
-/*.colSystempo{*/
-    /*min-width:125px;*/
-/*}*/
-/*.colBenoit{*/
-    /*min-width:145px;*/
-/*}*/
-/*.colAldiDAG, .colAldiDOM, .colAldiSWB{*/
-    /*min-width:100px;*/
-/*}*/
-/*.colDachser, .colSchefknecht{*/
-    /*min-width:120px;*/
-/*}*/
-/*.colBonduelle{*/
-    /*min-width:135px;*/
-/*}*/
-/*.colWildenhofer{*/
-    /*min-width:195px;*/
-/*}*/
-/*.colArinthod, .colPFM{*/
-    /*min-width:85px;*/
-/*}*/
-
-
-
-
+.table-palletsNumber tr>th{
+    width:50%;
+}
