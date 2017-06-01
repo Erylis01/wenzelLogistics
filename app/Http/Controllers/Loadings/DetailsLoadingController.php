@@ -20,7 +20,7 @@ class DetailsLoadingController extends Controller
     public function show($atrnr)
     {
 
-        dd(Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers);
+//        dd(Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->sum('palletsNumber'));
 //dd(Palletstransfer::all()->loading());
 
         if (Auth::check()) {
@@ -56,8 +56,13 @@ class DetailsLoadingController extends Controller
             $reasonUpdatePT = $detailsLoading->reasonUpdatePT;
 
             //table pallets
+            $palletstransfersPlus=Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->where('palletsNumber', '>=',0)->get();
+$palletstransfersMinus=Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->where('palletsNumber', '<',0)->get();
+$sumPlus=Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->where('palletsNumber', '>=',0)->sum('realPalletsNumber');
+$sumMinus=Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->where('palletsNumber', '<',0)->sum('realPalletsNumber');
+$sum=Loading::where('atrnr',$atrnr)->with('palletstransfers')->first()->palletstransfers()->sum('realPalletsNumber');
 
-            return view('loadings.detailsLoading', compact(  'ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
+            return view('loadings.detailsLoading', compact(  'sum','sumMinus','sumPlus','palletstransfersMinus','palletstransfersPlus','ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
                 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'vol', 'ldm', 'ware', 'gewicht', 'umsatz', 'aufwand',
                 'db', 'trp', 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen','reasonUpdatePT'
             ));

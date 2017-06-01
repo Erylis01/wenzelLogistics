@@ -514,14 +514,17 @@
                         <!--subpanel-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
+                                @if($sum==0 || $sum==null)
+                                    @php($class="text-alert")
+                                @endif
                                 <a data-toggle="collapse" href="#Pancollapse">Verification
-                                    and Validation - Pallets transfers</a><span class="col-lg-offset-6">TOTAL = </span>
+                                    and Validation - Pallets transfers</a><span class="col-lg-offset-6">TOTAL = {{$sum}}</span>
                             </div>
                             <div id="Pancollapse" class="panel-collapse in collapse">
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <p class="text-center"><span
-                                                    class="glyphicon glyphicon-plus glyphicon-green"></span> TOTAL =
+                                                    class="glyphicon glyphicon-plus glyphicon-green"></span> TOTAL = {{$sumPlus}}
                                         </p>
                                         <table class="table table-hover table-bordered table-loading-pallets">
                                             <thead>
@@ -551,23 +554,33 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            @foreach($palletstransfersPlus as $transfersPlus)
                                             <tr>
-                                                <td>lalala</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td class="text-center"><a href="{{route('showDetailsPalletstransfer',$transfersPlus->id)}}" class="link">{{$transfersPlus->id}}</a></td>
+                                                <td class="text-center">{{$transfersPlus->palletsAccount}}</td>
+                                                <td class="text-center">{{$transfersPlus->realPalletsNumber}}</td>
+                                                @if($transfersPlus->state==false)
+                                                    <td class="text-center">No</td>
+                                                @else
+                                                    <td class="text-center">Yes</td>
+                                                @endif
+                                                <td class="text-center">{{$transfersPlus->palletsNumber}}</td>
+                                                @if($transfersPlus->documents==false)
+                                                    <td class="text-center">No</td>
+                                                @else
+                                                    <td class="text-center">Yes</td>
+                                                @endif
+                                                <td class="text-center">{{$transfersPlus->dateLastReminder}}</td>
+                                                <td class="text-center">{{$transfersPlus->remindersNumber}}</td>
                                             </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
 
                                     <div class="table-responsive">
                                         <p class="text-center"><span
-                                                    class="glyphicon glyphicon-minus glyphicon-green"></span> TOTAL =
+                                                    class="glyphicon glyphicon-minus glyphicon-green"></span> TOTAL = {{$sumMinus}}
                                         </p>
                                         <table class="table table-hover table-loading-pallets table-bordered">
                                             <thead>
@@ -597,16 +610,26 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>alala</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
+                                            @foreach($palletstransfersMinus as $transfersMinus)
+                                                <tr>
+                                                    <td class="text-center"><a href="{{route('showDetailsPalletstransfer',$transfersMinus->id)}}" class="link">{{$transfersMinus->id}}</a></td>
+                                                    <td class="text-center">{{$transfersMinus->palletsAccount}}</td>
+                                                    <td class="text-center">{{$transfersMinus->realPalletsNumber}}</td>
+                                                    @if($transfersMinus->state==false)
+                                                    <td class="text-center">No</td>
+                                                    @else
+                                                        <td class="text-center">Yes</td>
+                                                        @endif
+                                                    <td class="text-center">{{$transfersMinus->palletsNumber}}</td>
+                                                    @if($transfersMinus->documents==false)
+                                                        <td class="text-center">No</td>
+                                                    @else
+                                                        <td class="text-center">Yes</td>
+                                                    @endif
+                                                    <td class="text-center">{{$transfersMinus->dateLastReminder}}</td>
+                                                    <td class="text-center">{{$transfersMinus->remindersNumber}}</td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -622,169 +645,3 @@
         @endif
     </div>
 @endsection
-<!--form to edit loading-->
-{{--<form class="form-horizontal" role="form"--}}
-{{--method="POST"--}}
-{{--action="{{route('saveDetailsLoading', $atrnr)}}">--}}
-{{--<input type="hidden" name="_token"--}}
-{{--value="{{ csrf_token() }}">--}}
-{{--<input type="hidden" name="id" value={{$atrnr}}>--}}
-
-
-{{--<!--ruckgabewo-->--}}
-{{--<div class="form-group {{ $errors->has('ruckgabewo') ? ' has-error' : '' }}">--}}
-{{--<label for="ruckgabewo"--}}
-{{--class="col-lg-3 col-lg-offset-1 control-label">Ruckgabe--}}
-{{--Wo--}}
-{{--?</label>--}}
-{{--<div class="col-lg-6">--}}
-{{--<input id="ruckgabewo" type="text"--}}
-{{--class="form-control"--}}
-{{--name="ruckgabewo"--}}
-{{--value="{{ $ruckgabewo }}"--}}
-{{--placeholder="Ruckgabe Wo"--}}
-{{--autofocus>--}}
-
-{{--@if ($errors->has('ruckgabewo'))--}}
-{{--<span class="help-block">--}}
-{{--<strong>{{ $errors->first('ruckgabewo') }}</strong>--}}
-{{--</span>--}}
-{{--@endif--}}
-{{--</div>--}}
-{{--</div>--}}
-{{--<!--mahnung-->--}}
-{{--<div class="form-group {{ $errors->has('mahnung') ? ' has-error' : '' }}">--}}
-{{--<label for="mahnung"--}}
-{{--class="col-lg-3 col-lg-offset-1 control-label">Mahnung--}}
-{{--:</label>--}}
-{{--<div class="col-lg-6">--}}
-{{--<input id="mahnung" type="text"--}}
-{{--class="form-control"--}}
-{{--name="mahnung"--}}
-{{--value="{{ $mahnung }}"--}}
-{{--placeholder="Mahnung"--}}
-{{--autofocus>--}}
-
-{{--@if ($errors->has('mahnung'))--}}
-{{--<span class="help-block">--}}
-{{--<strong>{{ $errors->first('mahnung') }}</strong>--}}
-{{--</span>--}}
-{{--@endif--}}
-{{--</div>--}}
-{{--</div>--}}
-{{--<!--blockierung-->--}}
-{{--<div class="form-group {{ $errors->has('blockierung') ? ' has-error' : '' }}">--}}
-{{--<label for="blockierung"--}}
-{{--class="col-lg-3 col-lg-offset-1 control-label">Blockierung--}}
-{{--:</label>--}}
-{{--<div class="col-lg-6">--}}
-{{--<input id="blockierung" type="text"--}}
-{{--class="form-control"--}}
-{{--name="blockierung"--}}
-{{--value="{{ $blockierung }}"--}}
-{{--placeholder="Blockierung"--}}
-{{--autofocus>--}}
-
-{{--@if ($errors->has('blockierung'))--}}
-{{--<span class="help-block">--}}
-{{--<strong>{{ $errors->first('blockierung') }}</strong>--}}
-{{--</span>--}}
-{{--@endif--}}
-{{--</div>--}}
-
-{{--</div>--}}
-{{--<!--bearbeitungsdatum-->--}}
-{{--<div class="form-group {{ $errors->has('bearbeitungsdatum') ? ' has-error' : '' }}">--}}
-{{--<label for="bearbeitungsdatum"--}}
-{{--class="col-lg-3 col-lg-offset-1 control-label">Bearbeitungsdatum--}}
-{{--:</label>--}}
-{{--<div class="col-lg-6">--}}
-{{--<input id="bearbeitungsdatum"--}}
-{{--type="date"--}}
-{{--class="form-control"--}}
-{{--name="bearbeitungsdatum"--}}
-{{--value="{{ $bearbeitungsdatum }}"--}}
-{{--placeholder="bearbeitungsdatum"--}}
-{{--autofocus>--}}
-
-{{--@if ($errors->has('bearbeitungsdatum'))--}}
-{{--<span class="help-block">--}}
-{{--<strong>{{ $errors->first('bearbeitungsdatum') }}</strong>--}}
-{{--</span>--}}
-{{--@endif--}}
-{{--</div>--}}
-{{--</div>--}}
-{{--<!--palgebucht-->--}}
-{{--<div class="form-group {{ $errors->has('palgebucht') ? ' has-error' : '' }}">--}}
-{{--<label for="palgebucht"--}}
-{{--class="col-lg-3 col-lg-offset-1 control-label">Pal--}}
-{{--gebucht--}}
-{{--?</label>--}}
-{{--<div class="col-lg-6">--}}
-{{--<input id="palgebucht" type="text"--}}
-{{--class="form-control"--}}
-{{--name="palgebucht"--}}
-{{--value="{{ $palgebucht }}"--}}
-{{--placeholder="Pal gebucht"--}}
-{{--autofocus>--}}
-
-{{--@if ($errors->has('palgebucht'))--}}
-{{--<span class="help-block">--}}
-{{--<strong>{{ $errors->first('palgebucht') }}</strong>--}}
-{{--</span>--}}
-{{--@endif--}}
-{{--</div>--}}
-{{--</div>--}}
-{{--</form>--}}
-
-{{--<div class="panel subpanel">--}}
-{{--<div class="panel-heading ">--}}
-{{--<a data-toggle="collapse" href="#Pan3collapse">Recap pallets chart</a>--}}
-{{--</div>--}}
-{{--<div id="Pan3collapse" class="panel-collapse collapse">--}}
-{{--<div class="panel-body">--}}
-{{--<div class="table-responsive loadings-container">--}}
-{{--<table class="table table-hover  table-bordered table-loading-pallets">--}}
-{{--<thead>--}}
-{{--<tr>--}}
-{{--<th>TOTAL</th>--}}
-{{--<th>Fakturiert</th>--}}
-{{--<th>Verschenkt</th>--}}
-{{--<th>ECL Wolfurt</th>--}}
-{{--<th>Systempo AT</th>--}}
-{{--<th>Benoit & Valerie</th>--}}
-{{--<th>PFM - FR</th>--}}
-{{--<th>Team Tex</th>--}}
-{{--<th>ALDI SWB</th>--}}
-{{--<th>ALDI DAG</th>--}}
-{{--<th>ALDI DOM</th>--}}
-{{--<th>Dachser F51 Reims</th>--}}
-{{--<th>Impex-EUY</th>--}}
-{{--<th>Bonduelle F80</th>--}}
-{{--<th>Schefknecht</th>--}}
-{{--<th>Wildenhofer Salzburg</th>--}}
-{{--<th>Impex-EUX</th>--}}
-{{--<th>Arinthod</th>--}}
-{{--<th>SPAR Wels</th>--}}
-{{--</tr>--}}
-{{--</thead>--}}
-{{--<tbody>--}}
-
-
-{{--<tr>--}}
-{{--<td class="text-center colTotal">{{$anz}}</td>--}}
-{{--@foreach($warehouses as $warehouse)--}}
-{{--@if($warehouse->id == $warehouse_id)--}}
-{{--<td class="text-center">{{$anz}}</td>--}}
-{{--@else--}}
-{{--<td class="text-center"></td>--}}
-{{--@endif--}}
-{{--@endforeach--}}
-{{--</tr>--}}
-
-{{--</tbody>--}}
-{{--</table>--}}
-{{--</div>--}}
-{{--</div>--}}
-{{--</div>--}}
-{{--</div>--}}

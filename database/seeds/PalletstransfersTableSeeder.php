@@ -16,7 +16,7 @@ class PalletstransfersTableSeeder extends Seeder
         DB::table('palletstransfers')->delete();
         Palletstransfer::create(array(
             'id' => 1,
-            'palletsNumber' => '11',
+            'palletsNumber' => '-11',
             'palletsAccount' => 'account1',
             'loading_atrnr' => 2278849,
             'date' => '2017-04-20',
@@ -30,7 +30,7 @@ class PalletstransfersTableSeeder extends Seeder
         ));
         Palletstransfer::create(array(
             'id' => 3,
-            'palletsNumber' => '33',
+            'palletsNumber' => '-33',
             'palletsAccount' => 'account3',
             'loading_atrnr' => 2277925,
             'date' => '2017-02-25',
@@ -44,7 +44,7 @@ class PalletstransfersTableSeeder extends Seeder
         ));
         Palletstransfer::create(array(
             'id' => 5,
-            'palletsNumber' => '55',
+            'palletsNumber' => '-55',
             'palletsAccount' => 'account5',
             'loading_atrnr' => 2278850,
             'date' => '2017-04-14',
