@@ -145,7 +145,7 @@
                                 <div class="form-group">
                                     <div class="col-lg-6">
                                         <a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}"
-                                           class="btn btn-form btn-block">Pallets transfers details</a>
+                                           class="btn btn-form btn-block">Details</a>
                                     </div>
                                 </div>
 

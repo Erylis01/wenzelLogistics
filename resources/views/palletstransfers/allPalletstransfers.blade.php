@@ -32,7 +32,7 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general">
-                    <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-7">
+                    <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-3">{{$totalpallets}} pallets</span><span class="col-lg-offset-3">
                             <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add transfers</a>
                         </span></div>
 
@@ -70,9 +70,9 @@
                                     </th>
                                     <th class="text-center">Pallets Account <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsAccount&order=asc')}}"></a><a
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsAccount&order=desc')}}"></a>
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
                                     </th>
                                     <th class="text-center">Pallets Number <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
@@ -94,12 +94,11 @@
                                         @php ($class="warning")
                                     @endif
                                     <tr class={{$class}}>
-                                        <td class="text-center"><a href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
+                                        <td class="text-center"><a class="link" href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
-                                        {{--<td class="text-center colID">{{$transfer->id}}</td>--}}
                                         <td class="text-center colDate">{{date('d-m-Y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center colRef">{{$transfer->loading_atrnr}}</td>
-                                        <td class="text-center colAccount">{{$transfer->palletsAccount}}</td>
+                                        <td class="text-center colRef"><a class="link" href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a></td>
+                                        <td class="text-center colAccount">{{$transfer->palletsaccount_name}}</td>
                                         <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
                                     </tr>
                                 @endforeach

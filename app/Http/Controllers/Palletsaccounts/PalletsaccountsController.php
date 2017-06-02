@@ -69,7 +69,7 @@ class PalletsaccountsController extends Controller
             'warehousesAssociated'=> 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
-        // process the login
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
@@ -110,14 +110,14 @@ class PalletsaccountsController extends Controller
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = request()->get('sortby'); // Order by what column?
                 $order = request()->get('order'); // Order direction: asc or desc
-                $listPalletstransfers=DB::table('palletstransfers')->where([['palletsAccount', $name],['date', '>=', $limitDate]])->orderBy($sortby, $order)->paginate(10);
+                $listPalletstransfers=DB::table('palletstransfers')->where([['palletsaccount_name', $name],['date', '>=', $limitDate]])->orderBy($sortby, $order)->paginate(10);
                 $links = $listPalletstransfers->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
-                $listPalletstransfers=DB::table('palletstransfers')->where([['palletsAccount', $name],['date', '>=', $limitDate]])->paginate(10);
+                $listPalletstransfers=DB::table('palletstransfers')->where([['palletsaccount_name', $name],['date', '>=', $limitDate]])->paginate(10);
                 $links = '';
             }
 
-            $count = count(DB::table('palletstransfers')->where([['palletsAccount', $name],['date', '>=', $limitDate]])->get());
+            $count = count(DB::table('palletstransfers')->where([['palletsaccount_name', $name],['date', '>=', $limitDate]])->get());
             return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'theoricalNumberPallets','warehousesAssociated', 'count', 'links'));
         } else {
             return view('auth.login');

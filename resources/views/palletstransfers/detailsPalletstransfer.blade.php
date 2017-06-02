@@ -109,10 +109,10 @@
                                                                 data-size="5"
                                                                 data-live-search="true"
                                                                 data-live-search-style="startsWith"
-                                                                title="Pallets Account" name="palletsAccount"
+                                                                title="Pallets Account" name="palletsaccount_name"
                                                                 required>
                                                             @foreach($listPalletsaccounts as $account )
-                                                                @if($account->name==$palletsAccount)
+                                                                @if($account->name==$palletsaccount_name)
                                                                     @php($option='selected')
                                                                     <option {{$option}}>{{$account->name}}</option>
                                                                 @else
@@ -209,7 +209,7 @@
                                                         <!--form to edit pallets transfer-->
                                                         <form class="form-horizontal" role="form"
                                                               method="POST"
-                                                              action="{{route('saveVerificationPalletstransfer', ['id' => $id, 'palletsAccount' => $palletsAccount])}}">
+                                                              action="{{route('saveVerificationPalletstransfer', ['id' => $id, 'palletsaccount_name' => $palletsaccount_name])}}">
                                                             <input type="hidden" name="_token"
                                                                    value="{{ csrf_token() }}">
 

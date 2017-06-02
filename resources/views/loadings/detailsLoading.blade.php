@@ -557,7 +557,7 @@
                                             @foreach($palletstransfersPlus as $transfersPlus)
                                             <tr>
                                                 <td class="text-center"><a href="{{route('showDetailsPalletstransfer',$transfersPlus->id)}}" class="link">{{$transfersPlus->id}}</a></td>
-                                                <td class="text-center">{{$transfersPlus->palletsAccount}}</td>
+                                                <td class="text-center">{{$transfersPlus->palletsaccount_name}}</td>
                                                 <td class="text-center">{{$transfersPlus->realPalletsNumber}}</td>
                                                 @if($transfersPlus->state==false)
                                                     <td class="text-center">No</td>
@@ -613,7 +613,7 @@
                                             @foreach($palletstransfersMinus as $transfersMinus)
                                                 <tr>
                                                     <td class="text-center"><a href="{{route('showDetailsPalletstransfer',$transfersMinus->id)}}" class="link">{{$transfersMinus->id}}</a></td>
-                                                    <td class="text-center">{{$transfersMinus->palletsAccount}}</td>
+                                                    <td class="text-center">{{$transfersMinus->palletsaccount_name}}</td>
                                                     <td class="text-center">{{$transfersMinus->realPalletsNumber}}</td>
                                                     @if($transfersMinus->state==false)
                                                     <td class="text-center">No</td>

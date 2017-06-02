@@ -16,8 +16,9 @@ class CreatePalletstransfersTable extends Migration
         Schema::create('palletstransfers', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->integer('loading_atrnr')->unsigned()->index();
+            $table->string('palletsaccount_name');
             $table->integer('palletsNumber');
-            $table->string('palletsAccount');
+//            $table->string('palletsaccount_name');
             $table->date('date');
             $table->integer('realPalletsNumber')->nullable();
             $table->boolean('documents')->default(false);
@@ -28,6 +29,7 @@ class CreatePalletstransfersTable extends Migration
             $table->timestamps();
 
             $table->foreign('loading_atrnr')->references('atrnr')->on('loadings');
+            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccounts');
         });
     }
 
