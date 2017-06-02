@@ -17,21 +17,21 @@ class PalletsaccountsTableSeeder extends Seeder
         Palletsaccount::create(array(
             'id' => 1,
             'name' => 'account1',
-            'realNumberPallets' => '11',
             'theoricalNumberPallets' => '15',
         ));
+
         Palletsaccount::create(array(
             'id' => 2,
             'name' => 'account2',
-            'realNumberPallets' => '22',
             'theoricalNumberPallets' => '22',
         ));
+
         Palletsaccount::create(array(
             'id' => 3,
             'name' => 'account3',
-            'realNumberPallets' => '33',
             'theoricalNumberPallets' => '15',
         ));
+
         Palletsaccount::create(array(
         'id' => 4,
         'name' => 'account4',

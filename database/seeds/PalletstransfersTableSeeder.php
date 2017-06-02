@@ -1,5 +1,6 @@
 <?php
 
+use App\Palletsaccount;
 use App\Palletstransfer;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,8 @@ class PalletstransfersTableSeeder extends Seeder
             'loading_atrnr' => 2278849,
             'date' => '2017-04-20',
         ));
+        $actualPalletsNumber = DB::table('palletsaccounts')->where('name','account1')->value('theoricalNumberPallets');
+        Palletsaccount::where('name','account1')->update(['theoricalNumberPallets'=> $actualPalletsNumber-11]);
         Palletstransfer::create(array(
             'id' => 2,
             'palletsNumber' => '22',
@@ -28,6 +31,8 @@ class PalletstransfersTableSeeder extends Seeder
             'loading_atrnr' => 2278863,
             'date' => '2017-04-12',
         ));
+        $actualPalletsNumber = DB::table('palletsaccounts')->where('name','account2')->value('theoricalNumberPallets');
+        Palletsaccount::where('name','account2')->update(['theoricalNumberPallets'=> $actualPalletsNumber+22]);
         Palletstransfer::create(array(
             'id' => 3,
             'palletsNumber' => '-33',
@@ -35,6 +40,8 @@ class PalletstransfersTableSeeder extends Seeder
             'loading_atrnr' => 2277925,
             'date' => '2017-02-25',
         ));
+        $actualPalletsNumber = DB::table('palletsaccounts')->where('name','account3')->value('theoricalNumberPallets');
+        Palletsaccount::where('name','account3')->update(['theoricalNumberPallets'=> $actualPalletsNumber-33]);
         Palletstransfer::create(array(
             'id' => 4,
             'palletsNumber' => '44',
@@ -42,6 +49,8 @@ class PalletstransfersTableSeeder extends Seeder
             'loading_atrnr' => 2277925,
             'date' => '2017-05-03',
         ));
+        $actualPalletsNumber = DB::table('palletsaccounts')->where('name','account4')->value('theoricalNumberPallets');
+        Palletsaccount::where('name','account4')->update(['theoricalNumberPallets'=> $actualPalletsNumber+44]);
         Palletstransfer::create(array(
             'id' => 5,
             'palletsNumber' => '-55',
@@ -49,6 +58,8 @@ class PalletstransfersTableSeeder extends Seeder
             'loading_atrnr' => 2278850,
             'date' => '2017-04-14',
         ));
+        $actualPalletsNumber = DB::table('palletsaccounts')->where('name','account5')->value('theoricalNumberPallets');
+        Palletsaccount::where('name','account5')->update(['theoricalNumberPallets'=> $actualPalletsNumber-55]);
         Palletstransfer::create(array(
             'id' => 6,
             'palletsNumber' => '66',
@@ -56,5 +67,7 @@ class PalletstransfersTableSeeder extends Seeder
             'loading_atrnr' => 2278850,
             'date' => '2017-05-19',
         ));
+        $actualPalletsNumber = DB::table('palletsaccounts')->where('name','account6')->value('theoricalNumberPallets');
+        Palletsaccount::where('name','account6')->update(['theoricalNumberPallets'=> $actualPalletsNumber+66]);
     }
 }
