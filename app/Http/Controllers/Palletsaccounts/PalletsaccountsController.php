@@ -57,7 +57,8 @@ class PalletsaccountsController extends Controller
     {
         $name = Input::get('name');
         $realNumberPallets = Input::get('realNumberPallets');
-        $warehousesAssociated=Input::get('warehousesAssociated');
+        $theoricalNumberPallets=$realNumberPallets;
+        $warehousesAssociatedName=Input::get('warehousesAssociated');
 
 //        $validateAddWarehouse = $request->validateAddWarehouse;
 //        $refuseAddWarehouse = $request->refuseAddWarehouse;
@@ -75,8 +76,13 @@ class PalletsaccountsController extends Controller
                 ->withInput();
         } else {
             Palletsaccount::create(
-                ['name' => $name, 'realNumberPallets' => $realNumberPallets]
+                ['name' => $name, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets'=>$theoricalNumberPallets]
             );
+
+            foreach($warehousesAssociatedName as $warehouseAName){
+                Warehouse::where('name',$warehouseAName)->update(['palletsaccount_name'=>$name]);
+            }
+
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
             return redirect('/allPalletsaccounts');
         }
@@ -153,18 +159,17 @@ class PalletsaccountsController extends Controller
     {
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts,name,'.$id,
-            'realNumberPallets' => 'required|integer',
             'warehousesAssociated'=>'required',
         );
         $validator = Validator::make(Input::all(), $rules);
-        // process the login
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
             $name = Input::get('name');
-            $realNumberPallets = Input::get('realNumberPallets');
+//            $realNumberPallets = Input::get('realNumberPallets');
             Palletsaccount::where('id', $id)->update(['name' => $name]);
 
             $warehousesAssociatedName=Input::get('warehousesAssociated');

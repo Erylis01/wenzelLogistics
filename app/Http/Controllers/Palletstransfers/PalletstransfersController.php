@@ -70,7 +70,6 @@ class PalletstransfersController extends Controller
      */
     public function add(Request $request)
     {
-
         $date = Input::get('date');
         $loading_atrnr = Input::get('loading_atrnr');
         $palletsAccount = Input::get('palletsAccount');
@@ -88,6 +87,8 @@ class PalletstransfersController extends Controller
                 ->withInput();
         } else {
             Palletstransfer::create(['date' => $date, 'loading_atrnr' => $loading_atrnr, 'palletsAccount' => $palletsAccount, 'palletsNumber' => $palletsNumber]);
+            $actualPalletsNumber = DB::table('palletsaccounts')->where('name', $palletsAccount)->value('theoricalNumberPallets');
+            Palletsaccount::where('name',$palletsAccount)->update(['theoricalNumberPallets'=> $actualPalletsNumber+$palletsNumber]);
 
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
             return redirect('/allPalletstransfers');
@@ -152,6 +153,9 @@ class PalletstransfersController extends Controller
             $loading_atrnr = Input::get('loading_atrnr');
             $palletsNumber = Input::get('palletsNumber');
             $palletsAccount = Input::get('palletsAccount');
+
+            $actualPalletsNumber = DB::table('palletsaccounts')->where('name', $palletsAccount)->value('theoricalNumberPallets');
+            Palletsaccount::where('name',$palletsAccount)->update(['theoricalNumberPallets'=> $actualPalletsNumber+$palletsNumber]);
 
             Palletstransfer::where('id', $id)->update(['date' => $date]);
             Palletstransfer::where('id', $id)->update(['loading_atrnr' => $loading_atrnr]);

@@ -69,11 +69,6 @@
                                                                    name="realNumberPallets"
                                                                    value="{{ $realNumberPallets }}" placeholder="Real pallets number"
                                                                    required readonly autofocus>
-                                                            @if ($errors->has('realNumberPallets'))
-                                                                <span class="help-block">
-                                        <strong>{{ $errors->first('realNumberPallets') }}</strong>
-                                    </span>
-                                                            @endif
                                                         </div>
 
                                                         <!--theorical number of pallets-->
@@ -229,7 +224,7 @@
                                                 <div class="general-pagination text-left">{!! $listPalletstransfers->render() !!}</div>
 
                                                 @if ($listPalletstransfers->currentPage()==$listPalletstransfers->lastPage())
-                                                    <div class="general-legend col-lg-offset-8">
+                                                    <div class="general-legend col-lg-offset-9">
                                                         Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
                                                         to {{$count}} of {{$count}} results
                                                     </div>
@@ -238,7 +233,7 @@
                                                         Showing 0 to 0 of 0 results
                                                     </div>
                                                 @else
-                                                    <div class="general-legend col-lg-offset-8">
+                                                    <div class="general-legend col-lg-offset-9">
                                                         Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
                                                         to @php($legend2= $listPalletstransfers->currentPage() * 5) {{$legend2}} of {{$count}}
                                                         results

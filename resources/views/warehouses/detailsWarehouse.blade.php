@@ -181,14 +181,14 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Pallets Account :</label>
+                                    <label for="namecontact" class="control-label"><a href="{{route('showDetailsPalletsaccount', \App\Palletsaccount::where('name',$namepalletsaccount)->first()->id)}}" class="link">Pallets Account :</a></label>
                                 </div>
                                 <div class="col-lg-6">
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Pallets Account" name="namepalletaccount">
+                                            title="Pallets Account" name="namepalletsaccount">
                                         @foreach($listPalletsAccounts as $palletsAccount )
-                                            @if($palletsAccount->name==$namepalletaccount)
+                                            @if($palletsAccount->name==$namepalletsaccount)
                                                 @php($option='selected')
                                                 <option {{$option}}>{{$palletsAccount->name}}</option>
                                             @else
