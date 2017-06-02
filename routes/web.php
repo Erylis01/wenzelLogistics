@@ -43,8 +43,6 @@ Route::delete('/detailsPalletsaccount/{id}', 'PalletsaccountsController@delete')
 Route::post('/addPalletsaccount', 'PalletsaccountsController@add')->name('addPalletsaccount');
 Route::get('addPalletsaccount', 'PalletsaccountsController@showAdd')->name('showAddPalletsaccount');
 
-Route::get('/totalPalletsaccounts', 'PalletsaccountsController@showTotal')->name('showTotalPalletsaccounts');
-
 //PALLETS TRANSFERS
 Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
 Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');

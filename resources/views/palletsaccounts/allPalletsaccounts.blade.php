@@ -52,7 +52,7 @@
                                     @php($class="text-success")
                                 @endif
                                 <tr>
-                                    <th class="text-center colName"><a href="{{route('showTotalPalletsaccounts')}}"
+                                    <th class="text-center colName"><a href="{{route('showAllPalletstransfers')}}"
                                                                        class="link">TOTAL</a></th>
                                     <th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span>
                                     </th>

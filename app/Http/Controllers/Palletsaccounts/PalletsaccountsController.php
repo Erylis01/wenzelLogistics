@@ -60,10 +60,6 @@ class PalletsaccountsController extends Controller
         $theoricalNumberPallets=$realNumberPallets;
         $warehousesAssociatedName=Input::get('warehousesAssociated');
 
-//        $validateAddWarehouse = $request->validateAddWarehouse;
-//        $refuseAddWarehouse = $request->refuseAddWarehouse;
-//        $namepalletaccount = Input::get('nameswarehouses');
-
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
             'warehousesAssociated'=> 'required',
@@ -119,31 +115,6 @@ class PalletsaccountsController extends Controller
 
             $count = count(DB::table('palletstransfers')->where([['palletsaccount_name', $name],['date', '>=', $limitDate]])->get());
             return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'theoricalNumberPallets','warehousesAssociated', 'count', 'links'));
-        } else {
-            return view('auth.login');
-        }
-    }
-
-    /**
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showTotal()
-    {
-        if (Auth::check()) {
-            $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
-//            $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
-//
-//            for ($k = 0; $k < 11; $k++) {
-//                $listWarehouses[] = 'w'.$k;
-//            }
-//
-//            $name = $palletsaccount->name;
-//            $realNumberPallets=$palletsaccount->realNumberPallets;
-//            $warehousesAssociated=['w1', 'w3','w5' ];
-//
-//            return view('palletsaccounts.detailsPalletsaccount', compact('listWarehouses', 'id', 'name', 'realNumberPallets', 'warehousesAssociated'));
-            return view('palletsaccounts.totalPalletsaccounts', compact('totalpallets'));
         } else {
             return view('auth.login');
         }

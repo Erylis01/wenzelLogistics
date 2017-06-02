@@ -22,9 +22,14 @@ class PalletstransfersController extends Controller
     {
 
         if (Auth::check()) {
-            $totalpallets = DB::table('palletstransfers')->sum('palletsNumber');
             $currentDate = Carbon::now();
             $limitDate = $currentDate->subDays(60)->format('Y-m-d');
+            $totalpallets = DB::table('palletstransfers')->where([
+                ['date', '>=', $limitDate],
+            ])->sum('palletsNumber');
+            $realTotalpallets = DB::table('palletstransfers')->where([
+                ['date', '>=', $limitDate],
+            ])->sum('realPalletsNumber');
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
@@ -42,7 +47,7 @@ class PalletstransfersController extends Controller
             $count = count(DB::table('palletstransfers')->where([
                 ['date', '>=', $limitDate],
             ])->get());
-            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'totalpallets', 'sortby', 'order', 'links', 'count'));
+            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'realTotalpallets','totalpallets', 'sortby', 'order', 'links', 'count'));
         } else {
             return view('auth.login');
         }

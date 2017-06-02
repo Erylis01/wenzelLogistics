@@ -32,7 +32,7 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general">
-                    <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-3">{{$totalpallets}} pallets</span><span class="col-lg-offset-3">
+                    <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-3">{{$totalpallets}} - {{$realTotalpallets}} pallets</span><span class="col-lg-offset-2">
                             <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add transfers</a>
                         </span></div>
 
