@@ -50,35 +50,53 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">ID <a
+                                    <th class="text-center">ID<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Date <a
+                                    <th class="text-center">Date<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Loading Atrnr <a
+                                    <th class="text-center">Loading Atrnr<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Pallets Account <a
+                                    <th class="text-center">Pallets Account<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Pallets Number <a
+                                    <th class="text-center">Theorical Pal. Nr<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>
+                                    </th>
+                                    <th class="text-center">Real Pal. Nr<br><a
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=desc')}}"></a>
+                                    </th>
+                                    <th class="text-center">Documents ?<br><a
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=documents&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=documents&order=desc')}}"></a>
+                                    </th>
+                                    <th class="text-center">State ?<br><a
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"></a>
                                     </th>
                                 </tr>
                                 </thead>
@@ -96,10 +114,21 @@
                                     <tr class={{$class}}>
                                         <td class="text-center"><a class="link" href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
-                                        <td class="text-center colDate">{{date('d-m-Y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center colRef"><a class="link" href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a></td>
-                                        <td class="text-center colAccount">{{$transfer->palletsaccount_name}}</td>
-                                        <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
+                                        <td class="text-center">{{date('d-m-Y', strtotime($transfer->date))}}</td>
+                                        <td class="text-center"><a class="link" href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a></td>
+                                        <td class="text-center">{{$transfer->palletsaccount_name}}</td>
+                                        <td class="text-center">{{$transfer->palletsNumber}}</td>
+                                        <td class="text-center">{{$transfer->realPalletsNumber}}</td>
+                                        @if($transfer->documents==false)
+                                            <td class="text-center">No</td>
+                                        @else
+                                            <td class="text-center">Yes</td>
+                                        @endif
+                                        @if($transfer->state==false)
+                                            <td class="text-center">No</td>
+                                        @else
+                                            <td class="text-center">Yes</td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -1,17 +1,6 @@
 
 
-.colNumber, .colDate{
-    max-width: 50px;
-}
-
 .colID{
     max-width: 20px;
 }
 
-.colRef{
-    max-width: 90px;
-}
-
-.colAccount{
-    max-width: 140px;
-}
