@@ -40,32 +40,36 @@
     overflow: hidden;
     z-index: 99;
     background-color: white;
-    width: 80px;
+    width: 70px;
     top: auto;
 }
 .col1b{
-    min-width: 80px;
-    width:80px;
+    min-width: 70px;
+    width:70px;
 }
 
 .colHeight{
-    height:70px;
+    min-height:48px;
 }
 
-.colMedium{
+.colOrt, .colKenn{
     min-width:150px;
 }
-.colLarge{
-    min-width:190px;
+.colSubfra, .colZus{
+    min-width:300px;
 }
-.colXLarge{
-    min-width:230px;
+.colAufr{
+    min-width:350px;
 }
-.colXSmall{
+.colArt{
     min-width:50px;
 }
-.colSmall{
-    min-width:90px;
+.colDate{
+    min-width:75px;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    padding:3px;
 }
 
 /*LOADING*/

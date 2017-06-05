@@ -110,8 +110,8 @@
                                         <table class="table table-hover table-bordered">
                                             <thead>
                                             <tr>
-                                                <th class="text-center">Real pallets number</th>
-                                                <th class="text-center">Theorical pallets number</th>
+                                                <th class="text-center">Confirmed pallets number</th>
+                                                <th class="text-center">Panned pallets number</th>
                                             </tr>
                                             </thead>
                                             <tbody>

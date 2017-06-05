@@ -48,161 +48,161 @@
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=atrnr&order=desc')}}"></a>
                                     </th>
                                     <th class="col1b colHeight"></th>
-                                    <th class="text-center colHeight">Ladedatum <a
+                                    <th class="text-center colHeight">Laded.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight">Entladedatum <a
+                                    <th class="text-center colHeight">Entladed.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight">Disp. <a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">Referenz<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight colLarge">Auftraggeber<br><a
+                                    {{--<th class="text-center colHeight">Disp. <a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight">Referenz<br><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    <th class="text-center colHeight">Auftraggeber<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colLarge">Beladestelle<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">Land <a
+                                    {{--<th class="text-center colHeight">Belad.<br><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    <th class="text-center colHeight">LadL.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=landb&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=landb&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight">Plz <a
+                                    <th class="text-center colHeight">LadP<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plzb&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plzb&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colSmall">Ort<br><a
+                                    <th class="text-center colHeight">LadO<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ortb&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ortb&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colLarge">Entladestelle<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">Land <a
+                                    {{--<th class="text-center colHeight">Entlad.<br><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    <th class="text-center colHeight">AblL.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=lande&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=lande&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight">Plz<a
+                                    <th class="text-center colHeight">AblP.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plze&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colSmall">Ort<br><a
+                                    <th class="text-center colHeight">AblO<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=orte&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight">Anzahl <a
+                                    <th class="text-center colHeight">Anz.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=anz&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=anz&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colXSmall">Art.<a
+                                    <th class="text-center colHeight">Art.<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=art&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=art&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colMedium">Ware<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">Gewicht<a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight colXSmall">Vol<a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=vol&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=vol&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">LDM<a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ldm&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ldm&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">Umsatz<a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight">Aufwand<a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight colXSmall">DB<a class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                     href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight colXSmall">Trp<a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight colXSmall">PT<a class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                     href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center colHeight colXLarge">Subfrächter<br><a
+                                    {{--<th class="text-center colHeight colMedium">Ware<br><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight">Gewicht<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight colXSmall">Vol<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=vol&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=vol&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight">LDM<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ldm&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ldm&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight">Umsatz<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight">Aufwand<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight colXSmall">DB<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                                                     {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight colXSmall">Trp<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    {{--<th class="text-center colHeight colXSmall">PT<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                                                     {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    <th class="text-center colHeight">Subfrächter<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight">Kennzeichen<a
+                                    <th class="text-center colHeight">Kennzeichen<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center colHeight colMedium">Zus. Ladestellen<a
+                                    <th class="text-center colHeight">Zus. Ladestellen<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
@@ -225,33 +225,33 @@
                                         <td class="text-center col1 colHeight"><a href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a>
                                         </td>
                                         <td class="col1b colHeight"></td>
-                                        <td class="text-center colHeight">{{date('d-m-Y', strtotime($loading->ladedatum))}}</td>
-                                        <td class="text-center colHeight">{{date('d-m-Y', strtotime($loading->entladedatum))}}</td>
-                                        <td class="text-center colHeight">{{$loading->disp}}</td>
-                                        <td class="text-center colHeight">{{$loading->referenz}}</td>
-                                        <td class="text-center colHeight">{{$loading->auftraggeber}}</td>
-                                        <td class="text-center colHeight">{{$loading->beladestelle}}</td>
+                                        <td class="text-center colHeight colDate">{{date('d-m-y', strtotime($loading->ladedatum))}}</td>
+                                        <td class="text-center colHeight colDate">{{date('d-m-y', strtotime($loading->entladedatum))}}</td>
+                                        {{--<td class="text-center colHeight">{{$loading->disp}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->referenz}}</td>--}}
+                                        <td class="text-center colHeight colAufr">{{$loading->auftraggeber}}</td>
+                                        {{--<td class="text-center colHeight colDestelle">{{$loading->beladestelle}}</td>--}}
                                         <td class="text-center colHeight">{{$loading->landb}}</td>
                                         <td class="text-center colHeight">{{$loading->plzb}}</td>
-                                        <td class="text-center colHeight">{{$loading->ortb}}</td>
-                                        <td class="text-center colHeight">{{$loading->entladestelle}}</td>
+                                        <td class="text-center colHeight colOrt">{{$loading->ortb}}</td>
+                                        {{--<td class="text-center colHeight colDestelle">{{$loading->entladestelle}}</td>--}}
                                         <td class="text-center colHeight">{{$loading->lande}}</td>
                                         <td class="text-center colHeight">{{$loading->plze}}</td>
-                                        <td class="text-center colHeight">{{$loading->orte}}</td>
+                                        <td class="text-center colHeight colOrt">{{$loading->orte}}</td>
                                         <td class="text-center colHeight">{{$loading->anz}}</td>
-                                        <td class="text-center colHeight">{{$loading->art}}</td>
-                                        <td class="text-center colHeight">{{$loading->ware}}</td>
-                                        <td class="text-center colHeight">{{$loading->gewicht}}</td>
-                                        <td class="text-center colHeight">{{$loading->vol}}</td>
-                                        <td class="text-center colHeight">{{$loading->ldm}}</td>
-                                        <td class="text-center colHeight">{{$loading->umsatz}}</td>
-                                        <td class="text-center colHeight">{{$loading->aufwand}}</td>
-                                        <td class="text-center colHeight">{{$loading->db}}</td>
-                                        <td class="text-center colHeight">{{$loading->trp}}</td>
-                                        <td class="text-center colHeight">{{$loading->pt}}</td>
-                                        <td class="text-center colHeight">{{$loading->subfrachter}}</td>
-                                        <td class="text-center colHeight">{{$loading->kennzeichen}}</td>
-                                        <td class="text-center colHeight">{{$loading->zusladestellen}}</td>
+                                        <td class="text-center colHeight colArt">{{$loading->art}}</td>
+                                        {{--<td class="text-center colHeight">{{$loading->ware}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->gewicht}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->vol}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->ldm}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->umsatz}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->aufwand}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->db}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->trp}}</td>--}}
+                                        {{--<td class="text-center colHeight">{{$loading->pt}}</td>--}}
+                                        <td class="text-center colHeight colSubfra">{{$loading->subfrachter}}</td>
+                                        <td class="text-center colHeight colKenn">{{$loading->kennzeichen}}</td>
+                                        <td class="text-center colHeight colZus">{{$loading->zusladestellen}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
