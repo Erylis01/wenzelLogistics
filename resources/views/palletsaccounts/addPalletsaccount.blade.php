@@ -40,10 +40,11 @@
                         <form class="form-horizontal text-right" role="form" method="POST"
                               action="{{route('addPalletsaccount')}}">
                             {{ csrf_field() }}
+                            <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
                                 <!--name-->
                                 <div class="col-lg-3">
-                                    <label for="name" class="control-label">Name :</label>
+                                    <label for="name" class="control-label"><span>*</span> Name :</label>
                                 </div>
                                 <div class="col-lg-6">
                                     <input id="name" type="text" class="form-control" name="name"
@@ -54,6 +55,29 @@
                                     </span>
                                     @endif
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <!--type-->
+                                <div class="col-lg-3">
+                                    <label for="type" class="control-label"><span>*</span> Type :</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <!-- if mistake in the adding form you are redirected with field already filled-->
+                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                                data-live-search="true" data-live-search-style="startsWith"
+                                                title="Type" name="type"
+                                                required>
+                                            @if(Illuminate\Support\Facades\Input::old('type'))
+                                                <option @if(old('type') == 'Carrier') selected @endif>Carrier</option>
+                                                <option @if(old('type') == 'Other') selected @endif>Other</option>
+                                                <option @if(old('type') == 'Warehouse') selected @endif>Warehouse</option>
+                                       @else
+                                                <option>Carrier</option>
+                                                <option>Other</option>
+                                                <option>Warehouse</option>
+                                            @endif
+                                        </select>
+                                </div>
                                 <!--number of pallets-->
                                 <div class="col-lg-2">
                                     <label for="realNumberPallets" class="control-label">Pallets Number
@@ -63,7 +87,7 @@
                                     <input id="realNumberPallets" type="number" class="form-control"
                                            name="realNumberPallets"
                                            value="0" placeholder="Pallets number"
-                                           required autofocus>
+                                           autofocus>
                                 </div>
                             </div>
 
@@ -75,35 +99,27 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">
-                                    {{--@if(isset($warehouseA))--}}
-                                        {{--<select class="selectpicker show-tick form-control" data-size="5"--}}
-                                                {{--data-live-search="true" data-live-search-style="startsWith"--}}
-                                                {{--title="Warehouses Associated" name="warehousesAssociated"--}}
-                                                {{--multiple>--}}
-                                            {{--@foreach($listWarehouses as $warehouse )--}}
-                                                {{--@php($list[]=null)--}}
-                                                {{--@foreach($warehousesAssociated as $warehouseA)--}}
-                                                    {{--@if($warehouse->name==$warehouseA->name)--}}
-                                                        {{--@php($option='selected')--}}
-                                                        {{--<option {{$option}}>{{$warehouse->name}}</option>--}}
-                                                        {{--@php($list[]=$warehouse)--}}
-                                                    {{--@endif--}}
-                                                {{--@endforeach--}}
-                                                {{--@if(!in_array($warehouse, $list))--}}
-                                                    {{--<option>{{$warehouse->name}}</option>--}}
-                                                {{--@endif--}}
-                                            {{--@endforeach--}}
-                                        {{--</select>--}}
-                                    {{--@else--}}
-                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                    <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Warehouses Associated" name="warehousesAssociated[]"
-                                                multiple required>
+                                                multiple>
                                             @foreach($listWarehouses as $warehouse )
-                                                <option>{{$warehouse->name}}</option>
+                                                @php($list[]=null)
+                                                @if(Illuminate\Support\Facades\Input::old('warehousesAssociated'))
+                                                    @foreach(old('warehousesAssociated') as $warehouseA)
+                                                    @if($warehouseA == $warehouse->name)
+                                                        <option  selected>{{$warehouse->name}}</option>
+                                                        @php($list[]=$warehouse)
+                                                    @endif
+                                                    @endforeach
+                                                    @if(!in_array($warehouse, $list))
+                                                        <option>{{$warehouse->name}}</option>
+                                                    @endif
+                                                @else
+                                                    <option>{{$warehouse->name}}</option>
+                                                @endif
                                             @endforeach
                                         </select>
-                                    {{--@endif--}}
                                 </div>
                                 <div class="col-lg-3 text-left">
                                     <a href="{{route('showAddWarehouse')}}" class="link"><span

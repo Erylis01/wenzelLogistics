@@ -40,6 +40,9 @@ class PalletsaccountsController extends Controller
         }
     }
 
+    /** show the add form
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showAdd()
     {
         if (Auth::check()) {
@@ -55,14 +58,22 @@ class PalletsaccountsController extends Controller
      */
     public function add(Request $request)
     {
+        //get data
         $name = Input::get('name');
+        $type = Input::get('type');
         $realNumberPallets = Input::get('realNumberPallets');
         $theoricalNumberPallets=$realNumberPallets;
         $warehousesAssociatedName=Input::get('warehousesAssociated');
+        if(isset($warehousesAssociatedName)){
+            foreach ($warehousesAssociatedName as $nameWarehouse) {
+                $idwarehouses[] = Warehouse::where('name', $nameWarehouse)->value('id');
+            }
+        }
 
+
+        //validation
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
-            'warehousesAssociated'=> 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
 
@@ -71,13 +82,20 @@ class PalletsaccountsController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            Palletsaccount::create(
-                ['name' => $name, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets'=>$theoricalNumberPallets]
-            );
+            if(isset($warehousesAssociatedName)) {
+                dd($type);
+                Palletsaccount::create(
+                    ['name' => $name, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
+                )->warehouse()->sync($idwarehouses);
+            }else{
+                Palletsaccount::create(
+                    ['name' => $name, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
+                );
 
-            foreach($warehousesAssociatedName as $warehouseAName){
-                Warehouse::where('name',$warehouseAName)->update(['palletsaccount_name'=>$name]);
             }
+//            foreach($warehousesAssociatedName as $warehouseAName){
+//                Warehouse::where('name',$warehouseAName)->update(['palletsaccount_name'=>$name]);
+//            }
 
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
             return redirect('/allPalletsaccounts');
@@ -85,6 +103,7 @@ class PalletsaccountsController extends Controller
     }
 
     /**
+     * show a specific pallets account
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -128,6 +147,7 @@ class PalletsaccountsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts,name,'.$id,
             'warehousesAssociated'=>'required',
@@ -153,6 +173,10 @@ class PalletsaccountsController extends Controller
         }
     }
 
+    /** delete a specific pallets account
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function delete($id)
     {
         DB::table('palletsaccounts')->where('id', $id)->delete();

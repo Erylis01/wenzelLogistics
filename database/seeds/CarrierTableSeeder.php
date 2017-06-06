@@ -35,18 +35,18 @@ class CarrierTableSeeder extends Seeder
                                 if(trim($sheet[$r][26])==null){
                                     Palletsaccount::firstOrCreate([
                                         'name' => trim($sheet[$r][25]),
-                                        'type'=>'carrier',
+                                        'type'=>'Carrier',
                                     ]);
                                     Carrier::firstOrCreate([
                                         'name' => trim($sheet[$r][25]),
                                         'licensePlate' => 'OTHER',
                                         'palletsaccount_name'=>trim($sheet[$r][25]),
                                     ]);
-//                                    dd(Palletsaccount::where('type', 'carrier')->value('name'));
+//                                    dd(Palletsaccount::where('type', 'Carrier')->value('name'));
                                 }else{
                                     Palletsaccount::firstOrCreate([
                                         'name' => trim($sheet[$r][26]).' - '.trim($sheet[$r][25]),
-                                        'type'=>'carrier',
+                                        'type'=>'Carrier',
                                     ]);
                                     Carrier::firstOrCreate([
                                         'name' => trim($sheet[$r][25]),

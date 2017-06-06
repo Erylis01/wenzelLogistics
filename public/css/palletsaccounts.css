@@ -11,7 +11,7 @@
 /*PANELS*/
 
 .panel-palletsaccounts{
-    width:350px;
+    width:500px;
     padding:0px;
 }
 
@@ -20,8 +20,9 @@
 }
 
 .panel-palletsaccounts-details{
-    width:700px;
+    width:600px;
     padding:0px;
+    margin-left: 60px;
 }
 
 /*TABLE*/
@@ -49,7 +50,13 @@
  }
 
 .colName{
-    min-width:258px;
+    min-width:312px;
+}
+.colType{
+    min-width:96px;
+}
+.colTot{
+    min-width:408px;
 }
 
 .colTotal{

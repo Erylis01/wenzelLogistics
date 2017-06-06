@@ -42,6 +42,7 @@ class WarehousesController extends Controller
      */
     public function add(Request $request)
     {
+        //get data
         $zipcode = Input::get('zipcode');
         $zipcodeWarehouses = DB::table('warehouses')->where('zipcode', '=', $zipcode)->get();
         $validateAddWarehouse = $request->validateAddWarehouse;
@@ -55,10 +56,11 @@ class WarehousesController extends Controller
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
         $namepalletsaccounts = Input::get('namepalletsaccounts');
-        foreach ($namepalletsaccounts as $namePA){
-            $idpalletsaccounts[]=Palletsaccount::where('name',$namePA )->value('id');
+        foreach ($namepalletsaccounts as $namePA) {
+            $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
         }
 
+        //validation
         $rules = array(
             'zipcode' => 'required',
             'name' => 'required|string|max:255|unique:warehouses',
@@ -81,24 +83,28 @@ class WarehousesController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
+//if there is an other warehouse in this city : be careful
             if (!$zipcodeWarehouses->isEmpty()) {
                 if (isset($validateAddWarehouse)) {
+                    //you validate creating a new warehouse even if there is an other one in the city
                     Warehouse::create(
                         ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                     )->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                     return redirect('/allWarehouses');
                 } elseif (isset($refuseAddWarehouse)) {
+                    //if after the warning message you refuse to add this warehouse : redirect with filled field to change them
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
                     return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 } else {
+                    //redirect to the add form with a pop up warning about the zipcode
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
                     return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 }
             } else {
+                //if no other warehouse in the city
                 Warehouse::create(
                     ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                 )->palletsaccounts()->sync($idpalletsaccounts);
@@ -144,10 +150,10 @@ class WarehousesController extends Controller
             $fax = $warehouse->fax;
             $email = $warehouse->email;
             $namecontact = $warehouse->namecontact;
-            $palletsaccounts =DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get() ;
-            foreach ($palletsaccounts as $palletsaccount){
-                $idpalletsaccounts[]=$palletsaccount->palletsaccount_id;
-                $namepalletsaccounts[]=Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('name');
+            $palletsaccounts = DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get();
+            foreach ($palletsaccounts as $palletsaccount) {
+                $idpalletsaccounts[] = $palletsaccount->palletsaccount_id;
+                $namepalletsaccounts[] = Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('name');
             }
 
             return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
@@ -164,11 +170,12 @@ class WarehousesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //get data
         $validateUpdateWarehouse = $request->validateUpdateWarehouse;
         $refuseUpdateWarehouse = $request->refuseUpdateWarehouse;
         $namepalletsaccounts = Input::get('namepalletsaccounts');
-        foreach ($namepalletsaccounts as $namePA){
-            $idpalletsaccounts[]=Palletsaccount::where('name',$namePA )->value('id');
+        foreach ($namepalletsaccounts as $namePA) {
+            $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
         }
         $name = Input::get('name');
         $adress = Input::get('adress');
@@ -184,6 +191,7 @@ class WarehousesController extends Controller
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
 
+        //validation
         $rules = array(
             'zipcode' => 'required',
             'name' => 'required|string|max:255|unique:warehouses,name,' . $id,
@@ -206,6 +214,7 @@ class WarehousesController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+            //same warning as in the add form when there is already an other warehouse in the same city
             if (isset($zipcodeWarehouses) && !$zipcodeWarehouses->isEmpty()) {
                 if (isset($validateUpdateWarehouse)) {
                     Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);

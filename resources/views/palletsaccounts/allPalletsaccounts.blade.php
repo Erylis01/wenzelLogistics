@@ -32,7 +32,8 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general col-lg-6 panel-palletsaccounts">
-                    <div class="panel-heading">Total of pallets by account</div>
+                    <div class="panel-heading">Total of pallets by account <span class="col-lg-offset-1"><a href="{{route('showAddPalletsaccount')}}" class=" btn btn-add"><span
+                                        class="glyphicon glyphicon-plus-sign"></span> Add account</a></span></div>
 
                     <div class="panel-body">
                         @if (Session::has('messageDeletePalletsaccount'))
@@ -52,7 +53,7 @@
                                     @php($class="text-success")
                                 @endif
                                 <tr>
-                                    <th class="text-center colName"><a href="{{route('showAllPalletstransfers')}}"
+                                    <th class="text-center colTot"><a href="{{route('showAllPalletstransfers')}}"
                                                                        class="link">TOTAL</a></th>
                                     <th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span>
                                     </th>
@@ -71,6 +72,11 @@
                                                 href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a></th>
+                                    <th class="text-center colType">Type<br><a
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                href="{{url('/allPalletsaccounts?sortby=type&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                href="{{url('/allPalletsaccounts?sortby=type&order=desc')}}"></a></th>
                                     <th class="text-center colTotal">Total<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=asc')}}"></a><a
@@ -83,25 +89,22 @@
                                 @foreach($listPalletsaccounts as $palletsaccount)
                                     <tr>
                                         <td class="text-center colName"><a
-                                                    href="#{{str_replace(' ', '', $palletsaccount->name)}}-collapse"
+                                                    href="#{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
                                                     data-toggle="collapse"
                                                     class="link">{{$palletsaccount->name}}</a></td>
+                                        <td class="text-center colType">{{$palletsaccount->type}}</td>
                                         <td class="text-center colTotal">{{$palletsaccount->realNumberPallets}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-lg-offset-2 col-lg-8">
-                            <a href="{{route('showAddPalletsaccount')}}" class="btn btn-add btn-block"><span
-                                        class="glyphicon glyphicon-plus-sign"></span> Add account</a>
-                        </div>
                     </div>
                 </div>
 
                 @foreach($listPalletsaccounts as $palletsaccount)
-                    <div id="{{str_replace(' ', '', $palletsaccount->name)}}-collapse"
-                         class="panel panel-general col-lg-8 col-lg-offset-1 panel-palletsaccounts-details collapse">
+                    <div id="{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
+                         class="panel panel-general col-lg-8 panel-palletsaccounts-details collapse">
                         <div class="panel-heading">Account n° {{$palletsaccount->id}} : {{$palletsaccount->name}}</div>
                         <div class="panel-body">
                             <form class="form-horizontal" role="form" method="POST" action="">
@@ -138,8 +141,6 @@
                                             @endforeach
                                         </ul>
                                     </div>
-                                    {{--id="warehousesAssociated" type="text" class="form-control" name="warehousesAssociated"--}}
-                                    {{--value="" placeholder="Warehouses associated" readonly>--}}
                                 </div>
 
                                 <div class="form-group">

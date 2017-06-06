@@ -158,11 +158,11 @@
                                         <input id="phone" type="text" class="form-control" name="phone"
                                                value="{{old('phone')}}" placeholder="Phone" autofocus>
                                     @endif
-                                    {{--@if ($errors->has('phone'))--}}
-                                    {{--<span class="help-block">--}}
-                                    {{--<strong>{{ $errors->first('phone') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
+                                    @if ($errors->has('phone'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <!--fax-->
                                 <div class="col-lg-2">
@@ -176,11 +176,11 @@
                                         <input id="fax" type="text" class="form-control" name="fax"
                                                value="{{old('fax')}}" placeholder="Fax" autofocus>
                                     @endif
-                                    {{--@if ($errors->has('fax'))--}}
-                                    {{--<span class="help-block">--}}
-                                    {{--<strong>{{ $errors->first('fax') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
+                                    @if ($errors->has('fax'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('fax') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -197,11 +197,11 @@
                                         <input id="email" type="text" class="form-control" name="email"
                                                value="{{old('email')}}" placeholder="Email" autofocus>
                                     @endif
-                                    {{--@if ($errors->has('email'))--}}
-                                    {{--<span class="help-block">--}}
-                                    {{--<strong>{{ $errors->first('email') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
+                                    @if ($errors->has('email'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -229,39 +229,32 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Pallet Account
+                                    <label for="namecontact" class="control-label"><span>*</span> Pallet Account
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
-                                    @if(isset($namepalletsaccounts))
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Pallets Accounts" name="namepalletsaccounts[]"
                                                 multiple>
                                             @foreach($listPalletsAccounts as $palletsAccount )
                                                 @php($list[]=null)
-                                                @foreach($namepalletsaccounts as $namePA)
-                                                    @if($palletsAccount->name==$namePA)
-                                                        @php($option='selected')
-                                                        <option {{$option}}>{{$palletsAccount->name}}</option>
-                                                        @php($list[]=$palletsAccount)
+                                                @if(Illuminate\Support\Facades\Input::old('namepalletsaccounts'))
+                                                    @foreach(old('namepalletsaccounts') as $namePA)
+                                                        @if($palletsAccount->name==$namePA)
+                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                            @php($list[]=$palletsAccount)
+                                                        @endif
+                                                    @endforeach
+                                                    @if(!in_array($palletsAccount, $list))
+                                                        <option>{{$palletsAccount->name}}</option>
                                                     @endif
-                                                @endforeach
-                                                @if(!in_array($palletsAccount, $list))
+                                                @else
                                                     <option>{{$palletsAccount->name}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
-                                    @else
-                                        <select class="selectpicker show-tick form-control" data-size="5"
-                                                data-live-search="true" data-live-search-style="startsWith"
-                                                title="Pallets Accounts" name="namepalletsaccounts[]" required multiple>
-                                            @foreach($listPalletsAccounts as $palletsAccount )
-                                                <option>{{$palletsAccount->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    @endif
                                 </div>
                                 <div class="col-lg-3 text-left">
                                     <a href="{{route('showAddPalletsaccount')}}" class="link"><span
