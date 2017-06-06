@@ -5,6 +5,39 @@
     height: 50px;
 }
 
+.navbar-logo{
+     padding:0px;
+     width:10%;
+ }
+
+.navbar-loading{
+    padding:0px;
+    width:131px;
+}
+.navbar-warehouse{
+    padding:0px;
+    width:161px;
+}
+.navbar-carrier{
+     padding:0px;
+     width:121px;
+ }
+
+.navbar-accounts{
+    padding:0px;
+    width:197px;
+}
+.navbar-transfers{
+    padding:0px;
+    width:199px;
+}
+
+
+.navbar-size2{
+    padding:0px;
+    width:20%;
+}
+
 .navbar-title {
     background-color: rgba(0, 160, 0, 0.8);
     vertical-align: middle;

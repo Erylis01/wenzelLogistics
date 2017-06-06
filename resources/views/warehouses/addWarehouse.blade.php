@@ -14,6 +14,9 @@
 @section('classWarehouses')
     class="active"
 @endsection
+@section('classCarriers')
+    class="nonActive"
+@endsection
 @section('classPalletsAccounts')
     class="nonActive"
 @endsection
@@ -229,7 +232,7 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label"><span>*</span> Pallet Account
+                                    <label for="namepalletsaccounts" class="control-label"><span>*</span> Pallet Account
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">

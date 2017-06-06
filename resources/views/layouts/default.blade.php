@@ -29,7 +29,7 @@
     <nav class="navbar navbar-default navbar-static-top navbar-title">
 
         <div class="container-fluid">
-            <div class="col-lg-2">
+            <div class="col-lg-2 navbar-logo">
                 <a href="{{route('home')}}"> <img class="img-responsive img-logo"
                                                   src="{{URL::asset('/image/wenzel_logistics.png')}}"
                                                   alt="Wenzel Logistics logo"></a>
@@ -45,20 +45,23 @@
                     <a class="navbar-title-link" href="{{ route('register') }}">Register</a>
                 </div>
             @else
-                <div class="col-lg-2 text-center navbar-title-link">
+                <div class="col-lg-1 text-center navbar-loading navbar-title-link">
                     <a @yield('classLoadings') href="{{ route('showAllLoadings') }}">Loadings</a>
                 </div>
-                <div class="col-lg-2 text-center navbar-title-link">
+                <div class="col-lg-2 text-center navbar-warehouse navbar-title-link">
                     <a @yield('classWarehouses') href="{{ route('showAllWarehouses') }}">Warehouses</a>
                 </div>
-                <div class="col-lg-2 text-center navbar-title-link">
+                <div class="col-lg-2 text-center navbar-carrier navbar-title-link">
+                    <a @yield('classCarriers') href="{{ route('showAllCarriers') }}">Carriers</a>
+                </div>
+                <div class="col-lg-2 text-center navbar-accounts navbar-title-link">
                     <a @yield('classPalletsAccounts') href="{{ route('showAllPalletsaccounts') }}">Pallets Accounts</a>
                 </div>
-                <div class="col-lg-2 text-center navbar-title-link">
+                <div class="col-lg-2 text-center navbar-transfers navbar-title-link">
                     <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}">Pallets Transfers</a>
                 </div>
 
-                <div class="col-lg-2 text-center dropdown">
+                <div class="col-lg-2 col-lg-offset-1 text-center dropdown">
                     <a href="#" class="dropdown-toggle navbar-title-link @yield('classProfile') "  data-toggle="dropdown" role="button"
                        aria-expanded="false">
                         {{ Auth::user()->username }} <span class="caret"></span>

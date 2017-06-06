@@ -14,6 +14,9 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
+@section('classCarriers')
+    class="nonActive"
+@endsection
 @section('classPalletsAccounts')
     class="nonActive"
 @endsection
@@ -60,6 +63,19 @@
                         </div>
                     </a>
 
+                    <!-- All carriers -->
+                    <a href="{{ route('showAllCarriers') }}">
+                        <div class="col-lg-3 text-center">
+                            <div class="service-box">
+                                <h3 class="menu-title">Carriers</h3>
+                                <img class="img-responsive center-block img-home"
+                                     src="{{URL::asset('/image/truck.jpg')}}"
+                                     alt="carrier image">
+                                <p class="text-muted menu-legend">Show all carriers</p>
+                            </div>
+                        </div>
+                    </a>
+
                     <!-- All pallets accounts -->
                     <a href="{{ route('showAllPalletsaccounts') }}">
                         <div class="col-lg-3 text-center ">
@@ -67,24 +83,24 @@
                                 <h3 class="menu-title">Pallets Accounts</h3>
                                 <img class="img-responsive img-home center-block"
                                      src="{{URL::asset('/image/account2.jpg')}}"
-                                     alt="warehouse image">
+                                     alt="pallets account image">
                                 <p class="text-muted menu-legend">Show all pallets accounts</p>
                             </div>
                         </div>
                     </a>
 
-                    <!-- All pallets transfers -->
-                    <a href="{{ route('showAllPalletstransfers') }}">
-                        <div class="col-lg-3 text-center ">
-                            <div class="service-box">
-                                <h3 class="menu-title">Pallets Transfers</h3>
-                                <img class="img-responsive img-home center-block"
-                                     src="{{URL::asset('/image/pallets.png')}}"
-                                     alt="warehouse image">
-                                <p class="text-muted menu-legend">Show all pallets transfers</p>
-                            </div>
-                        </div>
-                    </a>
+                    {{--<!-- All pallets transfers -->--}}
+                    {{--<a href="{{ route('showAllPalletstransfers') }}">--}}
+                        {{--<div class="col-lg-3 text-center ">--}}
+                            {{--<div class="service-box">--}}
+                                {{--<h3 class="menu-title">Pallets Transfers</h3>--}}
+                                {{--<img class="img-responsive img-home center-block"--}}
+                                     {{--src="{{URL::asset('/image/pallets.png')}}"--}}
+                                     {{--alt="pallets transfer image">--}}
+                                {{--<p class="text-muted menu-legend">Show all pallets transfers</p>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</a>--}}
                 </div>
             </div>
         </div>

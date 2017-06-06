@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrier;
 use App\Loading;
+use App\Palletsaccount;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
@@ -110,6 +112,31 @@ class ListLoadingsController extends Controller
                                     'kennzeichen' => trim($sheet[$r][26]),
                                     'zusladestellen' => trim($sheet[$r][27]),
                                 ]);
+                            }
+                            $carrierTest = DB::table('carriers')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
+                            if ($carrierTest == null) {
+                                //not double
+                                if(trim($sheet[$r][26])==null){
+                                    Palletsaccount::firstOrCreate([
+                                        'name' => trim($sheet[$r][25]),
+                                        'type'=>'Carrier',
+                                    ]);
+                                    Carrier::firstOrCreate([
+                                        'name' => trim($sheet[$r][25]),
+                                        'licensePlate' => 'OTHER',
+                                        'palletsaccount_name'=>trim($sheet[$r][25]),
+                                    ]);
+                                }else{
+                                    Palletsaccount::firstOrCreate([
+                                        'name' => trim($sheet[$r][26]).' - '.trim($sheet[$r][25]),
+                                        'type'=>'Carrier',
+                                    ]);
+                                    Carrier::firstOrCreate([
+                                        'name' => trim($sheet[$r][25]),
+                                        'licensePlate' => trim($sheet[$r][26]),
+                                        'palletsaccount_name'=>trim($sheet[$r][26]).' - '.trim($sheet[$r][25]),
+                                    ]);
+                                }
                             }
                         }
                     }

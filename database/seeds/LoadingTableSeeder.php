@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Loading;
-
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LoadingTableSeeder extends Seeder

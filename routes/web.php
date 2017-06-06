@@ -33,7 +33,15 @@ Route::get('/detailsWarehouse/{id}', 'WarehousesController@showDetails')->name('
 Route::post('/detailsWarehouse/{id}', 'WarehousesController@update')->name('updateWarehouse');
 Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
 Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
-Route::get('addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
+Route::get('/addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
+
+//WAREHOUSES
+Route::get('/allCarriers', 'CarriersController@showAll')->name('showAllCarriers');
+Route::get('/detailsCarrier/{id}', 'CarriersController@showDetails')->name('showDetailsCarrier');
+Route::post('/detailsCarrier/{id}', 'CarriersController@update')->name('updateCarrier');
+Route::delete('/detailsCarrier/{id}', 'CarriersController@delete')->name('deleteCarrier');
+Route::post('/addCarrier', 'CarriersController@add')->name('addCarrier');
+Route::get('/addCarrier', 'CarriersController@showAdd')->name('showAddCarrier');
 
 //PALLETS ACCOUNTS
 Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
@@ -41,12 +49,12 @@ Route::get('/detailsPalletsaccount/{id}', 'PalletsaccountsController@showDetails
 Route::post('/detailsPalletsaccount/{id}', 'PalletsaccountsController@update')->name('updatePalletsaccount');
 Route::delete('/detailsPalletsaccount/{id}', 'PalletsaccountsController@delete')->name('deletePalletsaccount');
 Route::post('/addPalletsaccount', 'PalletsaccountsController@add')->name('addPalletsaccount');
-Route::get('addPalletsaccount', 'PalletsaccountsController@showAdd')->name('showAddPalletsaccount');
+Route::get('/addPalletsaccount', 'PalletsaccountsController@showAdd')->name('showAddPalletsaccount');
 
 //PALLETS TRANSFERS
 Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
 Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');
-Route::get('addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
+Route::get('/addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
 Route::get('/detailsPalletstransfer/{id}', 'PalletstransfersController@showDetails')->name('showDetailsPalletstransfer');
 Route::post('/detailsPalletstransfer/{id}', 'PalletstransfersController@update')->name('updatePalletstransfer');
 Route::post('/detailsPalletstransfer/{id}/{palletsaccount_name}', 'PalletstransfersController@saveVerification')->name('saveVerificationPalletstransfer');
