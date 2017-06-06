@@ -18,8 +18,14 @@ class CreatePalletsaccountsTable extends Migration
             $table->string('name')->unique();
             $table->integer('realNumberPallets')->nullable();
             $table->integer('theoricalNumberPallets')->nullable();
+            $table->string('type');
+
             $table->timestamps();
         });
+//        Schema::create('palletsaccount_warehouse',function (Blueprint $table) {
+//
+//        });
+
     }
 
     /**

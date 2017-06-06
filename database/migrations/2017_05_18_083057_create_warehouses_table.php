@@ -15,7 +15,7 @@ class CreateWarehousesTable extends Migration
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->increments('id')->unique();
-            $table->string('palletsaccount_name')->nullable();
+//            $table->string('palletsaccount_name');
             $table->string('name')->unique();
             $table->string('adress');
             $table->integer('zipcode')->unsigned();
@@ -28,7 +28,15 @@ class CreateWarehousesTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccount');
+//            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccount');
+        });
+
+        Schema::create('palletsaccount_warehouse',function (Blueprint $table) {
+$table->increments('id');
+$table->integer('palletsaccount_id')->unsigned();
+            $table->integer('warehouse_id')->unsigned();
+            $table->foreign('palletsaccount_id')->references('id')->on('palletsaccounts')->onDelete('cascade');
+            $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
         });
 
 

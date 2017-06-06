@@ -97,8 +97,9 @@
                                                             @endif
                                                         </div>
                                                         </div>
-                                                        <!--change pt-->
-                                                        <!--pt-->
+
+                                                        <!--pt change pt-->
+                                                        @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname='Adrien' ||Auth::user()->username=='A' )
                                                         <div class="col-lg-2 col-lg-offset-2">
                                                             <div class="input-group details-loading">
                                                                 <label for="pt" class="input-group-addon">PT
@@ -111,6 +112,7 @@
                                                                        value="{{ $pt }}">
                                                             </div>
                                                         </div>
+                                                            @endif
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-lg-12">

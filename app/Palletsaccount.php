@@ -11,7 +11,11 @@ class Palletsaccount extends Model
     ];
 
     public function warehouses(){
-        return $this->hasMany('App\Warehouse','palletsaccount_name', 'name');
+        return $this->belongsToMany('App\Warehouse','palletsaccount_warehouse');
+    }
+
+    public function carrier(){
+        return $this->hasOne('App\Carrier','palletsaccount_name', 'name');
     }
 
     public function palletstransfers(){

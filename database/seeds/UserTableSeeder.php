@@ -22,7 +22,7 @@ class UserTableSeeder extends Seeder
             'username' => 'Erylis01',
             'initials'=>'tePi',
             'email'    => 'coquerelpierre@gmail.com',
-            'password' => Hash::make('test'),
+            'password' => Hash::make('testtest'),
             'activated'=> true,
             'email_token'=>'1234567890'
 
@@ -34,7 +34,7 @@ class UserTableSeeder extends Seeder
             'username' => 'Camille',
             'initials'=>'teCa',
             'email'    => 'camillesamain.56@gmail.com',
-            'password' => Hash::make('test'),
+            'password' => Hash::make('testtest'),
             'activated'=> true,
             'email_token'=>'1234657089'
 

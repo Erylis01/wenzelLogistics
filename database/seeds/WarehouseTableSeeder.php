@@ -25,7 +25,7 @@ class WarehouseTableSeeder extends Seeder
             'fax'=>'fax1',
             'email'=>'email1',
             'namecontact'=>'contact1',
-            'palletsaccount_name'=>'account1',
+//            'palletsaccount_name'=>'account1',
         ));
         Warehouse::create(array(
             'id' => 2,
@@ -38,7 +38,7 @@ class WarehouseTableSeeder extends Seeder
             'fax'=>'fax2',
             'email'=>'email2',
             'namecontact'=>'contact2',
-            'palletsaccount_name'=>'account1',
+//            'palletsaccount_name'=>'account1',
         ));
 
         Warehouse::create(array(
@@ -52,7 +52,7 @@ class WarehouseTableSeeder extends Seeder
             'fax'=>'fax3',
             'email'=>'email3',
             'namecontact'=>'contact3',
-            'palletsaccount_name'=>'account3',
+//            'palletsaccount_name'=>'account3',
         ));
 
         Warehouse::create(array(
@@ -66,6 +66,7 @@ class WarehouseTableSeeder extends Seeder
             'fax'=>'fax44',
             'email'=>'email44',
             'namecontact'=>'contact44',
+//            'palletsaccount_name'=>'account44',
         ));
 
 
