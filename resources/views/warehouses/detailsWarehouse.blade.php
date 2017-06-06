@@ -200,6 +200,16 @@
                                             @if(!in_array($palletsAccount, $list))
                                                 <option>{{$palletsAccount->name}}</option>
                                             @endif
+                                                    @elseif(isset($namepalletsaccounts))
+                                                        @foreach($namepalletsaccounts as $namePA)
+                                                            @if($palletsAccount->name==$namePA)
+                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                @php($list[]=$palletsAccount)
+                                                            @endif
+                                                        @endforeach
+                                                        @if(!in_array($palletsAccount, $list))
+                                                            <option>{{$palletsAccount->name}}</option>
+                                                        @endif
                                             @else
                                                 <option>{{$palletsAccount->name}}</option>
                                             @endif

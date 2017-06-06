@@ -152,7 +152,6 @@ class WarehousesController extends Controller
             $namecontact = $warehouse->namecontact;
             $palletsaccounts = DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get();
             foreach ($palletsaccounts as $palletsaccount) {
-                $idpalletsaccounts[] = $palletsaccount->palletsaccount_id;
                 $namepalletsaccounts[] = Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('name');
             }
 

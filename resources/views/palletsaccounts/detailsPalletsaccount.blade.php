@@ -87,26 +87,39 @@
                                                     <div class="form-group">
                                                     <!--warehouses associated-->
                                                     <div class="col-lg-3">
-                                                        <label for="warehousesAssociated" class="control-label">Warehouses
+                                                        <label for="namewarehouses" class="control-label">Warehouses
                                                             associated
                                                             :</label>
                                                     </div>
                                                     <div class="col-lg-7">
+
                                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                                 data-live-search="true" data-live-search-style="startsWith"
-                                                                title="Warehouses Associated" name="warehousesAssociated[]"
+                                                                title="Warehouses Associated" name="namewarehouses[]"
                                                                 multiple>
                                                             @foreach($listWarehouses as $warehouse )
                                                                 @php($list[]=null)
-                                                                @foreach($warehousesAssociated as $warehouseA)
-
-                                                                    @if($warehouse->name==$warehouseA->name)
-                                                                        @php($option='selected')
-                                                                        <option {{$option}}>{{$warehouse->name}}</option>
-                                                                        @php($list[]=$warehouse)
+                                                                @if(Illuminate\Support\Facades\Input::old('namewarehouses'))
+                                                                    @foreach(old('namewarehouses') as $warehouseA)
+                                                                        @if($warehouseA == $warehouse->name)
+                                                                            <option  selected>{{$warehouse->name}}</option>
+                                                                            @php($list[]=$warehouse)
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @if(!in_array($warehouse, $list))
+                                                                        <option>{{$warehouse->name}}</option>
                                                                     @endif
-                                                                @endforeach
-                                                                @if(!in_array($warehouse, $list))
+                                                                        @elseif(isset($namewarehouses))
+                                                                            @foreach($namewarehouses as $warehouseA)
+                                                                                @if($warehouseA == $warehouse->name)
+                                                                                    <option  selected>{{$warehouse->name}}</option>
+                                                                                    @php($list[]=$warehouse)
+                                                                                @endif
+                                                                            @endforeach
+                                                                            @if(!in_array($warehouse, $list))
+                                                                                <option>{{$warehouse->name}}</option>
+                                                                            @endif
+                                                                @else
                                                                     <option>{{$warehouse->name}}</option>
                                                                 @endif
                                                             @endforeach
