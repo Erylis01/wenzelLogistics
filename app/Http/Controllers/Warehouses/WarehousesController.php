@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Palletsaccount;
 use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,11 +54,14 @@ class WarehousesController extends Controller
         $fax = Input::get('fax');
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
-        $namepalletsaccount = Input::get('namepalletsaccount');
+        $namepalletsaccounts = Input::get('namepalletsaccounts');
+        foreach ($namepalletsaccounts as $namePA){
+            $idpalletsaccounts[]=Palletsaccount::where('name',$namePA )->value('id');
+        }
 
         $rules = array(
             'zipcode' => 'required',
-            'name' => 'required|string|max:255|unique:warehouses,name,' . $id,
+            'name' => 'required|string|max:255|unique:warehouses',
             'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
@@ -81,23 +85,24 @@ class WarehousesController extends Controller
             if (!$zipcodeWarehouses->isEmpty()) {
                 if (isset($validateAddWarehouse)) {
                     Warehouse::create(
-                        ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact, 'palletsaccount_name'=>$namepalletsaccount]
-                    );
+                        ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
+                    )->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                     return redirect('/allWarehouses');
                 } elseif (isset($refuseAddWarehouse)) {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
-                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccount'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 } else {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
-                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccount'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 }
             } else {
                 Warehouse::create(
-                    ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact, 'palletsaccount_name'=>$namepalletsaccount]
-                );
+                    ['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
+                )->palletsaccounts()->sync($idpalletsaccounts);
+
                 session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                 return redirect('/allWarehouses');
             }
@@ -139,9 +144,13 @@ class WarehousesController extends Controller
             $fax = $warehouse->fax;
             $email = $warehouse->email;
             $namecontact = $warehouse->namecontact;
-            $namepalletsaccount = $warehouse->palletsaccount_name;
+            $palletsaccounts =DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get() ;
+            foreach ($palletsaccounts as $palletsaccount){
+                $idpalletsaccounts[]=$palletsaccount->palletsaccount_id;
+                $namepalletsaccounts[]=Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('name');
+            }
 
-            return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccount'));
+            return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
         } else {
             return view('auth.login');
         }
@@ -157,7 +166,10 @@ class WarehousesController extends Controller
     {
         $validateUpdateWarehouse = $request->validateUpdateWarehouse;
         $refuseUpdateWarehouse = $request->refuseUpdateWarehouse;
-        $namepalletsaccount = Input::get('namepalletsaccount');
+        $namepalletsaccounts = Input::get('namepalletsaccounts');
+        foreach ($namepalletsaccounts as $namePA){
+            $idpalletsaccounts[]=Palletsaccount::where('name',$namePA )->value('id');
+        }
         $name = Input::get('name');
         $adress = Input::get('adress');
         $currentZipcode = DB::table('warehouses')->where('id', $id)->value('zipcode');
@@ -196,20 +208,23 @@ class WarehousesController extends Controller
         } else {
             if (isset($zipcodeWarehouses) && !$zipcodeWarehouses->isEmpty()) {
                 if (isset($validateUpdateWarehouse)) {
-                    Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact, 'palletsaccount_name'=>$namepalletsaccount]);
+                    Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                    Warehouse::where('id', $id)->first()->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
                     return redirect()->back();
                 } elseif (isset($refuseUpdateWarehouse)) {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseUpdateWarehouse', 'Please change the warehouse');
-                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccount'));
+                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 } else {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
-                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccount'));
+                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 }
             } else {
-                Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact , 'palletsaccount_name'=>$namepalletsaccount]);
+                Warehouse::where('id', $id)->update(['name' => $name, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                Warehouse::where('id', $id)->first()->palletsaccounts()->sync($idpalletsaccounts);
+
                 session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
                 return redirect()->back();
             }

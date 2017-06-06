@@ -179,19 +179,25 @@
                             </div>
 
                             <div class="form-group">
-                                <!--pallet account associated-->
+                                <!--pallets accounts associated-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label"><a href="{{route('showDetailsPalletsaccount', \App\Palletsaccount::where('name',$namepalletsaccount)->first()->id)}}" class="link">Pallets Account :</a></label>
+                                    {{--<label for="namecontact" class="control-label"><a href="{{route('showDetailsPalletsaccount', \App\Palletsaccount::where('name',$namepalletsaccount)->first()->id)}}" class="link">Pallets Account :</a></label>--}}
+                                    <label for="namecontact" class="control-label">Pallets Account : </label>
                                 </div>
                                 <div class="col-lg-6">
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Pallets Account" name="namepalletsaccount">
+                                            title="Pallets Accounts" name="namepalletsaccounts[]" required multiple>
                                         @foreach($listPalletsAccounts as $palletsAccount )
-                                            @if($palletsAccount->name==$namepalletsaccount)
-                                                @php($option='selected')
-                                                <option {{$option}}>{{$palletsAccount->name}}</option>
-                                            @else
+                                            @php($list[]=null)
+                                            @foreach($namepalletsaccounts as $namePA)
+                                                @if($palletsAccount->name==$namePA)
+                                                    @php($option='selected')
+                                                    <option {{$option}}>{{$palletsAccount->name}}</option>
+                                                    @php($list[]=$palletsAccount)
+                                                @endif
+                                            @endforeach
+                                            @if(!in_array($palletsAccount, $list))
                                                 <option>{{$palletsAccount->name}}</option>
                                             @endif
                                         @endforeach

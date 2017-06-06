@@ -159,8 +159,8 @@
                                                value="{{old('phone')}}" placeholder="Phone" autofocus>
                                     @endif
                                     {{--@if ($errors->has('phone'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('phone') }}</strong>--}}
+                                    {{--<span class="help-block">--}}
+                                    {{--<strong>{{ $errors->first('phone') }}</strong>--}}
                                     {{--</span>--}}
                                     {{--@endif--}}
                                 </div>
@@ -177,8 +177,8 @@
                                                value="{{old('fax')}}" placeholder="Fax" autofocus>
                                     @endif
                                     {{--@if ($errors->has('fax'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('fax') }}</strong>--}}
+                                    {{--<span class="help-block">--}}
+                                    {{--<strong>{{ $errors->first('fax') }}</strong>--}}
                                     {{--</span>--}}
                                     {{--@endif--}}
                                 </div>
@@ -198,8 +198,8 @@
                                                value="{{old('email')}}" placeholder="Email" autofocus>
                                     @endif
                                     {{--@if ($errors->has('email'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('email') }}</strong>--}}
+                                    {{--<span class="help-block">--}}
+                                    {{--<strong>{{ $errors->first('email') }}</strong>--}}
                                     {{--</span>--}}
                                     {{--@endif--}}
                                 </div>
@@ -219,8 +219,8 @@
                                                value="{{old('namecontact')}}" placeholder="Contact Name" autofocus>
                                     @endif
                                     {{--@if ($errors->has('namecontact'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('namecontact') }}</strong>--}}
+                                    {{--<span class="help-block">--}}
+                                    {{--<strong>{{ $errors->first('namecontact') }}</strong>--}}
                                     {{--</span>--}}
                                     {{--@endif--}}
                                 </div>
@@ -233,15 +233,22 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">
-                                    @if(isset($namepalletaccount))
+                                    <!-- if mistake in the adding form you are redirected with field already filled-->
+                                    @if(isset($namepalletsaccounts))
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
-                                                title="Pallets Account" name="namepalletaccount">
+                                                title="Pallets Accounts" name="namepalletsaccounts[]"
+                                                multiple>
                                             @foreach($listPalletsAccounts as $palletsAccount )
-                                                @if($palletsAccount->name==$namepalletaccount)
-                                                    @php($option='selected')
-                                                    <option {{$option}}>{{$palletsAccount->name}}</option>
-                                                @else
+                                                @php($list[]=null)
+                                                @foreach($namepalletsaccounts as $namePA)
+                                                    @if($palletsAccount->name==$namePA)
+                                                        @php($option='selected')
+                                                        <option {{$option}}>{{$palletsAccount->name}}</option>
+                                                        @php($list[]=$palletsAccount)
+                                                    @endif
+                                                @endforeach
+                                                @if(!in_array($palletsAccount, $list))
                                                     <option>{{$palletsAccount->name}}</option>
                                                 @endif
                                             @endforeach
@@ -249,7 +256,7 @@
                                     @else
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
-                                                title="Pallets Account" name="namepalletaccount">
+                                                title="Pallets Accounts" name="namepalletsaccounts[]" required multiple>
                                             @foreach($listPalletsAccounts as $palletsAccount )
                                                 <option>{{$palletsAccount->name}}</option>
                                             @endforeach
@@ -268,10 +275,6 @@
                                             name="addWarehouse" data-toggle="modal" data-target="#addWarehouse_modal">
                                         Add
                                     </button>
-                                    {{--<button type="button" class="btn btn-primary btn-block btn-form"--}}
-                                    {{--data-toggle="modal"--}}
-                                    {{--data-target="#addWarehouse_modal">Add--}}
-                                    {{--</button>--}}
                                 </div>
                             </div>
 
@@ -335,6 +338,7 @@
                         @php(session()->pull('testZipcode'))
                     </div>
                 </div>
-                @endif
             </div>
+        @endif
+    </div>
 @endsection
