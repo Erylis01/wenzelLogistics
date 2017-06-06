@@ -3,3 +3,21 @@
 .panel-carriers>.panel-heading{
     padding:5px;
 }
+
+/*TABLE*/
+
+.colID{
+    min-width:55px;
+}
+
+.colName{
+    width:400px;
+}
+
+.colLicense{
+    min-width:170px;
+}
+
+.table-carriers>tbody{
+    font-size:16px;
+}

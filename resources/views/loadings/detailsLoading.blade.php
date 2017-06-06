@@ -14,6 +14,9 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
+@section('classCarriers')
+    class="nonActive"
+@endsection
 @section('classPalletsAccounts')
     class="nonActive"
 @endsection
@@ -99,7 +102,7 @@
                                                         </div>
 
                                                         <!--pt change pt-->
-                                                        @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname='Adrien' ||Auth::user()->username=='A' )
+                                                        @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='A' )
                                                         <div class="col-lg-2 col-lg-offset-2">
                                                             <div class="input-group details-loading">
                                                                 <label for="pt" class="input-group-addon">PT
@@ -157,10 +160,10 @@
                                                             <div class="input-group details-loading">
                                                                 <label for="kennzeichen" class="input-group-addon">Kennzeichen
                                                                     :</label>
-                                                                <input type="number" name="kennzeichen"
+                                                                <input type="text" name="kennzeichen"
                                                                        class="form-control"
                                                                        value="{{ $kennzeichen }}"
-                                                                       placeholder="kennzeichen" min="0">
+                                                                       placeholder="kennzeichen">
                                                             </div>
                                                         </div>
                                                     </div>
