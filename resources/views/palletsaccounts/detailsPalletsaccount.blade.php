@@ -48,90 +48,125 @@
                                                     <div class="col-lg-3">
                                                         <label for="name" class="control-label">Name :</label>
                                                     </div>
-                                                    <div class="col-lg-7">
+                                                    <div class="col-lg-5">
                                                         <input id="name" type="text" class="form-control" name="name"
-                                                               value="{{ $name }}" placeholder="Name" required autofocus>
+                                                               value="{{ $name }}" placeholder="Name" required
+                                                               autofocus>
                                                         @if ($errors->has('name'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
                                     </span>
                                                         @endif
                                                     </div>
-                                                </div>
-                                                    <div class="form-group">
-                                                        <!--real number of pallets-->
-                                                        <div class="col-lg-3">
-                                                            <label for="realNumberPallets" class="control-label">Real Pallets Number
-                                                                :</label>
-                                                        </div>
-                                                        <div class="col-lg-2">
-                                                            <input id="realNumberPallets" type="number" class="form-control"
-                                                                   name="realNumberPallets"
-                                                                   value="{{ $realNumberPallets }}" placeholder="Real pallets number"
-                                                                   required readonly autofocus>
-                                                        </div>
-
-                                                        <!--theorical number of pallets-->
-                                                        <div class="col-lg-3">
-                                                            <label for="theoricalNumberPallets" class="control-label">Theorical Pallets Number
-                                                                :</label>
-                                                        </div>
-                                                        <div class="col-lg-2">
-                                                            <input id="theoricalNumberPallets" type="number" class="form-control"
-                                                                   name="theoricalNumberPallets"
-                                                                   value="{{ $theoricalNumberPallets }}" placeholder="Theorical pallets number"
-                                                                   readonly required autofocus>
-                                                        </div>
+                                                    <!--type-->
+                                                    <div class="col-lg-1">
+                                                        <label for="type" class="control-label"><span>*</span> Type :</label>
                                                     </div>
-
-                                                    <div class="form-group">
-                                                    <!--warehouses associated-->
-                                                    <div class="col-lg-3">
-                                                        <label for="namewarehouses" class="control-label">Warehouses
-                                                            associated
-                                                            :</label>
-                                                    </div>
-                                                    <div class="col-lg-7">
-
+                                                    <div class="col-lg-2">
+                                                        <!-- if mistake in the adding form you are redirected with field already filled-->
                                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                                 data-live-search="true" data-live-search-style="startsWith"
-                                                                title="Warehouses Associated" name="namewarehouses[]"
-                                                                multiple>
-                                                            @foreach($listWarehouses as $warehouse )
-                                                                @php($list[]=null)
-                                                                @if(Illuminate\Support\Facades\Input::old('namewarehouses'))
-                                                                    @foreach(old('namewarehouses') as $warehouseA)
-                                                                        @if($warehouseA == $warehouse->name)
-                                                                            <option  selected>{{$warehouse->name}}</option>
-                                                                            @php($list[]=$warehouse)
-                                                                        @endif
-                                                                    @endforeach
-                                                                    @if(!in_array($warehouse, $list))
-                                                                        <option>{{$warehouse->name}}</option>
-                                                                    @endif
-                                                                        @elseif(isset($namewarehouses))
-                                                                            @foreach($namewarehouses as $warehouseA)
-                                                                                @if($warehouseA == $warehouse->name)
-                                                                                    <option  selected>{{$warehouse->name}}</option>
-                                                                                    @php($list[]=$warehouse)
-                                                                                @endif
-                                                                            @endforeach
-                                                                            @if(!in_array($warehouse, $list))
-                                                                                <option>{{$warehouse->name}}</option>
-                                                                            @endif
-                                                                @else
-                                                                    <option>{{$warehouse->name}}</option>
-                                                                @endif
-                                                            @endforeach
+                                                                title="Type" name="type"
+                                                                required>
+                                                            @if(Illuminate\Support\Facades\Input::old('type'))
+                                                                <option @if(old('type') == 'Carrier') selected @endif>Carrier</option>
+                                                                <option @if(old('type') == 'Other') selected @endif>Other</option>
+                                                                <option @if(old('type') == 'Warehouse') selected @endif>Warehouse</option>
+                                                            @elseif(isset($type))
+                                                                <option @if($type == 'Carrier') selected @endif>Carrier</option>
+                                                                <option @if($type == 'Other') selected @endif>Other</option>
+                                                                <option @if($type == 'Warehouse') selected @endif>Warehouse</option>
+                                                            @else
+                                                                <option>Carrier</option>
+                                                                <option>Other</option>
+                                                                <option>Warehouse</option>
+                                                            @endif
                                                         </select>
-
-                                                    </div>
-                                                    <div class="col-lg-2 text-left">
-                                                        <a href="{{route('showAddWarehouse')}}" class="link"><span
-                                                                    class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <!--confirmed number of pallets-->
+                                                    <div class="col-lg-3">
+                                                        <label for="realNumberPallets" class="control-label">Confirmed
+                                                            Pallets Nbr
+                                                            :</label>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <input id="realNumberPallets" type="number" class="form-control"
+                                                               name="realNumberPallets"
+                                                               value="{{ $realNumberPallets }}"
+                                                               placeholder="Confirmed pal. nbr"
+                                                               required readonly autofocus>
+                                                    </div>
 
+                                                    <!--planned number of pallets-->
+                                                    <div class="col-lg-4">
+                                                        <label for="theoricalNumberPallets" class="control-label">Planned
+                                                            Pallets Nbr
+                                                            :</label>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <input id="theoricalNumberPallets" type="number"
+                                                               class="form-control"
+                                                               name="theoricalNumberPallets"
+                                                               value="{{ $theoricalNumberPallets }}"
+                                                               placeholder="Planned pal. nbr"
+                                                               readonly required autofocus>
+                                                    </div>
+                                                </div>
+                                                @if($type<>'Other')
+                                                    <div class="form-group">
+                                                        <!--warehouses associated-->
+                                                        <div class="col-lg-3">
+                                                            <label for="namewarehouses" class="control-label">Warehouses
+                                                                associated
+                                                                :</label>
+                                                        </div>
+                                                        <div class="col-lg-7">
+
+                                                            <select class="selectpicker show-tick form-control"
+                                                                    data-size="5"
+                                                                    data-live-search="true"
+                                                                    data-live-search-style="startsWith"
+                                                                    title="Warehouses Associated"
+                                                                    name="namewarehouses[]"
+                                                                    multiple>
+                                                                @foreach($listWarehouses as $warehouse )
+                                                                    @php($list[]=null)
+                                                                    @if(Illuminate\Support\Facades\Input::old('namewarehouses'))
+                                                                        @foreach(old('namewarehouses') as $warehouseA)
+                                                                            @if($warehouseA == $warehouse->name)
+                                                                                <option selected>{{$warehouse->name}}</option>
+                                                                                @php($list[]=$warehouse)
+                                                                            @endif
+                                                                        @endforeach
+                                                                        @if(!in_array($warehouse, $list))
+                                                                            <option>{{$warehouse->name}}</option>
+                                                                        @endif
+                                                                    @elseif(isset($namewarehouses))
+                                                                        @foreach($namewarehouses as $warehouseA)
+                                                                            @if($warehouseA == $warehouse->name)
+                                                                                <option selected>{{$warehouse->name}}</option>
+                                                                                @php($list[]=$warehouse)
+                                                                            @endif
+                                                                        @endforeach
+                                                                        @if(!in_array($warehouse, $list))
+                                                                            <option>{{$warehouse->name}}</option>
+                                                                        @endif
+                                                                    @else
+                                                                        <option>{{$warehouse->name}}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-lg-2 text-left">
+                                                            <a href="{{route('showAddWarehouse')}}" class="link"><span
+                                                                        class="glyphicon glyphicon-plus-sign"></span>
+                                                                Add warehouse</a>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 <div class="form-group">
                                                     <div class="col-lg-3 col-lg-offset-3">
                                                         <input type="submit"
@@ -140,7 +175,7 @@
                                                                name="updatePalletsaccount">
                                                     </div>
 
-                                                    <div class="col-lg-3 col-lg-offset-1">
+                                                    <div class="col-lg-3 col-lg-offset-2">
                                                         <button type="button" class="btn btn-primary btn-block btn-form"
                                                                 data-toggle="modal"
                                                                 data-target="#deletePalletsaccount_modal">Delete
@@ -156,23 +191,28 @@
                                                 <div class="modal-dialog modal-sm">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal">&times;
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
                                                             </button>
-                                                            <h4 class="modal-title text-center">Are you sure to delete this
+                                                            <h4 class="modal-title text-center">Are you sure to delete
+                                                                this
                                                                 pallets
                                                                 account ?</h4>
                                                         </div>
                                                         <div class="modal-body center">
-                                                            <form method="post" action="{{route('deletePalletsaccount', $id)}}">
+                                                            <form method="post"
+                                                                  action="{{route('deletePalletsaccount', $id)}}">
                                                                 <input type="hidden" name="_method" value="delete">
                                                                 {{ csrf_field() }}
                                                                 <div class="text-center">
-                                                                    <button type="submit" class="btn btn-danger btn-modal"
+                                                                    <button type="submit"
+                                                                            class="btn btn-danger btn-modal"
                                                                             value="yes"
                                                                             name="deletePalletsaccount">
                                                                         Yes
                                                                     </button>
-                                                                    <button type="button" class="btn btn-success btn-modal"
+                                                                    <button type="button"
+                                                                            class="btn btn-success btn-modal"
                                                                             data-dismiss="modal">No
                                                                     </button>
                                                                 </div>
@@ -197,35 +237,45 @@
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a></th>
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a>
+                                                        </th>
                                                         <th class="text-center">Date transfer <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a></th>
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
+                                                        </th>
                                                         <th class="text-center">Atrnr Loading <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a></th>
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
+                                                        </th>
                                                         <th class="text-center">Real pallets Number <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=desc')}}"></a></th>
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=desc')}}"></a>
+                                                        </th>
                                                         <th class="text-center">Theorical pallets Number <a
                                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                                     href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a></th>
+                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>
+                                                        </th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     @foreach($listPalletstransfers as $transfer)
                                                         <tr>
-                                                            <td class="text-center col1"><a href="{{route('showDetailsPalletstransfer', $transfer->id)}}" class="link">{{$transfer->id}}</a></td>
+                                                            <td class="text-center col1"><a
+                                                                        href="{{route('showDetailsPalletstransfer', $transfer->id)}}"
+                                                                        class="link">{{$transfer->id}}</a></td>
                                                             <td class="text-center">{{$transfer->date}}</td>
-                                                            <td class="text-center"><a href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}" class="link">{{$transfer->loading_atrnr}}</a></td>
+                                                            <td class="text-center"><a
+                                                                        href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}"
+                                                                        class="link">{{$transfer->loading_atrnr}}</a>
+                                                            </td>
                                                             <td class="text-center">{{$transfer->realPalletsNumber}}</td>
                                                             <td class="text-center">{{$transfer->palletsNumber}}</td>
                                                         </tr>
@@ -248,7 +298,8 @@
                                                 @else
                                                     <div class="general-legend col-lg-offset-9">
                                                         Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
-                                                        to @php($legend2= $listPalletstransfers->currentPage() * 5) {{$legend2}} of {{$count}}
+                                                        to @php($legend2= $listPalletstransfers->currentPage() * 5) {{$legend2}}
+                                                        of {{$count}}
                                                         results
                                                     </div>
                                                 @endif
@@ -258,6 +309,6 @@
                             </div>
                     </div>
             </div>
-    @endif
+        @endif
     </div>
 @endsection

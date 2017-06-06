@@ -40,24 +40,24 @@ class PalletsaccountsTableSeeder extends Seeder
 
         Palletsaccount::create(array(
             'id' => 4,
-            'name' => 'account44',
-            'type' => 'loading',
+            'name' => 'Loading',
+            'type' => 'Other',
         ));
 
         Palletsaccount::create(array(
             'id' => 5,
-            'name' => 'account5',
-            'type' => 'unloading',
+            'name' => 'Unloading',
+            'type' => 'Other',
         ));
         Palletsaccount::create(array(
             'id' => 6,
-            'name' => 'account6',
-            'type' => 'wenzel',
+            'name' => 'Wenzel',
+            'type' => 'Other',
         ));
         Palletsaccount::create(array(
             'id' => 7,
             'name' => 'account7',
-            'type' => 'other',
+            'type' => 'Other',
         ));
         Palletsaccount::create(array(
             'id' => 8,

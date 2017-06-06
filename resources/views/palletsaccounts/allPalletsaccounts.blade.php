@@ -32,7 +32,8 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general col-lg-6 panel-palletsaccounts">
-                    <div class="panel-heading">Total of pallets by account <span class="col-lg-offset-1"><a href="{{route('showAddPalletsaccount')}}" class=" btn btn-add"><span
+                    <div class="panel-heading">Total of pallets by account <span class="col-lg-offset-1"><a
+                                    href="{{route('showAddPalletsaccount')}}" class=" btn btn-add"><span
                                         class="glyphicon glyphicon-plus-sign"></span> Add account</a></span></div>
 
                     <div class="panel-body">
@@ -54,7 +55,7 @@
                                 @endif
                                 <tr>
                                     <th class="text-center colTot"><a href="{{route('showAllPalletstransfers')}}"
-                                                                       class="link">TOTAL</a></th>
+                                                                      class="link">TOTAL</a></th>
                                     <th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span>
                                     </th>
                                 </tr>
@@ -125,34 +126,35 @@
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-lg-5">
-                                        <label for="warehousesAssociated" class="control-label legend-palletsaccounts">Warehouses
-                                            associated :</label>
+                                @if($palletsaccount->type<>'Other')
+                                    <div class="form-group">
+                                        <div class="col-lg-5">
+                                            <label for="warehousesAssociated"
+                                                   class="control-label legend-palletsaccounts">Warehouses
+                                                associated :</label>
+                                        </div>
+                                        <div class="col-lg-6 info-palletsaccounts">
+                                            @php($listWarehouses=App\Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get())
+                                            <ul>
+                                                @foreach($listWarehouses as $warehouse)
+                                                    <li><a href="{{route('showDetailsWarehouse', $warehouse->id)}}"
+                                                           class="link">{{$warehouse->name}}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 info-palletsaccounts">
-
-                                        @php($listWarehouses=App\Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get())
-                                        <ul>
-                                            @foreach($listWarehouses as $warehouse)
-                                                <li><a href="{{route('showDetailsWarehouse', $warehouse->id)}}" class="link">{{$warehouse->name}}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-
+                                @endif
                                 <div class="form-group">
                                     <div class="col-lg-6">
                                         <a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}"
                                            class="btn btn-form btn-block">Details</a>
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
+
                 @endforeach
             </div>
         @endif

@@ -128,7 +128,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-lg-4 col-lg-offset-3">
+                                <div class="col-lg-4 col-lg-offset-4">
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Add"

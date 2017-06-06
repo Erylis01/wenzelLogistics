@@ -112,6 +112,7 @@ class PalletsaccountsController extends Controller
             $listWarehouses=DB::table('warehouses')->get();
 
             $name = $palletsaccount->name;
+            $type=$palletsaccount->type;
             $realNumberPallets = $palletsaccount->realNumberPallets;
             $theoricalNumberPallets=$palletsaccount->theoricalNumberPallets;
             $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
@@ -134,7 +135,7 @@ class PalletsaccountsController extends Controller
             }
             $count = count(DB::table('palletstransfers')->where([['palletsaccount_name', $name],['date', '>=', $limitDate]])->get());
 
-            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'theoricalNumberPallets','namewarehouses', 'count', 'links'));
+            return view('palletsaccounts.detailsPalletsaccount', compact('listPalletstransfers','totalpallets','listWarehouses', 'id', 'name', 'realNumberPallets', 'theoricalNumberPallets','type','namewarehouses', 'count', 'links'));
         } else {
             return view('auth.login');
         }
@@ -148,7 +149,6 @@ class PalletsaccountsController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts,name,'.$id,
         );
@@ -161,16 +161,15 @@ class PalletsaccountsController extends Controller
         } else {
             $name = Input::get('name');
             Palletsaccount::where('id', $id)->update(['name' => $name]);
-
+            $type = Input::get('type');
+            Palletsaccount::where('id', $id)->update(['type' => $type]);
             $warehousesAssociatedName=Input::get('namewarehouses');
-            foreach ($warehousesAssociatedName as $warehouseAName) {
-                $idwarehouses[] = Warehouse::where('name', $warehouseAName)->value('id');
+            if(isset($warehousesAssociatedName)){
+                foreach ($warehousesAssociatedName as $warehouseAName) {
+                    $idwarehouses[] = Warehouse::where('name', $warehouseAName)->value('id');
+                }
+                Palletsaccount::where('id', $id)->first()->warehouses()->sync($idwarehouses);
             }
-            Palletsaccount::where('id', $id)->first()->warehouses()->sync($idwarehouses);
-
-//            foreach($warehousesAssociatedName as $warehouseAName){
-//                Warehouse::where('name',$warehouseAName)->update(['palletsaccount_name'=>$name]);
-//            }
 
             session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
             return redirect()->back();
