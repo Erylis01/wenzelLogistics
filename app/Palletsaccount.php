@@ -14,6 +14,10 @@ class Palletsaccount extends Model
         return $this->belongsToMany('App\Warehouse','palletsaccount_warehouse');
     }
 
+//    public function loadings(){
+//        return $this->belongsToMany('App\Loading','loading_palletsaccount');
+//    }
+
     public function carrier(){
         return $this->hasOne('App\Carrier','palletsaccount_name', 'name');
     }
