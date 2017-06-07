@@ -18,7 +18,7 @@ class WarehouseTableSeeder extends Seeder
             'id' => 1,
             'name' => 'warehouse1',
             'adress' => 'adress1',
-            'zipcode' => 1,
+            'zipcode' => 88150,
             'town' => 'town1',
             'country' => 'country1',
             'phone'=>'phone1',
@@ -26,7 +26,8 @@ class WarehouseTableSeeder extends Seeder
             'email'=>'email1',
             'namecontact'=>'contact1',
 //            'palletsaccount_name'=>'account1',
-        ));
+        ))->palletsaccounts()->sync(3);
+
         Warehouse::create(array(
             'id' => 2,
             'name' => 'warehouse2',

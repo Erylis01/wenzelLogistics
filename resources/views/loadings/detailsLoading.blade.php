@@ -45,14 +45,16 @@
                 <div class="panel panel-default">
                     {{--@endif--}}
                     <div class="panel-heading">Details of the loading n°{{ $atrnr }}
-                        {{--<span class="col-lg-offset-7">{{$state}}</span>--}}
+                        @if(isset($numberPalletsBackLoadingPlace))
+                        <span class="col-lg-offset-6">TOTAL = {{$numberPalletsBackLoadingPlace}}</span>
+                            @endif
                     </div>
                     <div class="panel-body panel-body-general">
 
                         @if (Session::has('messageUpdateLoading'))
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
                         @endif
-                        <!--subpanel 1 reading form suming up information from the table-->
+                    <!--subpanel 1 reading form suming up information from the table-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
                                 <a data-toggle="collapse" href="#Pan1collapse">Information</a>
@@ -66,7 +68,7 @@
                                                name="_token"
                                                value="{{ csrf_token() }}">
 
-                                    <!-- subpanel general-->
+                                        <!-- subpanel general-->
                                         <div class="panel subpanel">
                                             <div class="panel-heading">
                                                 <a data-toggle="collapse" href="#PanSub3collapse">General</a>
@@ -87,60 +89,60 @@
                                                         </div>
                                                         <!--disp-->
                                                         <div class="col-lg-2">
-                                                        <div class="input-group details-loading">
-                                                            <label for="disp" class="input-group-addon">Disp
-                                                                :</label>
-                                                            <input type="text" name="disp"
-                                                                   class="form-control" value="{{ $disp }}"
-                                                                   placeholder="disp" required>
-                                                            @if ($errors->has('disp'))
-                                                                <span class="help-block">
+                                                            <div class="input-group details-loading">
+                                                                <label for="disp" class="input-group-addon">Disp
+                                                                    :</label>
+                                                                <input type="text" name="disp"
+                                                                       class="form-control" value="{{ $disp }}"
+                                                                       placeholder="disp" required>
+                                                                @if ($errors->has('disp'))
+                                                                    <span class="help-block">
                                         <strong>{{ $errors->first('disp') }}</strong>
                                     </span>
-                                                            @endif
-                                                        </div>
+                                                                @endif
+                                                            </div>
                                                         </div>
 
                                                         <!--pt change pt-->
                                                         @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='A' )
-                                                        <div class="col-lg-2 col-lg-offset-2">
-                                                            <div class="input-group details-loading">
-                                                                <label for="pt" class="input-group-addon">PT
-                                                                    :</label>
+                                                            <div class="col-lg-2 col-lg-offset-2">
+                                                                <div class="input-group details-loading">
+                                                                    <label for="pt" class="input-group-addon">PT
+                                                                        :</label>
 
-                                                                <input type="text" readonly name="pt"
-                                                                       class="form-control link"
-                                                                       data-toggle="modal"
-                                                                       data-target="#updatePT_modal"
-                                                                       value="{{ $pt }}">
+                                                                    <input type="text" readonly name="pt"
+                                                                           class="form-control link"
+                                                                           data-toggle="modal"
+                                                                           data-target="#updatePT_modal"
+                                                                           value="{{ $pt }}">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                            @endif
+                                                        @endif
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-lg-12">
                                                             <!--auftraggeber-->
-                                                                <div class="input-group details-loading">
-                                                                    <label for="auftraggeber"
-                                                                           class="input-group-addon">Auftraggeber
-                                                                        :</label> <input type="text" name="auftraggeber"
-                                                                                         class="form-control"
-                                                                                         value="{{ $auftraggeber }}"
-                                                                                         placeholder="auftraggeber"
-                                                                                         required>
-                                                                </div>
+                                                            <div class="input-group details-loading">
+                                                                <label for="auftraggeber"
+                                                                       class="input-group-addon">Auftraggeber
+                                                                    :</label> <input type="text" name="auftraggeber"
+                                                                                     class="form-control"
+                                                                                     value="{{ $auftraggeber }}"
+                                                                                     placeholder="auftraggeber"
+                                                                                     required>
                                                             </div>
+                                                        </div>
 
-                                                    {{--<!--trp-->--}}
-                                                    {{--<div class="col-lg-4">--}}
-                                                    {{--<div class="input-group details-loading">--}}
-                                                    {{--<label for="trp" class="input-group-addon">Trp--}}
-                                                    {{--:</label>--}}
-                                                    {{--<input type="number" name="trp"--}}
-                                                    {{--class="form-control" value="{{ $trp }}"--}}
-                                                    {{--placeholder="trp" required>--}}
-                                                    {{--</div>--}}
-                                                    {{--</div>--}}
+                                                        {{--<!--trp-->--}}
+                                                        {{--<div class="col-lg-4">--}}
+                                                        {{--<div class="input-group details-loading">--}}
+                                                        {{--<label for="trp" class="input-group-addon">Trp--}}
+                                                        {{--:</label>--}}
+                                                        {{--<input type="number" name="trp"--}}
+                                                        {{--class="form-control" value="{{ $trp }}"--}}
+                                                        {{--placeholder="trp" required>--}}
+                                                        {{--</div>--}}
+                                                        {{--</div>--}}
                                                     </div>
                                                     <div class="form-group">
                                                         <!--subfrachter-->
@@ -169,92 +171,96 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <!--anz-->
-                                                            <div class="col-lg-2 details-loading">
-                                                                <input type="number" name="anz"
-                                                                       class="form-control" value="{{ $anz }}"
-                                                                       placeholder="anz." min="0" required data-toggle="tooltip" data-placement="top" title="Anzahl">
-                                                            </div>
+                                                        <div class="col-lg-2 details-loading">
+                                                            <input type="number" name="anz"
+                                                                   class="form-control" value="{{ $anz }}"
+                                                                   placeholder="anz." min="0" required
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="Anzahl">
+                                                        </div>
                                                         <div class="col-lg-1 details-loading text-center">-</div>
                                                         <!--art-->
                                                         <div class="col-lg-3 details-loading">
-                                                                <input type="text" name="art"
-                                                                       class="form-control" value="{{ $art }}"
-                                                                       placeholder="art" required data-toggle="tooltip" data-placement="top" title="Art">
+                                                            <input type="text" name="art"
+                                                                   class="form-control" value="{{ $art }}"
+                                                                   placeholder="art" required data-toggle="tooltip"
+                                                                   data-placement="top" title="Art">
                                                         </div>
                                                         <div class="col-lg-1 details-loading text-center">-</div>
                                                         <!--ware-->
                                                         <div class="col-lg-5 details-loading">
-                                                                <input type="text" name="ware"
-                                                                       class="form-control" value="{{ $ware }}"
-                                                                       placeholder="ware" required data-toggle="tooltip" data-placement="top" title="Ware">
+                                                            <input type="text" name="ware"
+                                                                   class="form-control" value="{{ $ware }}"
+                                                                   placeholder="ware" required data-toggle="tooltip"
+                                                                   data-placement="top" title="Ware">
                                                         </div>
                                                     </div>
                                                     {{--<div class="form-group">--}}
-                                                        {{--<!--gewicht-->--}}
-                                                        {{--<div class="col-lg-4">--}}
-                                                            {{--<div class="input-group details-loading">--}}
-                                                                {{--<label for="gewicht"--}}
-                                                                       {{--class="input-group-addon">Gewicht (Kg)--}}
-                                                                    {{--:</label>--}}
-                                                                {{--<input type="number" name="gewicht"--}}
-                                                                       {{--class="form-control" value="{{$gewicht}}"--}}
-                                                                       {{--placeholder="gewicht" min="0" required>--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<!--vol-->--}}
-                                                        {{--<div class="col-lg-4">--}}
-                                                            {{--<div class="input-group details-loading">--}}
-                                                                {{--<label for="vol" class="input-group-addon">--}}
-                                                                    {{--Vol :</label>--}}
-                                                                {{--<input type="number" step="0.1" name="vol"--}}
-                                                                       {{--class="form-control" value="{{ $vol }}"--}}
-                                                                       {{--placeholder="vol" min="0">--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<!--ldm-->--}}
-                                                        {{--<div class="col-lg-4">--}}
-                                                            {{--<div class="input-group details-loading">--}}
-                                                                {{--<label for="ldm" class="input-group-addon">--}}
-                                                                    {{--LDM :</label>--}}
-                                                                {{--<input type="number" step="0.1" name="ldm"--}}
-                                                                       {{--class="form-control" value="{{ $ldm }}"--}}
-                                                                       {{--placeholder="ldm" min="0" required>--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
+                                                    {{--<!--gewicht-->--}}
+                                                    {{--<div class="col-lg-4">--}}
+                                                    {{--<div class="input-group details-loading">--}}
+                                                    {{--<label for="gewicht"--}}
+                                                    {{--class="input-group-addon">Gewicht (Kg)--}}
+                                                    {{--:</label>--}}
+                                                    {{--<input type="number" name="gewicht"--}}
+                                                    {{--class="form-control" value="{{$gewicht}}"--}}
+                                                    {{--placeholder="gewicht" min="0" required>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<!--vol-->--}}
+                                                    {{--<div class="col-lg-4">--}}
+                                                    {{--<div class="input-group details-loading">--}}
+                                                    {{--<label for="vol" class="input-group-addon">--}}
+                                                    {{--Vol :</label>--}}
+                                                    {{--<input type="number" step="0.1" name="vol"--}}
+                                                    {{--class="form-control" value="{{ $vol }}"--}}
+                                                    {{--placeholder="vol" min="0">--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<!--ldm-->--}}
+                                                    {{--<div class="col-lg-4">--}}
+                                                    {{--<div class="input-group details-loading">--}}
+                                                    {{--<label for="ldm" class="input-group-addon">--}}
+                                                    {{--LDM :</label>--}}
+                                                    {{--<input type="number" step="0.1" name="ldm"--}}
+                                                    {{--class="form-control" value="{{ $ldm }}"--}}
+                                                    {{--placeholder="ldm" min="0" required>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
                                                     {{--</div>--}}
                                                     {{--<div class="form-group">--}}
-                                                        {{--<!--umsatz-->--}}
-                                                        {{--<div class="col-lg-4">--}}
-                                                            {{--<div class="input-group details-loading">--}}
-                                                                {{--<label for="umsatz"--}}
-                                                                       {{--class="input-group-addon">Umsatz (€)--}}
-                                                                    {{--:</label>--}}
-                                                                {{--<input type="number" step="0.1" name="umsatz"--}}
-                                                                       {{--class="form-control" value="{{ $umsatz }}"--}}
-                                                                       {{--placeholder="umsatz" min="0" required>--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<!--aufwand-->--}}
-                                                        {{--<div class="col-lg-4">--}}
-                                                            {{--<div class="input-group details-loading">--}}
-                                                                {{--<label for="aufwand"--}}
-                                                                       {{--class="input-group-addon">Aufwand (€)--}}
-                                                                    {{--:</label>--}}
-                                                                {{--<input type="number" step="0.1" name="aufwand"--}}
-                                                                       {{--class="form-control" value="{{ $aufwand }}"--}}
-                                                                       {{--placeholder="aufwand" min="0" required>--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<!--db-->--}}
-                                                        {{--<div class="col-lg-4">--}}
-                                                            {{--<div class="input-group details-loading">--}}
-                                                                {{--<label for="db" class="input-group-addon">DB (€)--}}
-                                                                    {{--:</label>--}}
-                                                                {{--<input type="number" step="0.1" name="db"--}}
-                                                                       {{--class="form-control" value="{{$db}}"--}}
-                                                                       {{--placeholder="db" required readonly>--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
+                                                    {{--<!--umsatz-->--}}
+                                                    {{--<div class="col-lg-4">--}}
+                                                    {{--<div class="input-group details-loading">--}}
+                                                    {{--<label for="umsatz"--}}
+                                                    {{--class="input-group-addon">Umsatz (€)--}}
+                                                    {{--:</label>--}}
+                                                    {{--<input type="number" step="0.1" name="umsatz"--}}
+                                                    {{--class="form-control" value="{{ $umsatz }}"--}}
+                                                    {{--placeholder="umsatz" min="0" required>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<!--aufwand-->--}}
+                                                    {{--<div class="col-lg-4">--}}
+                                                    {{--<div class="input-group details-loading">--}}
+                                                    {{--<label for="aufwand"--}}
+                                                    {{--class="input-group-addon">Aufwand (€)--}}
+                                                    {{--:</label>--}}
+                                                    {{--<input type="number" step="0.1" name="aufwand"--}}
+                                                    {{--class="form-control" value="{{ $aufwand }}"--}}
+                                                    {{--placeholder="aufwand" min="0" required>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<!--db-->--}}
+                                                    {{--<div class="col-lg-4">--}}
+                                                    {{--<div class="input-group details-loading">--}}
+                                                    {{--<label for="db" class="input-group-addon">DB (€)--}}
+                                                    {{--:</label>--}}
+                                                    {{--<input type="number" step="0.1" name="db"--}}
+                                                    {{--class="form-control" value="{{$db}}"--}}
+                                                    {{--placeholder="db" required readonly>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
                                                     {{--</div>--}}
 
                                                     <div class="form-group">
@@ -288,7 +294,9 @@
                                                             <input type="text" name="beladestelle"
                                                                    class="form-control text-center"
                                                                    value="{{ $beladestelle }}"
-                                                                   placeholder="beladestelle" required data-toggle="tooltip" data-placement="top" title="Beladestelle">
+                                                                   placeholder="beladestelle" required
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="Beladestelle">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -296,19 +304,23 @@
                                                         <div class="col-lg-3 details-loading">
                                                             <input type="number" name="plzb"
                                                                    class="form-control text-center" value="{{ $plzb }}"
-                                                                   placeholder="plz" min="0" required data-toggle="tooltip" data-placement="top" title="Plz">
+                                                                   placeholder="plz" min="0" required
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="Plz">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <div class="col-lg-5 details-loading">
                                                             <input type="text" name="ortb"
                                                                    class="form-control text-center" value="{{ $ortb }}"
-                                                                   placeholder="ort" required data-toggle="tooltip" data-placement="top" title="Ort">
+                                                                   placeholder="ort" required data-toggle="tooltip"
+                                                                   data-placement="top" title="Ort">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <div class="col-lg-2 details-loading">
                                                             <input type="text" name="landb"
                                                                    class="form-control text-center" value="{{ $landb }}"
-                                                                   placeholder="land" required data-toggle="tooltip" data-placement="top" title="Land">
+                                                                   placeholder="land" required data-toggle="tooltip"
+                                                                   data-placement="top" title="Land">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -350,7 +362,9 @@
                                                             <input type="text" name="entladestelle"
                                                                    class="form-control"
                                                                    value="{{ $entladestelle }}"
-                                                                   placeholder="entladestelle" required data-toggle="tooltip" data-placement="top" title="Entladestelle">
+                                                                   placeholder="entladestelle" required
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="Entladestelle">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -358,21 +372,25 @@
                                                         <div class="col-lg-3 details-loading">
                                                             <input type="number" name="plze"
                                                                    class="form-control" value="{{ $plze }}"
-                                                                   placeholder="plz" min="0" required data-toggle="tooltip" data-placement="top" title="Plz">
+                                                                   placeholder="plz" min="0" required
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="Plz">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <!--ort-->
                                                         <div class="col-lg-5 details-loading">
                                                             <input type="text" name="orte"
                                                                    class="form-control" value="{{ $orte }}"
-                                                                   placeholder="ort" required data-toggle="tooltip" data-placement="top" title="Ort">
+                                                                   placeholder="ort" required data-toggle="tooltip"
+                                                                   data-placement="top" title="Ort">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <!--land-->
                                                         <div class="col-lg-2 details-loading">
                                                             <input type="text" name="lande"
                                                                    class="form-control" value="{{ $lande }}"
-                                                                   placeholder="land" required data-toggle="tooltip" data-placement="top" title="Land">
+                                                                   placeholder="land" required data-toggle="tooltip"
+                                                                   data-placement="top" title="Land">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -518,7 +536,7 @@
                         @elseif(Session::has('messageErrorUploadLoading'))
                             <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUploadLoading') }}</div>
                         @endif
-                        <!--subpanel 2 info about pallets transfer-->
+                    <!--subpanel 2 info about pallets transfer-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
                                 <a data-toggle="collapse" href="#Pan2collapse">Pallets location ?</a>
@@ -526,63 +544,102 @@
                             <div id="Pan2collapse" class="panel-collapse collapse">
                                 <div class="panel-body">
 
-                                        <div class="panel subpanel">
-                                            <div class="panel-heading">
-                                                <a data-toggle="collapse" href="#Pan2Sub1collapse">Loading place</a>
-                                            </div>
-                                            <div id="Pan2Sub1collapse" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    <form class="form-horizontal" role="form"
-                                                          method="POST"
-                                                          action="{{route('uploadLoading', ['atrnr'=>$atrnr, 'anz'=>$anz])}}" enctype="multipart/form-data">
-                                                        <input type="hidden"
-                                                               name="_token"
-                                                               value="{{ csrf_token() }}">
+                                    <div class="panel subpanel">
+                                        <div class="panel-heading">
+                                            <a data-toggle="collapse" href="#Pan2Sub1collapse">Loading place</a>
+                                        </div>
+                                        <div id="Pan2Sub1collapse" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <form class="form-horizontal" role="form"
+                                                      method="POST"
+                                                      action="{{route('uploadLoading', ['atrnr'=>$atrnr, 'anz'=>$anz])}}"
+                                                      enctype="multipart/form-data">
+                                                    <input type="hidden"
+                                                           name="_token"
+                                                           value="{{ csrf_token() }}">
                                                     <div class="form-group">
-                                                        <div class="col-lg-offset-1 col-lg-4">
-                                                            How many pallets do we brought back ?
+                                                        <div class="col-lg-5">
+                                                            <label for="numberPalletsBackLoadingPlace" class="control-label">How many pallets do we brought back ?</label>
                                                         </div>
                                                         <div class="col-lg-2">
                                                             @if(isset($numberPalletsBackLoadingPlace))
                                                                 <input type="number"
                                                                        name="numberPalletsBackLoadingPlace"
                                                                        value="{{$numberPalletsBackLoadingPlace}}">
-                                                                @else
-                                                            <input type="number"
-                                                                   name="numberPalletsBackLoadingPlace"
-                                                                   value="">
+                                                                {{$state}}
+                                                            @else
+                                                                <input type="number"
+                                                                       name="numberPalletsBackLoadingPlace"
+                                                                       value="">
                                                             @endif
-                                                            {{--data-toggle="collapse"--}}
-                                                            {{--data-target="#yesPalletsBackLoadingPlace_collapse:not(.in)"--}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <div class="col-lg-offset-1 col-lg-4">
-                                                            Do you have proof documents ?
+                                                        <div class="col-lg-5">
+                                                            <label for="documentsLoading" class="control-label">Do you have proof documents ?</label>
                                                         </div>
                                                         <div class="col-lg-2">
-                                                            <input type="file" name="documentsLoading[]" multiple />
+                                                            <input type="file" name="documentsLoading[]" multiple/>
                                                         </div>
-
+                                                        @if(isset($filesNames))
+                                                            <div class="col-lg-3 col-lg-offset-2">
+                                                                @foreach($filesNames as $name)
+                                                                    <ul>
+                                                                        <li>{{$name}}</li>
+                                                                    </ul>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-lg-5">
+                                                            <label for="accountLoadingPlace" class="control-label">Which account concerned ?</label>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            {{--@php(dd(isset($accountZipcodeLoadingPlace)))--}}
+                                                            <!-- if mistake in the adding form you are redirected with field already filled-->
+                                                            <select class="selectpicker show-tick form-control" data-size="5"
+                                                                    data-live-search="true" data-live-search-style="startsWith"
+                                                                    title="Pallets Account" name="accountLoadingPlace"
+                                                                    required>
+                                                                @foreach($listPalletsAccounts as $palletsAccount )
+                                                                    @if(Illuminate\Support\Facades\Input::old('accountLoadingPlace') && $palletsAccount->name==old('accountLoadingPlace'))
+                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                    @elseif(isset($accountZipcodeLoadingPlace)&& $palletsAccount->name==$accountZipcodeLoadingPlace)
+                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                    @elseif(isset($accountLoadingPlace)&& $palletsAccount->name==$accountLoadingPlace)
+                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                    @else
+                                                                        <option>{{$palletsAccount->name}}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    @if(isset($filesNames)&&isset($numberPalletsBackLoadingPlace)&&isset($accountLoadingPlace))
+                                                    <div class="form-group">
+                                                        <div class="col-lg-5">
+                                                            <label for="palletsValidateLoadingPlace" class="control-label">Is this transfer validated ?</label>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <input class="radio-inline" type="radio"
+                                                                   name="palletsValidateLoadingPlace"
+                                                                   value="" />Yes
+                                                            <input class="radio-inline" type="radio"
+                                                                   name="palletsValidateLoadingPlace"
+                                                                   value=""/>No
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                    <div class="form-group">
                                                         <div class="col-lg-3 col-lg-offset-2">
-                                                            <input type="submit" class="btn btn-primary btn-block btn-form"
+                                                            <input type="submit"
+                                                                   class="btn btn-primary btn-block btn-form"
                                                                    value="Submit and Upload"
-                                                                   name="uploadLoading" />
+                                                                   name="uploadLoading"/>
                                                         </div>
                                                     </div>
 
-                                                        @if(isset($filesNames))
-                                                        <div class="form-group">
-                                                            <div class="col-lg-4 col-lg-offset-5">
-
-                                                                @foreach($filesNames as $name)
-                                                                <ul>
-                                                                        <li>{{$name}}</li>
-                                                                    </ul>
-                                                                    @endforeach
-                                                            </div>
-                                                        </div>
-                                                        @endif
                                                     <div id="yesPalletsBackMeLoadingPlace_collapse"
                                                          class="form-group collapse">
                                                         <div class="form-group">
@@ -649,37 +706,37 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    </form>
-                                                </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div class="panel subpanel">
-                                            <div class="panel-heading">
-                                                <a data-toggle="collapse" href="#Pan2Sub2collapse">Unloading place</a>
-                                            </div>
-                                            <div id="Pan2Sub2collapse" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                </div>
+                                    </div>
+                                    <div class="panel subpanel">
+                                        <div class="panel-heading">
+                                            <a data-toggle="collapse" href="#Pan2Sub2collapse">Unloading place</a>
+                                        </div>
+                                        <div id="Pan2Sub2collapse" class="panel-collapse collapse">
+                                            <div class="panel-body">
                                             </div>
                                         </div>
-                                        <div class="panel subpanel">
-                                            <div class="panel-heading">
-                                                <a data-toggle="collapse" href="#Pan2Sub3collapse">Carrier</a>
-                                            </div>
-                                            <div id="Pan2Sub3collapse" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                </div>
+                                    </div>
+                                    <div class="panel subpanel">
+                                        <div class="panel-heading">
+                                            <a data-toggle="collapse" href="#Pan2Sub3collapse">Carrier</a>
+                                        </div>
+                                        <div id="Pan2Sub3collapse" class="panel-collapse collapse">
+                                            <div class="panel-body">
                                             </div>
                                         </div>
-                                        <div class="panel subpanel">
-                                            <div class="panel-heading">
-                                                <a data-toggle="collapse" href="#Pan2Sub4collapse">Other place</a>
-                                            </div>
-                                            <div id="Pan2Sub4collapse" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                </div>
+                                    </div>
+                                    <div class="panel subpanel">
+                                        <div class="panel-heading">
+                                            <a data-toggle="collapse" href="#Pan2Sub4collapse">Other place</a>
+                                        </div>
+                                        <div id="Pan2Sub4collapse" class="panel-collapse collapse">
+                                            <div class="panel-body">
                                             </div>
                                         </div>
+                                    </div>
                                     </form>
                                 </div>
                             </div>
@@ -828,7 +885,7 @@
     </div>
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

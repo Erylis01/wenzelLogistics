@@ -43,6 +43,9 @@ class CreateLoadingsTable extends Migration
             $table->string('kennzeichen')->nullable();
             $table->string('zusladestellen')->nullable();
 
+            $table->string('state')->default('Untreated');
+            $table->integer('numberPalletsBackLoadingPlace')->nullable();
+            $table->string('accountLoadingPlace')->nullable();
             $table->string('reasonUpdatePT')->nullable();
 
             $table->timestamps();
