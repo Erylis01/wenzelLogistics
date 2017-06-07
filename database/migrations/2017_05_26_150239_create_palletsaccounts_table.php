@@ -22,10 +22,6 @@ class CreatePalletsaccountsTable extends Migration
 
             $table->timestamps();
         });
-//        Schema::create('palletsaccount_warehouse',function (Blueprint $table) {
-//
-//        });
-
     }
 
     /**

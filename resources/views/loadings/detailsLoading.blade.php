@@ -49,6 +49,9 @@
                     </div>
                     <div class="panel-body panel-body-general">
 
+                        @if (Session::has('messageUpdateLoading'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
+                        @endif
                         <!--subpanel 1 reading form suming up information from the table-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
@@ -62,9 +65,6 @@
                                         <input type="hidden"
                                                name="_token"
                                                value="{{ csrf_token() }}">
-                                        @if (Session::has('messageUpdateLoading'))
-                                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
-                                        @endif
 
                                     <!-- subpanel general-->
                                         <div class="panel subpanel">
@@ -172,21 +172,21 @@
                                                             <div class="col-lg-2 details-loading">
                                                                 <input type="number" name="anz"
                                                                        class="form-control" value="{{ $anz }}"
-                                                                       placeholder="anz." min="0" required>
+                                                                       placeholder="anz." min="0" required data-toggle="tooltip" data-placement="top" title="Anzahl">
                                                             </div>
                                                         <div class="col-lg-1 details-loading text-center">-</div>
                                                         <!--art-->
                                                         <div class="col-lg-3 details-loading">
                                                                 <input type="text" name="art"
                                                                        class="form-control" value="{{ $art }}"
-                                                                       placeholder="art" required>
+                                                                       placeholder="art" required data-toggle="tooltip" data-placement="top" title="Art">
                                                         </div>
                                                         <div class="col-lg-1 details-loading text-center">-</div>
                                                         <!--ware-->
                                                         <div class="col-lg-5 details-loading">
                                                                 <input type="text" name="ware"
                                                                        class="form-control" value="{{ $ware }}"
-                                                                       placeholder="ware" required>
+                                                                       placeholder="ware" required data-toggle="tooltip" data-placement="top" title="Ware">
                                                         </div>
                                                     </div>
                                                     {{--<div class="form-group">--}}
@@ -288,7 +288,7 @@
                                                             <input type="text" name="beladestelle"
                                                                    class="form-control text-center"
                                                                    value="{{ $beladestelle }}"
-                                                                   placeholder="beladestelle" required>
+                                                                   placeholder="beladestelle" required data-toggle="tooltip" data-placement="top" title="Beladestelle">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -296,19 +296,19 @@
                                                         <div class="col-lg-3 details-loading">
                                                             <input type="number" name="plzb"
                                                                    class="form-control text-center" value="{{ $plzb }}"
-                                                                   placeholder="plz" min="0" required>
+                                                                   placeholder="plz" min="0" required data-toggle="tooltip" data-placement="top" title="Plz">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <div class="col-lg-5 details-loading">
                                                             <input type="text" name="ortb"
                                                                    class="form-control text-center" value="{{ $ortb }}"
-                                                                   placeholder="ort" required>
+                                                                   placeholder="ort" required data-toggle="tooltip" data-placement="top" title="Ort">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <div class="col-lg-2 details-loading">
                                                             <input type="text" name="landb"
                                                                    class="form-control text-center" value="{{ $landb }}"
-                                                                   placeholder="land" required>
+                                                                   placeholder="land" required data-toggle="tooltip" data-placement="top" title="Land">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -350,7 +350,7 @@
                                                             <input type="text" name="entladestelle"
                                                                    class="form-control"
                                                                    value="{{ $entladestelle }}"
-                                                                   placeholder="entladestelle" required>
+                                                                   placeholder="entladestelle" required data-toggle="tooltip" data-placement="top" title="Entladestelle">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -358,21 +358,21 @@
                                                         <div class="col-lg-3 details-loading">
                                                             <input type="number" name="plze"
                                                                    class="form-control" value="{{ $plze }}"
-                                                                   placeholder="plz" min="0" required>
+                                                                   placeholder="plz" min="0" required data-toggle="tooltip" data-placement="top" title="Plz">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <!--ort-->
                                                         <div class="col-lg-5 details-loading">
                                                             <input type="text" name="orte"
                                                                    class="form-control" value="{{ $orte }}"
-                                                                   placeholder="ort" required>
+                                                                   placeholder="ort" required data-toggle="tooltip" data-placement="top" title="Ort">
                                                         </div>
                                                         <div class="col-lg-1 details-loading">-</div>
                                                         <!--land-->
                                                         <div class="col-lg-2 details-loading">
                                                             <input type="text" name="lande"
                                                                    class="form-control" value="{{ $lande }}"
-                                                                   placeholder="land" required>
+                                                                   placeholder="land" required data-toggle="tooltip" data-placement="top" title="Land">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -513,71 +513,76 @@
                             </div>
                         </div>
 
-                        <!--subpanel 2-->
+                        @if (Session::has('messageSuccessUploadLoading'))
+                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessUploadLoading') }}</div>
+                        @elseif(Session::has('messageErrorUploadLoading'))
+                            <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUploadLoading') }}</div>
+                        @endif
+                        <!--subpanel 2 info about pallets transfer-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
                                 <a data-toggle="collapse" href="#Pan2collapse">Pallets location ?</a>
                             </div>
-                            <div id="Pan2collapse" class="panel-collapse in collapse">
+                            <div id="Pan2collapse" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form class="form-horizontal" role="form"
-                                          method="POST"
-                                          action="">
-                                        <input type="hidden"
-                                               name="_token"
-                                               value="{{ csrf_token() }}">
+
                                         <div class="panel subpanel">
                                             <div class="panel-heading">
                                                 <a data-toggle="collapse" href="#Pan2Sub1collapse">Loading place</a>
                                             </div>
-                                            <div id="Pan2Sub1collapse" class="panel-collapse in collapse">
+                                            <div id="Pan2Sub1collapse" class="panel-collapse collapse">
                                                 <div class="panel-body">
+                                                    <form class="form-horizontal" role="form"
+                                                          method="POST"
+                                                          action="{{route('uploadLoading', ['atrnr'=>$atrnr, 'anz'=>$anz])}}" enctype="multipart/form-data">
+                                                        <input type="hidden"
+                                                               name="_token"
+                                                               value="{{ csrf_token() }}">
                                                     <div class="form-group">
-                                                        <div class="col-lg-6">
-                                                            Do we need to bring back pallets to the loading place ?
+                                                        <div class="col-lg-offset-1 col-lg-4">
+                                                            How many pallets do we brought back ?
                                                         </div>
-                                                        <div>
-                                                            <input class="radio-inline" type="radio"
-                                                                   name="palletsBackLoadingPlace"
-                                                                   value="" data-toggle="collapse"
-                                                                   data-target="#yesPalletsBackLoadingPlace_collapse:not(.in)"/>Yes
-                                                            <input class="radio-inline" type="radio"
-                                                                   name="palletsBackLoadingPlace"
-                                                                   value="" data-toggle="collapse"
-                                                                   data-target="#yesPalletsBackLoadingPlace_collapse.in"/>No
-                                                        </div>
-                                                    </div>
-                                                    <div id="yesPalletsBackLoadingPlace_collapse"
-                                                         class="form-group collapse">
-                                                        <div class="form-group">
-                                                            <div class="col-lg-4 col-lg-offset-1">
-                                                                How many pallets planned ?
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="col-lg-4 col-lg-offset-1">
-                                                                How many pallets confirmed ?
-                                                            </div>
-                                                            <div class="col-lg-6 col-lg-offset-1">
-                                                                Is the situation verified ? => update account warehouse
-                                                            </div>
+                                                        <div class="col-lg-2">
+                                                            @if(isset($numberPalletsBackLoadingPlace))
+                                                                <input type="number"
+                                                                       name="numberPalletsBackLoadingPlace"
+                                                                       value="{{$numberPalletsBackLoadingPlace}}">
+                                                                @else
+                                                            <input type="number"
+                                                                   name="numberPalletsBackLoadingPlace"
+                                                                   value="">
+                                                            @endif
+                                                            {{--data-toggle="collapse"--}}
+                                                            {{--data-target="#yesPalletsBackLoadingPlace_collapse:not(.in)"--}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <div class="col-lg-6">
-                                                            Do the loading place needs to bring me back pallets ?
+                                                        <div class="col-lg-offset-1 col-lg-4">
+                                                            Do you have proof documents ?
                                                         </div>
-                                                        <div>
-                                                            <input class="radio-inline" type="radio"
-                                                                   name="palletsBackMeLoadingPlace"
-                                                                   value="" data-toggle="collapse"
-                                                                   data-target="#yesPalletsBackMeLoadingPlace_collapse:not(.in)"/>Yes
-                                                            <input class="radio-inline" type="radio"
-                                                                   name="palletsBackMeLoadingPlace"
-                                                                   value="" data-toggle="collapse"
-                                                                   data-target="#yesPalletsBackMeLoadingPlace_collapse.in"/>No
+                                                        <div class="col-lg-2">
+                                                            <input type="file" name="documentsLoading[]" multiple />
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-lg-offset-2">
+                                                            <input type="submit" class="btn btn-primary btn-block btn-form"
+                                                                   value="Submit and Upload"
+                                                                   name="uploadLoading" />
                                                         </div>
                                                     </div>
+
+                                                        @if(isset($filesNames))
+                                                        <div class="form-group">
+                                                            <div class="col-lg-4 col-lg-offset-5">
+
+                                                                @foreach($filesNames as $name)
+                                                                <ul>
+                                                                        <li>{{$name}}</li>
+                                                                    </ul>
+                                                                    @endforeach
+                                                            </div>
+                                                        </div>
+                                                        @endif
                                                     <div id="yesPalletsBackMeLoadingPlace_collapse"
                                                          class="form-group collapse">
                                                         <div class="form-group">
@@ -630,23 +635,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-lg-6">
-                                                            Do we have the documents ?
-                                                        </div>
-                                                        <div>
-                                                            <input class="radio-inline" type="radio"
-                                                                   name="DocLoadingPlace"
-                                                                   value="" data-toggle="collapse"
-                                                                   data-parent="#accordionDoc"
-                                                                   data-target="#yesDocLoadingPlace_collapse:not(.in)"/>Yes
-                                                            <input class="radio-inline" type="radio"
-                                                                   name="DocLoadingPlace"
-                                                                   value="" data-toggle="collapse"
-                                                                   data-parent="#accordionDoc"
-                                                                   data-target="#noDocLoadingPlace_collapse.in"/>No
-                                                        </div>
-                                                    </div>
                                                     <div id="accordion">
                                                         <div id="yesDocLoadingPlace_collapse"
                                                              class="form-group collapse">
@@ -661,11 +649,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        si 1 yes final + 3 yes => selectionner compte à actualiser :
-                                                        beladestelle = nom entrepot ?
-                                                        idem 2yes final + 3yes
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -842,4 +826,10 @@
             </div>
         @endif
     </div>
+
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 @endsection

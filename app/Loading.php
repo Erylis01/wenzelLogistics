@@ -13,4 +13,8 @@ class Loading extends Model
     public function palletstransfers(){
         return $this->hasMany('App\Palletstransfer','loading_atrnr', 'atrnr');
     }
+
+    public function documents(){
+        return $this->belongsToMany('App\Document', 'document_loading');
+    }
 }

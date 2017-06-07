@@ -262,7 +262,7 @@
                         </div>
                         <div class="row">
                             <div class="general-pagination text-left">{!! $listLoadings->render() !!}</div>
-                            {{--->appends($links)--}}
+
                             @if ($listLoadings->currentPage()==$listLoadings->lastPage())
                                 <div class="general-legend col-lg-offset-8">
                                     Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 5)  {{$legend1}}
