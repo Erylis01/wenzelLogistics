@@ -60,7 +60,7 @@ class WarehouseTableSeeder extends Seeder
             'id' => 44,
             'name' => 'warehouse44',
             'adress' => 'adress44',
-            'zipcode' => 44,
+            'zipcode' => 82362,
             'town' => 'town44',
             'country' => 'country44',
             'phone'=>'phone44',

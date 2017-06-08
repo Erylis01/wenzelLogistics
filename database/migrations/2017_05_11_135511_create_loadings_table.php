@@ -44,11 +44,22 @@ class CreateLoadingsTable extends Migration
             $table->string('zusladestellen')->nullable();
 
             $table->string('state')->default('Untreated');
-            $table->integer('numberPalletsBackLoadingPlace')->nullable();
+            $table->string('reasonUpdatePT')->nullable();
+
+            $table->integer('numberPalletsLoadingPlace')->nullable();
             $table->string('accountLoadingPlace')->nullable();
+            $table->string('accountCreditLoadingPlace')->nullable();
+            $table->string('accountDebitLoadingPlace')->nullable();
             $table->string('stateLoadingPlace')->default('Untreated');
             $table->boolean('validateLoadingPlace')->default(false);
-            $table->string('reasonUpdatePT')->nullable();
+
+            $table->integer('numberPalletsOffloadingPlace')->nullable();
+            $table->string('accountCreditOffloadingPlace')->nullable();
+            $table->string('accountDebitOffloadingPlace')->nullable();
+            $table->string('stateOffloadingPlace')->default('Untreated');
+            $table->boolean('validateOffloadingPlace')->default(false);
+//            $table->string('firstTimeLoadingPlace')->default('true true');
+
 
             $table->timestamps();
         });

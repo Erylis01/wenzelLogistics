@@ -204,3 +204,9 @@
     background-color: rgba(0, 160, 0, 0.1);
     border-radius: 5px;
 }
+
+
+
+.noPadding{
+    padding:0px;
+}

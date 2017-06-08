@@ -118,7 +118,7 @@
                                             <thead>
                                             <tr>
                                                 <th class="text-center">Confirmed pallets number</th>
-                                                <th class="text-center">Panned pallets number</th>
+                                                <th class="text-center">Planned pallets number</th>
                                             </tr>
                                             </thead>
                                             <tbody>

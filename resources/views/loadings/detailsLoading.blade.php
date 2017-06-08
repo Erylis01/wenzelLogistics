@@ -53,7 +53,7 @@
 
                         @if (Session::has('messageUpdateLoading'))
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
-                        @endif
+                    @endif
                     <!--subpanel 1 reading form suming up information from the table-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
@@ -629,459 +629,614 @@
                                         </div>
                                 </div>
 
-
-                                @if (Session::has('messageSuccessUploadLoading'))
-                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessUploadLoading') }}</div>
-                                @elseif(Session::has('messageErrorUploadLoading'))
-                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUploadLoading') }}</div>
-                                @endif
-                            <!--subpanel 2 info about pallets transfer-->
+                                <!--subpanel 2 info about pallets transfer-->
                                 <div class="panel subpanel">
                                     <div class="panel-heading">
                                         <a data-toggle="collapse" href="#Pan2collapse">Pallets location ?</a>
                                     </div>
-                                    @if (Session::has('openPanelLoading'))
+                                    @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading'))
                                         <div id="Pan2collapse" class="panel-collapse in collapse">
                                             @else
                                                 <div id="Pan2collapse" class="panel-collapse collapse">
                                                     @endif
                                                     <div class="panel-body">
-
-                                                        <div class="panel subpanel">
-                                                            <div class="panel-heading">
-                                                                <a data-toggle="collapse" href="#Pan2Sub1collapse">Loading
-                                                                    place</a>
-                                                            </div>
-                                                            @if (Session::has('openPanelLoading'))
-                                                                <div id="Pan2Sub1collapse"
-                                                                     class="panel-collapse in collapse">
-                                                                    @else
-                                                                        <div id="Pan2Sub1collapse"
-                                                                             class="panel-collapse collapse">
-                                                                            @endif
-                                                                            <div class="panel-body">
-                                                                                <form class="form-horizontal"
-                                                                                      role="form"
-                                                                                      method="POST"
-                                                                                      action="{{route('uploadLoading', ['atrnr'=>$atrnr, 'anz'=>$anz])}}"
-                                                                                      enctype="multipart/form-data">
-                                                                                    <input type="hidden"
-                                                                                           name="_token"
-                                                                                           value="{{ csrf_token() }}">
-                                                                                    <div class="form-group">
-                                                                                        <div class="col-lg-5">
-                                                                                            <label for="numberPalletsBackLoadingPlace"
-                                                                                                   class="control-label">How
-                                                                                                many pallets do we
-                                                                                                brought back
-                                                                                                ?</label>
-                                                                                        </div>
-                                                                                        <div class="col-lg-2">
-                                                                                            @if(isset($numberPalletsBackLoadingPlace))
-                                                                                                <input class="col-lg-10" type="number"
-                                                                                                       name="numberPalletsBackLoadingPlace"
-                                                                                                       value="{{$numberPalletsBackLoadingPlace}}">
-                                                                                            @else
-                                                                                                <input class="col-lg-10" type="number"
-                                                                                                       name="numberPalletsBackLoadingPlace"
-                                                                                                       value="">
-                                                                                            @endif
-                                                                                        </div>
-                                                                                        <div class="col-lg-offset-2 col-lg-2">
-                                                                                            @php($diff=$numberPalletsBackLoadingPlace-$anz)
-                                                                                            <label for="differencePalletsBackLoadingPlace"
-                                                                                                   class="control-label">Diff : {{$diff}}</label>
-                                                                                    </div>
-                                                                                    </div>
-                                                                                    @if(isset($numberPalletsBackLoadingPlace)&& $numberPalletsBackLoadingPlace<$anz)
-                                                                                        <div class="form-group">
-                                                                                            <div class="col-lg-5">
-                                                                                                <label for="palletsOrderLoading"
-                                                                                                       class="control-label">Do
-                                                                                                    you
-                                                                                                    have pallets order
-                                                                                                    ?</label>
-                                                                                            </div>
-                                                                                            <div class="col-lg-2">
-                                                                                                <input type="file"
-                                                                                                       name="palletsOrderLoading[]"
-                                                                                                       multiple/>
-                                                                                            </div>
-                                                                                            @if(isset($palletsOrderNamesLoadingPlace))
-                                                                                                <div class="col-lg-3 col-lg-offset-2">
-                                                                                                    @foreach($palletsOrderNamesLoadingPlace as $palletsOrder)
-                                                                                                        <ul>
-                                                                                                            <li>{{$palletsOrder}}</li>
-                                                                                                        </ul>
-                                                                                                    @endforeach
+                                                        @if (Session::has('messageSuccessSubmit'))
+                                                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessSubmit') }}</div>
+                                                            @elseif (Session::has('messageSuccessUpload'))
+                                                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessUpload') }}</div>
+                                                        @elseif(Session::has('messageErrorUpload'))
+                                                            <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>
+                                                        @endif
+                                                        <form class="form-horizontal"
+                                                              role="form"
+                                                              method="POST"
+                                                              action="{{route('submitUpload', ['atrnr'=>$atrnr, 'anz'=>$anz])}}"
+                                                              enctype="multipart/form-data">
+                                                            <input type="hidden"
+                                                                   name="_token"
+                                                                   value="{{ csrf_token() }}">
+                                                            <div class="panel subpanel">
+                                                                <div class="panel-heading">
+                                                                    <a data-toggle="collapse" href="#Pan2Sub1collapse">Loading
+                                                                        place</a>
+                                                                </div>
+                                                                @if (Session::has('openPanelLoading'))
+                                                                    <div id="Pan2Sub1collapse"
+                                                                         class="panel-collapse in collapse">
+                                                                        @else
+                                                                            <div id="Pan2Sub1collapse"
+                                                                                 class="panel-collapse collapse">
+                                                                                @endif
+                                                                                <div class="panel-body">
+                                                                                    <div class="panel subpanel col-lg-7">
+                                                                                        <div class="panel-body">
+                                                                                            <!--pallets number brought to loading place-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-6 noPadding">
+                                                                                                    <label for="numberPalletsLoadingPlace"
+                                                                                                           class="control-label">How
+                                                                                                        many pallets
+                                                                                                        were
+                                                                                                        brought
+                                                                                                        ?</label>
                                                                                                 </div>
-                                                                                            @endif
-                                                                                        </div>
-                                                                                    @endif
-
-                                                                                    <div class="form-group">
-                                                                                        <div class="col-lg-5">
-                                                                                            <label for="documentsLoading"
-                                                                                                   class="control-label">Do
-                                                                                                you
-                                                                                                have proof documents
-                                                                                                (CMR/exchange) ?</label>
-                                                                                        </div>
-                                                                                        <div class="col-lg-2">
-                                                                                            <input type="file"
-                                                                                                   name="documentsLoading[]"
-                                                                                                   multiple/>
-                                                                                        </div>
-                                                                                        @if(isset($filesNamesLoadingPlace))
-                                                                                            <div class="col-lg-3 col-lg-offset-2">
-                                                                                                @foreach($filesNamesLoadingPlace as $name)
-                                                                                                    <ul>
-                                                                                                        <li>{{$name}}</li>
-                                                                                                    </ul>
-                                                                                                @endforeach
-                                                                                            </div>
-                                                                                        @endif
-                                                                                    </div>
-                                                                                    <div class="form-group">
-                                                                                        <div class="col-lg-5">
-                                                                                            <label for="accountLoadingPlace"
-                                                                                                   class="control-label">Which
-                                                                                                account is concerned
-                                                                                                ?</label>
-                                                                                        </div>
-                                                                                        <div class="col-lg-6">
-                                                                                            <!-- if mistake in the adding form you are redirected with field already filled-->
-                                                                                            <select class="selectpicker show-tick form-control"
-                                                                                                    data-size="5"
-                                                                                                    data-live-search="true"
-                                                                                                    data-live-search-style="startsWith"
-                                                                                                    title="Pallets Account"
-                                                                                                    name="accountLoadingPlace"
-                                                                                                    required>
-                                                                                                @foreach($listPalletsAccounts as $palletsAccount )
-                                                                                                    @if(Illuminate\Support\Facades\Input::old('accountLoadingPlace') && $palletsAccount->name==old('accountLoadingPlace'))
-                                                                                                        <option selected>{{$palletsAccount->name}}</option>
-                                                                                                    @elseif(isset($accountZipcodeLoadingPlace)&& $palletsAccount->name==$accountZipcodeLoadingPlace)
-                                                                                                        <option selected>{{$palletsAccount->name}}</option>
-                                                                                                    @elseif(isset($accountLoadingPlace)&& $palletsAccount->name==$accountLoadingPlace)
-                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                <div class="col-lg-3">
+                                                                                                    @if(isset($numberPalletsLoadingPlace))
+                                                                                                        <input class="col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsLoadingPlace"
+                                                                                                               value="{{$numberPalletsLoadingPlace}}">
                                                                                                     @else
-                                                                                                        <option>{{$palletsAccount->name}}</option>
+                                                                                                        <input class="col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsLoadingPlace"
+                                                                                                               value="">
                                                                                                     @endif
-                                                                                                @endforeach
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    @if(isset($filesNamesLoadingPlace)&&isset($numberPalletsBackLoadingPlace)&&isset($accountLoadingPlace))
-                                                                                        <div class="form-group">
-                                                                                            <div class="col-lg-5">
-                                                                                                <label for="validateLoadingPlace"
-                                                                                                       class="control-label">Is
-                                                                                                    this transfer
-                                                                                                    validated
-                                                                                                    ?</label>
-                                                                                            </div>
-                                                                                            <div class="col-lg-3">
-                                                                                                @if($validateLoadingPlace==true)
-                                                                                                    <label class="radio-inline"><input
-                                                                                                                type="radio"
-                                                                                                                name="validateLoadingPlace"
-                                                                                                                value="true"
-                                                                                                                checked>Yes</label>
-                                                                                                    <label class="radio-inline"><input
-                                                                                                                type="radio"
-                                                                                                                name="validateLoadingPlace"
-                                                                                                                value="false">No</label>
-                                                                                                @else
-                                                                                                    <label class="radio-inline"><input
-                                                                                                                type="radio"
-                                                                                                                name="validateLoadingPlace"
-                                                                                                                value="true">Yes</label>
-                                                                                                    <label class="radio-inline"><input
-                                                                                                                type="radio"
-                                                                                                                name="validateLoadingPlace"
-                                                                                                                value="false"
-                                                                                                                checked>No</label>
+                                                                                                </div>
+                                                                                                @if(isset($numberPalletsLoadingPlace))
+                                                                                                    <div class="col-lg-3 noPadding">
+                                                                                                        @php($diff=$numberPalletsLoadingPlace-$anz)
+                                                                                                        <label for="differencePalletsLoadingPlace"
+                                                                                                               class="control-label">Diff
+                                                                                                            : {{$diff}}</label>
+                                                                                                    </div>
                                                                                                 @endif
                                                                                             </div>
-                                                                                        </div>
-                                                                                    @endif
-                                                                                    <div class="form-group">
-                                                                                        <div class="col-lg-3 col-lg-offset-5">
-                                                                                            <input type="submit"
-                                                                                                   class="btn btn-primary btn-block btn-form"
-                                                                                                   value="Submit and Upload"
-                                                                                                   name="uploadLoading"/>
+                                                                                            <!--Account credit-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-5 noPadding">
+                                                                                                    <label for="accountCreditLoadingPlace"
+                                                                                                           class="control-label">Which
+                                                                                                        account to
+                                                                                                        credit ?</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-7">
+                                                                                                    <select class="selectpicker show-tick form-control"
+                                                                                                            data-size="5"
+                                                                                                            data-live-search="true"
+                                                                                                            data-live-search-style="startsWith"
+                                                                                                            title="Pallets Account Credit"
+                                                                                                            name="accountCreditLoadingPlace"
+                                                                                                            >
+                                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                            @if(Illuminate\Support\Facades\Input::old('accountCreditLoadingPlace') && $palletsAccount->name==old('accountCreditLoadingPlace'))
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @elseif(isset($accountZipcodeLoadingPlace)&& $palletsAccount->name==$accountZipcodeLoadingPlace)
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @elseif(isset($accountCreditLoadingPlace)&& $palletsAccount->name==$accountCreditLoadingPlace)
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @else
+                                                                                                                <option>{{$palletsAccount->name}}</option>
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--Account debited-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-5 noPadding">
+                                                                                                    <label for="accountDebitLoadingPlace"
+                                                                                                           class="control-label">Which
+                                                                                                        account to
+                                                                                                        debit ?</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-7">
+                                                                                                    <select class="selectpicker show-tick form-control"
+                                                                                                            data-size="5"
+                                                                                                            data-live-search="true"
+                                                                                                            data-live-search-style="startsWith"
+                                                                                                            title="Pallets Account Debit"
+                                                                                                            name="accountDebitLoadingPlace"
+                                                                                                            >
+                                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                            @if(Illuminate\Support\Facades\Input::old('accountDebitLoadingPlace') && $palletsAccount->name==old('accountDebitLoadingPlace'))
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            {{--@elseif(isset($accountZipcodeLoadingPlace)&& $palletsAccount->name==$accountZipcodeLoadingPlace)--}}
+                                                                                                                {{--<option selected>{{$palletsAccount->name}}</option>--}}
+                                                                                                            @elseif(isset($accountDebitLoadingPlace)&& $palletsAccount->name==$accountDebitLoadingPlace)
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @else
+                                                                                                                <option>{{$palletsAccount->name}}</option>
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--validate loading ?-->
+                                                                                            @if(isset($filesNamesLoadingPlace)&&isset($numberPalletsLoadingPlace)&&isset($accountCreditLoadingPlace)&&isset($accountDebitLoadingPlace))
+                                                                                                <div class="form-group">
+                                                                                                    <div class="col-lg-5 noPadding">
+                                                                                                        <label for="validateLoadingPlace"
+                                                                                                               class="control-label">Is
+                                                                                                            this
+                                                                                                            transfer
+                                                                                                            validated
+                                                                                                            ?</label>
+                                                                                                    </div>
+                                                                                                    <div class="col-lg-3">
+                                                                                                        @if($validateLoadingPlace==true)
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace"
+                                                                                                                        value="true"
+                                                                                                                        checked>Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace"
+                                                                                                                        value="false">No</label>
+                                                                                                        @else
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace"
+                                                                                                                        value="true">Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace"
+                                                                                                                        value="false"
+                                                                                                                        checked>No</label>
+                                                                                                        @endif
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                        @endif
+                                                                                        <!--submit button-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-6 col-lg-offset-3">
+                                                                                                    <input type="submit"
+                                                                                                           class="btn btn-primary btn-block btn-form"
+                                                                                                           value="Submit"
+                                                                                                           name="submitLoading"/>
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
 
-                                                                                    <div id="yesPalletsBackMeLoadingPlace_collapse"
-                                                                                         class="form-group collapse">
-                                                                                        <div class="form-group">
-                                                                                            <div class="col-lg-4 col-lg-offset-1">
-                                                                                                How many pallets planned
-                                                                                                ?
+                                                                                    <div class="panel subpanel col-lg-5">
+                                                                                        <div class="panel-body">
+                                                                                            <!--documents proof upload-->
+                                                                                            <div class="form-group text-center">
+                                                                                                <label for="documentsLoading">Do
+                                                                                                    you
+                                                                                                    have proof
+                                                                                                    documents<br>
+                                                                                                    (CMR/Exchange
+                                                                                                    bill/Pallets bill)
+                                                                                                    ?</label>
                                                                                             </div>
-                                                                                        </div>
-                                                                                        <div class="form-group">
-                                                                                            <div class="col-lg-5 col-lg-offset-1">
-                                                                                                Do we have the pallets
-                                                                                                order ?
+                                                                                            <div class="form-group">
+                                                                                                <input type="file"
+                                                                                                       name="documentsLoading[]"
+                                                                                                       multiple/>
                                                                                             </div>
-                                                                                            <div>
-                                                                                                <input class="radio-inline"
-                                                                                                       type="radio"
-                                                                                                       name="palletsOrderLoadingPlace"
-                                                                                                       value=""
-                                                                                                       data-toggle="collapse"
-                                                                                                       data-parent="#accordion"
-                                                                                                       data-target="#yesPalletsOrderLoadingPlace_collapse:not(.in)"/>Yes
-                                                                                                <input class="radio-inline"
-                                                                                                       type="radio"
-                                                                                                       name="palletsOrderLoadingPlace"
-                                                                                                       value=""
-                                                                                                       data-toggle="collapse"
-                                                                                                       data-parent="#accordion"
-                                                                                                       data-target="#noPalletsOrderLoadingPlace_collapse:not(.in)"/>No
-                                                                                                <input class="radio-inline"
-                                                                                                       type="radio"
-                                                                                                       name="palletsOrderLoadingPlace"
-                                                                                                       value=""
-                                                                                                       data-toggle="collapse"
-                                                                                                       data-parent="#accordion"
-                                                                                                       data-target="#noNecesaryPalletsOrderLoadingPlace_collapse:not(.in)"/>No
-                                                                                                necessary, pallets have
-                                                                                                been
-                                                                                                brought back
+                                                                                            <div class="form-group text-left">
+                                                                                                @if(isset($filesNamesLoadingPlace))
+                                                                                                        <ul>
+                                                                                                            @foreach($filesNamesLoadingPlace as $name)
+                                                                                                            <li><a href="../../storage/app/proofsPallets/{{$atrnr}}/documentsLoading/{{$name}}" class="link">{{$name}}</a></li>
+                                                                                                            @endforeach
+                                                                                                        </ul>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <!--upload button-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-8 col-lg-offset-2">
+                                                                                                    <input type="submit"
+                                                                                                           class="btn btn-primary btn-block btn-form"
+                                                                                                           value="Upload"
+                                                                                                           name="uploadLoading"/>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div id="accordion">
-                                                                                        <div id="yesPalletsOrderLoadingPlace_collapse"
-                                                                                             class="form-group collapse">
-                                                                                            <div class="col-lg-5 col-lg-offset-3">
-                                                                                                Load pallets order
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div id="noPalletsOrderLoadingPlace_collapse"
-                                                                                             class="form-group collapse">
-                                                                                            <div class="col-lg-5 col-lg-offset-3">
-                                                                                                Send reminder -> block
-                                                                                                account
-                                                                                                -> payment -> no update
-                                                                                                account
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div id="noNecessaryPalletsOrderLoadingPlace_collapse"
-                                                                                             class="form-group collapse">
-                                                                                            <div class="col-lg-5 col-lg-offset-3">
-                                                                                                OK update account
-                                                                                                warehouse
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div id="accordion">
-                                                                                        <div id="yesDocLoadingPlace_collapse"
-                                                                                             class="form-group collapse">
-                                                                                            <div class="col-lg-5 col-lg-offset-3">
-                                                                                                Load documents
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div id="noDocLoadingPlace_collapse"
-                                                                                             class="form-group collapse">
-                                                                                            <div class="col-lg-5 col-lg-offset-3">
-                                                                                                Send reminder
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </form>
+
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="panel subpanel">
-                                                                    <div class="panel-heading">
-                                                                        <a data-toggle="collapse"
-                                                                           href="#Pan2Sub2collapse">Unloading
-                                                                            place</a>
+                                                                            @if (Session::has('openPanelLoading'))
                                                                     </div>
+                                                                @else
+                                                            </div>
+                                                            @endif
+<!--offloading panel-->
+                                                            <div class="panel subpanel">
+                                                                <div class="panel-heading">
+                                                                    <a data-toggle="collapse"
+                                                                       href="#Pan2Sub2collapse">Offloading
+                                                                        place</a>
+                                                                </div>
+                                                                @if (Session::has('openPanelOffloading'))
                                                                     <div id="Pan2Sub2collapse"
-                                                                         class="panel-collapse collapse">
-                                                                        <div class="panel-body">
-                                                                        </div>
+                                                                         class="panel-collapse in collapse">
+                                                                        @else
+                                                                            <div id="Pan2Sub2collapse"
+                                                                                 class="panel-collapse collapse">
+                                                                                @endif
+                                                                                <div class="panel-body">
+                                                                                    <div class="panel subpanel col-lg-7">
+                                                                                        <div class="panel-body">
+                                                                                            <!--pallets number taken from offloading place-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-6 noPadding">
+                                                                                                    <label for="numberPalletsOffloadingPlace"
+                                                                                                           class="control-label">How
+                                                                                                        many pallets
+                                                                                                        were
+                                                                                                        taken
+                                                                                                        ?</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-3">
+                                                                                                    @if(isset($numberPalletsOffloadingPlace))
+                                                                                                        <input class="col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsOffloadingPlace"
+                                                                                                               value="{{$numberPalletsOffloadingPlace}}">
+                                                                                                    @else
+                                                                                                        <input class="col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsOffloadingPlace"
+                                                                                                               value="">
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                                @if(isset($numberPalletsOffloadingPlace))
+                                                                                                    <div class="col-lg-3 noPadding">
+                                                                                                        @php($diff=$numberPalletsOffloadingPlace-$anz)
+                                                                                                        <label for="differencePalletsOffloadingPlace"
+                                                                                                               class="control-label">Diff
+                                                                                                            : {{$diff}}</label>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <!--Account credit-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-5 noPadding">
+                                                                                                    <label for="accountCreditOffloadingPlace"
+                                                                                                           class="control-label">Which
+                                                                                                        account to
+                                                                                                        credit ?</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-7">
+                                                                                                    <select class="selectpicker show-tick form-control"
+                                                                                                            data-size="5"
+                                                                                                            data-live-search="true"
+                                                                                                            data-live-search-style="startsWith"
+                                                                                                            title="Pallets Account Credit"
+                                                                                                            name="accountCreditOffloadingPlace"
+                                                                                                            >
+                                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                            @if(Illuminate\Support\Facades\Input::old('accountCreditOffloadingPlace') && $palletsAccount->name==old('accountCreditOffloadingPlace'))
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            {{--@elseif(isset($accountZipcodeCreditOffloadingPlace)&& $palletsAccount->name==$accountZipcodeCreditOffloadingPlace)--}}
+                                                                                                                {{--<option selected>{{$palletsAccount->name}}</option>--}}
+                                                                                                            @elseif(isset($accountCreditOffloadingPlace)&& $palletsAccount->name==$accountCreditOffloadingPlace)
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @else
+                                                                                                                <option>{{$palletsAccount->name}}</option>
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--Account debited-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-5 noPadding">
+                                                                                                    <label for="accountDebitOffloadingPlace"
+                                                                                                           class="control-label">Which
+                                                                                                        account to
+                                                                                                        debit ?</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-7">
+                                                                                                    <select class="selectpicker show-tick form-control"
+                                                                                                            data-size="5"
+                                                                                                            data-live-search="true"
+                                                                                                            data-live-search-style="startsWith"
+                                                                                                            title="Pallets Account Debit"
+                                                                                                            name="accountDebitOffloadingPlace"
+                                                                                                            >
+                                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                            @if(Illuminate\Support\Facades\Input::old('accountDebitOffloadingPlace') && $palletsAccount->name==old('accountDebitOffloadingPlace'))
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @elseif(isset($accountZipcodeOffloadingPlace)&& $palletsAccount->name==$accountZipcodeOffloadingPlace)
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @elseif(isset($accountDebitOffloadingPlace)&& $palletsAccount->name==$accountDebitOffloadingPlace)
+                                                                                                                <option selected>{{$palletsAccount->name}}</option>
+                                                                                                            @else
+                                                                                                                <option>{{$palletsAccount->name}}</option>
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--validate loading ?-->
+                                                                                            @if(isset($filesNamesOffloadingPlace)&&isset($numberPalletsOffloadingPlace)&&isset($accountCreditOffloadingPlace)&&isset($accountDebitOffloadingPlace))
+                                                                                                <div class="form-group">
+                                                                                                    <div class="col-lg-5 noPadding">
+                                                                                                        <label for="validateOffloadingPlace"
+                                                                                                               class="control-label">Is
+                                                                                                            this
+                                                                                                            transfer
+                                                                                                            validated
+                                                                                                            ?</label>
+                                                                                                    </div>
+                                                                                                    <div class="col-lg-3">
+                                                                                                        @if($validateOffloadingPlace==true)
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace"
+                                                                                                                        value="true"
+                                                                                                                        checked>Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace"
+                                                                                                                        value="false">No</label>
+                                                                                                        @else
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateoffloadingPlace"
+                                                                                                                        value="true">Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace"
+                                                                                                                        value="false"
+                                                                                                                        checked>No</label>
+                                                                                                        @endif
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                        @endif
+                                                                                        <!--submit button-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-6 col-lg-offset-3">
+                                                                                                    <input type="submit"
+                                                                                                           class="btn btn-primary btn-block btn-form"
+                                                                                                           value="Submit"
+                                                                                                           name="submitOffloading"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="panel subpanel col-lg-5">
+                                                                                        <div class="panel-body">
+                                                                                            <!--documents proof upload-->
+                                                                                            <div class="form-group text-center">
+                                                                                                <label for="documentsOffloading">Do
+                                                                                                    you
+                                                                                                    have proof
+                                                                                                    documents<br>
+                                                                                                    (CMR/Exchange
+                                                                                                    bill/Pallets bill)
+                                                                                                    ?</label>
+                                                                                            </div>
+                                                                                            <div class="form-group">
+                                                                                                <input type="file"
+                                                                                                       name="documentsOffloading[]"
+                                                                                                       multiple/>
+                                                                                            </div>
+                                                                                            <div class="form-group text-left">
+                                                                                                @if(isset($filesNamesOffloadingPlace))
+                                                                                                    @foreach($filesNamesOffloadingPlace as $name)
+                                                                                                        <ul>
+                                                                                                            <li>{{$name}}</li>
+                                                                                                        </ul>
+                                                                                                    @endforeach
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <!--upload button-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-8 col-lg-offset-2">
+                                                                                                    <input type="submit"
+                                                                                                           class="btn btn-primary btn-block btn-form"
+                                                                                                           value="Upload"
+                                                                                                           name="uploadOffloading"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            @if (Session::has('openPanelOffloading'))
+                                                                    </div>
+                                                                @else
+                                                            </div>
+                                                            @endif
+
+                                                            <div class="panel subpanel">
+                                                                <div class="panel-heading">
+                                                                    <a data-toggle="collapse"
+                                                                       href="#Pan2Sub3collapse">Carrier</a>
+                                                                </div>
+                                                                <div id="Pan2Sub3collapse"
+                                                                     class="panel-collapse collapse">
+                                                                    <div class="panel-body">
                                                                     </div>
                                                                 </div>
-                                                                <div class="panel subpanel">
-                                                                    <div class="panel-heading">
-                                                                        <a data-toggle="collapse"
-                                                                           href="#Pan2Sub3collapse">Carrier</a>
-                                                                    </div>
-                                                                    <div id="Pan2Sub3collapse"
-                                                                         class="panel-collapse collapse">
-                                                                        <div class="panel-body">
-                                                                        </div>
+                                                            </div>
+                                                            <div class="panel subpanel">
+                                                                <div class="panel-heading">
+                                                                    <a data-toggle="collapse"
+                                                                       href="#Pan2Sub4collapse">Other
+                                                                        place</a>
+                                                                </div>
+                                                                <div id="Pan2Sub4collapse"
+                                                                     class="panel-collapse collapse">
+                                                                    <div class="panel-body">
                                                                     </div>
                                                                 </div>
-                                                                <div class="panel subpanel">
-                                                                    <div class="panel-heading">
-                                                                        <a data-toggle="collapse"
-                                                                           href="#Pan2Sub4collapse">Other
-                                                                            place</a>
-                                                                    </div>
-                                                                    <div id="Pan2Sub4collapse"
-                                                                         class="panel-collapse collapse">
-                                                                        <div class="panel-body">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                        </div>
+                                                            </div>
+
+                                                        </form>
+                                                        @if (Session::has('openPanelLoading'))
                                                     </div>
+                                                    @else
                                                 </div>
-
-
-                                                {{--<!--subpanel-->--}}
-                                                {{--<div class="panel subpanel">--}}
-                                                {{--<div class="panel-heading">--}}
-                                                {{--@if($sum==0 || $sum==null)--}}
-                                                {{--@php($class="text-alert")--}}
-                                                {{--@endif--}}
-                                                {{--<a data-toggle="collapse" href="#Pan2collapse">Verification--}}
-                                                {{--and Validation - Pallets transfers</a><span--}}
-                                                {{--class="col-lg-offset-6">TOTAL = {{$sum}}</span>--}}
-                                                {{--</div>--}}
-                                                {{--<div id="Pan2collapse" class="panel-collapse collapse">--}}
-                                                {{--<div class="panel-body">--}}
-                                                {{--<div class="table-responsive">--}}
-                                                {{--<p class="text-center"><span--}}
-                                                {{--class="glyphicon glyphicon-plus glyphicon-green"></span> TOTAL--}}
-                                                {{--= {{$sumPlus}}--}}
-                                                {{--</p>--}}
-                                                {{--<table class="table table-hover table-bordered table-loading-pallets">--}}
-                                                {{--<thead>--}}
-                                                {{--@if($totalpallets<0)--}}
-                                                {{--@php($class="text-alert")--}}
-                                                {{--@elseif($totalpallets>0)--}}
-                                                {{--@php($class="text-warning")--}}
-                                                {{--@else--}}
-                                                {{--@php($class="text-success")--}}
-                                                {{--@endif--}}
-                                                {{--<tr>--}}
-                                                {{--<th class="text-center">ID</th>--}}
-                                                {{--<th class="text-center">Pallets account</th>--}}
-                                                {{--<th class="text-center">Real pallets--}}
-                                                {{--number--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center">Validated ?</th>--}}
-                                                {{--<th class="text-center">Theorical pallets--}}
-                                                {{--number--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center">Documents ?</th>--}}
-                                                {{--<th class="text-center">Date last reminder--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center">Reminders number--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span></th>--}}
-                                                {{--</tr>--}}
-                                                {{--</thead>--}}
-                                                {{--<tbody>--}}
-                                                {{--@foreach($palletstransfersPlus as $transfersPlus)--}}
-                                                {{--<tr>--}}
-                                                {{--<td class="text-center"><a--}}
-                                                {{--href="{{route('showDetailsPalletstransfer',$transfersPlus->id)}}"--}}
-                                                {{--class="link">{{$transfersPlus->id}}</a></td>--}}
-                                                {{--<td class="text-center">{{$transfersPlus->palletsaccount_name}}</td>--}}
-                                                {{--<td class="text-center">{{$transfersPlus->realPalletsNumber}}</td>--}}
-                                                {{--@if($transfersPlus->state==false)--}}
-                                                {{--<td class="text-center">No</td>--}}
-                                                {{--@else--}}
-                                                {{--<td class="text-center">Yes</td>--}}
-                                                {{--@endif--}}
-                                                {{--<td class="text-center">{{$transfersPlus->palletsNumber}}</td>--}}
-                                                {{--@if($transfersPlus->documents==false)--}}
-                                                {{--<td class="text-center">No</td>--}}
-                                                {{--@else--}}
-                                                {{--<td class="text-center">Yes</td>--}}
-                                                {{--@endif--}}
-                                                {{--<td class="text-center">{{$transfersPlus->dateLastReminder}}</td>--}}
-                                                {{--<td class="text-center">{{$transfersPlus->remindersNumber}}</td>--}}
-                                                {{--</tr>--}}
-                                                {{--@endforeach--}}
-                                                {{--</tbody>--}}
-                                                {{--</table>--}}
-                                                {{--</div>--}}
-
-                                                {{--<div class="table-responsive">--}}
-                                                {{--<p class="text-center"><span--}}
-                                                {{--class="glyphicon glyphicon-minus glyphicon-green"></span> TOTAL--}}
-                                                {{--= {{$sumMinus}}--}}
-                                                {{--</p>--}}
-                                                {{--<table class="table table-hover table-loading-pallets table-bordered">--}}
-                                                {{--<thead>--}}
-                                                {{--@if($totalpallets<0)--}}
-                                                {{--@php($class="text-alert")--}}
-                                                {{--@elseif($totalpallets>0)--}}
-                                                {{--@php($class="text-warning")--}}
-                                                {{--@else--}}
-                                                {{--@php($class="text-success")--}}
-                                                {{--@endif--}}
-                                                {{--<tr>--}}
-                                                {{--<th class="text-center">ID</th>--}}
-                                                {{--<th class="text-center">Pallets account</th>--}}
-                                                {{--<th class="text-center">Real pallets--}}
-                                                {{--number--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center">Validated ?</th>--}}
-                                                {{--<th class="text-center">Theorical pallets--}}
-                                                {{--number--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center">Documents ?</th>--}}
-                                                {{--<th class="text-center">Date last reminder--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center">Reminders number--}}
-                                                {{--</th>--}}
-                                                {{--<th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span></th>--}}
-                                                {{--</tr>--}}
-                                                {{--</thead>--}}
-                                                {{--<tbody>--}}
-                                                {{--@foreach($palletstransfersMinus as $transfersMinus)--}}
-                                                {{--<tr>--}}
-                                                {{--<td class="text-center"><a--}}
-                                                {{--href="{{route('showDetailsPalletstransfer',$transfersMinus->id)}}"--}}
-                                                {{--class="link">{{$transfersMinus->id}}</a></td>--}}
-                                                {{--<td class="text-center">{{$transfersMinus->palletsaccount_name}}</td>--}}
-                                                {{--<td class="text-center">{{$transfersMinus->realPalletsNumber}}</td>--}}
-                                                {{--@if($transfersMinus->state==false)--}}
-                                                {{--<td class="text-center">No</td>--}}
-                                                {{--@else--}}
-                                                {{--<td class="text-center">Yes</td>--}}
-                                                {{--@endif--}}
-                                                {{--<td class="text-center">{{$transfersMinus->palletsNumber}}</td>--}}
-                                                {{--@if($transfersMinus->documents==false)--}}
-                                                {{--<td class="text-center">No</td>--}}
-                                                {{--@else--}}
-                                                {{--<td class="text-center">Yes</td>--}}
-                                                {{--@endif--}}
-                                                {{--<td class="text-center">{{$transfersMinus->dateLastReminder}}</td>--}}
-                                                {{--<td class="text-center">{{$transfersMinus->remindersNumber}}</td>--}}
-                                                {{--</tr>--}}
-                                                {{--@endforeach--}}
-                                                {{--</tbody>--}}
-                                                {{--</table>--}}
-                                                {{--</div>--}}
-                                                {{--</div>--}}
-                                                {{--</div>--}}
-                                                {{--</div>--}}
+                                            @endif
                                         </div>
                                 </div>
-                                {{--</div>--}}
-                                {{--</div>--}}
-                                {{--</div>--}}
                         </div>
-                        @endif
                     </div>
 
-                    <script>
-                        $(document).ready(function () {
-                            $('[data-toggle="tooltip"]').tooltip();
-                        });
-                    </script>
+
+                    {{--<!--subpanel-->--}}
+                    {{--<div class="panel subpanel">--}}
+                    {{--<div class="panel-heading">--}}
+                    {{--@if($sum==0 || $sum==null)--}}
+                    {{--@php($class="text-alert")--}}
+                    {{--@endif--}}
+                    {{--<a data-toggle="collapse" href="#Pan2collapse">Verification--}}
+                    {{--and Validation - Pallets transfers</a><span--}}
+                    {{--class="col-lg-offset-6">TOTAL = {{$sum}}</span>--}}
+                    {{--</div>--}}
+                    {{--<div id="Pan2collapse" class="panel-collapse collapse">--}}
+                    {{--<div class="panel-body">--}}
+                    {{--<div class="table-responsive">--}}
+                    {{--<p class="text-center"><span--}}
+                    {{--class="glyphicon glyphicon-plus glyphicon-green"></span> TOTAL--}}
+                    {{--= {{$sumPlus}}--}}
+                    {{--</p>--}}
+                    {{--<table class="table table-hover table-bordered table-loading-pallets">--}}
+                    {{--<thead>--}}
+                    {{--@if($totalpallets<0)--}}
+                    {{--@php($class="text-alert")--}}
+                    {{--@elseif($totalpallets>0)--}}
+                    {{--@php($class="text-warning")--}}
+                    {{--@else--}}
+                    {{--@php($class="text-success")--}}
+                    {{--@endif--}}
+                    {{--<tr>--}}
+                    {{--<th class="text-center">ID</th>--}}
+                    {{--<th class="text-center">Pallets account</th>--}}
+                    {{--<th class="text-center">Real pallets--}}
+                    {{--number--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center">Validated ?</th>--}}
+                    {{--<th class="text-center">Theorical pallets--}}
+                    {{--number--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center">Documents ?</th>--}}
+                    {{--<th class="text-center">Date last reminder--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center">Reminders number--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span></th>--}}
+                    {{--</tr>--}}
+                    {{--</thead>--}}
+                    {{--<tbody>--}}
+                    {{--@foreach($palletstransfersPlus as $transfersPlus)--}}
+                    {{--<tr>--}}
+                    {{--<td class="text-center"><a--}}
+                    {{--href="{{route('showDetailsPalletstransfer',$transfersPlus->id)}}"--}}
+                    {{--class="link">{{$transfersPlus->id}}</a></td>--}}
+                    {{--<td class="text-center">{{$transfersPlus->palletsaccount_name}}</td>--}}
+                    {{--<td class="text-center">{{$transfersPlus->realPalletsNumber}}</td>--}}
+                    {{--@if($transfersPlus->state==false)--}}
+                    {{--<td class="text-center">No</td>--}}
+                    {{--@else--}}
+                    {{--<td class="text-center">Yes</td>--}}
+                    {{--@endif--}}
+                    {{--<td class="text-center">{{$transfersPlus->palletsNumber}}</td>--}}
+                    {{--@if($transfersPlus->documents==false)--}}
+                    {{--<td class="text-center">No</td>--}}
+                    {{--@else--}}
+                    {{--<td class="text-center">Yes</td>--}}
+                    {{--@endif--}}
+                    {{--<td class="text-center">{{$transfersPlus->dateLastReminder}}</td>--}}
+                    {{--<td class="text-center">{{$transfersPlus->remindersNumber}}</td>--}}
+                    {{--</tr>--}}
+                    {{--@endforeach--}}
+                    {{--</tbody>--}}
+                    {{--</table>--}}
+                    {{--</div>--}}
+
+                    {{--<div class="table-responsive">--}}
+                    {{--<p class="text-center"><span--}}
+                    {{--class="glyphicon glyphicon-minus glyphicon-green"></span> TOTAL--}}
+                    {{--= {{$sumMinus}}--}}
+                    {{--</p>--}}
+                    {{--<table class="table table-hover table-loading-pallets table-bordered">--}}
+                    {{--<thead>--}}
+                    {{--@if($totalpallets<0)--}}
+                    {{--@php($class="text-alert")--}}
+                    {{--@elseif($totalpallets>0)--}}
+                    {{--@php($class="text-warning")--}}
+                    {{--@else--}}
+                    {{--@php($class="text-success")--}}
+                    {{--@endif--}}
+                    {{--<tr>--}}
+                    {{--<th class="text-center">ID</th>--}}
+                    {{--<th class="text-center">Pallets account</th>--}}
+                    {{--<th class="text-center">Real pallets--}}
+                    {{--number--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center">Validated ?</th>--}}
+                    {{--<th class="text-center">Theorical pallets--}}
+                    {{--number--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center">Documents ?</th>--}}
+                    {{--<th class="text-center">Date last reminder--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center">Reminders number--}}
+                    {{--</th>--}}
+                    {{--<th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span></th>--}}
+                    {{--</tr>--}}
+                    {{--</thead>--}}
+                    {{--<tbody>--}}
+                    {{--@foreach($palletstransfersMinus as $transfersMinus)--}}
+                    {{--<tr>--}}
+                    {{--<td class="text-center"><a--}}
+                    {{--href="{{route('showDetailsPalletstransfer',$transfersMinus->id)}}"--}}
+                    {{--class="link">{{$transfersMinus->id}}</a></td>--}}
+                    {{--<td class="text-center">{{$transfersMinus->palletsaccount_name}}</td>--}}
+                    {{--<td class="text-center">{{$transfersMinus->realPalletsNumber}}</td>--}}
+                    {{--@if($transfersMinus->state==false)--}}
+                    {{--<td class="text-center">No</td>--}}
+                    {{--@else--}}
+                    {{--<td class="text-center">Yes</td>--}}
+                    {{--@endif--}}
+                    {{--<td class="text-center">{{$transfersMinus->palletsNumber}}</td>--}}
+                    {{--@if($transfersMinus->documents==false)--}}
+                    {{--<td class="text-center">No</td>--}}
+                    {{--@else--}}
+                    {{--<td class="text-center">Yes</td>--}}
+                    {{--@endif--}}
+                    {{--<td class="text-center">{{$transfersMinus->dateLastReminder}}</td>--}}
+                    {{--<td class="text-center">{{$transfersMinus->remindersNumber}}</td>--}}
+                    {{--</tr>--}}
+                    {{--@endforeach--}}
+                    {{--</tbody>--}}
+                    {{--</table>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                </div>
+            </div>
+            {{--</div>--}}
+            {{--</div>--}}
+            {{--</div>--}}
+    </div>
+    @endif
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 @endsection
