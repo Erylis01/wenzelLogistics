@@ -60,27 +60,37 @@ class DetailsLoadingController extends Controller
 
             //loading
             $stateLoadingPlace = $detailsLoading->stateLoadingPlace;
-            $validateLoadingPlace=$detailsLoading->validateLoadingPlace;
+            $validateLoadingPlace = $detailsLoading->validateLoadingPlace;
             $numberPalletsBackLoadingPlace = $detailsLoading->numberPalletsBackLoadingPlace;
-            $accountLoadingPlace=$detailsLoading->accountLoadingPlace;
+            $accountLoadingPlace = $detailsLoading->accountLoadingPlace;
             $listPalletsAccounts = DB::table('palletsaccounts')->get();
-            if(Warehouse::where('zipcode', $plzb)->first()<>null){
-                $idWarehouseZipcodeLoadingPlace=Warehouse::where('zipcode', $plzb)->first()->id;
-                $idAccountZipcodeLoadingPlace = DB::table('palletsaccount_warehouse')->where('warehouse_id',$idWarehouseZipcodeLoadingPlace)->first()->palletsaccount_id;
-                $accountZipcodeLoadingPlace=Palletsaccount::where('id', $idAccountZipcodeLoadingPlace)->first()->name;
+            if (Warehouse::where('zipcode', $plzb)->first() <> null) {
+                $idWarehouseZipcodeLoadingPlace = Warehouse::where('zipcode', $plzb)->first()->id;
+                $idAccountZipcodeLoadingPlace = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeLoadingPlace)->first()->palletsaccount_id;
+                $accountZipcodeLoadingPlace = Palletsaccount::where('id', $idAccountZipcodeLoadingPlace)->first()->name;
             };
 
             $files = DB::table('document_loading')->where('loading_id', $atrnr)->get();
-            if(!$files->isEmpty()){
-                foreach ($files as $f) {
-                    $filesNamesLoadingPlace[] = Document::where('id', $f->document_id)->first()->name;
+            if (!$files->isEmpty()) {
+//                dd(Document::where('type', 'CMR_Exchange')->get(), Document::where('type', 'Pallets order')->get());
+                $filesLoadingPlace=Document::where('type', 'CMR_Exchange')->get();
+                if(!$filesLoadingPlace->isEmpty()){
+                    foreach ($filesLoadingPlace as $fLP) {
+                        $filesNamesLoadingPlace[] = $fLP->name;
+                    }
+                }
+                $palletsOrderLoadingPlace=Document::where('type', 'Pallets order')->get();
+                if(!$palletsOrderLoadingPlace->isEmpty()){
+                    foreach ($palletsOrderLoadingPlace as $poLP){
+                        $palletsOrderNamesLoadingPlace[] = $poLP->name;
+                    }
                 }
             }
 
             return view('loadings.detailsLoading', compact('ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
                 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'ware',
-                'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'reasonUpdatePT','state','listPalletsAccounts',
-                'filesNamesLoadingPlace', 'stateLoadingPlace', 'numberPalletsBackLoadingPlace', 'accountLoadingPlace', 'accountZipcodeLoadingPlace', 'validateLoadingPlace'
+                'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'reasonUpdatePT', 'state', 'listPalletsAccounts',
+                'filesNamesLoadingPlace', 'palletsOrderNamesLoadingPlace', 'stateLoadingPlace', 'numberPalletsBackLoadingPlace', 'accountLoadingPlace', 'accountZipcodeLoadingPlace', 'validateLoadingPlace'
             ));
         } else {
             return view('auth.login');
@@ -137,7 +147,7 @@ class DetailsLoadingController extends Controller
     {
         //number pallets
         $numberPalletsBackLoadingPlace = Input::get('numberPalletsBackLoadingPlace');
-       if(isset($numberPalletsBackLoadingPlace)){
+        if (isset($numberPalletsBackLoadingPlace)) {
 //        if ($numberPalletsBackLoadingPlace == $anz) {
 //            $stateLoadingPlace = 'OK';
 //        } elseif ($numberPalletsBackLoadingPlace > $anz) {
@@ -145,16 +155,16 @@ class DetailsLoadingController extends Controller
 //        } else {
 //            $stateLoadingPlace = 'inf';
 //        }
-           Loading::where('atrnr', $atrnr)->update(['numberPalletsBackLoadingPlace'=>$numberPalletsBackLoadingPlace]);
-       }
+            Loading::where('atrnr', $atrnr)->update(['numberPalletsBackLoadingPlace' => $numberPalletsBackLoadingPlace]);
+        }
 
-       //account associated
-        $accountLoadingPlace=Input::get('accountLoadingPlace');
-       if(isset($accountLoadingPlace)){
-           Loading::where('atrnr', $atrnr)->update(['accountLoadingPlace'=>$accountLoadingPlace]);
-           $actualTheoricalNumberPallets=Palletsaccount::where('name',$accountLoadingPlace)->first()->theoricalNumberPallets;
-           Palletsaccount::where('name',$accountLoadingPlace)->update(['theoricalNumberPallets'=> $actualTheoricalNumberPallets+$numberPalletsBackLoadingPlace]);
-       }
+        //account associated
+        $accountLoadingPlace = Input::get('accountLoadingPlace');
+        if (isset($accountLoadingPlace)) {
+            Loading::where('atrnr', $atrnr)->update(['accountLoadingPlace' => $accountLoadingPlace]);
+            $actualTheoricalNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->theoricalNumberPallets;
+            Palletsaccount::where('name', $accountLoadingPlace)->update(['theoricalNumberPallets' => $actualTheoricalNumberPallets + $numberPalletsBackLoadingPlace]);
+        }
         session()->flash('messageSuccessUploadLoading', 'Successfully updated pallets location');
 
         //documents
@@ -162,15 +172,37 @@ class DetailsLoadingController extends Controller
         if (isset($documentsLoading)) {
             foreach ($documentsLoading as $document) {
                 $filename = $document->getClientOriginalName();
-                $fileNames[] = $filename;
                 $extension = $document->getClientOriginalExtension();
                 $size = $document->getSize();
                 //if file is an image, a pdf or an email
                 if (($extension == 'png' || $extension == 'jpg' || $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
-                    $document->store('proofsPallets/' . $atrnr . '/documentsLoading');
+                    $document->store('proofsPallets/' . $atrnr . '/documentsLoading/CMR_Exchange');
                     Document::firstOrCreate([
-                        'name' => $filename
-                    ])->loadings()->sync($atrnr);
+                        'name' => $filename,
+                        'type'=>'CMR_Exchange'
+                    ])->loadings()->attach($atrnr);
+                    session()->flash('messageSuccessUploadLoading', 'Successfully uploaded the files');
+                } else {
+                    session()->flash('messageErrorUploadLoading', 'Error ! The file type is not supported (png, jgp, pdf, msg, htm, rtf only');
+                    return redirect()->back();
+                }
+            }
+        }
+
+        //palletsOrder
+        $palletsOrderLoading = $request->file('palletsOrderLoading');
+        if (isset($palletsOrderLoading)) {
+            foreach ($palletsOrderLoading as $palletsOrder) {
+                $palletsOrderName = $palletsOrder->getClientOriginalName();
+                $extensionPalletsOrder = $palletsOrder->getClientOriginalExtension();
+                $sizePalletsOrder = $palletsOrder->getSize();
+                //if file is an image, a pdf or an email
+                if (($extensionPalletsOrder == 'png' || $extensionPalletsOrder == 'jpg' || $extensionPalletsOrder == 'msg' || $extensionPalletsOrder == 'htm' || $extensionPalletsOrder == 'rtf' || $extensionPalletsOrder == 'pdf') && $sizePalletsOrder < 2000000) {
+                    $palletsOrder->store('proofsPallets/' . $atrnr . '/documentsLoading/palletsOrder');
+                    Document::firstOrCreate([
+                        'name' => $palletsOrderName,
+                        'type'=>'Pallets order'
+                    ])->loadings()->attach($atrnr);
                     session()->flash('messageSuccessUploadLoading', 'Successfully uploaded the files');
                 } else {
                     session()->flash('messageErrorUploadLoading', 'Error ! The file type is not supported (png, jgp, pdf, msg, htm, rtf only');
@@ -180,36 +212,40 @@ class DetailsLoadingController extends Controller
         }
 
         //validated
-        $validateLoadingPlace=Input::get('validateLoadingPlace');
-        if($validateLoadingPlace=='false'){
-            $validateLoadingPlace=false;
-        }else{
-            $validateLoadingPlace=true;
+        $validateLoadingPlace = Input::get('validateLoadingPlace');
+        if ($validateLoadingPlace == 'false' || $validateLoadingPlace==null) {
+            $validateLoadingPlace = false;
+        } else {
+            $validateLoadingPlace = true;
         }
-        Loading::where('atrnr', $atrnr)->update(['validateLoadingPlace'=>$validateLoadingPlace]);
+        Loading::where('atrnr', $atrnr)->update(['validateLoadingPlace' => $validateLoadingPlace]);
 
-        $actualDocumentsLoading1=DB::table('document_loading')->where('loading_id', $atrnr)->get();
-        if(!$actualDocumentsLoading1->isEmpty()){
-        foreach ($actualDocumentsLoading1 as $actualDoc){
-            $actualDocumentsLoading[]=Document::where('id', $actualDoc->document_id)->first();
-        }}
+        //documents already associated to the loading ?
+        //pallets order already associated to the laoding ?
+        $actualDocumentsLoading1 = DB::table('document_loading')->where('loading_id', $atrnr)->get();
+        if (!$actualDocumentsLoading1->isEmpty()) {
+            foreach ($actualDocumentsLoading1 as $actualDoc) {
+                $actualDocumentsLoading[] = Document::where('id', $actualDoc->document_id)->where( 'type', 'CMR_Exchange')->first();
+                $actualPalletsOrderLoading[] = Document::where('id', $actualDoc->document_id)->where('type', 'Pallets order')->first();
+            }
+        }
 
         //state
-        if(isset($numberPalletsBackLoadingPlace)&&isset($accountLoadingPlace)&&(isset($documentsLoading)||isset($actualDocumentsLoading))&&$validateLoadingPlace==true){
-            $stateLoadingPlace='Complete Validated';
-            $actualRealNumberPallets=Palletsaccount::where('name',$accountLoadingPlace)->first()->realNumberPallets;
-            Palletsaccount::where('name',$accountLoadingPlace)->update(['realNumberPallets'=> $actualRealNumberPallets+$numberPalletsBackLoadingPlace]);
-        }elseif(isset($numberPalletsBackLoadingPlace)&&isset($accountLoadingPlace)&&(isset($documentsLoading)||isset($actualDocumentsLoading))){
-            $stateLoadingPlace='Complete';
-        }elseif(!(isset($documentsLoading)&&!isset($actualDocumentsLoading))){
-            $stateLoadingPlace='Waiting documents';
-        }elseif(isset($numberPalletsBackLoadingPlace)||isset($accountLoadingPlace)||(isset($documentsLoading)||isset($actualDocumentsLoading))){
-            $stateLoadingPlace='In progress';
-        }else{
-            $stateLoadingPlace='Untreated';
+        if (isset($numberPalletsBackLoadingPlace) && isset($accountLoadingPlace) && (isset($documentsLoading) || isset($actualDocumentsLoading)) && $validateLoadingPlace == true &&($numberPalletsBackLoadingPlace<$anz && (isset($palletsOrderLoading) || isset($actualPalletsOrderLoading)))) {
+            $stateLoadingPlace = 'Complete Validated';
+            $actualRealNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->realNumberPallets;
+            Palletsaccount::where('name', $accountLoadingPlace)->update(['realNumberPallets' => $actualRealNumberPallets + $numberPalletsBackLoadingPlace]);
+        } elseif (isset($numberPalletsBackLoadingPlace) && isset($accountLoadingPlace) && (isset($documentsLoading) || isset($actualDocumentsLoading)) && $validateLoadingPlace == true &&($numberPalletsBackLoadingPlace<$anz && (isset($palletsOrderLoading) || isset($actualPalletsOrderLoading)))) {
+            $stateLoadingPlace = 'Complete';
+        } elseif (!isset($documentsLoading) || !isset($actualDocumentsLoading)||($numberPalletsBackLoadingPlace<$anz && !isset($palletsOrderLoading) ) ||($numberPalletsBackLoadingPlace<$anz && !isset($actualPalletsOrderLoading))) {
+            $stateLoadingPlace = 'Waiting documents';
+        } elseif (isset($numberPalletsBackLoadingPlace) || isset($accountLoadingPlace) || (isset($documentsLoading) || isset($actualDocumentsLoading))) {
+            $stateLoadingPlace = 'In progress';
+        } else {
+            $stateLoadingPlace = 'Untreated';
         }
 
-        Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace'=>$stateLoadingPlace]);
+        Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace' => $stateLoadingPlace]);
 
         session()->flash('openPanelLoading', 'openPanelLoading');
         return redirect()->back();
