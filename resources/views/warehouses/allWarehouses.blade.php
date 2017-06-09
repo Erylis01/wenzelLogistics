@@ -47,14 +47,11 @@
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddWarehouse') }}</div>
                         @endif
 
-
-
                         <!-- Table -->
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
-
                                     <th class="text-center">ID<br> <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=id&order=asc')}}"></a><a

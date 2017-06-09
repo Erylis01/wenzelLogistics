@@ -68,7 +68,7 @@ class WarehouseTableSeeder extends Seeder
             'email'=>'email44',
             'namecontact'=>'contact44',
 //            'palletsaccount_name'=>'account44',
-        ));
+        ))->palletsaccounts()->sync(5);;
 
 
     }

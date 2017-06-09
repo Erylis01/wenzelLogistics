@@ -10,7 +10,10 @@ use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class DetailsLoadingController extends Controller
@@ -63,17 +66,15 @@ class DetailsLoadingController extends Controller
 
             if (Warehouse::where('zipcode', $plzb)->first() <> null) {
                 $idWarehouseZipcodeLoadingPlace = Warehouse::where('zipcode', $plzb)->first()->id;
-                $idAccountZipcodeLoadingPlace = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeLoadingPlace)->first()->palletsaccount_id;
-                $accountZipcodeLoadingPlace = Palletsaccount::where('id', $idAccountZipcodeLoadingPlace)->first()->name;
-            };
+                $accountZipcodeLoadingPlace1 = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeLoadingPlace)->first();
+                if ($accountZipcodeLoadingPlace1 <> null) {
+                    $accountZipcodeLoadingPlace = Palletsaccount::where('id', $accountZipcodeLoadingPlace1->palletsaccount_id)->first()->name;
 
-            $filesLoading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
+                } };
 
-            if (!$filesLoading->isEmpty()) {
-                foreach ($filesLoading as $f) {
-                    $filesNamesLoadingPlace[] = Document::where('id', $f->document_id)->first()->name;
-                }
-            }
+            $files = DB::table('document_loading')->where('loading_id', $atrnr)->get();
+
+
 
             //offloading panel
             $stateOffloadingPlace = $detailsLoading->stateOffloadingPlace;
@@ -84,23 +85,29 @@ class DetailsLoadingController extends Controller
 
             if (Warehouse::where('zipcode', $plze)->first() <> null) {
                 $idWarehouseZipcodeOffloadingPlace = Warehouse::where('zipcode', $plze)->first()->id;
-                $idAccountZipcodeOffloadingPlace = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeOffloadingPlace)->first()->palletsaccount_id;
-                $accountZipcodeOffloadingPlace = Palletsaccount::where('id', $idAccountZipcodeOffloadingPlace)->first()->name;
+                $accountZipcodeOffloadingPlace1 = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeOffloadingPlace)->first();
+                if ($accountZipcodeOffloadingPlace1 <> null) {
+                    $accountZipcodeOffloadingPlace = Palletsaccount::where('id', $accountZipcodeOffloadingPlace1->palletsaccount_id)->first()->name;
+                }
             };
 
-            $filesOffloading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
-//            dd($filesOffloading);
-            if (!$filesOffloading->isEmpty()) {
-                foreach ($filesOffloading as $f) {
-                    $filesNamesOffloadingPlace[] = Document::where('id', $f->document_id)->first()->name;
+            //offloading-loading
+            if (!$files->isEmpty()) {
+                foreach ($files as $f) {
+                    $filesNames = Document::where('id', $f->document_id)->first();
+                    if ($filesNames->type == 'loading') {
+                        $filesNamesLoadingPlace[] = $filesNames->name;
+                    }elseif($filesNames->type == 'offloading'){
+                        $filesNamesOffloadingPlace[] = $filesNames->name;
+                    }
                 }
             }
 
             return view('loadings.detailsLoading', compact('ladedatum', 'entladedatum', 'disp', 'atrnr', 'referenz', 'auftraggeber', 'beladestelle',
                 'landb', 'plzb', 'ortb', 'entladestelle', 'lande', 'plze', 'orte', 'anz', 'art', 'ware',
                 'pt', 'subfrachter', 'kennzeichen', 'zusladestellen', 'reasonUpdatePT', 'state', 'listPalletsAccounts',
-                'filesNamesLoadingPlace', 'stateLoadingPlace', 'numberPalletsLoadingPlace', 'accountDebitLoadingPlace','accountCreditLoadingPlace', 'accountZipcodeLoadingPlace', 'validateLoadingPlace',
-                'filesNamesOffloadingPlace', 'stateOffloadingPlace', 'numberPalletsOffloadingPlace', 'accountDebitOffloadingPlace','accountCreditOffloadingPlace', 'accountZipcodeOffloadingPlace', 'validateOffloadingPlace'
+                'filesNamesLoadingPlace', 'stateLoadingPlace', 'numberPalletsLoadingPlace', 'accountDebitLoadingPlace', 'accountCreditLoadingPlace', 'accountZipcodeLoadingPlace', 'validateLoadingPlace',
+                'filesNamesOffloadingPlace', 'stateOffloadingPlace', 'numberPalletsOffloadingPlace', 'accountDebitOffloadingPlace', 'accountCreditOffloadingPlace', 'accountZipcodeOffloadingPlace', 'validateOffloadingPlace'
             ));
         } else {
             return view('auth.login');
@@ -159,7 +166,8 @@ class DetailsLoadingController extends Controller
         $submitLoading = Input::get('submitLoading');
         $uploadLoading = Input::get('uploadLoading');
         $submitOffloading = Input::get('submitOffloading');
-        $uploadOffloading = Input::get('uploadoffloading');
+        $uploadOffloading = Input::get('uploadOffloading');
+        $deleteDocument=Input::get('deleteDocument');
 
         if (isset($submitLoading) || isset($uploadLoading)) {
             //////////////////////LOADING PANEL///////////////////
@@ -209,6 +217,7 @@ class DetailsLoadingController extends Controller
                             $document->move('../storage/app/proofsPallets/' . $atrnr . '/documentsLoading', $filename);
                             Document::firstOrCreate([
                                 'name' => $filename,
+                                'type' => 'loading'
                             ])->loadings()->attach($atrnr);
                             session()->flash('messageSuccessUpload', 'Successfully uploaded the files');
                         } else {
@@ -223,7 +232,10 @@ class DetailsLoadingController extends Controller
             $actualDocuments_LoadingLoading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
             if (!$actualDocuments_LoadingLoading->isEmpty()) {
                 foreach ($actualDocuments_LoadingLoading as $actualDoc) {
-                    $actualDocumentsLoading[] = Document::where('id', $actualDoc->document_id)->first();
+                    $actualDocuments = Document::where('id', $actualDoc->document_id)->first();
+                    if ($actualDocuments->type == 'loading') {
+                        $actualDocumentsLoading[] = $actualDocuments;
+                    }
                 }
             }
             //state
@@ -242,8 +254,7 @@ class DetailsLoadingController extends Controller
             }
             Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace' => $stateLoadingPlace]);
             session()->flash('openPanelLoading', 'openPanelLoading');
-        }
-        elseif (isset($submitOffloading) || isset($uploadOffloading)) {
+        } elseif (isset($submitOffloading) || isset($uploadOffloading)) {
             //////////////////////OFFLOADING PANEL///////////////////
             if (isset($submitOffloading)) {
                 ///////SUBMIT OFFLOADING PANEL////////
@@ -286,11 +297,15 @@ class DetailsLoadingController extends Controller
                         $filename = $document->getClientOriginalName();
                         $extension = $document->getClientOriginalExtension();
                         $size = $document->getSize();
+//                        dd($document);
                         //if file is an image, a pdf or an email
                         if (($extension == 'png' || $extension == 'jpg' || $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
-                            $document->store('proofsPallets/' . $atrnr . '/documentsLoading');
+//                            $document->copy('/proofsPallets/' . $atrnr . '/documentsOffloading',$filename);
+//                            $document->move('../storage/app/proofsPallets/' . $atrnr . '/documentsOffloading', $filename);
+                            Storage::putFileAs('/proofsPallets/' . $atrnr . '/documentsOffloading', $document, $filename);
                             Document::firstOrCreate([
                                 'name' => $filename,
+                                'type' => 'offloading'
                             ])->loadings()->attach($atrnr);
                             session()->flash('messageSuccessUpload', 'Successfully uploaded the files');
                         } else {
@@ -300,14 +315,17 @@ class DetailsLoadingController extends Controller
                     }
                 }
             }
-
             //documents already associated to the loading ?
             $actualDocuments_Loadingoffloading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
             if (!$actualDocuments_Loadingoffloading->isEmpty()) {
                 foreach ($actualDocuments_Loadingoffloading as $actualDoc) {
-                    $actualDocumentsOffloading[] = Document::where('id', $actualDoc->document_id)->first();
+                    $actualDocuments = Document::where('id', $actualDoc->document_id)->first();
+                    if ($actualDocuments->type == 'offloading') {
+                        $actualDocumentsOffloading[] = $actualDocuments;
+                    }
                 }
             }
+
             //state
             if (isset($numberPalletsOffloadingPlace) && isset($accountDebitOffloadingPlace) && isset($accountCreditLoadingPlace) && (isset($documentsOffloading) || isset($actualDocumentsOffloading)) && $validateOffloadingPlace == true) {
                 $stateOffloadingPlace = 'Complete Validated';
@@ -323,9 +341,26 @@ class DetailsLoadingController extends Controller
                 $stateOffloadingPlace = 'Untreated';
             }
             Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' => $stateOffloadingPlace]);
-            session()->flash('openPanelLoading', 'openPanelLoading');
+            session()->flash('openPanelOffloading', 'openPanelOffloading');
+        }elseif(isset($deleteDocument)){
+            $this->deleteDocument($atrnr, $deleteDocument);
         }
         return redirect()->back();
     }
 
+    public function deleteDocument($atrnr ,$name){
+        $doc=Document::where('name', $name)->first();
+        if($doc->type=='loading'){
+            session()->flash('openPanelLoading', 'openPanelLoading');
+        }elseif($doc->type=='offloading'){
+            session()->flash('openPanelOffloading', 'openPanelOffloading');
+        }
+        $doc->loadings()->detach($atrnr);
+        $path='/proofsPallets/' . $atrnr . '/documentsOffloading/';
+        Storage::delete($path.$name);
+        $doc->delete();
+        // redirect
+        session()->flash('messageSuccessDeleteDocument', 'Successfully deleted the document!');
+        return redirect()->back();
+    }
 }
