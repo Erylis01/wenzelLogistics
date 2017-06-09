@@ -45,19 +45,74 @@ class CreateLoadingsTable extends Migration
 
             $table->string('state')->default('Untreated');
             $table->string('reasonUpdatePT')->nullable();
+$table->integer('numberLoadingPlace')->default(1);
+            $table->integer('numberOffloadingPlace')->default(1);
 
-            $table->integer('numberPalletsLoadingPlace')->nullable();
-            $table->string('accountLoadingPlace')->nullable();
-            $table->string('accountCreditLoadingPlace')->nullable();
-            $table->string('accountDebitLoadingPlace')->nullable();
-            $table->string('stateLoadingPlace')->default('Untreated');
-            $table->boolean('validateLoadingPlace')->default(false);
+            $table->integer('numberPalletsLoadingPlace1')->nullable();
+            $table->string('accountLoadingPlace1')->nullable();
+            $table->string('accountCreditLoadingPlace1')->nullable();
+            $table->string('accountDebitLoadingPlace1')->nullable();
+            $table->string('stateLoadingPlace1')->default('Untreated');
+            $table->boolean('validateLoadingPlace1')->default(false);
 
-            $table->integer('numberPalletsOffloadingPlace')->nullable();
-            $table->string('accountCreditOffloadingPlace')->nullable();
-            $table->string('accountDebitOffloadingPlace')->nullable();
-            $table->string('stateOffloadingPlace')->default('Untreated');
-            $table->boolean('validateOffloadingPlace')->default(false);
+            $table->integer('numberPalletsOffloadingPlace1')->nullable();
+            $table->string('accountCreditOffloadingPlace1')->nullable();
+            $table->string('accountDebitOffloadingPlace1')->nullable();
+            $table->string('stateOffloadingPlace1')->default('Untreated');
+            $table->boolean('validateOffloadingPlace1')->default(false);
+
+            $table->integer('numberPalletsLoadingPlace2')->nullable();
+            $table->string('accountLoadingPlace2')->nullable();
+            $table->string('accountCreditLoadingPlace2')->nullable();
+            $table->string('accountDebitLoadingPlace2')->nullable();
+            $table->string('stateLoadingPlace2')->default('Untreated');
+            $table->boolean('validateLoadingPlace2')->default(false);
+
+            $table->integer('numberPalletsOffloadingPlace2')->nullable();
+            $table->string('accountCreditOffloadingPlace2')->nullable();
+            $table->string('accountDebitOffloadingPlace2')->nullable();
+            $table->string('stateOffloadingPlace2')->default('Untreated');
+            $table->boolean('validateOffloadingPlace2')->default(false);
+
+            $table->integer('numberPalletsLoadingPlace3')->nullable();
+            $table->string('accountLoadingPlace3')->nullable();
+            $table->string('accountCreditLoadingPlace3')->nullable();
+            $table->string('accountDebitLoadingPlace3')->nullable();
+            $table->string('stateLoadingPlace3')->default('Untreated');
+            $table->boolean('validateLoadingPlace3')->default(false);
+
+            $table->integer('numberPalletsOffloadingPlace3')->nullable();
+            $table->string('accountCreditOffloadingPlace3')->nullable();
+            $table->string('accountDebitOffloadingPlace3')->nullable();
+            $table->string('stateOffloadingPlace3')->default('Untreated');
+            $table->boolean('validateOffloadingPlace3')->default(false);
+
+            $table->integer('numberPalletsLoadingPlace4')->nullable();
+            $table->string('accountLoadingPlace4')->nullable();
+            $table->string('accountCreditLoadingPlace4')->nullable();
+            $table->string('accountDebitLoadingPlace4')->nullable();
+            $table->string('stateLoadingPlace4')->default('Untreated');
+            $table->boolean('validateLoadingPlace4')->default(false);
+
+            $table->integer('numberPalletsOffloadingPlace4')->nullable();
+            $table->string('accountCreditOffloadingPlace4')->nullable();
+            $table->string('accountDebitOffloadingPlace4')->nullable();
+            $table->string('stateOffloadingPlace4')->default('Untreated');
+            $table->boolean('validateOffloadingPlace4')->default(false);
+
+            $table->integer('numberPalletsLoadingPlace5')->nullable();
+            $table->string('accountLoadingPlace5')->nullable();
+            $table->string('accountCreditLoadingPlace5')->nullable();
+            $table->string('accountDebitLoadingPlace5')->nullable();
+            $table->string('stateLoadingPlace5')->default('Untreated');
+            $table->boolean('validateLoadingPlace5')->default(false);
+
+            $table->integer('numberPalletsOffloadingPlace5')->nullable();
+            $table->string('accountCreditOffloadingPlace5')->nullable();
+            $table->string('accountDebitOffloadingPlace5')->nullable();
+            $table->string('stateOffloadingPlace5')->default('Untreated');
+            $table->boolean('validateOffloadingPlace5')->default(false);
+
 //            $table->string('firstTimeLoadingPlace')->default('true true');
 
 
