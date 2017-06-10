@@ -191,11 +191,23 @@ class DetailsLoadingController extends Controller
         $uploadLoading = Input::get('uploadLoading');
         $uploadOffloading = Input::get('uploadOffloading');
         $deleteDocument = Input::get('deleteDocument');
+        $deleteLoadingPlace = Input::get('deleteLoadingPlace');
+        $deleteOffloadingPlace = Input::get('deleteOffloadingPlace');
+        $addLoadingPlace = Input::get('addLoadingPlace');
+        $addOffloadingPlace = Input::get('addOffloadingPlace');
 
         //////LOADING PLACES//////
         //documents already associated to the loading ?
         $actualDocuments_LoadingLoading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
         $actualDocumentsLoading = $this->documentsAssociated($actualDocuments_LoadingLoading, 'Loading');
+
+        if (isset($addLoadingPlace)) {
+            $this->addPlace($atrnr, 'LoadingPlace', $loading->numberLoadingPlace);
+            session()->flash('openPanelLoading', 'openPanelLoading');
+        } elseif (isset($deleteLoadingPlace)) {
+            $this->deletePlace($atrnr, 'LoadingPlace', $loading->numberLoadingPlace);
+            session()->flash('openPanelLoading', 'openPanelLoading');
+        }
 
         for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
             $submitLoadingK = 'submitLoading' . $k;
@@ -275,54 +287,62 @@ class DetailsLoadingController extends Controller
         $actualDocuments_LoadingOffloading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
         $actualDocumentsOffloading = $this->documentsAssociated($actualDocuments_LoadingOffloading, 'Offloading');
 
+        if (isset($addOffloadingPlace)) {
+            $this->addPlace($atrnr, 'OffloadingPlace', $loading->numberOffloadingPlace);
+            session()->flash('openPanelOffloading', 'openPanelOffloading');
+        } elseif (isset($deleteOffloadingPlace)) {
+            $this->deletePlace($atrnr, 'OffloadingPlace', $loading->numberOffloadingPlace);
+            session()->flash('openPanelOffloading', 'openPanelOffloading');
+        }
+
         for ($k = 1; $k <= $loading->numberOffloadingPlace; $k++) {
+
             $submitOffloadingK = 'submitOffloading' . $k;
             $$submitOffloadingK = Input::get('submitOffloading' . $k);
 
-            if (isset($submitOffloading)) {
-                if (isset($$submitOffloadingK)) {
-                    ///////SUBMIT LOADING PANEL////////
-                    //number pallets
-                    $numberPalletsOffloadingPlaceK = 'numberPalletsOffloading' . $k;
-                    $$numberPalletsOffloadingPlaceK = Input::get('numberPalletsOffloadingPlace' . $k);
-                    $this->numberPallets($atrnr, $$numberPalletsOffloadingPlaceK, 'OffloadingPlace', $k);
+            if (isset($$submitOffloadingK)) {
+                ///////SUBMIT LOADING PANEL////////
+                //number pallets
+                $numberPalletsOffloadingPlaceK = 'numberPalletsOffloadingPlace' . $k;
+                $$numberPalletsOffloadingPlaceK = Input::get('numberPalletsOffloadingPlace' . $k);
+                $this->numberPallets($atrnr, $$numberPalletsOffloadingPlaceK, 'OffloadingPlace', $k);
 
-                    //account credited
-                    $accountCreditOffloadingPlaceK = 'accountCreditOffloadingPlace' . $k;
-                    $$accountCreditOffloadingPlaceK = Input::get('accountCreditOffloadingPlace' . $k);
-                    $this->accountCredit($atrnr, $$accountCreditOffloadingPlaceK, 'OffloadingPlace', $k);
+                //account credited
+                $accountCreditOffloadingPlaceK = 'accountCreditOffloadingPlace' . $k;
+                $$accountCreditOffloadingPlaceK = Input::get('accountCreditOffloadingPlace' . $k);
+                $this->accountCredit($atrnr, $$accountCreditOffloadingPlaceK, 'OffloadingPlace', $k);
 
-                    //account debited
-                    $accountDebitOffloadingPlaceK = 'accountDebitOffloadingPlace' . $k;
-                    $$accountDebitOffloadingPlaceK = Input::get('accountDebitOffloadingPlace' . $k);
-                    $this->accountDebit($atrnr, $$accountDebitOffloadingPlaceK, 'OffloadingPlace', $k);
+                //account debited
+                $accountDebitOffloadingPlaceK = 'accountDebitOffloadingPlace' . $k;
+                $$accountDebitOffloadingPlaceK = Input::get('accountDebitOffloadingPlace' . $k);
+                $this->accountDebit($atrnr, $$accountDebitOffloadingPlaceK, 'OffloadingPlace', $k);
 
-                    //validated
-                    $validateOffloadingPlaceK = 'validateOffloadingPlace' . $k;
-                    $$validateOffloadingPlaceK = Input::get('validateOffloadingPlace' . $k);
-                    $this->validateTransfer($atrnr, $$validateOffloadingPlaceK, 'OffloadingPlace', $k);
+                //validated
+                $validateOffloadingPlaceK = 'validateOffloadingPlace' . $k;
+                $$validateOffloadingPlaceK = Input::get('validateOffloadingPlace' . $k);
+                $this->validateTransfer($atrnr, $$validateOffloadingPlaceK, 'OffloadingPlace', $k);
 
-                    session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
+                session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
 
-                    //state
-                    $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
-                    if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
-                        $$stateOffloadingPlaceK = 'Complete Validated';
+                //state
+                $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
+                if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
+                    $$stateOffloadingPlaceK = 'Complete Validated';
 //                $actualRealNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->realNumberPallets;
 //                Palletsaccount::where('name', $accountLoadingPlace)->update(['realNumberPallets' => $actualRealNumberPallets + $numberPalletsLoadingPlace]);
-                    } elseif (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
-                        $$stateOffloadingPlaceK = 'Complete';
-                    } elseif (!isset($documentsOffloading) || !isset($actualDocumentsOffloading)) {
-                        $$stateOffloadingPlaceK = 'Waiting documents';
-                    } elseif (isset($$numberPalletsOffloadingPlaceK) || isset($$accountCreditOffloadingPlaceK) || isset($$accountDebitOffloadingPlaceK) || (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
-                        $$stateOffloadingPlaceK = 'In progress';
-                    } else {
-                        $$stateOffloadingPlaceK = 'Untreated';
-                    }
-                    Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
+                } elseif (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
+                    $$stateOffloadingPlaceK = 'Complete';
+                } elseif (!isset($documentsOffloading) || !isset($actualDocumentsOffloading)) {
+                    $$stateOffloadingPlaceK = 'Waiting documents';
+                } elseif (isset($$numberPalletsOffloadingPlaceK) || isset($$accountCreditOffloadingPlaceK) || isset($$accountDebitOffloadingPlaceK) || (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
+                    $$stateOffloadingPlaceK = 'In progress';
+                } else {
+                    $$stateOffloadingPlaceK = 'Untreated';
                 }
-                session()->flash('openPanelOffloading', 'openPanelOffloading');
+                Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
             }
+            session()->flash('openPanelOffloading', 'openPanelOffloading');
+
         }
 
         if (isset($uploadOffloading)) {
@@ -441,5 +461,20 @@ class DetailsLoadingController extends Controller
         // redirect
         session()->flash('messageSuccessDeleteDocument', 'Successfully deleted the document!');
         return redirect()->back();
+    }
+
+    public function deletePlace($atrnr, $type, $numberPlace)
+    {
+        Loading::where('atrnr', $atrnr)->update(['number' . $type => $numberPlace - 1]);
+        Loading::where('atrnr', $atrnr)->update(['numberPallets' . $type . $numberPlace => null]);
+        Loading::where('atrnr', $atrnr)->update(['accountCredit' . $type . $numberPlace => null]);
+        Loading::where('atrnr', $atrnr)->update(['accountDebit' . $type . $numberPlace => null]);
+        Loading::where('atrnr', $atrnr)->update(['validate' . $type . $numberPlace => false]);
+        Loading::where('atrnr', $atrnr)->update(['state' . $type . $numberPlace => 'Untreated']);
+    }
+
+    public function addPlace($atrnr, $type, $numberPlace)
+    {
+        Loading::where('atrnr', $atrnr)->update(['number' . $type => $numberPlace + 1]);
     }
 }

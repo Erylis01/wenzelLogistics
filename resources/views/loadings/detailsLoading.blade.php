@@ -609,8 +609,16 @@
                                                     <!-- loading panel-->
                                                     <div class="panel subpanel">
                                                         <div class="panel-heading">
-                                                            <a data-toggle="collapse" href="#Pan2Sub1collapse">Loading
+                                                            <a class="col-lg-3 text-left" data-toggle="collapse" href="#Pan2Sub1collapse">Loading
                                                                 place</a>
+                                                                <button type="submit"
+                                                                       class="col-lg-offset-7 btn btn-add glyphicon glyphicon-plus"
+                                                                       value="addLoadingPlace"
+                                                                        name="addLoadingPlace"></button>
+                                                            <button type="submit"
+                                                                    name="deleteLoadingPlace"
+                                                                    class="btn btn-add glyphicon glyphicon-minus"
+                                                                    value="deleteLoadingPlace"></button>
                                                         </div>
                                                         @if (Session::has('openPanelLoading'))
                                                             <div id="Pan2Sub1collapse"
@@ -633,9 +641,9 @@
                                                                                     </div>
                                                                                     <div class="form-group">
                                                                                         <div class="col-lg-offset-1 col-lg-4">
-                                                                                        <input type="file"
-                                                                                               name="documentsLoading[]"
-                                                                                               multiple>
+                                                                                            <input type="file"
+                                                                                                   name="documentsLoading[]"
+                                                                                                   multiple>
                                                                                         </div>
                                                                                         <!--button upload-->
                                                                                         <div class="col-lg-4 col-lg-offset-2">
@@ -704,7 +712,8 @@
                                                                                         <div class="form-group">
                                                                                             <div class="col-lg-2">
                                                                                                 <label for="accountCreditLoadingPlace{{$k}}"
-                                                                                                       class="control-label">Credit Account :</label>
+                                                                                                       class="control-label">Credit
+                                                                                                    Account :</label>
                                                                                             </div>
                                                                                             <div class="col-lg-4">
                                                                                                 <select class="selectpicker show-tick form-control"
@@ -728,35 +737,36 @@
                                                                                                 </select>
                                                                                             </div>
                                                                                             <!--Account debited-->
-                                                                                                <div class="col-lg-2">
-                                                                                                    <label for="accountDebitLoadingPlace{{$k}}"
-                                                                                                           class="control-label">Debit Account :</label>
-                                                                                                </div>
-                                                                                                <div class="col-lg-4">
-                                                                                                    <select class="selectpicker show-tick form-control"
-                                                                                                            data-size="5"
-                                                                                                            data-live-search="true"
-                                                                                                            data-live-search-style="startsWith"
-                                                                                                            title="Pallets Account Debit"
-                                                                                                            name="accountDebitLoadingPlace{{$k}}">
-                                                                                                        @php($accountDebitLoadingPlaceK ='accountDebitLoadingPlace'.$k)
-                                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
-                                                                                                            @if(Illuminate\Support\Facades\Input::old('accountDebitLoadingPlace'.$k) && $palletsAccount->name==old('accountDebitLoadingPlace'.$k))
-                                                                                                                <option selected>{{$palletsAccount->name}}</option>
-                                                                                                            @elseif(isset($$accountDebitLoadingPlaceK)&& $palletsAccount->name==$$accountDebitLoadingPlaceK)
-                                                                                                                <option selected>{{$palletsAccount->name}}</option>
-                                                                                                            @else
-                                                                                                                <option>{{$palletsAccount->name}}</option>
-                                                                                                            @endif
-                                                                                                        @endforeach
-                                                                                                    </select>
-                                                                                                </div>
+                                                                                            <div class="col-lg-2">
+                                                                                                <label for="accountDebitLoadingPlace{{$k}}"
+                                                                                                       class="control-label">Debit
+                                                                                                    Account :</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4">
+                                                                                                <select class="selectpicker show-tick form-control"
+                                                                                                        data-size="5"
+                                                                                                        data-live-search="true"
+                                                                                                        data-live-search-style="startsWith"
+                                                                                                        title="Pallets Account Debit"
+                                                                                                        name="accountDebitLoadingPlace{{$k}}">
+                                                                                                    @php($accountDebitLoadingPlaceK ='accountDebitLoadingPlace'.$k)
+                                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                        @if(Illuminate\Support\Facades\Input::old('accountDebitLoadingPlace'.$k) && $palletsAccount->name==old('accountDebitLoadingPlace'.$k))
+                                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                                        @elseif(isset($$accountDebitLoadingPlaceK)&& $palletsAccount->name==$$accountDebitLoadingPlaceK)
+                                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                                        @else
+                                                                                                            <option>{{$palletsAccount->name}}</option>
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                </select>
+                                                                                            </div>
                                                                                         </div>
                                                                                         <!--validate loading ?-->
                                                                                         @php($validateLoadingPlaceK ='validateLoadingPlace'.$k)
                                                                                         <div class="form-group">
                                                                                             @if(isset($filesNamesLoadingPlace)&&isset($$numberPalletsLoadingPlaceK)&&isset($$accountCreditLoadingPlaceK)&&isset($$accountDebitLoadingPlaceK))
-                                                                                            <div class="col-lg-2">
+                                                                                                <div class="col-lg-2">
                                                                                                     <label for="validateLoadingPlace{{$k}}"
                                                                                                            class="control-label">Validated
                                                                                                         ?</label>
@@ -784,14 +794,14 @@
                                                                                                                     checked>No</label>
                                                                                                     @endif
                                                                                                 </div>
-                                                                                            <!--button submit-->
+                                                                                                <!--button submit-->
                                                                                                 <div class="col-lg-4 col-lg-offset-1">
                                                                                                     <input type="submit"
                                                                                                            class="btn btn-primary btn-block btn-form"
                                                                                                            value="Submit"
                                                                                                            name="submitLoading{{$k}}">
                                                                                                 </div>
-                                                                                        @else
+                                                                                            @else
                                                                                             <!--button submit-->
                                                                                                 <div class="col-lg-4 col-lg-offset-6">
                                                                                                     <input type="submit"
@@ -799,7 +809,7 @@
                                                                                                            value="Submit"
                                                                                                            name="submitLoading{{$k}}">
                                                                                                 </div>
-                                                                                    @endif
+                                                                                            @endif
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -815,9 +825,17 @@
                                                     <!--offloading panel-->
                                                     <div class="panel subpanel">
                                                         <div class="panel-heading">
-                                                            <a data-toggle="collapse"
+                                                            <a class="col-lg-3 text-left" data-toggle="collapse"
                                                                href="#Pan2Sub2collapse">Offloading
                                                                 place</a>
+                                                            <button type="submit"
+                                                                    class="col-lg-offset-7 btn btn-add glyphicon glyphicon-plus"
+                                                                    value="addOffloadingPlace"
+                                                                    name="addOffloadingPlace"></button>
+                                                                <button type="submit"
+                                                                        name="deleteOffloadingPlace"
+                                                                        class="btn btn-add glyphicon glyphicon-minus"
+                                                                        value="deleteOffloadingPlace"></button>
                                                         </div>
                                                         @if (Session::has('openPanelOffloading'))
                                                             <div id="Pan2Sub2collapse"
@@ -840,9 +858,9 @@
                                                                                     </div>
                                                                                     <div class="form-group">
                                                                                         <div class="col-lg-offset-1 col-lg-4">
-                                                                                        <input type="file"
-                                                                                               name="documentsOffloading[]"
-                                                                                               multiple>
+                                                                                            <input type="file"
+                                                                                                   name="documentsOffloading[]"
+                                                                                                   multiple>
                                                                                         </div>
                                                                                         <!--button upload-->
                                                                                         <div class="col-lg-4 col-lg-offset-2">
@@ -911,7 +929,8 @@
                                                                                         <div class="form-group">
                                                                                             <div class="col-lg-2">
                                                                                                 <label for="accountCreditOffloadingPlace{{$k}}"
-                                                                                                       class="control-label">Credit Account :</label>
+                                                                                                       class="control-label">Credit
+                                                                                                    Account :</label>
                                                                                             </div>
                                                                                             <div class="col-lg-4">
                                                                                                 <select class="selectpicker show-tick form-control"
@@ -933,43 +952,45 @@
                                                                                                 </select>
                                                                                             </div>
                                                                                             <!--Account debited-->
-                                                                                                <div class="col-lg-2">
-                                                                                                    <label for="accountDebitOffloadingPlace{{$k}}"
-                                                                                                           class="control-label">Debit Account :</label>
-                                                                                                </div>
-                                                                                                <div class="col-lg-4">
-                                                                                                    <select class="selectpicker show-tick form-control"
-                                                                                                            data-size="5"
-                                                                                                            data-live-search="true"
-                                                                                                            data-live-search-style="startsWith"
-                                                                                                            title="Pallets Account Debit"
-                                                                                                            name="accountDebitOffloadingPlace{{$k}}">
-                                                                                                        @php($accountDebitOffloadingPlaceK ='accountDebitOffloadingPlace'.$k)
-                                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
-                                                                                                            @if(Illuminate\Support\Facades\Input::old('accountDebitOffloadingPlace'.$k) && $palletsAccount->name==old('accountDebitOffloadingPlace'.$k))
-                                                                                                                <option selected>{{$palletsAccount->name}}</option>
-                                                                                                            @elseif(isset($accountZipcodeOffloadingPlace)&& $palletsAccount->name==$accountZipcodeOffloadingPlace)
-                                                                                                                <option selected>{{$palletsAccount->name}}</option>
-                                                                                                            @elseif(isset($$accountDebitOffloadingPlaceK)&& $palletsAccount->name==$$accountDebitOffloadingPlaceK)
-                                                                                                                <option selected>{{$palletsAccount->name}}</option>
-                                                                                                            @else
-                                                                                                                <option>{{$palletsAccount->name}}</option>
-                                                                                                            @endif
-                                                                                                        @endforeach
-                                                                                                    </select>
-                                                                                                </div>
+                                                                                            <div class="col-lg-2">
+                                                                                                <label for="accountDebitOffloadingPlace{{$k}}"
+                                                                                                       class="control-label">Debit
+                                                                                                    Account :</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4">
+                                                                                                <select class="selectpicker show-tick form-control"
+                                                                                                        data-size="5"
+                                                                                                        data-live-search="true"
+                                                                                                        data-live-search-style="startsWith"
+                                                                                                        title="Pallets Account Debit"
+                                                                                                        name="accountDebitOffloadingPlace{{$k}}">
+                                                                                                    @php($accountDebitOffloadingPlaceK ='accountDebitOffloadingPlace'.$k)
+                                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                        @if(Illuminate\Support\Facades\Input::old('accountDebitOffloadingPlace'.$k) && $palletsAccount->name==old('accountDebitOffloadingPlace'.$k))
+                                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                                        @elseif(isset($accountZipcodeOffloadingPlace)&& $palletsAccount->name==$accountZipcodeOffloadingPlace)
+                                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                                        @elseif(isset($$accountDebitOffloadingPlaceK)&& $palletsAccount->name==$$accountDebitOffloadingPlaceK)
+                                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                                        @else
+                                                                                                            <option>{{$palletsAccount->name}}</option>
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                </select>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <!--validate loading ?-->
-                                                                                        @php($validateLoadingPlaceK ='validateLoadingPlace'.$k)
+                                                                                        <!--validate offloading ?-->
+                                                                                        @php($validateOffloadingPlaceK ='validateOffloadingPlace'.$k)
                                                                                         <div class="form-group">
                                                                                             @if(isset($filesNamesOffloadingPlace)&&isset($$numberPalletsOffloadingPlaceK)&&isset($$accountCreditOffloadingPlaceK)&&isset($$accountDebitOffloadingPlaceK))
-                                                                                            <div class="col-lg-2">
+                                                                                                <div class="col-lg-2">
                                                                                                     <label for="validateOffloadingPlace{{$k}}"
                                                                                                            class="control-label">Validated
                                                                                                         ?</label>
                                                                                                 </div>
                                                                                                 <div class="col-lg-3">
-                                                                                                    @if($$validateLoadingPlaceK==true)
+                                                                                                    @php(dump($k, $$validateOffloadingPlaceK))
+                                                                                                    @if($$validateOffloadingPlaceK==1)
                                                                                                         <label class="radio-inline"><input
                                                                                                                     type="radio"
                                                                                                                     name="validateOffloadingPlace{{$k}}"
@@ -982,7 +1003,7 @@
                                                                                                     @else
                                                                                                         <label class="radio-inline"><input
                                                                                                                     type="radio"
-                                                                                                                    name="validateoffloadingPlace{{$k}}"
+                                                                                                                    name="validateOffloadingPlace{{$k}}"
                                                                                                                     value="true">Yes</label>
                                                                                                         <label class="radio-inline"><input
                                                                                                                     type="radio"
@@ -997,14 +1018,14 @@
                                                                                                            value="Submit"
                                                                                                            name="submitOffloading{{$k}}">
                                                                                                 </div>
-                                                                                           @else
+                                                                                            @else
                                                                                                 <div class="col-lg-4 col-lg-offset-6">
                                                                                                     <input type="submit"
                                                                                                            class="btn btn-primary btn-block btn-form"
                                                                                                            value="Submit"
                                                                                                            name="submitOffloading{{$k}}">
                                                                                                 </div>
-                                                                                    @endif
+                                                                                            @endif
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
