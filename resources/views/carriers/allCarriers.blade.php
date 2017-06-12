@@ -35,10 +35,29 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general panel-carriers">
-                    <div class="panel-heading">List of all carriers <span class="col-lg-offset-8">
-                            <a href="{{route('showAddCarrier')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add carrier</a>
-                        </span></div>
-
+                    <div class="panel-heading"><div class="col-lg-4">List of all carriers
+                        </div>
+                        <form role="form" class="form-inline" method="GET" action="{{route('showAllCarriers')}}">
+                            {{ csrf_field() }}
+                            <div class="col-lg-4 input-group">
+                                @if(isset($searchQuery))
+                                    <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
+                                           placeholder="search"/>
+                                @else
+                                    <input type="text" class="form-control" name="search" value=""
+                                           placeholder="search"/>
+                                @endif
+                                <span class="input-group-btn">
+                                <button class="btn glyphicon glyphicon-search" type="submit"
+                                        name="searchSubmit"></button>
+                            </span>
+                            </div>
+                            <div class="col-lg-1 col-lg-offset-2 input-group">
+                                <a href="{{route('showAddCarrier')}}" class="btn btn-add"><span
+                                            class="glyphicon glyphicon-plus-sign"></span> Add carrier</a>
+                            </div>
+                        </form>
+                    </div>
                     <div class="panel-body panel-body-general">
 
                         @if(Session::has('messageDeleteCarrier'))
@@ -54,6 +73,32 @@
                             <table class="table table-hover table-bordered table-carriers">
                                 <thead>
                                 <tr>
+                                    @if(isset($searchQuery))
+                                        <th class="text-center colID">ID<br> <a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=id&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center colName">Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=name&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=name&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center colLicense">License Plate<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=licensePlate&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Pallets Account<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allCarriers?search='.$searchQuery.'&page='.$listCarriers->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
+                                        </th>
+                                        @else
                                     <th class="text-center colID">ID<br> <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allCarriers?page='.$listCarriers->currentPage().'&sortby=id&order=asc')}}"></a><a
@@ -78,6 +123,7 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allCarriers?page='.$listCarriers->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
                                     </th>
+                                        @endif
                                 </tr>
                                 </thead>
                                 <tbody>
