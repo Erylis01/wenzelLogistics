@@ -10,7 +10,10 @@ use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;;
+use Illuminate\Support\Facades\File;
+
+;
+use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ListLoadingsController extends Controller
@@ -22,47 +25,140 @@ class ListLoadingsController extends Controller
      */
     public function show(Request $request)
     {
+
         if (Auth::check()) {
             $this->importData();
             $currentDate = Carbon::now();
-            $limitDate=$currentDate->subDays(60)->format('Y-m-d');
-
+            $limitDate = $currentDate->subDays(60)->format('Y-m-d');
+            $searchQuery = $request->get('search');
+           
             if (request()->has('sortby') && request()->has('order')) {
+
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
-                $listLoadings=DB::table('loadings')->where([
-                    ['pt', '=', 'ja'],
-                    ['ladedatum', '>=', $limitDate],
-                ])->orderBy($sortby, $order)->paginate(10);
-                $links=$listLoadings->appends(['sortby'=>$sortby, 'order'=>$order])->render();
-            }
-            else{
-                $listLoadings = DB::table('loadings')->where([
-                    ['pt', '=', 'ja'],
-                    ['ladedatum', '>=', $limitDate],
-                ])->paginate(10);
-                $links='';
-            }
-            $count=count(DB::table('loadings')->where([
-                ['pt', '=', 'ja'],
-                ['ladedatum', '>=', $limitDate],
-            ])->get());
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    $listLoadings = DB::table('loadings')
+                        ->where('pt', 'ja')
+                        ->where('ladedatum', '>=', $limitDate)
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
+                        })->orderBy($sortby, $order)->paginate(10);
 
+                    $count = count(DB::table('loadings')->where('pt', 'ja')
+                        ->where('ladedatum', '>=', $limitDate)
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
+                        })->get());
+                } else {
+                    $listLoadings = DB::table('loadings')->where([
+                        ['pt', '=', 'ja'],
+                        ['ladedatum', '>=', $limitDate],
+                    ])->orderBy($sortby, $order)->paginate(10);
+                    $count = count(DB::table('loadings')->where([
+                        ['pt', '=', 'ja'],
+                        ['ladedatum', '>=', $limitDate],
+                    ])->get());
+                }
+                $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
+            } else {
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    $listLoadings = DB::table('loadings')
+                        ->where('pt', 'ja')
+                        ->where('ladedatum', '>=', $limitDate)
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
+                        })->paginate(10);
 
-            return view('loadings.loadings', compact('listLoadings','sortby', 'order', 'links', 'count'));
-        }else{
+                    $count = count(DB::table('loadings')->where('pt', 'ja')
+                        ->where('ladedatum', '>=', $limitDate)
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
+                        })->get());
+
+                } else {
+                    $listLoadings = DB::table('loadings')->where([
+                        ['pt', '=', 'ja'],
+                        ['ladedatum', '>=', $limitDate],
+                    ])->paginate(10);
+                    $count = count(DB::table('loadings')->where([
+                        ['pt', '=', 'ja'],
+                        ['ladedatum', '>=', $limitDate],
+                    ])->get());
+                }
+                $links = '';
+            }
+
+            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery'));
+        } else {
             return view('auth.login');
-        }}
+        }
+    }
 
     /**
      * Import data from an excel file
      */
-    public function importData(){
+    public function importData()
+    {
         $path = '../resources/assets/excel/';
         $files = File::allFiles($path);
-        foreach ($files as $file)
-        {
-            if (strpos((string) $file, '.xls')!==false){
+        foreach ($files as $file) {
+            if (strpos((string)$file, '.xls') !== false) {
 
                 Excel::load($file, function ($reader) {
                     if (!empty($reader)) {
@@ -72,18 +168,18 @@ class ListLoadingsController extends Controller
 
                         for ($r = 4; $r < $nbrows; $r++) {
                             $loadingsTest = DB::table('loadings')->where('atrnr', '=', trim($sheet[$r][3]))->first();
-                            if ($loadingsTest==null) {
+                            if ($loadingsTest == null) {
                                 //not double
-                                $datel_parse=date_parse_from_format('m-d-y', trim($sheet[$r][0]));
-                                $datel=new DateTime();
-                                $datel->setDate($datel_parse['year'], $datel_parse['month'],$datel_parse['day']);
+                                $datel_parse = date_parse_from_format('m-d-y', trim($sheet[$r][0]));
+                                $datel = new DateTime();
+                                $datel->setDate($datel_parse['year'], $datel_parse['month'], $datel_parse['day']);
 
-                                $datee_parse=date_parse_from_format('m-d-y', trim($sheet[$r][1]));
-                                $datee=new DateTime();
-                                $datee->setDate($datee_parse['year'], $datee_parse['month'],$datee_parse['day']);
+                                $datee_parse = date_parse_from_format('m-d-y', trim($sheet[$r][1]));
+                                $datee = new DateTime();
+                                $datee->setDate($datee_parse['year'], $datee_parse['month'], $datee_parse['day']);
 
                                 Loading::firstOrCreate([
-                                    'ladedatum' =>$datel ,
+                                    'ladedatum' => $datel,
                                     'entladedatum' => $datee,
                                     'disp' => trim($sheet[$r][2]),
                                     'atrnr' => trim($sheet[$r][3]),
@@ -116,25 +212,25 @@ class ListLoadingsController extends Controller
                             $carrierTest = DB::table('carriers')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
                             if ($carrierTest == null) {
                                 //not double
-                                if(trim($sheet[$r][26])==null){
+                                if (trim($sheet[$r][26]) == null) {
                                     Palletsaccount::firstOrCreate([
                                         'name' => trim($sheet[$r][25]),
-                                        'type'=>'Carrier',
+                                        'type' => 'Carrier',
                                     ]);
                                     Carrier::firstOrCreate([
                                         'name' => trim($sheet[$r][25]),
                                         'licensePlate' => 'OTHER',
-                                        'palletsaccount_name'=>trim($sheet[$r][25]),
+                                        'palletsaccount_name' => trim($sheet[$r][25]),
                                     ]);
-                                }else{
+                                } else {
                                     Palletsaccount::firstOrCreate([
-                                        'name' => trim($sheet[$r][26]).' - '.trim($sheet[$r][25]),
-                                        'type'=>'Carrier',
+                                        'name' => trim($sheet[$r][26]) . ' - ' . trim($sheet[$r][25]),
+                                        'type' => 'Carrier',
                                     ]);
                                     Carrier::firstOrCreate([
                                         'name' => trim($sheet[$r][25]),
                                         'licensePlate' => trim($sheet[$r][26]),
-                                        'palletsaccount_name'=>trim($sheet[$r][26]).' - '.trim($sheet[$r][25]),
+                                        'palletsaccount_name' => trim($sheet[$r][26]) . ' - ' . trim($sheet[$r][25]),
                                     ]);
                                 }
                             }
@@ -145,69 +241,4 @@ class ListLoadingsController extends Controller
         }
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
