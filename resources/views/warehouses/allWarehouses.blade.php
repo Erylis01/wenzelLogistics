@@ -35,89 +35,174 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general panel-warehouses">
-                    <div class="panel-heading">List of all warehouses <span class="col-lg-offset-7">
-                            <a href="{{route('showAddWarehouse')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
-                        </span></div>
+                    <div class="panel-heading">
+                        <div class="col-lg-4">List of all warehouses
+                        </div>
+                        <form role="form" class="form-inline" method="GET" action="{{route('showAllWarehouses')}}">
+                            {{ csrf_field() }}
+                            <div class="col-lg-4 input-group">
+                                @if(isset($searchQuery))
+                                    <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
+                                           placeholder="search"/>
+                                @else
+                                    <input type="text" class="form-control" name="search" value=""
+                                           placeholder="search"/>
+                                @endif
+                                <span class="input-group-btn">
+                                <button class="btn glyphicon glyphicon-search" type="submit"
+                                        name="searchSubmit"></button>
+                            </span>
+                            </div>
+                            <div class="col-lg-1 col-lg-offset-2 input-group">
+                                <a href="{{route('showAddWarehouse')}}" class="btn btn-add"><span
+                                            class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
+                            </div>
+                        </form>
+                    </div>
 
                     <div class="panel-body panel-body-general">
 
                         @if(Session::has('messageDeleteWarehouse'))
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeleteWarehouse') }}</div>
-                            @elseif(Session::has('messageAddWarehouse'))
+                        @elseif(Session::has('messageAddWarehouse'))
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddWarehouse') }}</div>
-                        @endif
+                    @endif
 
-                        <!-- Table -->
+                    <!-- Table -->
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">ID<br> <a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=id&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=id&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Name<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=name&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=name&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Adress<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=adress&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=adress&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Zip Code<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=zipcode&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=zipcode&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Town<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=town&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=town&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Country<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=country&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/loadings?page='.$listWarehouses->currentPage().'&sortby=country&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Phone<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=phone&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=phone&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Fax<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=fax&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=fax&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Email<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=email&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=email&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Contact Name<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=namecontact&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=namecontact&order=desc')}}"></a>
-                                    </th>
+                                    @if(isset($searchQuery))
+                                        <th class="text-center">ID<br> <a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=id&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=name&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=name&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Adress<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=adress&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=adress&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Zip Code<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=zipcode&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=zipcode&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Town<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=town&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=town&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Country<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=country&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/loadings?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=country&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Phone<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=phone&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=phone&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Fax<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=fax&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=fax&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Email<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=email&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=email&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Contact Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=namecontact&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?search='.$searchQuery.'&page='.$listWarehouses->currentPage().'&sortby=namecontact&order=desc')}}"></a>
+                                        </th>
+                                    @else
+                                        <th class="text-center">ID<br> <a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=id&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=name&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=name&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Adress<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=adress&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=adress&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Zip Code<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=zipcode&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=zipcode&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Town<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=town&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=town&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Country<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=country&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/loadings?page='.$listWarehouses->currentPage().'&sortby=country&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Phone<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=phone&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=phone&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Fax<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=fax&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=fax&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Email<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=email&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=email&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center">Contact Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=namecontact&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=namecontact&order=desc')}}"></a>
+                                        </th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listWarehouses as $warehouse)
                                     <tr class="text-center">
-                                        <td><a href="{{route('showDetailsWarehouse',$warehouse->id)}}">{{$warehouse->id}}</a>
+                                        <td>
+                                            <a href="{{route('showDetailsWarehouse',$warehouse->id)}}">{{$warehouse->id}}</a>
                                         </td>
                                         {{--<td>{{$warehouse->id}}</td>--}}
                                         <td>{{$warehouse->name}}</td>

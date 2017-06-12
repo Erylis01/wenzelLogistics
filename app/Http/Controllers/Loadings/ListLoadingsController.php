@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 ;
-use Illuminate\Support\Facades\Input;
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class ListLoadingsController extends Controller
@@ -31,12 +31,12 @@ class ListLoadingsController extends Controller
             $currentDate = Carbon::now();
             $limitDate = $currentDate->subDays(60)->format('Y-m-d');
             $searchQuery = $request->get('search');
-           
-            if (request()->has('sortby') && request()->has('order')) {
 
+            if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 if (isset($searchQuery) && $searchQuery <> '') {
+                    //search query
                     $listLoadings = DB::table('loadings')
                         ->where('pt', 'ja')
                         ->where('ladedatum', '>=', $limitDate)

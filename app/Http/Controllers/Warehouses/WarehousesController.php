@@ -19,18 +19,79 @@ class WarehousesController extends Controller
      */
     public function showAll(Request $request)
     {
+        $searchQuery = $request->get('search');
         if (Auth::check()) {
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
-                $listWarehouses = DB::table('warehouses')->orderBy($sortby, $order)->paginate(10);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    //search query
+                    $listWarehouses = DB::table('warehouses')
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('id', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('adress', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('zipcode', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('town', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('country', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('phone', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('fax', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('email', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('namecontact', 'LIKE', '%' . $searchQuery . '%');
+                        })->orderBy($sortby, $order)->paginate(10);
+                    $count = count(DB::table('warehouses')->where(function ($q) use ($searchQuery) {
+                        $q->where('id', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('adress', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('zipcode', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('town', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('country', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('phone', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('fax', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('email', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('namecontact', 'LIKE', '%' . $searchQuery . '%');
+                    })->get());
+                } else {
+                    $listWarehouses = DB::table('warehouses')->orderBy($sortby, $order)->paginate(10);
+                    $count = count(DB::table('warehouses')->get());
+                }
                 $links = $listWarehouses->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
-                $listWarehouses = DB::table('warehouses')->paginate(10);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    //search query
+                    $listWarehouses = DB::table('warehouses')
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('id', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('adress', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('zipcode', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('town', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('country', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('phone', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('fax', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('email', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('namecontact', 'LIKE', '%' . $searchQuery . '%');
+                        })->paginate(10);
+                    $count = count(DB::table('warehouses')->where(function ($q) use ($searchQuery) {
+                        $q->where('id', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('adress', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('zipcode', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('town', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('country', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('phone', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('fax', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('email', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('namecontact', 'LIKE', '%' . $searchQuery . '%');
+                    })->get());
+                } else {
+                    $listWarehouses = DB::table('warehouses')->paginate(10);
+                    $count = count(DB::table('warehouses')->get());
+                }
                 $links = '';
             }
-            $count = count(DB::table('warehouses')->get());
-            return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count'));
+
+            return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery'));
         } else {
             return view('auth.login');
         }
