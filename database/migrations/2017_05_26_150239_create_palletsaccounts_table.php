@@ -18,6 +18,7 @@ class CreatePalletsaccountsTable extends Migration
             $table->string('name')->unique();
             $table->integer('realNumberPallets')->nullable();
             $table->integer('theoricalNumberPallets')->nullable();
+            $table->integer('lastNumberPalletsTransfered')->nullable();
             $table->string('type');
 
             $table->timestamps();

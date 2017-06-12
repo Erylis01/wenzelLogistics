@@ -187,6 +187,7 @@ class DetailsLoadingController extends Controller
 
     public function submitUpload($atrnr, $anz, Request $request)
     {
+
         $loading = Loading::where('atrnr', $atrnr)->first();
         $uploadLoading = Input::get('uploadLoading');
         $uploadOffloading = Input::get('uploadOffloading');
@@ -195,83 +196,110 @@ class DetailsLoadingController extends Controller
         $deleteOffloadingPlace = Input::get('deleteOffloadingPlace');
         $addLoadingPlace = Input::get('addLoadingPlace');
         $addOffloadingPlace = Input::get('addOffloadingPlace');
+        $submitLoading = Input::get('submitLoading');
+        $submitOffloading = Input::get('submitOffloading');
 
-        //////LOADING PLACES//////
         //documents already associated to the loading ?
         $actualDocuments_LoadingLoading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
         $actualDocumentsLoading = $this->documentsAssociated($actualDocuments_LoadingLoading, 'Loading');
+        //documents
+        $documentsLoading = $request->file('documentsLoading');
 
+        //documents already associated to the loading ?
+        $actualDocuments_LoadingOffloading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
+        $actualDocumentsOffloading = $this->documentsAssociated($actualDocuments_LoadingOffloading, 'Offloading');
+        //documents
+        $documentsOffloading = $request->file('documentsOffloading');
+
+        //////LOADING PLACES//////
         if (isset($addLoadingPlace)) {
             $this->addPlace($atrnr, 'LoadingPlace', $loading->numberLoadingPlace);
             session()->flash('openPanelLoading', 'openPanelLoading');
         } elseif (isset($deleteLoadingPlace)) {
             $this->deletePlace($atrnr, 'LoadingPlace', $loading->numberLoadingPlace);
             session()->flash('openPanelLoading', 'openPanelLoading');
-        }
+        } elseif (isset($submitLoading)) {
+            ///////SUBMIT LOADING PANEL////////
+            $k = $submitLoading;
+            //number pallets
+            $numberPalletsLoadingPlaceK = 'numberPalletsLoading' . $k;
+            $$numberPalletsLoadingPlaceK = Input::get('numberPalletsLoadingPlace' . $k);
 
-        for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
-            $submitLoadingK = 'submitLoading' . $k;
-            $$submitLoadingK = Input::get('submitLoading' . $k);
+            //account credited
+            $accountCreditLoadingPlaceK = 'accountCreditLoadingPlace' . $k;
+            $$accountCreditLoadingPlaceK = Input::get('accountCreditLoadingPlace' . $k);
 
-            if (isset($$submitLoadingK)) {
-                ///////SUBMIT LOADING PANEL////////
-                //number pallets
-                $numberPalletsLoadingPlaceK = 'numberPalletsLoading' . $k;
-                $$numberPalletsLoadingPlaceK = Input::get('numberPalletsLoadingPlace' . $k);
-                $this->numberPallets($atrnr, $$numberPalletsLoadingPlaceK, 'LoadingPlace', $k);
+            //account debited
+            $accountDebitLoadingPlaceK = 'accountDebitLoadingPlace' . $k;
+            $$accountDebitLoadingPlaceK = Input::get('accountDebitLoadingPlace' . $k);
 
-                //account credited
-                $accountCreditLoadingPlaceK = 'accountCreditLoadingPlace' . $k;
-                $$accountCreditLoadingPlaceK = Input::get('accountCreditLoadingPlace' . $k);
-                $this->accountCredit($atrnr, $$accountCreditLoadingPlaceK, 'LoadingPlace', $k);
+            //validated
+            $validateLoadingPlaceK = 'validateLoadingPlace' . $k;
+            $$validateLoadingPlaceK = Input::get('validateLoadingPlace' . $k);
 
-                //account debited
-                $accountDebitLoadingPlaceK = 'accountDebitLoadingPlace' . $k;
-                $$accountDebitLoadingPlaceK = Input::get('accountDebitLoadingPlace' . $k);
-                $this->accountDebit($atrnr, $$accountDebitLoadingPlaceK, 'LoadingPlace', $k);
+            //count
+            $countTimeLoadingPlaceK = 'countTimeLoadingPlace' . $k;
+            $$countTimeLoadingPlaceK = $loading->$countTimeLoadingPlaceK;
+            if (isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && isset($$numberPalletsLoadingPlaceK)) {
+                if ($$countTimeLoadingPlaceK < 1) {
+                    //credit and debit account 1st time
+                    Loading::where('atrnr', $atrnr)->update(['countTimeLoadingPlace' . $k => $$countTimeLoadingPlaceK + 1]);
+                    $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered' => $$numberPalletsLoadingPlaceK]);
+                    $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsDebitAccount - $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered' => -$$numberPalletsLoadingPlaceK]);
 
-                //validated
-                $validateLoadingPlaceK = 'validateLoadingPlace' . $k;
-                $$validateLoadingPlaceK = Input::get('validateLoadingPlace' . $k);
-                $this->validateTransfer($atrnr, $$validateLoadingPlaceK, 'LoadingPlace', $k);
+                    session()->flash('testFirstTime', 1);
+                    session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
+                    session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                }else{
+                    Loading::where('atrnr',$atrnr)->update(['countTimeLoadingPlace'.$k => $$countTimeLoadingPlaceK+1]);
+                    //credit and debit account update
+                    $actualCreditAccount=Loading::where('atrnr',$atrnr)->first()->$accountCreditLoadingPlaceK;
+                    $actualTheoricalNumberPalletsActualCreditAccount=Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
+                    $lastNumberPalletsTransferedCreditAccount=Palletsaccount::where('name', $actualCreditAccount)->first()->lastNumberPalletsTransfered;
+                    Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets'=>$actualTheoricalNumberPalletsActualCreditAccount-$lastNumberPalletsTransferedCreditAccount]);
+                    $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered'=>$$numberPalletsLoadingPlaceK]);
 
-                session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
+                    $actualDebitAccount=Loading::where('atrnr',$atrnr)->first()->$accountDebitLoadingPlaceK;
+                    $actualTheoricalNumberPalletsActualDebitAccount=Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
+                    $lastNumberPalletsTransferedDebitAccount=Palletsaccount::where('name', $actualDebitAccount)->first()->lastNumberPalletsTransfered;
+                    Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets'=>$actualTheoricalNumberPalletsActualDebitAccount-$lastNumberPalletsTransferedDebitAccount]);
+                    $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsDebitAccount - $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered'=>-$$numberPalletsLoadingPlaceK]);
 
-                //state
-                $stateLoadingPlaceK = 'stateLoadingPlace' . $k;
-                if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || isset($actualDocumentsLoading)) && $$validateLoadingPlaceK == true) {
-                    $$stateLoadingPlaceK = 'Complete Validated';
-//                $actualRealNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->realNumberPallets;
-//                Palletsaccount::where('name', $accountLoadingPlace)->update(['realNumberPallets' => $actualRealNumberPallets + $numberPalletsLoadingPlace]);
-                } elseif (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || isset($actualDocumentsLoading))) {
-                    $$stateLoadingPlaceK = 'Complete';
-                } elseif (!isset($documentsLoading) || !isset($actualDocumentsLoading)) {
-                    $$stateLoadingPlaceK = 'Waiting documents';
-                } elseif (isset($$numberPalletsLoadingPlaceK) || isset($$accountCreditLoadingPlaceK) || isset($$accountDebitLoadingPlaceK) || (isset($documentsLoading) || isset($actualDocumentsLoading))) {
-                    $$stateLoadingPlaceK = 'In progress';
-                } else {
-                    $$stateLoadingPlaceK = 'Untreated';
+                    if($actualCreditAccount==$$accountCreditLoadingPlaceK &&$actualDebitAccount<>$$accountDebitLoadingPlaceK ){
+                        session()->flash('testFirstTime', 3);
+                    }elseif($actualCreditAccount<>$$accountCreditLoadingPlaceK &&$actualDebitAccount==$$accountDebitLoadingPlaceK){
+                        session()->flash('testFirstTime', 5);
+                    }else{
+                        session()->flash('testFirstTime', 2);
+                    }
+
+                    session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
+                    session()->flash('lastNumberPalletsTransferedCreditAccount', $lastNumberPalletsTransferedCreditAccount);
+                    session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                    session()->flash('lastNumberPalletsTransferedDebitAccount', $lastNumberPalletsTransferedDebitAccount);
                 }
-                Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace' . $k => $$stateLoadingPlaceK]);
-                session()->flash('openPanelLoading', 'openPanelLoading');
             }
-        }
 
-        if (isset($uploadLoading)) {
-            ////////UPLOAD LOADING PANEL/////////
-            //documents
-            $documentsLoading = $request->file('documentsLoading');
-            $this->uploadDocuments($atrnr, $documentsLoading, 'Loading');
+            $this->numberPallets($atrnr, $$numberPalletsLoadingPlaceK, 'LoadingPlace', $k);
+            $this->accountCredit($atrnr, $$accountCreditLoadingPlaceK, 'LoadingPlace', $k);
+            $this->accountDebit($atrnr, $$accountDebitLoadingPlaceK, 'LoadingPlace', $k);
+            $this->validateTransfer($atrnr, $$validateLoadingPlaceK, 'LoadingPlace', $k);
 
             //state
             $stateLoadingPlaceK = 'stateLoadingPlace' . $k;
-            if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || isset($actualDocumentsLoading)) && $$validateLoadingPlaceK == true) {
+            if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading)) && $$validateLoadingPlaceK == true) {
                 $$stateLoadingPlaceK = 'Complete Validated';
-//                $actualRealNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->realNumberPallets;
-//                Palletsaccount::where('name', $accountLoadingPlace)->update(['realNumberPallets' => $actualRealNumberPallets + $numberPalletsLoadingPlace]);
-            } elseif (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || isset($actualDocumentsLoading))) {
+                $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->realNumberPallets;
+                Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK]);
+                $actualRealNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->realNumberPallets;
+                Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsDebitAccount - $$numberPalletsLoadingPlaceK]);
+            } elseif (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading))) {
                 $$stateLoadingPlaceK = 'Complete';
-            } elseif (!isset($documentsLoading) || !isset($actualDocumentsLoading)) {
+            } elseif (!isset($documentsLoading) || empty($actualDocumentsLoading)) {
                 $$stateLoadingPlaceK = 'Waiting documents';
             } elseif (isset($$numberPalletsLoadingPlaceK) || isset($$accountCreditLoadingPlaceK) || isset($$accountDebitLoadingPlaceK) || (isset($documentsLoading) || isset($actualDocumentsLoading))) {
                 $$stateLoadingPlaceK = 'In progress';
@@ -279,60 +307,171 @@ class DetailsLoadingController extends Controller
                 $$stateLoadingPlaceK = 'Untreated';
             }
             Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace' . $k => $$stateLoadingPlaceK]);
+
+            session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
             session()->flash('openPanelLoading', 'openPanelLoading');
-        }
 
-////OFFLOADING PLACES/////
-        //documents already associated to the loading ?
-        $actualDocuments_LoadingOffloading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
-        $actualDocumentsOffloading = $this->documentsAssociated($actualDocuments_LoadingOffloading, 'Offloading');
+        } elseif (isset($uploadLoading)) {
+            ////////UPLOAD LOADING PANEL/////////
+            $this->uploadDocuments($atrnr, $documentsLoading, 'Loading');
 
-        if (isset($addOffloadingPlace)) {
+            //state
+            for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
+                $stateLoadingPlaceK = 'stateLoadingPlace' . $k;
+
+                $numberPalletsLoadingPlaceK = 'numberPalletsLoading' . $k;
+                $$numberPalletsLoadingPlaceK = Input::get('numberPalletsLoadingPlace' . $k);
+                $accountCreditLoadingPlaceK = 'accountCreditLoadingPlace' . $k;
+                $$accountCreditLoadingPlaceK = Input::get('accountCreditLoadingPlace' . $k);
+                $accountDebitLoadingPlaceK = 'accountDebitLoadingPlace' . $k;
+                $$accountDebitLoadingPlaceK = Input::get('accountDebitLoadingPlace' . $k);
+                $validateLoadingPlaceK = 'validateLoadingPlace' . $k;
+                $$validateLoadingPlaceK = Input::get('validateLoadingPlace' . $k);
+
+                if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading)) && $$validateLoadingPlaceK == true) {
+                    $$stateLoadingPlaceK = 'Complete Validated';
+                    $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->realNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK]);
+                    $actualRealNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->realNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsDebitAccount - $$numberPalletsLoadingPlaceK]);
+                } elseif (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading))) {
+                    $$stateLoadingPlaceK = 'Complete';
+                } elseif (!isset($documentsLoading) || empty($actualDocumentsLoading)) {
+                    $$stateLoadingPlaceK = 'Waiting documents';
+                } elseif (isset($$numberPalletsLoadingPlaceK) || isset($$accountCreditLoadingPlaceK) || isset($$accountDebitLoadingPlaceK) || (isset($documentsLoading) || isset($actualDocumentsLoading))) {
+                    $$stateLoadingPlaceK = 'In progress';
+                } else {
+                    $$stateLoadingPlaceK = 'Untreated';
+                }
+                Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace' . $k => $$stateLoadingPlaceK]);
+            }
+            session()->flash('openPanelLoading', 'openPanelLoading');
+        } elseif (isset($addOffloadingPlace)) {
+            ////OFFLOADING PLACES/////
             $this->addPlace($atrnr, 'OffloadingPlace', $loading->numberOffloadingPlace);
             session()->flash('openPanelOffloading', 'openPanelOffloading');
         } elseif (isset($deleteOffloadingPlace)) {
             $this->deletePlace($atrnr, 'OffloadingPlace', $loading->numberOffloadingPlace);
             session()->flash('openPanelOffloading', 'openPanelOffloading');
-        }
+        } elseif (isset($submitOffloading)) {
+            $k = $submitOffloading;
+            ///////SUBMIT OFFLOADING PANEL////////
+            //number pallets
+            $numberPalletsOffloadingPlaceK = 'numberPalletsOffloadingPlace' . $k;
+            $$numberPalletsOffloadingPlaceK = Input::get('numberPalletsOffloadingPlace' . $k);
 
-        for ($k = 1; $k <= $loading->numberOffloadingPlace; $k++) {
+            //account credited
+            $accountCreditOffloadingPlaceK = 'accountCreditOffloadingPlace' . $k;
+            $$accountCreditOffloadingPlaceK = Input::get('accountCreditOffloadingPlace' . $k);
 
-            $submitOffloadingK = 'submitOffloading' . $k;
-            $$submitOffloadingK = Input::get('submitOffloading' . $k);
+            //account debited
+            $accountDebitOffloadingPlaceK = 'accountDebitOffloadingPlace' . $k;
+            $$accountDebitOffloadingPlaceK = Input::get('accountDebitOffloadingPlace' . $k);
 
-            if (isset($$submitOffloadingK)) {
-                ///////SUBMIT LOADING PANEL////////
-                //number pallets
+            //validated
+            $validateOffloadingPlaceK = 'validateOffloadingPlace' . $k;
+            $$validateOffloadingPlaceK = Input::get('validateOffloadingPlace' . $k);
+
+            //count
+            $countTimeOffloadingPlaceK = 'countTimeOffloadingPlace' . $k;
+            $$countTimeOffloadingPlaceK = $loading->$countTimeOffloadingPlaceK;
+            if (isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && isset($$numberPalletsOffloadingPlaceK)) {
+                if ($$countTimeOffloadingPlaceK < 1) {
+                    //credit and debit account 1st time
+                    Loading::where('atrnr', $atrnr)->update(['countTimeOffloadingPlace' . $k => $$countTimeOffloadingPlaceK + 1]);
+                    $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsOffloadingPlaceK, 'lastNumberPalletsTransfered' => $$numberPalletsOffloadingPlaceK]);
+                    $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsDebitAccount - $$numberPalletsOffloadingPlaceK, 'lastNumberPalletsTransfered' => -$$numberPalletsOffloadingPlaceK]);
+
+                    session()->flash('testFirstTime', 1);
+                    session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
+                    session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                }else{
+                    Loading::where('atrnr',$atrnr)->update(['countTimeOffloadingPlace'.$k => $$countTimeOffloadingPlaceK+1]);
+                    //credit and debit account update
+                    $actualCreditAccount=Loading::where('atrnr',$atrnr)->first()->$accountCreditOffloadingPlaceK;
+                    $actualTheoricalNumberPalletsActualCreditAccount=Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
+                    $lastNumberPalletsTransferedCreditAccount=Palletsaccount::where('name', $actualCreditAccount)->first()->lastNumberPalletsTransfered;
+                    Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets'=>$actualTheoricalNumberPalletsActualCreditAccount-$lastNumberPalletsTransferedCreditAccount]);
+                    $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsOffloadingPlaceK, 'lastNumberPalletsTransfered'=>$$numberPalletsOffloadingPlaceK]);
+
+                    $actualDebitAccount=Loading::where('atrnr',$atrnr)->first()->$accountDebitOffloadingPlaceK;
+                    $actualTheoricalNumberPalletsActualDebitAccount=Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
+                    $lastNumberPalletsTransferedDebitAccount=Palletsaccount::where('name', $actualDebitAccount)->first()->lastNumberPalletsTransfered;
+                    Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets'=>$actualTheoricalNumberPalletsActualDebitAccount-$lastNumberPalletsTransferedDebitAccount]);
+                    $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsDebitAccount - $$numberPalletsOffloadingPlaceK, 'lastNumberPalletsTransfered'=>-$$numberPalletsOffloadingPlaceK]);
+
+                    if($actualCreditAccount==$$accountCreditOffloadingPlaceK &&$actualDebitAccount<>$$accountDebitOffloadingPlaceK ){
+                        session()->flash('testFirstTime', 3);
+                    }elseif($actualCreditAccount<>$$accountCreditOffloadingPlaceK &&$actualDebitAccount==$$accountDebitOffloadingPlaceK){
+                        session()->flash('testFirstTime', 5);
+                    }else{
+                        session()->flash('testFirstTime', 2);
+                    }
+
+                    session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
+                    session()->flash('lastNumberPalletsTransferedCreditAccount', $lastNumberPalletsTransferedCreditAccount);
+                    session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                    session()->flash('lastNumberPalletsTransferedDebitAccount', $lastNumberPalletsTransferedDebitAccount);
+                }
+            }
+
+            $this->numberPallets($atrnr, $$numberPalletsOffloadingPlaceK, 'OffloadingPlace', $k);
+            $this->accountCredit($atrnr, $$accountCreditOffloadingPlaceK, 'OffloadingPlace', $k);
+            $this->accountDebit($atrnr, $$accountDebitOffloadingPlaceK, 'OffloadingPlace', $k);
+            $this->validateTransfer($atrnr, $$validateOffloadingPlaceK, 'OffloadingPlace', $k);
+
+            //state
+            $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
+            if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
+                $$stateOffloadingPlaceK = 'Complete Validated';
+                $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->first()->realNumberPallets;
+                Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsOffloadingPlaceK]);
+                $actualRealNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->first()->realNumberPallets;
+                Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsDebitAccount - $$numberPalletsOffloadingPlaceK]);
+            } elseif (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading))) {
+                $$stateOffloadingPlaceK = 'Complete';
+            } elseif (!isset($documentsOffloading) || empty($actualDocumentsOffloading)) {
+                $$stateOffloadingPlaceK = 'Waiting documents';
+            } elseif (isset($$numberPalletsOffloadingPlaceK) || isset($$accountCreditOffloadingPlaceK) || isset($$accountDebitOffloadingPlaceK) || (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
+                $$stateOffloadingPlaceK = 'In progress';
+            } else {
+                $$stateOffloadingPlaceK = 'Untreated';
+            }
+            Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
+
+            session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
+            session()->flash('openPanelOffloading', 'openPanelOffloading');
+
+        } elseif (isset($uploadOffloading)) {
+            ////////UPLOAD OFFLOADING PANEL/////////
+            $this->uploadDocuments($atrnr, $documentsOffloading, 'Offloading');
+
+            //state
+            for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
+                $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
+
                 $numberPalletsOffloadingPlaceK = 'numberPalletsOffloadingPlace' . $k;
                 $$numberPalletsOffloadingPlaceK = Input::get('numberPalletsOffloadingPlace' . $k);
-                $this->numberPallets($atrnr, $$numberPalletsOffloadingPlaceK, 'OffloadingPlace', $k);
-
-                //account credited
                 $accountCreditOffloadingPlaceK = 'accountCreditOffloadingPlace' . $k;
                 $$accountCreditOffloadingPlaceK = Input::get('accountCreditOffloadingPlace' . $k);
-                $this->accountCredit($atrnr, $$accountCreditOffloadingPlaceK, 'OffloadingPlace', $k);
-
-                //account debited
                 $accountDebitOffloadingPlaceK = 'accountDebitOffloadingPlace' . $k;
                 $$accountDebitOffloadingPlaceK = Input::get('accountDebitOffloadingPlace' . $k);
-                $this->accountDebit($atrnr, $$accountDebitOffloadingPlaceK, 'OffloadingPlace', $k);
-
-                //validated
                 $validateOffloadingPlaceK = 'validateOffloadingPlace' . $k;
                 $$validateOffloadingPlaceK = Input::get('validateOffloadingPlace' . $k);
-                $this->validateTransfer($atrnr, $$validateOffloadingPlaceK, 'OffloadingPlace', $k);
 
-                session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
-
-                //state
-                $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
-                if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
+                if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
                     $$stateOffloadingPlaceK = 'Complete Validated';
-//                $actualRealNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->realNumberPallets;
-//                Palletsaccount::where('name', $accountLoadingPlace)->update(['realNumberPallets' => $actualRealNumberPallets + $numberPalletsLoadingPlace]);
-                } elseif (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
+                    $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->first()->realNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsOffloadingPlaceK]);
+                    $actualRealNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->first()->realNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitOffloadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsDebitAccount - $$numberPalletsOffloadingPlaceK]);
+                } elseif (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading))) {
                     $$stateOffloadingPlaceK = 'Complete';
-                } elseif (!isset($documentsOffloading) || !isset($actualDocumentsOffloading)) {
+                } elseif (!isset($documentsOffloading) || empty($actualDocumentsOffloading)) {
                     $$stateOffloadingPlaceK = 'Waiting documents';
                 } elseif (isset($$numberPalletsOffloadingPlaceK) || isset($$accountCreditOffloadingPlaceK) || isset($$accountDebitOffloadingPlaceK) || (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
                     $$stateOffloadingPlaceK = 'In progress';
@@ -342,35 +481,7 @@ class DetailsLoadingController extends Controller
                 Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
             }
             session()->flash('openPanelOffloading', 'openPanelOffloading');
-
-        }
-
-        if (isset($uploadOffloading)) {
-            ////////UPLOAD OFFLOADING PANEL/////////
-            //documents
-            $documentsOffloading = $request->file('documentsOffloading');
-            $this->uploadDocuments($atrnr, $documentsOffloading, 'Offloading');
-
-            //state
-            $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
-            if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
-                $$stateOffloadingPlaceK = 'Complete Validated';
-//                $actualRealNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->realNumberPallets;
-//                Palletsaccount::where('name', $accountLoadingPlace)->update(['realNumberPallets' => $actualRealNumberPallets + $numberPalletsLoadingPlace]);
-            } elseif (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
-                $$stateOffloadingPlaceK = 'Complete';
-            } elseif (!isset($documentsOffloading) || !isset($actualDocumentsOffloading)) {
-                $$stateOffloadingPlaceK = 'Waiting documents';
-            } elseif (isset($$numberPalletsOffloadingPlaceK) || isset($$accountCreditOffloadingPlaceK) || isset($$accountDebitOffloadingPlaceK) || (isset($documentsOffloading) || isset($actualDocumentsOffloading))) {
-                $$stateOffloadingPlaceK = 'In progress';
-            } else {
-                $$stateOffloadingPlaceK = 'Untreated';
-            }
-            Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
-            session()->flash('openPanelOffloading', 'openPanelOffloading');
-        }
-
-        if (isset($deleteDocument)) {
+        } elseif (isset($deleteDocument)) {
             $this->deleteDocument($atrnr, $deleteDocument);
         }
         return redirect()->back();
@@ -387,8 +498,6 @@ class DetailsLoadingController extends Controller
     {
         if (isset($accountCredit)) {
             Loading::where('atrnr', $atrnr)->update(['accountCredit' . $type . $k => $accountCredit]);
-//                $actualTheoricalNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->theoricalNumberPallets;
-//                Palletsaccount::where('name', $accountLoadingPlace)->update(['theoricalNumberPallets' => $actualTheoricalNumberPallets + $numberPalletsLoadingPlace]);
         }
     }
 
@@ -396,8 +505,6 @@ class DetailsLoadingController extends Controller
     {
         if (isset($accountDebit)) {
             Loading::where('atrnr', $atrnr)->update(['accountDebit' . $type . $k => $accountDebit]);
-//                $actualTheoricalNumberPallets = Palletsaccount::where('name', $accountLoadingPlace)->first()->theoricalNumberPallets;
-//                Palletsaccount::where('name', $accountLoadingPlace)->update(['theoricalNumberPallets' => $actualTheoricalNumberPallets + $numberPalletsLoadingPlace]);
         }
     }
 
@@ -407,6 +514,11 @@ class DetailsLoadingController extends Controller
             $validate = true;
             Loading::where('atrnr', $atrnr)->update(['validate' . $type . $k => $validate]);
         }
+    }
+
+    public function countTime($atrnr, $accountCredit, $accountDebit, $numberPallets, $countTime, $type, $k)
+    {
+
     }
 
     public function uploadDocuments($atrnr, $documents, $type)
