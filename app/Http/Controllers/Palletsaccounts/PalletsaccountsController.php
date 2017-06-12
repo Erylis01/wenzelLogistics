@@ -24,17 +24,39 @@ class PalletsaccountsController extends Controller
      */
     public function showAll(Request $request)
     {
-
+        $searchQuery = $request->get('search');
         if (Auth::check()) {
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
-                $listPalletsaccounts = DB::table('palletsaccounts')->orderBy($sortby, $order)->get();
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    //search query
+                    $listPalletsaccounts = DB::table('palletsaccounts')
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('id', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('type', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('realNumberPallets', 'LIKE', '%' . $searchQuery . '%');
+                        })->orderBy($sortby, $order)->paginate(10);
+                }else{
+                    $listPalletsaccounts = DB::table('palletsaccounts')->orderBy($sortby, $order)->get();
+                }
             } else {
-                $listPalletsaccounts = DB::table('palletsaccounts')->get();
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    //search query
+                    $listPalletsaccounts = DB::table('palletsaccounts')
+                        ->where(function ($q) use ($searchQuery) {
+                            $q->where('id', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('type', 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere('realNumberPallets', 'LIKE', '%' . $searchQuery . '%');
+                        })->paginate(10);
+                }else{
+                    $listPalletsaccounts = DB::table('palletsaccounts')->get();
+                }
             }
-            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order'));
+            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'searchQuery'));
         } else {
             return view('auth.login');
         }

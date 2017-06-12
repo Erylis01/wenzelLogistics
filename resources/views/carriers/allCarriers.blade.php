@@ -66,8 +66,6 @@
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddCarrier') }}</div>
                     @endif
 
-
-
                     <!-- Table -->
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-carriers">

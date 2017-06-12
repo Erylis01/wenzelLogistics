@@ -66,11 +66,49 @@
                             </table>
                         </div>
 
+                            <div>
+                                <form role="form" class="form-inline" method="GET" action="{{route('showAllPalletsaccounts')}}">
+                                    {{ csrf_field() }}
+                                    <div class="col-lg-10 col-lg-offset-1 input-group">
+                                        @if(isset($searchQuery))
+                                            <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
+                                                   placeholder="search"/>
+                                        @else
+                                            <input type="text" class="form-control" name="search" value=""
+                                                   placeholder="search"/>
+                                        @endif
+                                        <span class="input-group-btn">
+                                <button class="btn glyphicon glyphicon-search" type="submit"
+                                        name="searchSubmit"></button>
+                            </span>
+                                    </div>
+                                </form>
+                                <br>
+                            </div>
+
                         <!-- Table -->
                         <div class="table-responsive table-palletsaccounts">
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
+                                    @if(isset($searchQuery))
+                                        <th class="text-center colName">Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=name&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=name&order=desc')}}"></a></th>
+                                        <th class="text-center colType">Type<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=type&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=type&order=desc')}}"></a></th>
+                                        <th class="text-center colTotal">Total<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=realNumberPallets&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=realNumberPallets&order=desc')}}"></a>
+                                        </th>
+                                        @else
                                     <th class="text-center colName">Name<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
@@ -87,6 +125,7 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=desc')}}"></a>
                                     </th>
+                                        @endif
                                 </tr>
                                 </thead>
                                 <tbody>
