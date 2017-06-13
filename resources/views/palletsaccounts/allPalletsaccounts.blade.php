@@ -65,11 +65,11 @@
                                 </thead>
                             </table>
                         </div>
-
+<br>
                             <div>
-                                <form role="form" class="form-inline" method="GET" action="{{route('showAllPalletsaccounts')}}">
+                                <form role="form" class="searchBar form-inline" method="GET" action="{{route('showAllPalletsaccounts')}}">
                                     {{ csrf_field() }}
-                                    <div class="col-lg-12 input-group">
+                                    <div class="searchBar col-lg-12 input-group">
                                         @if(isset($searchQuery))
                                             <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
                                                    placeholder="search"/>
@@ -174,14 +174,16 @@
                                         <table class="table table-hover table-bordered">
                                             <thead>
                                             <tr>
-                                                <th class="text-center">Confirmed pallets number</th>
-                                                <th class="text-center">Planned pallets number</th>
+                                                <th class="text-center">Confirmed<br> pallets nbr</th>
+                                                <th class="text-center">Planned<br> pallets nbr</th>
+                                                <th class="text-center">Last<br> pallets transfer</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                                 <td class="text-center">{{$palletsaccount->realNumberPallets}}</td>
                                                 <td class="text-center">{{$palletsaccount->theoricalNumberPallets}}</td>
+                                                <td class="text-center">{{$palletsaccount->lastNumberPalletsTransfered}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -189,7 +191,7 @@
                                 </div>
                                 @if($palletsaccount->type<>'Other')
                                     <div class="form-group">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-5 text-right">
                                             <label for="warehousesAssociated"
                                                    class="control-label legend-palletsaccounts">Warehouses
                                                 associated :</label>

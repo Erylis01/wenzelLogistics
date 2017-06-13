@@ -6,6 +6,7 @@
 
 .info-palletsaccounts{
     font-size:16px;
+    vertical-align: middle;
 }
 
 /*PANELS*/
@@ -27,10 +28,6 @@
 
 /*TABLE*/
 
-.col1{
-    max-width: 70px;
-}
-
 .table-palletsaccounts{
     margin:-10px;
     font-size:18px;
@@ -51,18 +48,64 @@
 
 .colName{
     min-width:312px;
+    max-width: 312px;
 }
 .colType{
     min-width:96px;
+    max-width:96px;
 }
 .colTot{
     min-width:408px;
+    max-width:408px;
 }
 
 .colTotal{
     min-width:60px;
+    max-width:60px;
 }
 
 .table-palletsNumber tr>th{
-    width:50%;
+    width:30%;
 }
+
+.col1{
+    max-width: 90px;
+    min-width:90px;
+    width:90px;
+}
+.col2{
+    max-width: 100px;
+    min-width:100px;
+    width:100px;
+}
+.col3{
+    max-width: 110px;
+    min-width:110px;
+    width:110px;
+}
+
+.col4 {
+    max-width: 625px;
+    min-width: 625px;
+    width: 625px;
+}
+
+.table-loading-account{
+    margin:-10px;
+    font-size:18px;
+}
+
+.table-loading-account>table>thead{
+    display: inline-block;
+    width: 100%;
+}
+
+.table-loading-account>table>tbody{
+    font-size:16px;
+    width: 100%;
+    max-height: 450px;
+    overflow: auto;
+    display: inline-block;
+}
+
+

@@ -38,9 +38,9 @@
                     <div class="panel-heading">
                         <div class="col-lg-4">List of all warehouses
                         </div>
-                        <form role="form" class="form-inline" method="GET" action="{{route('showAllWarehouses')}}">
+                        <form role="form" class="searchBar form-inline" method="GET" action="{{route('showAllWarehouses')}}">
                             {{ csrf_field() }}
-                            <div class="col-lg-4 input-group">
+                            <div class="searchBar col-lg-4 input-group">
                                 @if(isset($searchQuery))
                                     <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
                                            placeholder="search"/>

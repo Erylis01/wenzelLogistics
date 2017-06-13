@@ -40,7 +40,7 @@
                         </div>
                         <form role="form" method="GET" action="{{route('showAllLoadings')}}">
                             {{ csrf_field() }}
-                            <div class="col-lg-4 input-group">
+                            <div class="searchBar col-lg-4 input-group">
                                 @if(isset($searchQuery))
                                     <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
                                            placeholder="search"/>

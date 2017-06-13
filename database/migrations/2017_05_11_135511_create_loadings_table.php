@@ -77,6 +77,7 @@ $table->integer('numberLoadingPlace')->default(1);
             $table->integer('countTimeOffloadingPlace2')->default(0);
 
             $table->integer('numberPalletsLoadingPlace3')->nullable();
+            $table->string('accountCreditLoadingPlace3')->nullable();
             $table->string('accountDebitLoadingPlace3')->nullable();
             $table->string('stateLoadingPlace3')->default('Untreated');
             $table->boolean('validateLoadingPlace3')->default(false);

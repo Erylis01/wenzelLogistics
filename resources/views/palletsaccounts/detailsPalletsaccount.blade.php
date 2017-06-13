@@ -63,22 +63,36 @@
                                                     </div>
                                                     <!--type-->
                                                     <div class="col-lg-1">
-                                                        <label for="type" class="control-label"><span>*</span> Type :</label>
+                                                        <label for="type" class="control-label"><span>*</span> Type
+                                                            :</label>
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <!-- if mistake in the adding form you are redirected with field already filled-->
-                                                        <select class="selectpicker show-tick form-control" data-size="5"
-                                                                data-live-search="true" data-live-search-style="startsWith"
+                                                        <select class="selectpicker show-tick form-control"
+                                                                data-size="5"
+                                                                data-live-search="true"
+                                                                data-live-search-style="startsWith"
                                                                 title="Type" name="type"
                                                                 required>
                                                             @if(Illuminate\Support\Facades\Input::old('type'))
-                                                                <option @if(old('type') == 'Carrier') selected @endif>Carrier</option>
-                                                                <option @if(old('type') == 'Other') selected @endif>Other</option>
-                                                                <option @if(old('type') == 'Warehouse') selected @endif>Warehouse</option>
+                                                                <option @if(old('type') == 'Carrier') selected @endif>
+                                                                    Carrier
+                                                                </option>
+                                                                <option @if(old('type') == 'Other') selected @endif>
+                                                                    Other
+                                                                </option>
+                                                                <option @if(old('type') == 'Warehouse') selected @endif>
+                                                                    Warehouse
+                                                                </option>
                                                             @elseif(isset($type))
-                                                                <option @if($type == 'Carrier') selected @endif>Carrier</option>
-                                                                <option @if($type == 'Other') selected @endif>Other</option>
-                                                                <option @if($type == 'Warehouse') selected @endif>Warehouse</option>
+                                                                <option @if($type == 'Carrier') selected @endif>
+                                                                    Carrier
+                                                                </option>
+                                                                <option @if($type == 'Other') selected @endif>Other
+                                                                </option>
+                                                                <option @if($type == 'Warehouse') selected @endif>
+                                                                    Warehouse
+                                                                </option>
                                                             @else
                                                                 <option>Carrier</option>
                                                                 <option>Other</option>
@@ -231,82 +245,200 @@
                                                 </div>
                                             </div>
 
+                                            <!--search bar-->
                                             <br>
-                                            <div class="table-responsive">
+                                            <div>
+                                                <form role="form" class="searchBar form-inline" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
+                                                    {{ csrf_field() }}
+                                                    {{--<div class="form-goup">--}}
+                                                    <div class="col-lg-8 col-lg-offset-2 input-group">
+                                                        @if(isset($searchQuery))
+                                                            <input type="text" class="searchBar form-control" name="search" value="{{$searchQuery}}"
+                                                                   placeholder="search"/>
+                                                        @else
+                                                            <input type="text" class="form-control" name="search" value=""
+                                                                   placeholder="search"/>
+                                                        @endif
+                                                        <span class="input-group-btn">
+                                            <select class="col-lg-8 selectpicker show-tick input-group" data-size="5"
+                                                    data-live-search="true" data-live-search-style="startsWith"
+                                                    title="columns" name="searchColumn">
+                                      @if(!isset($searchColumn)||!Illuminate\Support\Facades\Input::old('searchColumn'))
+                                                    <option selected>all</option>
+                                                @else
+                                                    <option>all</option>
+                                                @endif
+                                                @foreach($listColumns as $column )
+                                                    @if(Illuminate\Support\Facades\Input::old('searchColumn') && $column==old('searchColumn'))
+                                                        <option selected>{{$column}}</option>
+                                                    @elseif(isset($searchColumn)&& $column==$searchColumn)
+                                                        <option selected>{{$column}}</option>
+                                                    @else
+                                                        <option>{{$column}}</option>
+                                                    @endif
+                                                @endforeach
+                                        </select>
+                                <button class="btn glyphicon glyphicon-search" type="submit"
+                                        name="searchSubmit"></button>
+                            </span>
+                                                    </div>
+                                                    {{--</div>--}}
+                                                    <div class="col-lg-5 col-lg-offset-2 input-group">
+                                                        <label class="checkbox-inline"><input type="checkbox" value="loading">Loading Place</label>
+                                                        <label class="checkbox-inline"><input type="checkbox" value="offloading">Offloading Place</label>
+                                                        <label class="checkbox-inline"><input type="checkbox" value="credit">Credit</label>
+                                                        <label class="checkbox-inline"><input type="checkbox" value="debit">Debit</label>
+                                                    </div>
+                                                    <div class="col-lg-3 col-lg-offset-1 input-group">
+                                                    {{--<span class="input-group-btn">--}}
+                                                    <button class="btn btn-block glyphicon glyphicon-search" type="submit"
+                                                            name="searchSubmit"></button>
+                                                    {{--</span>--}}
+                                                    </div>
+                                                </form>
+                                                <br>
+                                            </div>
+                                            <div class="table-responsive table-loading-account">
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th class="text-center col1">ID <a
-                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"></a><a
-                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a>
+                                                        <th class="text-center col1">Atrnr
+                                                            {{--<a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listLoadingsAssociated->currentPage().'&sortby=atrnr&order=asc')}}"></a><a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listLoadingsAssociated->currentPage().'&sortby=atrnr&order=desc')}}"></a>--}}
                                                         </th>
-                                                        <th class="text-center">Date transfer <a
-                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
-                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
+                                                        <th class="text-center col3">Date transfer
+                                                            {{--<a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>--}}
                                                         </th>
-                                                        <th class="text-center">Atrnr Loading <a
-                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
-                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
+                                                        <th class="text-center col4">Subfrachter
+                                                            {{--<a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>--}}
                                                         </th>
-                                                        <th class="text-center">Real pallets Number <a
-                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=asc')}}"></a><a
-                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=desc')}}"></a>
+                                                        <th class="text-center col3">Planned<br>pallets nbr
+                                                            {{--<a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>--}}
                                                         </th>
-                                                        <th class="text-center">Theorical pallets Number <a
-                                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
-                                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                    href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>
+                                                        <th class="text-center col2">Type<br>place
+                                                            {{--<a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>--}}
+                                                        </th>
+                                                        <th class="text-center col2">Type transfer
+                                                            {{--<a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a--}}
+                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>--}}
                                                         </th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach($listPalletstransfers as $transfer)
-                                                        <tr>
-                                                            <td class="text-center col1"><a
-                                                                        href="{{route('showDetailsPalletstransfer', $transfer->id)}}"
-                                                                        class="link">{{$transfer->id}}</a></td>
-                                                            <td class="text-center">{{$transfer->date}}</td>
-                                                            <td class="text-center"><a
-                                                                        href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}"
-                                                                        class="link">{{$transfer->loading_atrnr}}</a>
-                                                            </td>
-                                                            <td class="text-center">{{$transfer->realPalletsNumber}}</td>
-                                                            <td class="text-center">{{$transfer->palletsNumber}}</td>
-                                                        </tr>
-                                                    @endforeach
+                                                    @for($k=0;$k<5;$k++)
+                                                        @for($i=0;$i<4;$i++)
+                                                            @if(!$listLoadingsAssociated[$i+4*$k]->isEmpty())
+                                                                @php($j=$k+1)
+                                                                @if($i==0)
+                                                                    @php($numberPalletsI='numberPalletsLoadingPlace'.$j)
+                                                                    <!--loading place credit account-->
+                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
+                                                                        <tr>
+                                                                            <td class="text-center col1"><a
+                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
+                                                                                        class="link">{{$loading->atrnr}}</a></td>
+                                                                            <td class="text-center col3">{{$loading->ladedatum}}</td>
+                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
+                                                                            <td class="text-center col3">{{$loading->$numberPalletsI}}</td>
+                                                                            <td class="text-center col2">Loading place</td>
+                                                                            <td class="text-center col2">Credit</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    @elseif($i==1)
+                                                                    @php($numberPalletsI='numberPalletsLoadingPlace'.$j)
+                                                                    <!--loading place debit account-->
+                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
+                                                                        <tr>
+                                                                            <td class="text-center col1"><a
+                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
+                                                                                        class="link">{{$loading->atrnr}}</a></td>
+                                                                            <td class="text-center col3">{{$loading->ladedatum}}</td>
+                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
+                                                                            <td class="text-center col3">-{{$loading->$numberPalletsI}}</td>
+                                                                            <td class="text-center col2">Loading place</td>
+                                                                            <td class="text-center col2">Debit</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @elseif($i==2)
+                                                                    @php($numberPalletsI='numberPalletsOffloadingPlace'.$j)
+                                                                    <!--offloading place credit account-->
+                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
+                                                                        <tr>
+                                                                            <td class="text-center col1"><a
+                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
+                                                                                        class="link">{{$loading->atrnr}}</a></td>
+                                                                            <td class="text-center col3">{{$loading->entladedatum}}</td>
+                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
+                                                                            <td class="text-center col3">{{$loading->$numberPalletsI}}</td>
+                                                                            <td class="text-center col2">Offloading place</td>
+                                                                            <td class="text-center col2">Credit</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @elseif($i==3)
+                                                                    @php($numberPalletsI='numberPalletsOffloadingPlace'.$j)
+                                                                    <!--offloading place debit account-->
+                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
+                                                                        <tr>
+                                                                            <td class="text-center col1"><a
+                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
+                                                                                        class="link">{{$loading->atrnr}}</a></td>
+                                                                            <td class="text-center col3">{{$loading->entladedatum}}</td>
+                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
+                                                                            <td class="text-center col3">-{{$loading->$numberPalletsI}}</td>
+                                                                            <td class="text-center col2">Offloading place</td>
+                                                                            <td class="text-center col2">Debit</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    @endif
+                                                                @endif
+                                                    @endfor
+                                                    @endfor
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="row">
-                                                <div class="general-pagination text-left">{!! $listPalletstransfers->render() !!}</div>
+                                            {{--<div class="row">--}}
+                                            {{--<div class="general-pagination text-left">{!! $listLoadingsAssociated->render() !!}</div>--}}
 
-                                                @if ($listPalletstransfers->currentPage()==$listPalletstransfers->lastPage())
-                                                    <div class="general-legend col-lg-offset-9">
-                                                        Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
-                                                        to {{$count}} of {{$count}} results
-                                                    </div>
-                                                @elseif($listPalletstransfers->isEmpty())
-                                                    <div class="general-legend col-lg-offset-9">
-                                                        Showing 0 to 0 of 0 results
-                                                    </div>
-                                                @else
-                                                    <div class="general-legend col-lg-offset-9">
-                                                        Showing @php($legend1=1+ ($listPalletstransfers->currentPage() -1) * 5)  {{$legend1}}
-                                                        to @php($legend2= $listPalletstransfers->currentPage() * 5) {{$legend2}}
-                                                        of {{$count}}
-                                                        results
-                                                    </div>
-                                                @endif
-                                            </div>
+                                            {{--@if ($listLoadingsAssociated->currentPage()==$listLoadingsAssociated->lastPage())--}}
+                                            {{--<div class="general-legend col-lg-offset-9">--}}
+                                            {{--Showing @php($legend1=1+ ($listLoadingsAssociated->currentPage() -1) * 5)  {{$legend1}}--}}
+                                            {{--to {{$count}} of {{$count}} results--}}
+                                            {{--</div>--}}
+                                            {{--@elseif($listLoadingsAssociated->isEmpty())--}}
+                                            {{--<div class="general-legend col-lg-offset-9">--}}
+                                            {{--Showing 0 to 0 of 0 results--}}
+                                            {{--</div>--}}
+                                            {{--@else--}}
+                                            {{--<div class="general-legend col-lg-offset-9">--}}
+                                            {{--Showing @php($legend1=1+ ($listLoadingsAssociated->currentPage() -1) * 5)  {{$legend1}}--}}
+                                            {{--to @php($legend2= $listLoadingsAssociated->currentPage() * 5) {{$legend2}}--}}
+                                            {{--of {{$count}}--}}
+                                            {{--results--}}
+                                            {{--</div>--}}
+                                            {{--@endif--}}
+                                            {{--</div>--}}
                                         </div>
                                     </div>
                             </div>
