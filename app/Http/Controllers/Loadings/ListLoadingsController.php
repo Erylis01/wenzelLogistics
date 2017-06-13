@@ -31,52 +31,64 @@ class ListLoadingsController extends Controller
             $currentDate = Carbon::now();
             $limitDate = $currentDate->subDays(60)->format('Y-m-d');
             $searchQuery = $request->get('search');
+//            $searchQueryArray=explode(' ', $searchQuery);
+            $searchColumn=$request->get('searchColumn');
+            $listColumns=['atrnr','ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb','lande', 'plze', 'orte', 'anz', 'art',  'subfrachter', 'kennzeichen', 'zusladestellen' ];
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 if (isset($searchQuery) && $searchQuery <> '') {
                     //search query
-                    $listLoadings = DB::table('loadings')
-                        ->where('pt', 'ja')
-                        ->where('ladedatum', '>=', $limitDate)
-                        ->where(function ($q) use ($searchQuery) {
-                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
-                        })->orderBy($sortby, $order)->paginate(10);
-
-                    $count = count(DB::table('loadings')->where('pt', 'ja')
-                        ->where('ladedatum', '>=', $limitDate)
-                        ->where(function ($q) use ($searchQuery) {
-                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
-                        })->get());
+                    if($searchColumn=='all'){
+                        $listLoadings = DB::table('loadings')
+                            ->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where(function ($q) use ($searchQuery, $listColumns) {
+                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
+                            })->orderBy($sortby, $order)->paginate(10);
+                        $count = count(DB::table('loadings')->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where(function ($q) use ($searchQuery, $listColumns) {
+                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
+                            })->get());
+                    }else{
+                        $listLoadings = DB::table('loadings')
+                            ->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->orderBy($sortby, $order)->paginate(10);
+                        $count = count(DB::table('loadings')->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
+                    }
                 } else {
                     $listLoadings = DB::table('loadings')->where([
                         ['pt', '=', 'ja'],
@@ -90,47 +102,55 @@ class ListLoadingsController extends Controller
                 $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    $listLoadings = DB::table('loadings')
-                        ->where('pt', 'ja')
-                        ->where('ladedatum', '>=', $limitDate)
-                        ->where(function ($q) use ($searchQuery) {
-                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
-                        })->paginate(10);
-
-                    $count = count(DB::table('loadings')->where('pt', 'ja')
-                        ->where('ladedatum', '>=', $limitDate)
-                        ->where(function ($q) use ($searchQuery) {
-                            $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('auftraggeber', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('landb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plzb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('ortb', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('lande', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('plze', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('orte', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('anz', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('art', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('kennzeichen', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('zusladestellen', 'LIKE', '%' . $searchQuery . '%');
-                        })->get());
-
+                    if($searchColumn=='all'){
+                        $listLoadings = DB::table('loadings')
+                            ->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where(function ($q) use ($searchQuery, $listColumns) {
+                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
+                            })->paginate(10);
+                        $count = count(DB::table('loadings')->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where(function ($q) use ($searchQuery, $listColumns) {
+                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
+                            })->get());
+                    }else{
+                        $listLoadings = DB::table('loadings')
+                            ->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->paginate(10);
+                        $count = count(DB::table('loadings')->where('pt', 'ja')
+                            ->where('ladedatum', '>=', $limitDate)
+                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
+                    }
                 } else {
                     $listLoadings = DB::table('loadings')->where([
                         ['pt', '=', 'ja'],
@@ -144,7 +164,7 @@ class ListLoadingsController extends Controller
                 $links = '';
             }
 
-            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery'));
+            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumn', 'listColumns'));
         } else {
             return view('auth.login');
         }
