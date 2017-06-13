@@ -51,8 +51,8 @@
                 <div class="col-lg-2 text-center navbar-warehouse navbar-title-link">
                     <a @yield('classWarehouses') href="{{ route('showAllWarehouses') }}">Warehouses</a>
                 </div>
-                <div class="col-lg-2 text-center navbar-carrier navbar-title-link">
-                    <a @yield('classCarriers') href="{{ route('showAllCarriers') }}">Carriers</a>
+                <div class="col-lg-2 text-center navbar-truck navbar-title-link">
+                    <a @yield('classTrucks') href="{{ route('showAllTrucks') }}">Trucks</a>
                 </div>
                 <div class="col-lg-2 text-center navbar-accounts navbar-title-link">
                     <a @yield('classPalletsAccounts') href="{{ route('showAllPalletsaccounts') }}">Pallets Accounts</a>

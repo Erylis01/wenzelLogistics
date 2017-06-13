@@ -14,7 +14,7 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
-@section('classCarriers')
+@section('classTrucks')
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
@@ -71,13 +71,13 @@
                                                 title="Type" name="type"
                                                 required>
                                             @if(Illuminate\Support\Facades\Input::old('type'))
-                                                <option @if(old('type') == 'Carrier') selected @endif>Carrier</option>
+                                                <option @if(old('type') == 'Truck') selected @endif>Carrier</option>
                                                 <option @if(old('type') == 'Other') selected @endif>Other</option>
-                                                <option @if(old('type') == 'Warehouse') selected @endif>Warehouse</option>
+                                                <option @if(old('type') == 'Warehouse') selected @endif>Network</option>
                                        @else
                                                 <option>Carrier</option>
                                                 <option>Other</option>
-                                                <option>Warehouse</option>
+                                                <option>Network</option>
                                             @endif
                                         </select>
                                 </div>

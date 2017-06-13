@@ -1,11 +1,11 @@
 @extends('layouts.default')
 
 @section('title')
-    Carrier details
+    Truck details
 @endsection
 
 @section('stylesheet')
-    <link href="{{asset('css/carriers.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/trucks.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('classLoadings')
@@ -14,7 +14,7 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
-@section('classCarriers')
+@section('classTrucks')
     class="active"
 @endsection
 @section('classPalletsAccounts')
@@ -35,17 +35,17 @@
             <div class="col-lg-10 col-lg-offset-1">
 
                 <div class="panel panel-general">
-                    <div class="panel-heading">Details of the carrier : {{$id}} - {{ $name }}</div>
+                    <div class="panel-heading">Details of the truck : {{$id}} - {{ $name }}</div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('updateCarrier', $id)}}">
+                              action="{{route('updateTruck', $id)}}">
                             {{ csrf_field() }}
                             <p class="text-center legend-auth">* required field</p>
 
-                            @if(Session::has('messageErrorUpdateCarrier'))
-                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpdateCarrier') }}</div>
-                            @elseif (Session::has('messageUpdateCarrier'))
-                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateCarrier') }}</div>
+                            @if(Session::has('messageErrorUpdateTruck'))
+                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpdateTruck') }}</div>
+                            @elseif (Session::has('messageUpdateTruck'))
+                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateTruck') }}</div>
                             @endif
 
                             <div class="form-group">
@@ -118,33 +118,33 @@
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Update"
-                                           name="updateCarrier">
+                                           name="updateTruck">
                                 </div>
 
                                 <div class="col-lg-3 col-lg-offset-1">
                                     <button type="button" class="btn btn-primary btn-block btn-form"
                                             data-toggle="modal"
-                                            data-target="#deleteCarrier_modal">Delete
+                                            data-target="#deleteTruck_modal">Delete
                                     </button>
                                 </div>
                             </div>
                         </form>
 
                         <!-- Modal Delete -->
-                        <div class="modal fade" id="deleteCarrier_modal" role="dialog">
+                        <div class="modal fade" id="deleteTruck_modal" role="dialog">
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title text-center">Are you sure to delete this carrier ?</h4>
+                                        <h4 class="modal-title text-center">Are you sure to delete this truck ?</h4>
                                     </div>
                                     <div class="modal-body center">
-                                        <form method="post" action="{{route('deleteCarrier',$id)}}">
+                                        <form method="post" action="{{route('deleteTruck',$id)}}">
                                             <input type="hidden" name="_method" value="delete">
                                             {{ csrf_field() }}
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-danger btn-modal" value="yes"
-                                                        name="deleteCarrier">
+                                                        name="deleteTruck">
                                                     Yes
                                                 </button>
                                                 <button type="button" class="btn btn-success btn-modal"

@@ -14,7 +14,7 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
-@section('classCarriers')
+@section('classTrucks')
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
@@ -1682,11 +1682,11 @@
                                                         @endif
                                                     </div>
 
-                                                    <!-- carrier panel-->
+                                                    <!-- truck panel-->
                                                     <div class="panel subpanel">
                                                         <div class="panel-heading">
                                                             <a data-toggle="collapse"
-                                                               href="#Pan2Sub3collapse">Carrier</a>
+                                                               href="#Pan2Sub3collapse">Truck</a>
                                                         </div>
                                                         <div id="Pan2Sub3collapse"
                                                              class="panel-collapse collapse">

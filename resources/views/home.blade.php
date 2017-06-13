@@ -14,7 +14,7 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
-@section('classCarriers')
+@section('classTrucks')
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
@@ -63,15 +63,15 @@
                         </div>
                     </a>
 
-                    <!-- All carriers -->
-                    <a href="{{ route('showAllCarriers') }}">
+                    <!-- All trucks -->
+                    <a href="{{ route('showAllTrucks') }}">
                         <div class="col-lg-3 text-center">
                             <div class="service-box">
-                                <h3 class="menu-title">Carriers</h3>
+                                <h3 class="menu-title">Trucks</h3>
                                 <img class="img-responsive center-block img-home"
                                      src="{{URL::asset('/image/truck.jpg')}}"
-                                     alt="carrier image">
-                                <p class="text-muted menu-legend">Show all carriers</p>
+                                     alt="truck image">
+                                <p class="text-muted menu-legend">Show all trucks</p>
                             </div>
                         </div>
                     </a>

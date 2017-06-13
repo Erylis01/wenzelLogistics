@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Carrier;
+use App\Truck;
 use App\Palletsaccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,81 +12,79 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
 
-class CarriersController extends Controller
+class TrucksController extends Controller
 {
     /**
-     * show all carriers in a table. You can order the different columns
+     * show all trucks in a table. You can order the different columns
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showAll(Request $request)
     {
         $searchQuery = $request->get('search');
-        $searchColumn=$request->get('searchColumn');
-        $listColumns=['id','name', 'licensePlate', 'palletsaccount_name'];
+        $searchColumn = $request->get('searchColumn');
+        $listColumns = ['id', 'name', 'licensePlate', 'palletsaccount_name'];
         if (Auth::check()) {
             $this->importData();
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    if($searchColumn=='all') {
+                    if ($searchColumn == 'all') {
                         //search query
-                        $listCarriers = DB::table('carriers')
+                        $listTrucks = DB::table('trucks')
                             ->where(function ($q) use ($searchQuery, $listColumns) {
                                 $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
                                     ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
                                     ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
                                     ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
                             })->orderBy($sortby, $order)->paginate(10);
-                        $count = count(DB::table('carriers')->where(function ($q) use ($searchQuery, $listColumns) {
+                        $count = count(DB::table('trucks')->where(function ($q) use ($searchQuery, $listColumns) {
                             $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
                                 ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
                                 ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
                                 ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
                         })->get());
-                    }
-                    else{
-                        $listCarriers = DB::table('carriers')
+                    } else {
+                        $listTrucks = DB::table('trucks')
                             ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->orderBy($sortby, $order)->paginate(10);
-                        $count = count(DB::table('carriers')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
+                        $count = count(DB::table('trucks')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
                     }
-                }else{
-                    $listCarriers = DB::table('carriers')->orderBy($sortby, $order)->paginate(10);
-                    $count = count(DB::table('carriers')->get());
+                } else {
+                    $listTrucks = DB::table('trucks')->orderBy($sortby, $order)->paginate(10);
+                    $count = count(DB::table('trucks')->get());
                 }
-                $links = $listCarriers->appends(['sortby' => $sortby, 'order' => $order])->render();
+                $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    if($searchColumn=='all') {
+                    if ($searchColumn == 'all') {
                         //search query
-                        $listCarriers = DB::table('carriers')
+                        $listTrucks = DB::table('trucks')
                             ->where(function ($q) use ($searchQuery, $listColumns) {
                                 $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
                                     ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
                                     ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
                                     ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
                             })->paginate(10);
-                        $count = count(DB::table('carriers')->where(function ($q) use ($searchQuery, $listColumns) {
+                        $count = count(DB::table('trucks')->where(function ($q) use ($searchQuery, $listColumns) {
                             $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
                                 ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
                                 ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
                                 ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
                         })->get());
-                    }
-                    else{
-                        $listCarriers = DB::table('carriers')
+                    } else {
+                        $listTrucks = DB::table('trucks')
                             ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->paginate(10);
-                        $count = count(DB::table('carriers')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
+                        $count = count(DB::table('trucks')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
                     }
-                }else{
-                    $listCarriers = DB::table('carriers')->paginate(10);
-                    $count = count(DB::table('carriers')->get());
+                } else {
+                    $listTrucks = DB::table('trucks')->paginate(10);
+                    $count = count(DB::table('trucks')->get());
                 }
                 $links = '';
             }
 
-            return view('carriers.allCarriers', compact('listCarriers', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumn', 'listColumns'));
+            return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumn', 'listColumns'));
         } else {
             return view('auth.login');
         }
@@ -103,29 +101,36 @@ class CarriersController extends Controller
                         $reader->noHeading();
                         $sheet = $reader->getSheet(0)->toArray();
                         $nbrows = count($sheet);
+
                         for ($r = 4; $r < $nbrows; $r++) {
-                            $carrierTest = DB::table('carriers')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
-                            if ($carrierTest == null) {
+                            $testLicense = DB::table('trucks')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
+
+                            if ($testLicense == null) {
                                 //not double
-                                if (trim($sheet[$r][26]) == null) {
+                                $nameAdress=explode(',',$sheet[$r][25]);
+                                $testTruck = DB::table('palletsaccounts')->where('type', 'Truck')->where('name', trim($nameAdress[0]))->first();
+
+                                if($testTruck==null) {
                                     Palletsaccount::firstOrCreate([
-                                        'name' => trim($sheet[$r][25]),
+                                        'name' => trim($nameAdress[0]),
+                                        'adress'=>trim($nameAdress[1]),
                                         'type' => 'Carrier',
                                     ]);
-                                    Carrier::firstOrCreate([
-                                        'name' => trim($sheet[$r][25]),
+                                }
+
+                                if(trim($sheet[$r][26])==null){
+                                    Truck::firstOrCreate([
+                                        'name' => trim($nameAdress[0]),
+                                        'adress'=>trim($nameAdress[1]),
                                         'licensePlate' => 'OTHER',
-                                        'palletsaccount_name' => trim($sheet[$r][25]),
+                                        'palletsaccount_name'=>trim($nameAdress[0]),
                                     ]);
-                                } else {
-                                    Palletsaccount::firstOrCreate([
-                                        'name' => trim($sheet[$r][26]) . ' - ' . trim($sheet[$r][25]),
-                                        'type' => 'Carrier',
-                                    ]);
-                                    Carrier::firstOrCreate([
-                                        'name' => trim($sheet[$r][25]),
+                                }else{
+                                    Truck::firstOrCreate([
+                                        'name' => trim($nameAdress[0]),
+                                        'adress'=>trim($nameAdress[1]),
                                         'licensePlate' => trim($sheet[$r][26]),
-                                        'palletsaccount_name' => trim($sheet[$r][26]) . ' - ' . trim($sheet[$r][25]),
+                                        'palletsaccount_name'=>trim($nameAdress[0]),
                                     ]);
                                 }
                             }
@@ -144,11 +149,11 @@ class CarriersController extends Controller
         //get data
         $name = Input::get('name');
         $licensePlate = Input::get('licensePlate');
-        if(!$licensePlate){
-            $licensePlate='OTHER';
+        if (!$licensePlate) {
+            $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
-        $carrierTest = Carrier::where([['name', $name], ['licensePlate', $licensePlate]])->first();
+        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
 
         //validation
         $rules = array(
@@ -160,16 +165,16 @@ class CarriersController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
-        } elseif ($carrierTest <> null) {
-            session()->flash('messageErrorAddCarrier', 'Error ! This carrier already exists');
+        } elseif ($truckTest <> null) {
+            session()->flash('messageErrorAddTruck', 'Error ! This truck already exists');
             $listPalletsAccounts = DB::table('palletsaccounts')->get();
-            return view('carriers.addCarrier', compact('name', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
+            return view('trucks.addTruck', compact('name', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
         } else {
-            Carrier::create(
+            Truck::create(
                 ['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
             );
-            session()->flash('messageAddCarrier', 'Successfully added new carrier');
-            return redirect('/allCarriers');
+            session()->flash('messageAddTruck', 'Successfully added new truck');
+            return redirect('/allTrucks');
         }
     }
 
@@ -182,7 +187,7 @@ class CarriersController extends Controller
     {
         if (Auth::check()) {
             $listPalletsAccounts = DB::table('palletsaccounts')->get();
-            return view('carriers.addCarrier', compact('listPalletsAccounts'));
+            return view('trucks.addTruck', compact('listPalletsAccounts'));
         } else {
             return view('auth.login');
         }
@@ -190,7 +195,7 @@ class CarriersController extends Controller
 
 
     /**
-     * show one specific carrier according to its ID
+     * show one specific truck according to its ID
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -198,21 +203,21 @@ class CarriersController extends Controller
     function showDetails($id)
     {
         if (Auth::check()) {
-            $carrier = DB::table('carriers')->where('id', '=', $id)->first();
+            $truck = DB::table('trucks')->where('id', '=', $id)->first();
             $listPalletsAccounts = DB::table('palletsaccounts')->get();
 
-            $name = $carrier->name;
-            $licensePlate = $carrier->licensePlate;
-            $palletsaccount_name = $carrier->palletsaccount_name;
+            $name = $truck->name;
+            $licensePlate = $truck->licensePlate;
+            $palletsaccount_name = $truck->palletsaccount_name;
 
-            return view('carriers.detailsCarrier', compact('listPalletsAccounts', 'id', 'name', 'licensePlate', 'palletsaccount_name'));
+            return view('trucks.detailsTruck', compact('listPalletsAccounts', 'id', 'name', 'licensePlate', 'palletsaccount_name'));
         } else {
             return view('auth.login');
         }
     }
 
     /**
-     * update the carrier n° ID
+     * update the truck n° ID
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
@@ -223,11 +228,11 @@ class CarriersController extends Controller
         //get data
         $name = Input::get('name');
         $licensePlate = Input::get('licensePlate');
-        if(!$licensePlate){
-            $licensePlate='OTHER';
+        if (!$licensePlate) {
+            $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
-        $carrierTest = Carrier::where([['name', $name], ['licensePlate', $licensePlate]])->first();
+        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
 
         //validation
         $rules = array(
@@ -240,28 +245,28 @@ class CarriersController extends Controller
                 ->withErrors($validator)
                 ->withInput();
 
-        } elseif (count($carrierTest) > 1) {
-            session()->flash('messageErrorUpdateCarrier', 'Error ! This carrier already exists');
+        } elseif (count($truckTest) > 1) {
+            session()->flash('messageErrorUpdateTruck', 'Error ! This truck already exists');
             return redirect()->back();
         } else {
-            Carrier::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]);
+            Truck::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]);
 
-            session()->flash('messageUpdateCarrier', 'Successfully updated carrier');
+            session()->flash('messageUpdateTruck', 'Successfully updated truck');
             return redirect()->back();
         }
     }
 
 
     /**
-     * delete the carrier
+     * delete the truck
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function delete($id)
     {
-        DB::table('carriers')->where('id', $id)->delete();
+        DB::table('trucks')->where('id', $id)->delete();
         // redirect
-        session()->flash('messageDeleteCarrier', 'Successfully deleted the carrier!');
-        return redirect('/allCarriers');
+        session()->flash('messageDeleteTruck', 'Successfully deleted the truck!');
+        return redirect('/allTrucks');
     }
 }

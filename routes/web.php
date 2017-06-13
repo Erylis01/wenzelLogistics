@@ -38,12 +38,12 @@ Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
 Route::get('/addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
 //WAREHOUSES
-Route::get('/allCarriers', 'CarriersController@showAll')->name('showAllCarriers');
-Route::get('/detailsCarrier/{id}', 'CarriersController@showDetails')->name('showDetailsCarrier');
-Route::post('/detailsCarrier/{id}', 'CarriersController@update')->name('updateCarrier');
-Route::delete('/detailsCarrier/{id}', 'CarriersController@delete')->name('deleteCarrier');
-Route::post('/addCarrier', 'CarriersController@add')->name('addCarrier');
-Route::get('/addCarrier', 'CarriersController@showAdd')->name('showAddCarrier');
+Route::get('/allTrucks', 'TrucksController@showAll')->name('showAllTrucks');
+Route::get('/detailsTruck/{id}', 'TrucksController@showDetails')->name('showDetailsTruck');
+Route::post('/detailsTruck/{id}', 'TrucksController@update')->name('updateTruck');
+Route::delete('/detailsTruck/{id}', 'TrucksController@delete')->name('deleteTruck');
+Route::post('/addTruck', 'TrucksController@add')->name('addTruck');
+Route::get('/addTruck', 'TrucksController@showAdd')->name('showAddTruck');
 
 //PALLETS ACCOUNTS
 Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');

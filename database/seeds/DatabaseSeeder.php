@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LoadingTableSeeder::class);
         $this->call(PalletsaccountsTableSeeder::class);
         $this->call(WarehouseTableSeeder::class);
-        $this->call(CarrierTableSeeder::class);
+        $this->call(TruckTableSeeder::class);
 
         $this->call(PalletstransfersTableSeeder::class);
 

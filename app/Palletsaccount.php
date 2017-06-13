@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Palletsaccount extends Model
 {
     protected $fillable = [
-        'name', 'realNumberPallets', 'theoricalNumberPallets','lastNumberPalletsTransfered', 'type'
+        'name','nickname', 'realNumberPallets', 'theoricalNumberPallets','lastNumberPalletsTransfered', 'type','adress', 'phone', 'email', 'namecontact'
     ];
 
     public function warehouses(){
@@ -18,8 +18,8 @@ class Palletsaccount extends Model
 //        return $this->belongsToMany('App\Loading','loading_palletsaccount');
 //    }
 
-    public function carrier(){
-        return $this->hasOne('App\Carrier','palletsaccount_name', 'name');
+    public function truck(){
+        return $this->hasOne('App\Truck','palletsaccount_name', 'name');
     }
 
     public function palletstransfers(){

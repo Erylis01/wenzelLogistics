@@ -1,11 +1,11 @@
 @extends('layouts.default')
 
 @section('title')
-    Add carrier
+    Add truck
 @endsection
 
 @section('stylesheet')
-    <link href="{{asset('css/carrier.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/truck.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('classLoadings')
@@ -14,7 +14,7 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
-@section('classCarriers')
+@section('classTrucks')
     class="active"
 @endsection
 @section('classPalletsAccounts')
@@ -35,16 +35,16 @@
             <div class="col-lg-10 col-lg-offset-1">
 
                 <div class="panel panel-general">
-                    <div class="panel-heading"><span class="glyphicon glyphicon-plus-sign"></span> Add a new carrier
+                    <div class="panel-heading"><span class="glyphicon glyphicon-plus-sign"></span> Add a new truck
                     </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('addCarrier')}}">
+                              action="{{route('addTruck')}}">
                             {{ csrf_field() }}
                             <p class="text-center legend-auth">* required field</p>
 
-                            @if(Session::has('messageErrorAddCarrier'))
-                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorAddCarrier') }}</div>
+                            @if(Session::has('messageErrorAddTruck'))
+                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorAddTruck') }}</div>
                             @endif
                             <div class="form-group">
                                 <!--name-->
@@ -121,7 +121,7 @@
                             <div class="form-group">
                                 <div class="col-lg-8 col-lg-offset-3">
                                     <button type="submit" class="btn btn-primary btn-block btn-form"
-                                            name="addCarrier">
+                                            name="addTruck">
                                         Add
                                     </button>
                                 </div>

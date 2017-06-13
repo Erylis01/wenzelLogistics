@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Carrier;
+use App\Truck;
 use App\Loading;
 use App\Palletsaccount;
 use Carbon\Carbon;
@@ -229,28 +229,34 @@ class ListLoadingsController extends Controller
                                     'zusladestellen' => trim($sheet[$r][27]),
                                 ]);
                             }
-                            $carrierTest = DB::table('carriers')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
-                            if ($carrierTest == null) {
+                            $testLicense = DB::table('trucks')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
+
+                            if ($testLicense == null) {
                                 //not double
-                                if (trim($sheet[$r][26]) == null) {
+                                $nameAdress=explode(',',$sheet[$r][25]);
+                                $testTruck = DB::table('palletsaccounts')->where('type', 'Truck')->where('name', trim($nameAdress[0]))->first();
+
+                                if($testTruck==null) {
                                     Palletsaccount::firstOrCreate([
-                                        'name' => trim($sheet[$r][25]),
+                                        'name' => trim($nameAdress[0]),
+                                        'adress'=>trim($nameAdress[1]),
                                         'type' => 'Carrier',
                                     ]);
-                                    Carrier::firstOrCreate([
-                                        'name' => trim($sheet[$r][25]),
+                                }
+
+                                if(trim($sheet[$r][26])==null){
+                                    Truck::firstOrCreate([
+                                        'name' => trim($nameAdress[0]),
+                                        'adress'=>trim($nameAdress[1]),
                                         'licensePlate' => 'OTHER',
-                                        'palletsaccount_name' => trim($sheet[$r][25]),
+                                        'palletsaccount_name'=>trim($nameAdress[0]),
                                     ]);
-                                } else {
-                                    Palletsaccount::firstOrCreate([
-                                        'name' => trim($sheet[$r][26]) . ' - ' . trim($sheet[$r][25]),
-                                        'type' => 'Carrier',
-                                    ]);
-                                    Carrier::firstOrCreate([
-                                        'name' => trim($sheet[$r][25]),
+                                }else{
+                                    Truck::firstOrCreate([
+                                        'name' => trim($nameAdress[0]),
+                                        'adress'=>trim($nameAdress[1]),
                                         'licensePlate' => trim($sheet[$r][26]),
-                                        'palletsaccount_name' => trim($sheet[$r][26]) . ' - ' . trim($sheet[$r][25]),
+                                        'palletsaccount_name'=>trim($nameAdress[0]),
                                     ]);
                                 }
                             }

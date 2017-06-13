@@ -14,7 +14,7 @@
 @section('classWarehouses')
     class="nonActive"
 @endsection
-@section('classCarriers')
+@section('classTrucks')
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
@@ -78,25 +78,25 @@
                                                                 <option @if(old('type') == 'Carrier') selected @endif>
                                                                     Carrier
                                                                 </option>
+                                                                <option @if(old('type') == 'Network') selected @endif>
+                                                                    Network
+                                                                </option>
                                                                 <option @if(old('type') == 'Other') selected @endif>
                                                                     Other
-                                                                </option>
-                                                                <option @if(old('type') == 'Warehouse') selected @endif>
-                                                                    Warehouse
                                                                 </option>
                                                             @elseif(isset($type))
                                                                 <option @if($type == 'Carrier') selected @endif>
                                                                     Carrier
                                                                 </option>
-                                                                <option @if($type == 'Other') selected @endif>Other
+                                                                <option @if($type == 'Network') selected @endif>
+                                                                    Network
                                                                 </option>
-                                                                <option @if($type == 'Warehouse') selected @endif>
-                                                                    Warehouse
+                                                                <option @if($type == 'Other') selected @endif>Other
                                                                 </option>
                                                             @else
                                                                 <option>Carrier</option>
+                                                                <option>Network</option>
                                                                 <option>Other</option>
-                                                                <option>Warehouse</option>
                                                             @endif
                                                         </select>
                                                     </div>

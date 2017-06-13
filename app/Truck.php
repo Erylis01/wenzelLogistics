@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Carrier extends Model
+class Truck extends Model
 {
     protected $fillable = [
-        'name', 'licensePlate', 'palletsaccount_name'
+        'name', 'adress','licensePlate', 'palletsaccount_name'
     ];
 
     public function palletsaccount(){
