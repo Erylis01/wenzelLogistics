@@ -22,27 +22,35 @@ class CarriersController extends Controller
     public function showAll(Request $request)
     {
         $searchQuery = $request->get('search');
+        $searchColumn=$request->get('searchColumn');
+        $listColumns=['id','name', 'licensePlate', 'palletsaccount_name'];
         if (Auth::check()) {
             $this->importData();
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    //search query
-                    $listCarriers = DB::table('carriers')
-                        ->where(function ($q) use ($searchQuery) {
-                            $q->where('id', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('licensePlate', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('palletsaccount_name', 'LIKE', '%' . $searchQuery . '%');
-                        })->orderBy($sortby, $order)->paginate(10);
-                    $count = count(DB::table('carriers')->where(function ($q) use ($searchQuery) {
-                        $q->where('id', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('licensePlate', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('palletsaccount_name', 'LIKE', '%' . $searchQuery . '%');
-                    })->get());
-
+                    if($searchColumn=='all') {
+                        //search query
+                        $listCarriers = DB::table('carriers')
+                            ->where(function ($q) use ($searchQuery, $listColumns) {
+                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
+                            })->orderBy($sortby, $order)->paginate(10);
+                        $count = count(DB::table('carriers')->where(function ($q) use ($searchQuery, $listColumns) {
+                            $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
+                        })->get());
+                    }
+                    else{
+                        $listCarriers = DB::table('carriers')
+                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->orderBy($sortby, $order)->paginate(10);
+                        $count = count(DB::table('carriers')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
+                    }
                 }else{
                     $listCarriers = DB::table('carriers')->orderBy($sortby, $order)->paginate(10);
                     $count = count(DB::table('carriers')->get());
@@ -50,20 +58,27 @@ class CarriersController extends Controller
                 $links = $listCarriers->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    //search query
-                    $listCarriers = DB::table('carriers')
-                        ->where(function ($q) use ($searchQuery) {
-                            $q->where('id', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('licensePlate', 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere('palletsaccount_name', 'LIKE', '%' . $searchQuery . '%');
-                        })->paginate(10);
-                    $count = count(DB::table('carriers')->where(function ($q) use ($searchQuery) {
-                        $q->where('id', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('name', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('licensePlate', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('palletsaccount_name', 'LIKE', '%' . $searchQuery . '%');
-                    })->get());
+                    if($searchColumn=='all') {
+                        //search query
+                        $listCarriers = DB::table('carriers')
+                            ->where(function ($q) use ($searchQuery, $listColumns) {
+                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
+                            })->paginate(10);
+                        $count = count(DB::table('carriers')->where(function ($q) use ($searchQuery, $listColumns) {
+                            $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
+                                ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
+                        })->get());
+                    }
+                    else{
+                        $listCarriers = DB::table('carriers')
+                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->paginate(10);
+                        $count = count(DB::table('carriers')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
+                    }
                 }else{
                     $listCarriers = DB::table('carriers')->paginate(10);
                     $count = count(DB::table('carriers')->get());
@@ -71,7 +86,7 @@ class CarriersController extends Controller
                 $links = '';
             }
 
-            return view('carriers.allCarriers', compact('listCarriers', 'sortby', 'order', 'links', 'count', 'searchQuery'));
+            return view('carriers.allCarriers', compact('listCarriers', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumn', 'listColumns'));
         } else {
             return view('auth.login');
         }

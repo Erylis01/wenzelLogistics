@@ -69,7 +69,7 @@
                             <div>
                                 <form role="form" class="form-inline" method="GET" action="{{route('showAllPalletsaccounts')}}">
                                     {{ csrf_field() }}
-                                    <div class="col-lg-10 col-lg-offset-1 input-group">
+                                    <div class="col-lg-12 input-group">
                                         @if(isset($searchQuery))
                                             <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
                                                    placeholder="search"/>
@@ -78,6 +78,24 @@
                                                    placeholder="search"/>
                                         @endif
                                         <span class="input-group-btn">
+                                            <select class="col-lg-8 selectpicker show-tick input-group" data-size="5"
+                                                    data-live-search="true" data-live-search-style="startsWith"
+                                                    title="columns" name="searchColumn">
+                                      @if(!isset($searchColumn)||!Illuminate\Support\Facades\Input::old('searchColumn'))
+                                                    <option selected>all</option>
+                                                @else
+                                                    <option>all</option>
+                                                @endif
+                                                @foreach($listColumns as $column )
+                                                    @if(Illuminate\Support\Facades\Input::old('searchColumn') && $column==old('searchColumn'))
+                                                        <option selected>{{$column}}</option>
+                                                    @elseif(isset($searchColumn)&& $column==$searchColumn)
+                                                        <option selected>{{$column}}</option>
+                                                    @else
+                                                        <option>{{$column}}</option>
+                                                    @endif
+                                                @endforeach
+                                        </select>
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
