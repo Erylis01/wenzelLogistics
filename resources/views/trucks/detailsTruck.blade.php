@@ -114,6 +114,22 @@
                             </div>
 
                             <div class="form-group">
+                                <!--adress-->
+                                <div class="col-lg-3">
+                                    <label for="adress" class="control-label">Adress :</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    @if(isset($adress))
+                                        <input id="adress" type="text" class="form-control" name="adress"
+                                               value="{{$adress}}" placeholder="Adress" autofocus>
+                                    @else
+                                        <input id="adress" type="text" class="form-control" name="adress"
+                                               value="{{ old('adress') }}" placeholder="Adress" autofocus>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <div class="col-lg-4 col-lg-offset-3">
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"

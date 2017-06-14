@@ -148,12 +148,14 @@ class TrucksController extends Controller
     {
         //get data
         $name = Input::get('name');
+        $adress=Input::get('adress');
+
         $licensePlate = Input::get('licensePlate');
         if (!$licensePlate) {
             $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
-        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
+        $truckTest = Truck::where([['name', $name], ['adress',$adress],['licensePlate', $licensePlate]])->first();
 
         //validation
         $rules = array(
@@ -167,11 +169,11 @@ class TrucksController extends Controller
                 ->withInput();
         } elseif ($truckTest <> null) {
             session()->flash('messageErrorAddTruck', 'Error ! This truck already exists');
-            $listPalletsAccounts = DB::table('palletsaccounts')->get();
-            return view('trucks.addTruck', compact('name', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type','Carrier')->get();
+            return view('trucks.addTruck', compact('name', 'adress', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
         } else {
             Truck::create(
-                ['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
+                ['name' => $name, 'adress'=>$adress, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
             );
             session()->flash('messageAddTruck', 'Successfully added new truck');
             return redirect('/allTrucks');
@@ -186,7 +188,7 @@ class TrucksController extends Controller
     function showAdd()
     {
         if (Auth::check()) {
-            $listPalletsAccounts = DB::table('palletsaccounts')->get();
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type','Carrier')->get();
             return view('trucks.addTruck', compact('listPalletsAccounts'));
         } else {
             return view('auth.login');
@@ -204,13 +206,14 @@ class TrucksController extends Controller
     {
         if (Auth::check()) {
             $truck = DB::table('trucks')->where('id', '=', $id)->first();
-            $listPalletsAccounts = DB::table('palletsaccounts')->get();
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type','Carrier')->get();
 
             $name = $truck->name;
+            $adress=$truck->adress;
             $licensePlate = $truck->licensePlate;
             $palletsaccount_name = $truck->palletsaccount_name;
 
-            return view('trucks.detailsTruck', compact('listPalletsAccounts', 'id', 'name', 'licensePlate', 'palletsaccount_name'));
+            return view('trucks.detailsTruck', compact('listPalletsAccounts', 'id', 'name','adress', 'licensePlate', 'palletsaccount_name'));
         } else {
             return view('auth.login');
         }
