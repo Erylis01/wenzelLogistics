@@ -67,35 +67,56 @@
                         </div>
 <br>
                             <div>
-                                <form role="form" class="searchBar form-inline" method="GET" action="{{route('showAllPalletsaccounts')}}">
+                                <form role="form" method="GET" action="{{route('showAllPalletsaccounts')}}">
                                     {{ csrf_field() }}
-                                    <div class="searchBar col-lg-12 input-group">
-                                        @if(isset($searchQuery))
-                                            <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
-                                                   placeholder="search"/>
-                                        @else
-                                            <input type="text" class="form-control" name="search" value=""
-                                                   placeholder="search"/>
-                                        @endif
+                                    <div class="col-lg-5 input-group searchBar">
+                            <span class="input-group-btn searchInput">
+                                @if(isset($searchQuery))
+                                    <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
+                                           placeholder="search">
+                                @else
+                                    <input type="text" class="form-control" name="search" value=""
+                                           placeholder="search">
+                                @endif
+                            </span>
                                         <span class="input-group-btn">
-                                            <select class="col-lg-8 selectpicker show-tick input-group" data-size="5"
-                                                    data-live-search="true" data-live-search-style="startsWith"
-                                                    title="columns" name="searchColumn">
-                                      @if(!isset($searchColumn)||!Illuminate\Support\Facades\Input::old('searchColumn'))
-                                                    <option selected>all</option>
-                                                @else
-                                                    <option>all</option>
-                                                @endif
-                                                @foreach($listColumns as $column )
-                                                    @if(Illuminate\Support\Facades\Input::old('searchColumn') && $column==old('searchColumn'))
+                                    <select class="selectpicker show-tick form-control searchSelect" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="columns" name="searchColumns[]" multiple>
+                                      @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                            <option selected>ALL</option>
+                                        @else
+                                            <option>ALL</option>
+                                        @endif
+                                        @foreach($listColumns as $column)
+                                            @php($list[]=null)
+                                            @if(isset($searchColumns))
+                                                @foreach($searchColumns as $searchC)
+                                                    @if($column==$searchC)
                                                         <option selected>{{$column}}</option>
-                                                    @elseif(isset($searchColumn)&& $column==$searchColumn)
-                                                        <option selected>{{$column}}</option>
-                                                    @else
-                                                        <option>{{$column}}</option>
+                                                        @php($list[]=$column)
                                                     @endif
                                                 @endforeach
+                                                @if(!in_array($column, $list))
+                                                    <option>{{$column}}</option>
+                                                @endif
+                                            @elseif(Illuminate\Support\Facades\Input::old('searchColumns'))
+                                                @foreach(old('searchColumns') as $searchC)
+                                                    @if($column==$searchC)
+                                                        <option selected>{{$column}}</option>
+                                                        @php($list[]=$column)
+                                                    @endif
+                                                @endforeach
+                                                @if(!in_array($column, $list))
+                                                    <option>{{$column}}</option>
+                                                @endif
+                                            @else
+                                                <option>{{$column}}</option>
+                                            @endif
+                                        @endforeach
                                         </select>
+                                     </span>
+                                        <span class="input-group-btn">
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>

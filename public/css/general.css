@@ -214,3 +214,27 @@
 .searchBar{
     font-size: 16px;
 }
+
+.searchInput{
+    width:250px;
+    min-width:250px;
+    max-width:250px;
+}
+
+.searchForm{
+border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+}
+
+.searchCheckbox{
+    width:500px;
+    min-width:500px;
+    max-width:500px;
+}
+
+.searchSelect{
+    width:150px;
+    min-width:150px;
+    max-width:150px;
+}
