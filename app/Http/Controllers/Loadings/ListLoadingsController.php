@@ -31,144 +31,63 @@ class ListLoadingsController extends Controller
             $currentDate = Carbon::now();
             $limitDate = $currentDate->subDays(60)->format('Y-m-d');
             $searchQuery = $request->get('search');
-//            $searchQueryArray=explode(' ', $searchQuery);
-            $searchColumn=$request->get('searchColumn');
-            $listColumns=['atrnr','ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb','lande', 'plze', 'orte', 'anz', 'art',  'subfrachter', 'kennzeichen', 'zusladestellen' ];
+            $searchQueryArray = explode(' ', $searchQuery);
+            $searchColumns = $request->get('searchColumns');
+            $listColumns = ['atrnr', 'ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb', 'lande', 'plze', 'orte', 'anz', 'art', 'subfrachter', 'kennzeichen', 'zusladestellen'];
 
-            if (request()->has('sortby') && request()->has('order')) {
-                $sortby = $request->get('sortby'); // Order by what column?
-                $order = $request->get('order'); // Order direction: asc or desc
-                if (isset($searchQuery) && $searchQuery <> '') {
-                    //search query
-                    if($searchColumn=='all'){
-                        $listLoadings = DB::table('loadings')
-                            ->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where(function ($q) use ($searchQuery, $listColumns) {
-                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
-                            })->orderBy($sortby, $order)->paginate(10);
-                        $count = count(DB::table('loadings')->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where(function ($q) use ($searchQuery, $listColumns) {
-                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
-                            })->get());
-                    }else{
-                        $listLoadings = DB::table('loadings')
-                            ->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->orderBy($sortby, $order)->paginate(10);
-                        $count = count(DB::table('loadings')->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
-                    }
+            $query = DB::table('loadings')
+                ->where('pt', 'ja')
+                ->where('ladedatum', '>=', $limitDate);
+
+            if (isset($searchQuery) && $searchQuery <> '') {
+                if (in_array('ALL', $searchColumns)) {
+                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                        foreach ($listColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ){
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                        }
+                        }
+                    });
                 } else {
-                    $listLoadings = DB::table('loadings')->where([
-                        ['pt', '=', 'ja'],
-                        ['ladedatum', '>=', $limitDate],
-                    ])->orderBy($sortby, $order)->paginate(10);
-                    $count = count(DB::table('loadings')->where([
-                        ['pt', '=', 'ja'],
-                        ['ladedatum', '>=', $limitDate],
-                    ])->get());
+                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                        foreach ($searchColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ){
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
                 }
-                $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
-            } else {
-                if (isset($searchQuery) && $searchQuery <> '') {
-                    if($searchColumn=='all'){
-                        $listLoadings = DB::table('loadings')
-                            ->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where(function ($q) use ($searchQuery, $listColumns) {
-                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
-                            })->paginate(10);
-                        $count = count(DB::table('loadings')->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where(function ($q) use ($searchQuery, $listColumns) {
-                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[4], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[5], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[6], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[7], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[8], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[9], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[10], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[11], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[12], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[13], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[14], 'LIKE', '%' . $searchQuery . '%');
-                            })->get());
-                    }else{
-                        $listLoadings = DB::table('loadings')
-                            ->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->paginate(10);
-                        $count = count(DB::table('loadings')->where('pt', 'ja')
-                            ->where('ladedatum', '>=', $limitDate)
-                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
-                    }
-                } else {
-                    $listLoadings = DB::table('loadings')->where([
-                        ['pt', '=', 'ja'],
-                        ['ladedatum', '>=', $limitDate],
-                    ])->paginate(10);
-                    $count = count(DB::table('loadings')->where([
-                        ['pt', '=', 'ja'],
-                        ['ladedatum', '>=', $limitDate],
-                    ])->get());
-                }
+                $count = count($query->get());
+                $listLoadings = $query->paginate(10);
                 $links = '';
+            }else{
+                if (request()->has('sortby') && request()->has('order')) {
+                    $sortby = $request->get('sortby'); // Order by what column?
+                    $order = $request->get('order'); // Order direction: asc or desc
+                    $count = count($query->get());
+                    $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
+                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
+                } else {
+                    $count = count($query->get());
+                    $listLoadings = $query->paginate(10);
+                    $links = '';
+                }
             }
-
-            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumn', 'listColumns'));
+            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchQueryArray', 'searchColumns', 'listColumns'));
         } else {
             return view('auth.login');
         }
     }
+//                if (request()->has('sortby') && request()->has('order')) {
+//                    $sortby = $request->get('sortby'); // Order by what column?
+//                    $order = $request->get('order'); // Order direction: asc or desc
+//                    $count = count($query->get());
+//                    $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
+//                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
+//                } else {
+
+//                }
+
 
     /**
      * Import data from an excel file
@@ -233,30 +152,30 @@ class ListLoadingsController extends Controller
 
                             if ($testLicense == null) {
                                 //not double
-                                $nameAdress=explode(',',$sheet[$r][25]);
+                                $nameAdress = explode(',', $sheet[$r][25]);
                                 $testTruck = DB::table('palletsaccounts')->where('type', 'Truck')->where('name', trim($nameAdress[0]))->first();
 
-                                if($testTruck==null) {
+                                if ($testTruck == null) {
                                     Palletsaccount::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress'=>trim($nameAdress[1]),
+                                        'adress' => trim($nameAdress[1]),
                                         'type' => 'Carrier',
                                     ]);
                                 }
 
-                                if(trim($sheet[$r][26])==null){
+                                if (trim($sheet[$r][26]) == null) {
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress'=>trim($nameAdress[1]),
+                                        'adress' => trim($nameAdress[1]),
                                         'licensePlate' => 'OTHER',
-                                        'palletsaccount_name'=>trim($nameAdress[0]),
+                                        'palletsaccount_name' => trim($nameAdress[0]),
                                     ]);
-                                }else{
+                                } else {
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress'=>trim($nameAdress[1]),
+                                        'adress' => trim($nameAdress[1]),
                                         'licensePlate' => trim($sheet[$r][26]),
-                                        'palletsaccount_name'=>trim($nameAdress[0]),
+                                        'palletsaccount_name' => trim($nameAdress[0]),
                                     ]);
                                 }
                             }

@@ -44,8 +44,8 @@
 
                             @if(Session::has('messageRefuseUpdateWarehouse'))
                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('messageRefuseUpdateWarehouse') }}</div>
-                                @elseif (Session::has('messageUpdateWarehouse'))
-                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateWarehouse') }}</div>
+                            @elseif (Session::has('messageUpdateWarehouse'))
+                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateWarehouse') }}</div>
                             @endif
 
                             <div class="form-group">
@@ -162,11 +162,11 @@
                                 <div class="col-lg-8">
                                     <input id="email" type="text" class="form-control" name="email"
                                            value="{{ $email }}" placeholder="Email" autofocus>
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
+                                    @if ($errors->has('email'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -185,7 +185,8 @@
                                 <!--pallets accounts associated-->
                                 <div class="col-lg-3">
                                     {{--<label for="namecontact" class="control-label"><a href="{{route('showDetailsPalletsaccount', \App\Palletsaccount::where('name',$namepalletsaccount)->first()->id)}}" class="link">Pallets Account :</a></label>--}}
-                                    <label for="namecontact" class="control-label"><span>*</span> Pallets Account : </label>
+                                    <label for="namecontact" class="control-label"><span>*</span> Pallets Account :
+                                    </label>
                                 </div>
                                 <div class="col-lg-6">
                                     <select class="selectpicker show-tick form-control" data-size="5"
@@ -195,24 +196,24 @@
                                             @php($list[]=null)
                                             @if(Illuminate\Support\Facades\Input::old('namepalletsaccounts'))
                                                 @foreach(old('namepalletsaccounts') as $namePA)
-                                                @if($palletsAccount->name==$namePA)
-                                                    <option selected>{{$palletsAccount->name}}</option>
-                                                    @php($list[]=$palletsAccount)
+                                                    @if($palletsAccount->name==$namePA)
+                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                        @php($list[]=$palletsAccount)
+                                                    @endif
+                                                @endforeach
+                                                @if(!in_array($palletsAccount, $list))
+                                                    <option>{{$palletsAccount->name}}</option>
                                                 @endif
-                                            @endforeach
-                                            @if(!in_array($palletsAccount, $list))
-                                                <option>{{$palletsAccount->name}}</option>
-                                            @endif
-                                                    @elseif(isset($namepalletsaccounts))
-                                                        @foreach($namepalletsaccounts as $namePA)
-                                                            @if($palletsAccount->name==$namePA)
-                                                                <option selected>{{$palletsAccount->name}}</option>
-                                                                @php($list[]=$palletsAccount)
-                                                            @endif
-                                                        @endforeach
-                                                        @if(!in_array($palletsAccount, $list))
-                                                            <option>{{$palletsAccount->name}}</option>
-                                                        @endif
+                                            @elseif(isset($namepalletsaccounts))
+                                                @foreach($namepalletsaccounts as $namePA)
+                                                    @if($palletsAccount->name==$namePA)
+                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                        @php($list[]=$palletsAccount)
+                                                    @endif
+                                                @endforeach
+                                                @if(!in_array($palletsAccount, $list))
+                                                    <option>{{$palletsAccount->name}}</option>
+                                                @endif
                                             @else
                                                 <option>{{$palletsAccount->name}}</option>
                                             @endif

@@ -40,6 +40,7 @@
                         </div>
                         <form role="form" method="GET" action="{{route('showAllLoadings')}}">
                             {{ csrf_field() }}
+
                             <div class="searchBar col-lg-4 input-group">
                                 @if(isset($searchQuery))
                                     <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
@@ -49,39 +50,57 @@
                                            placeholder="search"/>
                                 @endif
                                 <span class="input-group-btn">
-
                                   <select class="col-lg-8 selectpicker show-tick input-group" data-size="5"
                                           data-live-search="true" data-live-search-style="startsWith"
-                                          title="columns" name="searchColumn">
-                                      @if(!isset($searchColumn)||!Illuminate\Support\Facades\Input::old('searchColumn'))
-                                          <option selected>all</option>
+                                          title="columns" name="searchColumns[]" multiple>
+                                      @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                          <option selected>ALL</option>
                                       @else
-                                          <option>all</option>
+                                          <option>ALL</option>
                                       @endif
-                                      @foreach($listColumns as $column )
-                                          @if(Illuminate\Support\Facades\Input::old('searchColumn') && $column==old('searchColumn'))
-                                              <option selected>{{$column}}</option>
-                                          @elseif(isset($searchColumn)&& $column==$searchColumn)
-                                              <option selected>{{$column}}</option>
+                                      @foreach($listColumns as $column)
+                                          @php($list[]=null)
+                                          @if(isset($searchColumns))
+                                              @foreach($searchColumns as $searchC)
+                                                  @if($column==$searchC)
+                                                      <option selected>{{$column}}</option>
+                                                      @php($list[]=$column)
+                                                  @endif
+                                              @endforeach
+                                              @if(!in_array($column, $list))
+                                                  <option>{{$column}}</option>
+                                              @endif
+                                              @elseif(Illuminate\Support\Facades\Input::old('searchColumns'))
+                                                  @foreach(old('searchColumns') as $searchC)
+                                                      @if($column==$searchC)
+                                                          <option selected>{{$column}}</option>
+                                                          @php($list[]=$column)
+                                                      @endif
+                                                  @endforeach
+                                                  @if(!in_array($column, $list))
+                                                      <option>{{$column}}</option>
+                                                  @endif
                                           @else
                                               <option>{{$column}}</option>
                                           @endif
                                       @endforeach
                                         </select>
-
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
                             </div>
                         </form>
                     </div>
+                    {{--@if(isset($searchQuery)||isset($searchColumns))--}}
+                        {{--@php(dd($searchQuery, $searchColumns))--}}
+                    {{--@endif--}}
                     <div class="panel-body panel-body-general">
                         <!-- Table -->
                         <div class="table-responsive loadings-wrapper">
                             <table class="table table-hover table-bordered table-loadings">
                                 <thead>
                                 <tr>
-                                    @if(isset($searchQuery))
+                                    @if(isset($searchQuery)&&count($searchQueryArray)<=1)
                                         <th class="text-center col1 colHeight">AtrNr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/loadings?search='.$searchQuery.'&page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
@@ -137,7 +156,7 @@
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/loadings?search='.$searchQuery.'&page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center colHeight">AblO<br><a
+                                        <th class="text-center colHeight">AblO.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/loadings?search='.$searchQuery.'&page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
@@ -173,6 +192,23 @@
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/loadings?search='.$searchQuery.'&page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
                                         </th>
+                                        @elseif(isset($searchQuery)&&count($searchQueryArray)>1)
+                                        <th class="text-center col1 colHeight">AtrNr</th>
+                                        <th class="col1b colHeight"></th>
+                                        <th class="text-center colHeight">Laded.</th>
+                                        <th class="text-center colHeight">Entladed.</th>
+                                        <th class="text-center colHeight">Auftraggeber</th>
+                                        <th class="text-center colHeight">LadL.</th>
+                                        <th class="text-center colHeight">LadP.</th>
+                                        <th class="text-center colHeight">LadO.</th>
+                                        <th class="text-center colHeight">AblL.</th>
+                                        <th class="text-center colHeight">AblP.</th>
+                                        <th class="text-center colHeight">AblO.</th>
+                                        <th class="text-center colHeight">Anz.</th>
+                                        <th class="text-center colHeight">Art.</th>
+                                        <th class="text-center colHeight">Subfrächter</th>
+                                        <th class="text-center colHeight">Kennzeichen</th>
+                                        <th class="text-center colHeight">Zus. Ladestellen</th>
                                     @else
                                         <th class="text-center col1 colHeight">AtrNr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
@@ -401,7 +437,7 @@
 
                             @if ($listLoadings->currentPage()==$listLoadings->lastPage())
                                 <div class="general-legend col-lg-offset-8">
-                                    Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 5)  {{$legend1}}
+                                    Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 10)  {{$legend1}}
                                     to {{$count}} of {{$count}} results
                                 </div>
                             @elseif($listLoadings->isEmpty())
@@ -410,8 +446,8 @@
                                 </div>
                             @else
                                 <div class="general-legend col-lg-offset-8">
-                                    Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 5)  {{$legend1}}
-                                    to @php($legend2= $listLoadings->currentPage() * 5) {{$legend2}} of {{$count}}
+                                    Showing @php($legend1=1+ ($listLoadings->currentPage() -1) * 10)  {{$legend1}}
+                                    to @php($legend2= $listLoadings->currentPage() * 10) {{$legend2}} of {{$count}}
                                     results
                                 </div>
                             @endif
