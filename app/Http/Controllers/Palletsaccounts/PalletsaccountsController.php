@@ -81,7 +81,8 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             $listWarehouses = DB::table('warehouses')->get();
-            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses'));
+            $listTrucks = DB::table('trucks')->get();
+            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses', 'listTrucks'));
         } else {
             return view('auth.login');
         }

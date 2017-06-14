@@ -66,20 +66,24 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
-                                        <select class="selectpicker show-tick form-control" data-size="5"
-                                                data-live-search="true" data-live-search-style="startsWith"
-                                                title="Type" name="type"
-                                                required>
-                                            @if(Illuminate\Support\Facades\Input::old('type'))
-                                                <option @if(old('type') == 'Truck') selected @endif>Carrier</option>
-                                                <option @if(old('type') == 'Other') selected @endif>Other</option>
-                                                <option @if(old('type') == 'Warehouse') selected @endif>Network</option>
-                                       @else
-                                                <option>Carrier</option>
-                                                <option>Other</option>
-                                                <option>Network</option>
-                                            @endif
-                                        </select>
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Type" name="type" id="type" onchange="displayFields(this);"
+                                            required>
+                                        @if(Illuminate\Support\Facades\Input::old('type'))
+                                            <option @if(old('type') == 'Carrier') selected @endif value="1"
+                                                    id="carrierOption">Carrier
+                                            </option>
+                                            <option @if(old('type') == 'Network') selected @endif value="2"
+                                                    id="networkOption">Network
+                                            </option>
+                                            <option @if(old('type') == 'Other') selected @endif value="3">Other</option>
+                                        @else
+                                            <option value="1" id="carrierOption">Carrier</option>
+                                            <option value="2" id="networkOption">Network</option>
+                                            <option value="3">Other</option>
+                                        @endif
+                                    </select>
                                 </div>
                                 <!--number of pallets-->
                                 <div class="col-lg-2">
@@ -94,15 +98,16 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <!--warehouses associated-->
-                                <div class="col-lg-3">
-                                    <label for="warehousesAssociated" class="control-label">Warehouses
-                                        associated
-                                        :</label>
-                                </div>
-                                <div class="col-lg-6">
-                                    <select class="selectpicker show-tick form-control" data-size="5"
+                            <div id="warehousesAssociated">
+                                <div class="form-group">
+                                    <!--warehouses associated-->
+                                    <div class="col-lg-3">
+                                        <label for="warehousesAssociated" class="control-label">Warehouses
+                                            associated
+                                            :</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Warehouses Associated" name="warehousesAssociated[]"
                                                 multiple>
@@ -110,10 +115,10 @@
                                                 @php($list[]=null)
                                                 @if(Illuminate\Support\Facades\Input::old('warehousesAssociated'))
                                                     @foreach(old('warehousesAssociated') as $warehouseA)
-                                                    @if($warehouseA == $warehouse->name)
-                                                        <option  selected>{{$warehouse->name}}</option>
-                                                        @php($list[]=$warehouse)
-                                                    @endif
+                                                        @if($warehouseA == $warehouse->name)
+                                                            <option selected>{{$warehouse->name}}</option>
+                                                            @php($list[]=$warehouse)
+                                                        @endif
                                                     @endforeach
                                                     @if(!in_array($warehouse, $list))
                                                         <option>{{$warehouse->name}}</option>
@@ -123,10 +128,50 @@
                                                 @endif
                                             @endforeach
                                         </select>
+                                    </div>
+                                    <div class="col-lg-3 text-left">
+                                        <a href="{{route('showAddWarehouse')}}" class="link"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
+                                    </div>
                                 </div>
-                                <div class="col-lg-3 text-left">
-                                    <a href="{{route('showAddWarehouse')}}" class="link"><span
-                                                class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
+                            </div>
+
+                            <div id="trucksAssociated">
+                                <div class="form-group">
+                                    <!--trucks associated-->
+                                    <div class="col-lg-3">
+                                        <label for="trucksAssociated" class="control-label">Trucks
+                                            associated
+                                            :</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                                data-live-search="true" data-live-search-style="startsWith"
+                                                title="Trucks Associated" name="trucksAssociated[]"
+                                                multiple>
+                                            @foreach($listTrucks as $truck )
+                                                @php($list[]=null)
+                                                @if(Illuminate\Support\Facades\Input::old('trucksAssociated'))
+                                                    @foreach(old('trucksAssociated') as $truckA)
+                                                        @if($truckA == $truck->name.' - '.$truck->licensePlate)
+                                                            <option selected>{{$truck->name}}
+                                                                - {{$truck->licensePlate}}</option>
+                                                            @php($list[]=$truck)
+                                                        @endif
+                                                    @endforeach
+                                                    @if(!in_array($truck, $list))
+                                                        <option>{{$truck->name}} - {{$truck->licensePlate}}</option>
+                                                    @endif
+                                                @else
+                                                    <option>{{$truck->name}} - {{$truck->licensePlate}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 text-left">
+                                        <a href="{{route('showAddTruck')}}" class="link"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span> Add truck</a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -145,3 +190,4 @@
         @endif
     </div>
 @endsection
+<script type="text/javascript" src="{{asset('js/addPalletsaccount.js')}}"></script>

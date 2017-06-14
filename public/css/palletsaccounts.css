@@ -108,4 +108,8 @@
     display: inline-block;
 }
 
+/*HIDDEN DIV*/
+#warehousesAssociated, #trucksAssociated{
+    display: none;
+}
 

@@ -189,9 +189,9 @@
                                         </table>
                                     </div>
                                 </div>
-                                @if($palletsaccount->type<>'Other')
+                                @if($palletsaccount->type=='Network')
                                     <div class="form-group">
-                                        <div class="col-lg-5 text-right">
+                                        <div class="col-lg-5">
                                             <label for="warehousesAssociated"
                                                    class="control-label legend-palletsaccounts">Warehouses
                                                 associated :</label>
@@ -202,6 +202,23 @@
                                                 @foreach($listWarehouses as $warehouse)
                                                     <li><a href="{{route('showDetailsWarehouse', $warehouse->id)}}"
                                                            class="link">{{$warehouse->name}}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    @elseif($palletsaccount->type=='Carrier')
+                                    <div class="form-group">
+                                        <div class="col-lg-5">
+                                            <label for="trucksAssociated"
+                                                   class="control-label legend-palletsaccounts">Trucks
+                                                associated :</label>
+                                        </div>
+                                        <div class="col-lg-6 info-palletsaccounts">
+                                            @php($listTrucks=\App\Truck::where('palletsaccount_name',$palletsaccount->name)->get())
+                                            <ul>
+                                                @foreach($listTrucks as $truck)
+                                                    <li><a href="{{route('showDetailsTruck', $truck->id)}}"
+                                                           class="link">{{$truck->name}} - {{$truck->licensePlate}}</a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
