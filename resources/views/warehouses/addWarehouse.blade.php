@@ -232,7 +232,7 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namepalletsaccounts" class="control-label"><span>*</span> Pallet Account
+                                    <label for="namepalletsaccounts" class="control-label"><span>*</span> Pallets Account
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">

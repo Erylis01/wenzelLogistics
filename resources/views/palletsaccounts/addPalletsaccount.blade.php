@@ -51,10 +51,25 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <input id="name" type="text" class="form-control" name="name"
-                                           value="" placeholder="Name" required autofocus>
+                                           value="{{old('name')}}" placeholder="Name" required autofocus>
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!--nickname-->
+                                <div class="col-lg-3">
+                                    <label for="nickname" class="control-label">Nickname :</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <input id="nickname" type="text" class="form-control" name="nickname"
+                                           value="{{old('nickname')}}" placeholder="Nickname" autofocus>
+                                    @if ($errors->has('nickname'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('nickname') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -64,24 +79,24 @@
                                 <div class="col-lg-3">
                                     <label for="type" class="control-label"><span>*</span> Type :</label>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Type" name="type" id="type" onchange="displayFields(this);"
                                             required>
                                         @if(Illuminate\Support\Facades\Input::old('type'))
-                                            <option @if(old('type') == 'Carrier') selected @endif value="1"
+                                            <option @if(old('type') == 'Carrier') selected @endif value="Carrier"
                                                     id="carrierOption">Carrier
                                             </option>
-                                            <option @if(old('type') == 'Network') selected @endif value="2"
+                                            <option @if(old('type') == 'Network') selected @endif value="Network"
                                                     id="networkOption">Network
                                             </option>
-                                            <option @if(old('type') == 'Other') selected @endif value="3">Other</option>
+                                            <option @if(old('type') == 'Other') selected @endif value="Other">Other</option>
                                         @else
-                                            <option value="1" id="carrierOption">Carrier</option>
-                                            <option value="2" id="networkOption">Network</option>
-                                            <option value="3">Other</option>
+                                            <option value="Carrier" id="carrierOption">Carrier</option>
+                                            <option value="Network" id="networkOption">Network</option>
+                                            <option value="Other">Other</option>
                                         @endif
                                     </select>
                                 </div>
@@ -90,10 +105,10 @@
                                     <label for="realNumberPallets" class="control-label">Pallets Number
                                         :</label>
                                 </div>
-                                <div class="col-lg-1">
+                                <div class="col-lg-2">
                                     <input id="realNumberPallets" type="number" class="form-control"
                                            name="realNumberPallets"
-                                           value="0" placeholder="Pallets number"
+                                           value="{{old('realNumberPallets')}}" placeholder="Pallets number"
                                            autofocus>
                                 </div>
                             </div>
@@ -173,6 +188,64 @@
                                                     class="glyphicon glyphicon-plus-sign"></span> Add truck</a>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <!--adress-->
+                                    <div class="col-lg-3">
+                                        <label for="adress" class="control-label">Adress :</label>
+                                    </div>
+                                    <div class="col-lg-7">
+                                            <input id="adress" type="text" class="form-control" name="adress"
+                                                   value="{{old('adress')}}" placeholder="Adress" autofocus>
+                                        @if ($errors->has('adress'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('adress') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <!--phone-->
+                                    <div class="col-lg-3">
+                                        <label for="phone" class="control-label">Phone :</label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                            <input id="phone" type="text" class="form-control" name="phone"
+                                                   value="{{old('phone')}}" placeholder="Phone" autofocus>
+                                        @if ($errors->has('phone'))
+                                            <span class="help-block">
+                                    <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                    <!--name contact-->
+                                    <div class="col-lg-2">
+                                        <label for="namecontact" class="control-label">Contact :</label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                            <input id="namecontact" type="text" class="form-control" name="namecontact"
+                                                   value="{{old('namecontact')}}" placeholder="Contact name" autofocus>
+                                        @if ($errors->has('namecontact'))
+                                            <span class="help-block">
+                                    <strong>{{ $errors->first('namecontact') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <!--email-->
+                                    <div class="col-lg-3">
+                                        <label for="email" class="control-label">Email :</label>
+                                    </div>
+                                    <div class="col-lg-7">
+                                            <input id="email" type="text" class="form-control" name="email"
+                                                   value="{{old('email')}}" placeholder="Email" autofocus>
+                                        @if ($errors->has('email'))
+                                            <span class="help-block">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -190,4 +263,4 @@
         @endif
     </div>
 @endsection
-<script type="text/javascript" src="{{asset('js/addPalletsaccount.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>

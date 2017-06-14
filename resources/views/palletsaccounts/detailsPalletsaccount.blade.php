@@ -47,17 +47,23 @@
                                                 {{ csrf_field() }}
 
                                                 <div class="form-group">
-                                                    <!--name-->
+                                                    <!--nickname-->
                                                     <div class="col-lg-3">
-                                                        <label for="name" class="control-label">Name :</label>
+                                                        <label for="nickname" class="control-label">Nickname :</label>
                                                     </div>
-                                                    <div class="col-lg-5">
-                                                        <input id="name" type="text" class="form-control" name="name"
-                                                               value="{{ $name }}" placeholder="Name" required
+                                                    <div class="col-lg-4">
+                                                        @if(isset($nickname))
+                                                        <input id="nickname" type="text" class="form-control" name="nickname"
+                                                               value="{{ $nickname }}" placeholder="Nickname"
                                                                autofocus>
-                                                        @if ($errors->has('name'))
+                                                        @else
+                                                            <input id="nickname" type="text" class="form-control" name="nickname"
+                                                                   value="" placeholder="Nickname"
+                                                                   autofocus>
+                                                            @endif
+                                                        @if ($errors->has('nickname'))
                                                             <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('nickname') }}</strong>
                                     </span>
                                                         @endif
                                                     </div>
@@ -72,31 +78,31 @@
                                                                 data-size="5"
                                                                 data-live-search="true"
                                                                 data-live-search-style="startsWith"
-                                                                title="Type" name="type"
+                                                                title="Type" name="type" id="type" onchange="displayFields(this);"
                                                                 required>
                                                             @if(Illuminate\Support\Facades\Input::old('type'))
-                                                                <option @if(old('type') == 'Carrier') selected @endif>
+                                                                <option @if(old('type') == 'Carrier') selected @endif value="Carrier" id="carrierOption">
                                                                     Carrier
                                                                 </option>
-                                                                <option @if(old('type') == 'Network') selected @endif>
+                                                                <option @if(old('type') == 'Network') selected @endif value="Network" id="networkOption">
                                                                     Network
                                                                 </option>
-                                                                <option @if(old('type') == 'Other') selected @endif>
+                                                                <option @if(old('type') == 'Other') selected @endif value="Other">
                                                                     Other
                                                                 </option>
                                                             @elseif(isset($type))
-                                                                <option @if($type == 'Carrier') selected @endif>
+                                                                <option @if($type == 'Carrier') selected @endif value="Carrier" id="carrierOption">
                                                                     Carrier
                                                                 </option>
-                                                                <option @if($type == 'Network') selected @endif>
+                                                                <option @if($type == 'Network') selected @endif value="Network" id="networkOption">
                                                                     Network
                                                                 </option>
-                                                                <option @if($type == 'Other') selected @endif>Other
+                                                                <option @if($type == 'Other') selected @endif value="Other">Other
                                                                 </option>
                                                             @else
-                                                                <option>Carrier</option>
-                                                                <option>Network</option>
-                                                                <option>Other</option>
+                                                                <option value="Carrier" id="carrierOption">Carrier</option>
+                                                                <option value="Network" id="networkOption">Network</option>
+                                                                <option value="Other">Other</option>
                                                             @endif
                                                         </select>
                                                     </div>
@@ -109,29 +115,50 @@
                                                             :</label>
                                                     </div>
                                                     <div class="col-lg-2">
+                                                        @if(isset($realNumberPallets))
                                                         <input id="realNumberPallets" type="number" class="form-control"
                                                                name="realNumberPallets"
                                                                value="{{ $realNumberPallets }}"
                                                                placeholder="Confirmed pal. nbr"
                                                                required readonly autofocus>
+                                                            @else
+                                                            <input id="realNumberPallets" type="number" class="form-control"
+                                                                   name="realNumberPallets"
+                                                                   value=""
+                                                                   placeholder="Confirmed pal. nbr"
+                                                                   required readonly autofocus>
+                                                        @endif
                                                     </div>
 
                                                     <!--planned number of pallets-->
-                                                    <div class="col-lg-4">
+                                                    <div class="col-lg-3">
                                                         <label for="theoricalNumberPallets" class="control-label">Planned
                                                             Pallets Nbr
                                                             :</label>
                                                     </div>
                                                     <div class="col-lg-2">
+                                                        @if(isset($theoricalNumberPallets))
                                                         <input id="theoricalNumberPallets" type="number"
                                                                class="form-control"
                                                                name="theoricalNumberPallets"
                                                                value="{{ $theoricalNumberPallets }}"
                                                                placeholder="Planned pal. nbr"
                                                                readonly required autofocus>
+                                                            @else
+                                                            <input id="theoricalNumberPallets" type="number"
+                                                                   class="form-control"
+                                                                   name="theoricalNumberPallets"
+                                                                   value=""
+                                                                   placeholder="Planned pal. nbr"
+                                                                   readonly required autofocus>
+                                                        @endif
                                                     </div>
                                                 </div>
-                                                @if($type<>'Other')
+                                                @if($type=='Network')
+                                                    <div id="warehousesAssociated" style="display: block">
+                                                    @else
+                                                <div id="warehousesAssociated">
+                                                    @endif
                                                     <div class="form-group">
                                                         <!--warehouses associated-->
                                                         <div class="col-lg-3">
@@ -140,7 +167,6 @@
                                                                 :</label>
                                                         </div>
                                                         <div class="col-lg-7">
-
                                                             <select class="selectpicker show-tick form-control"
                                                                     data-size="5"
                                                                     data-live-search="true"
@@ -183,7 +209,138 @@
                                                                 Add warehouse</a>
                                                         </div>
                                                     </div>
+                                                    @if($type=='Network')
+                                                        </div>
+                                                            @else
+                                                                </div>
+                                                                    @endif
+
+                                                @if($type=='Carrier')
+                                                    <div id="trucksAssociated" style="display: block">
+                                                        @else
+                                                            <div id="trucksAssociated">
+                                                                @endif
+                                                                <div class="form-group">
+                                                                    <!--trucks associated-->
+                                                                    <div class="col-lg-3">
+                                                                        <label for="trucksAssociated" class="control-label">Trucks
+                                                                            associated
+                                                                            :</label>
+                                                                    </div>
+                                                                    <div class="col-lg-7">
+                                                                        <select class="selectpicker show-tick form-control"
+                                                                                data-size="5"
+                                                                                data-live-search="true"
+                                                                                data-live-search-style="startsWith"
+                                                                                title="Trucks Associated"
+                                                                                name="trucksAssociated[]"
+                                                                                multiple>
+                                                                            @foreach($listTrucks as $truck )
+                                                                                <option>{{$truck->name}} - {{$truck->licensePlate}}</option>
+                                                                            @endforeach
+                                                                                @if(Illuminate\Support\Facades\Input::old('trucksAssociated'))
+                                                                                    @foreach(old('trucksAssociated') as $truckA)
+                                                                                            <option selected>{{$truckA->name}}
+                                                                                                - {{$truckA->licensePlate}}</option>
+                                                                                    @endforeach
+                                                                                @elseif(isset($trucksAssociated))
+                                                                                    @foreach($trucksAssociated as $truckA)
+                                                                                            <option selected>{{$truckA->name}} - {{$truckA->licensePlate}}</option>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                        </select>
+
+                                                                    </div>
+                                                                    <div class="col-lg-2 text-left">
+                                                                        <a href="{{route('showAddTruck')}}" class="link"><span
+                                                                                    class="glyphicon glyphicon-plus-sign"></span>
+                                                                            Add truck</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <!--adress-->
+                                                                    <div class="col-lg-3">
+                                                                        <label for="adress" class="control-label">Adress :</label>
+                                                                    </div>
+                                                                    <div class="col-lg-7">
+                                                                        @if(isset($adress))
+                                                                            <input id="adress" type="text" class="form-control" name="adress"
+                                                                                   value="{{ $adress }}" placeholder="Adress" autofocus>
+                                                                            @else
+                                                                        <input id="adress" type="text" class="form-control" name="adress"
+                                                                               value="" placeholder="Adress" autofocus>
+                                                                        @endif
+                                                                        @if ($errors->has('adress'))
+                                                                            <span class="help-block">
+                                        <strong>{{ $errors->first('adress') }}</strong>
+                                    </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <!--phone-->
+                                                                    <div class="col-lg-3">
+                                                                        <label for="phone" class="control-label">Phone :</label>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        @if(isset($phone))
+                                                                        <input id="phone" type="text" class="form-control" name="phone"
+                                                                               value="{{$phone}}" placeholder="Phone" autofocus>
+                                                                        @else
+                                                                            <input id="phone" type="text" class="form-control" name="phone"
+                                                                                   value="" placeholder="Phone" autofocus>
+                                                                            @endif
+                                                                        @if ($errors->has('phone'))
+                                                                            <span class="help-block">
+                                    <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                                                        @endif
+                                                                    </div>
+                                                                    <!--name contact-->
+                                                                    <div class="col-lg-2">
+                                                                        <label for="namecontact" class="control-label">Contact :</label>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        @if(isset($namecontact))
+                                                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
+                                                                               value="{{$namecontact}}" placeholder="Contact name" autofocus>
+                                                                        @else
+                                                                            <input id="namecontact" type="text" class="form-control" name="namecontact"
+                                                                                   value="" placeholder="Contact name" autofocus>
+                                                                            @endif
+                                                                        @if ($errors->has('namecontact'))
+                                                                            <span class="help-block">
+                                    <strong>{{ $errors->first('namecontact') }}</strong>
+                                    </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <!--email-->
+                                                                    <div class="col-lg-3">
+                                                                        <label for="email" class="control-label">Email :</label>
+                                                                    </div>
+                                                                    <div class="col-lg-7">
+                                                                        @if(isset($email))
+                                                                        <input id="email" type="text" class="form-control" name="email"
+                                                                               value="{{$email}}" placeholder="Email" autofocus>
+                                                                        @else
+                                                                            <input id="email" type="text" class="form-control" name="email"
+                                                                                   value="" placeholder="Email" autofocus>
+                                                                            @endif
+                                                                        @if ($errors->has('email'))
+                                                                            <span class="help-block">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                @if($type=='Carrier')
+                                                            </div>
+                                                            @else
+                                                    </div>
                                                 @endif
+
                                                 <div class="form-group">
                                                     <div class="col-lg-3 col-lg-offset-3">
                                                         <input type="submit"
@@ -192,7 +349,7 @@
                                                                name="updatePalletsaccount">
                                                     </div>
 
-                                                    <div class="col-lg-3 col-lg-offset-2">
+                                                    <div class="col-lg-3 col-lg-offset-1">
                                                         <button type="button" class="btn btn-primary btn-block btn-form"
                                                                 data-toggle="modal"
                                                                 data-target="#deletePalletsaccount_modal">Delete
@@ -349,7 +506,7 @@
                                                     <tbody>
                                                     @for($k=0;$k<5;$k++)
                                                         @for($i=0;$i<4;$i++)
-                                                            @if(!$listLoadingsAssociated[$i+4*$k]->isEmpty())
+                                                            @if(isset($listLoadingsAssociated)&&!$listLoadingsAssociated[$i+4*$k]->isEmpty())
                                                                 @php($j=$k+1)
                                                                 @if($i==0)
                                                                     @php($numberPalletsI='numberPalletsLoadingPlace'.$j)
@@ -447,3 +604,4 @@
         @endif
     </div>
 @endsection
+<script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
