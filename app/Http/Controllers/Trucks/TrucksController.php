@@ -22,69 +22,49 @@ class TrucksController extends Controller
     public function showAll(Request $request)
     {
         $searchQuery = $request->get('search');
-        $searchColumn = $request->get('searchColumn');
+        $searchQueryArray = explode(' ', $searchQuery);
+        $searchColumns = $request->get('searchColumns');
         $listColumns = ['id', 'name', 'licensePlate', 'palletsaccount_name'];
         if (Auth::check()) {
             $this->importData();
-            if (request()->has('sortby') && request()->has('order')) {
-                $sortby = $request->get('sortby'); // Order by what column?
-                $order = $request->get('order'); // Order direction: asc or desc
-                if (isset($searchQuery) && $searchQuery <> '') {
-                    if ($searchColumn == 'all') {
-                        //search query
-                        $listTrucks = DB::table('trucks')
-                            ->where(function ($q) use ($searchQuery, $listColumns) {
-                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
-                            })->orderBy($sortby, $order)->paginate(10);
-                        $count = count(DB::table('trucks')->where(function ($q) use ($searchQuery, $listColumns) {
-                            $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
-                        })->get());
-                    } else {
-                        $listTrucks = DB::table('trucks')
-                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->orderBy($sortby, $order)->paginate(10);
-                        $count = count(DB::table('trucks')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
-                    }
-                } else {
-                    $listTrucks = DB::table('trucks')->orderBy($sortby, $order)->paginate(10);
-                    $count = count(DB::table('trucks')->get());
-                }
-                $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order])->render();
-            } else {
-                if (isset($searchQuery) && $searchQuery <> '') {
-                    if ($searchColumn == 'all') {
-                        //search query
-                        $listTrucks = DB::table('trucks')
-                            ->where(function ($q) use ($searchQuery, $listColumns) {
-                                $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                    ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
-                            })->paginate(10);
-                        $count = count(DB::table('trucks')->where(function ($q) use ($searchQuery, $listColumns) {
-                            $q->where($listColumns[0], 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere($listColumns[1], 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere($listColumns[2], 'LIKE', '%' . $searchQuery . '%')
-                                ->orWhere($listColumns[3], 'LIKE', '%' . $searchQuery . '%');
-                        })->get());
-                    } else {
-                        $listTrucks = DB::table('trucks')
-                            ->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->paginate(10);
-                        $count = count(DB::table('trucks')->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get());
-                    }
-                } else {
-                    $listTrucks = DB::table('trucks')->paginate(10);
-                    $count = count(DB::table('trucks')->get());
-                }
-                $links = '';
-            }
 
-            return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumn', 'listColumns'));
+            $query=DB::table('trucks');
+
+            if (isset($searchQuery) && $searchQuery <> '') {
+                if (in_array('ALL', $searchColumns)) {
+                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                        foreach ($listColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ){
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
+                } else {
+                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                        foreach ($searchColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ){
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
+                }
+                $count = count($query->get());
+                $listTrucks = $query->paginate(10);
+                $links = '';
+            }else{
+                if (request()->has('sortby') && request()->has('order')) {
+                    $sortby = $request->get('sortby'); // Order by what column?
+                    $order = $request->get('order'); // Order direction: asc or desc
+                    $count = count($query->get());
+                    $listTrucks = $query->orderBy($sortby, $order)->paginate(10);
+                    $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order])->render();
+                } else {
+                    $count = count($query->get());
+                    $listTrucks = $query->paginate(10);
+                    $links = '';
+                }
+            }
+            return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchQueryArray','searchColumns', 'listColumns'));
         } else {
             return view('auth.login');
         }

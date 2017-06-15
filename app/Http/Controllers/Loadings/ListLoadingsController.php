@@ -78,16 +78,6 @@ class ListLoadingsController extends Controller
             return view('auth.login');
         }
     }
-//                if (request()->has('sortby') && request()->has('order')) {
-//                    $sortby = $request->get('sortby'); // Order by what column?
-//                    $order = $request->get('order'); // Order direction: asc or desc
-//                    $count = count($query->get());
-//                    $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
-//                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
-//                } else {
-
-//                }
-
 
     /**
      * Import data from an excel file
