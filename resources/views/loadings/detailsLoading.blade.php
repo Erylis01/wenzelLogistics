@@ -588,7 +588,9 @@
                                         <div id="Pan2collapse" class="panel-collapse collapse">
                                             @endif
                                             <div class="panel-body">
-                                                @if (Session::has('messageSuccessSubmit'))
+                                                @if (Session::has('messageErrorSubmit'))
+                                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorSubmit') }}</div>
+                                                @elseif(Session::has('messageSuccessSubmit'))
                                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessSubmit') }}</div>
                                                 @elseif (Session::has('messageSuccessUpload'))
                                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessUpload') }}</div>
@@ -832,7 +834,7 @@
                                                                                                             <button type="submit"
                                                                                                                     class="close"
                                                                                                                     value="close"
-                                                                                                                    name="closeSubmitModal">
+                                                                                                                    name="closeSubmitLoadingModal">
                                                                                                                 &times;
                                                                                                             </button>
                                                                                                             <h4 class="modal-title text-center">
@@ -840,62 +842,81 @@
                                                                                                                 :</h4>
                                                                                                         </div>
                                                                                                         <div class="modal-body center">
-                                                                                                            @if(request()->session()->get('testFirstTime')==1)
-                                                                                                                <p class="text-left">
-                                                                                                                    It
-                                                                                                                    is
-                                                                                                                    the
-                                                                                                                    1st
-                                                                                                                    time
-                                                                                                                    these accounts are credited and debited for this loading place.
-                                                                                                                </p>
-                                                                                                                <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
+
+                                                                                                            @if(request()->session()->get('testFirstTime')=='1stTime' ||request()->session()->get('testFirstTime')=='diffC-diffD')
+                                                                                                               <!-- 1st time or none account changed-->
+                                                                                                                @if(request()->session()->get('testFirstTime')=='1stTime')
+                                                                                                                    <p class="text-center">
+                                                                                                                        It
+                                                                                                                        is
+                                                                                                                        the
+                                                                                                                        1st
+                                                                                                                        time
+                                                                                                                        this
                                                                                                                         pallets
-                                                                                                                        number
-                                                                                                                        :
-                                                                                                                        {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}
-                                                                                                                    </li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        :
-                                                                                                                        {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}
-                                                                                                                    </li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                </ul>
-                                                                                                            @elseif(request()->session()->get('testFirstTime')==2)
-                                                                                                                <p class="text-left">
+                                                                                                                        transfer
+                                                                                                                        is
+                                                                                                                        done
+                                                                                                                        for
+                                                                                                                        this
+                                                                                                                        loading
+                                                                                                                        place.
+                                                                                                                    </p>
+                                                                                                                @elseif(request()->session()->get('testFirstTime')=='diffC-diffD')
+                                                                                                                    <p class="text-center">
+                                                                                                                        Both
+                                                                                                                        accounts
+                                                                                                                        have
+                                                                                                                        been
+                                                                                                                        updated
+                                                                                                                        for
+                                                                                                                        this
+                                                                                                                        loading
+                                                                                                                        place.
+                                                                                                                    </p>
+                                                                                                                @endif
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    planned
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                <table class="table table-hover table-bordered">
+                                                                                                                    <thead>
+                                                                                                                    <tr>
+                                                                                                                        <th class="text-center">
+                                                                                                                            CREDIT
+                                                                                                                        </th>
+                                                                                                                        <th class="text-center">
+                                                                                                                            DEBIT
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                    </thead>
+                                                                                                                    <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    </tbody>
+                                                                                                                </table>
+                                                                                                            @elseif(request()->session()->get('testFirstTime')=='sameC-sameD')
+                                                                                                            <!-- credit and debit accounts haven't changed-->
+                                                                                                                <p class="text-center">
                                                                                                                     These
                                                                                                                     accounts
                                                                                                                     have
@@ -907,226 +928,174 @@
                                                                                                                     loading
                                                                                                                     place.
                                                                                                                 </p>
-                                                                                                                <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Last
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{request()->session()->get('lastNumberPalletsTransferedCreditAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Finally
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK-request()->session()->get('lastNumberPalletsTransferedCreditAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Last
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{-request()->session()->get('lastNumberPalletsTransferedDebitAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Finally
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK+request()->session()->get('lastNumberPalletsTransferedDebitAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                </ul>
-                                                                                                            @elseif(request()->session()->get('testFirstTime')==3)
-                                                                                                                <p class="text-left">
-                                                                                                                    The
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    planned
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                <table class="table table-hover table-bordered">
+                                                                                                                    <thead>
+                                                                                                                    <tr>
+                                                                                                                        <th class="text-center">
+                                                                                                                            CREDIT
+                                                                                                                        </th>
+                                                                                                                        <th class="text-center">
+                                                                                                                            DEBIT
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                    </thead>
+                                                                                                                    <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')- request()->session()->get('lastPalletsNumber')+request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')+ request()->session()->get('lastPalletsNumber')-request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    </tbody>
+                                                                                                                </table>
+                                                                                                            @elseif(request()->session()->get('testFirstTime')=='sameC-diffD')
+                                                                                                            <!-- debit account has changed-->
+                                                                                                                <p class="text-center">
+                                                                                                                    Debit
                                                                                                                     account
                                                                                                                     has
-                                                                                                                    already
                                                                                                                     been
-                                                                                                                    credited while the other has never been debited yet
+                                                                                                                    updated
                                                                                                                     for
                                                                                                                     this
                                                                                                                     loading
                                                                                                                     place.
                                                                                                                 </p>
-                                                                                                                <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Last
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{request()->session()->get('lastNumberPalletsTransferedCreditAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Finally
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK-request()->session()->get('lastNumberPalletsTransferedCreditAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        :
-                                                                                                                        {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}
-                                                                                                                    </li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                </ul>
-                                                                                                            @elseif(request()->session()->get('testFirstTime')==5)
-                                                                                                                <p class="text-left">
-                                                                                                                    The
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    planned
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                <table class="table table-hover table-bordered">
+                                                                                                                    <thead>
+                                                                                                                    <tr>
+                                                                                                                        <th class="text-center">
+                                                                                                                            CREDIT
+                                                                                                                        </th>
+                                                                                                                        <th class="text-center">
+                                                                                                                            DEBIT
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                    </thead>
+                                                                                                                    <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            </td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')- request()->session()->get('lastPalletsNumber')+request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    </tbody>
+                                                                                                                </table>
+                                                                                                            @elseif(request()->session()->get('testFirstTime')=='diffC-sameD')
+                                                                                                            <!-- credit account has changed-->
+                                                                                                                <p class="text-center">
+                                                                                                                    Credit
                                                                                                                     account
                                                                                                                     has
-                                                                                                                    never
                                                                                                                     been
-                                                                                                                    credited yet while the other has already been debited
+                                                                                                                    updated
                                                                                                                     for
                                                                                                                     this
                                                                                                                     loading
                                                                                                                     place.
                                                                                                                 </p>
-                                                                                                                <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        :
-                                                                                                                        {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}
-                                                                                                                    </li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        credit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Actual
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                    <li>
-                                                                                                                        Last
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{-request()->session()->get('lastNumberPalletsTransferedDebitAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        Finally
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        to
-                                                                                                                        debit
-                                                                                                                        : {{$$numberPalletsLoadingPlaceK+request()->session()->get('lastNumberPalletsTransferedDebitAccount')}}</li>
-                                                                                                                    <li>
-                                                                                                                        New
-                                                                                                                        planned
-                                                                                                                        pallets
-                                                                                                                        number
-                                                                                                                        : {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-$$numberPalletsLoadingPlaceK}}</li>
-                                                                                                                </ul>
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    planned
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                <table class="table table-hover table-bordered">
+                                                                                                                    <thead>
+                                                                                                                    <tr>
+                                                                                                                        <th class="text-center">
+                                                                                                                            CREDIT
+                                                                                                                        </th>
+                                                                                                                        <th class="text-center">
+                                                                                                                            DEBIT
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                    </thead>
+                                                                                                                    <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            </td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')+ request()->session()->get('lastPalletsNumber')-request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    </tbody>
+                                                                                                                </table>
                                                                                                             @endif
                                                                                                         </div>
                                                                                                         <div class="modal-footer">
                                                                                                             <button type="submit"
                                                                                                                     class="btn btn-default btn-modal"
                                                                                                                     value="close"
-                                                                                                                    name="closeSubmitModal">
+                                                                                                                    name="closeSubmitLoadingModal">
                                                                                                                 OK
                                                                                                             </button>
                                                                                                         </div>
@@ -1383,10 +1352,22 @@
                                                                                                                     the
                                                                                                                     1st
                                                                                                                     time
-                                                                                                                    these accounts are credited and debited for this offloading place.
+                                                                                                                    these
+                                                                                                                    accounts
+                                                                                                                    are
+                                                                                                                    credited
+                                                                                                                    and
+                                                                                                                    debited
+                                                                                                                    for
+                                                                                                                    this
+                                                                                                                    offloading
+                                                                                                                    place.
                                                                                                                 </p>
                                                                                                                 <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Credited
+                                                                                                                        account
+                                                                                                                        : {{$$accountCreditOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1408,7 +1389,10 @@
                                                                                                                         number
                                                                                                                         : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsOffloadingPlaceK}}</li>
                                                                                                                     <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Debited
+                                                                                                                        account
+                                                                                                                        : {{$$accountDebitOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1444,7 +1428,10 @@
                                                                                                                     place.
                                                                                                                 </p>
                                                                                                                 <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Credited
+                                                                                                                        account
+                                                                                                                        : {{$$accountCreditOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1479,7 +1466,10 @@
                                                                                                                         number
                                                                                                                         : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsOffloadingPlaceK}}</li>
                                                                                                                     <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Debited
+                                                                                                                        account
+                                                                                                                        : {{$$accountDebitOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1521,14 +1511,25 @@
                                                                                                                     has
                                                                                                                     already
                                                                                                                     been
-                                                                                                                    credited while the other has never been debited yet
+                                                                                                                    credited
+                                                                                                                    while
+                                                                                                                    the
+                                                                                                                    other
+                                                                                                                    has
+                                                                                                                    never
+                                                                                                                    been
+                                                                                                                    debited
+                                                                                                                    yet
                                                                                                                     for
                                                                                                                     this
                                                                                                                     offloading
                                                                                                                     place.
                                                                                                                 </p>
                                                                                                                 <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Credited
+                                                                                                                        account
+                                                                                                                        : {{$$accountCreditOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1563,7 +1564,10 @@
                                                                                                                         number
                                                                                                                         : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsOffloadingPlaceK}}</li>
                                                                                                                     <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Debited
+                                                                                                                        account
+                                                                                                                        : {{$$accountDebitOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1592,14 +1596,25 @@
                                                                                                                     has
                                                                                                                     never
                                                                                                                     been
-                                                                                                                    credited yet while the other has already been debited
+                                                                                                                    credited
+                                                                                                                    yet
+                                                                                                                    while
+                                                                                                                    the
+                                                                                                                    other
+                                                                                                                    has
+                                                                                                                    already
+                                                                                                                    been
+                                                                                                                    debited
                                                                                                                     for
                                                                                                                     this
                                                                                                                     offloading
                                                                                                                     place.
                                                                                                                 </p>
                                                                                                                 <ul>
-                                                                                                                    <li>Credited account : {{$$accountCreditOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Credited
+                                                                                                                        account
+                                                                                                                        : {{$$accountCreditOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned
@@ -1621,7 +1636,10 @@
                                                                                                                         number
                                                                                                                         : {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+$$numberPalletsOffloadingPlaceK}}</li>
                                                                                                                     <br>
-                                                                                                                    <li>Debited account : {{$$accountDebitOffloadingPlaceK}}</li>
+                                                                                                                    <li>
+                                                                                                                        Debited
+                                                                                                                        account
+                                                                                                                        : {{$$accountDebitOffloadingPlaceK}}</li>
                                                                                                                     <li>
                                                                                                                         Actual
                                                                                                                         planned

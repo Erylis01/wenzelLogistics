@@ -198,6 +198,7 @@ class DetailsLoadingController extends Controller
         $addOffloadingPlace = Input::get('addOffloadingPlace');
         $submitLoading = Input::get('submitLoading');
         $submitOffloading = Input::get('submitOffloading');
+        $closeSubmitLoadingModal = Input::get('closeSubmitLoadingModal');
 
         //documents already associated to the loading ?
         $actualDocuments_LoadingLoading = DB::table('document_loading')->where('loading_id', $atrnr)->get();
@@ -243,40 +244,46 @@ class DetailsLoadingController extends Controller
             $actualDebitAccount = Loading::where('atrnr', $atrnr)->first()->$accountDebitLoadingPlaceK;
             $actualNumberPallets = Loading::where('atrnr', $atrnr)->first()->$numberPalletsLoadingPlaceK;
 
-//            dd($actualCreditAccount,$numberPalletsLoadingPlaceK, $actualNumberPallets, isset($actualCreditAccount), isset($actualNumberPallets)  );
-            if ($actualCreditAccount <> null && $actualDebitAccount <> null && $actualNumberPallets <> null) {
-                //the pallets transfer has alredy been done, we have to take it the former off and then to put the new one
-                //pallets number on the credit account in memory
-                $actualTheoricalNumberPalletsActualCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
-                $lastNumberPalletsTransferedActualCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->lastNumberPalletsTransfered;
-                Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsActualCreditAccount - $lastNumberPalletsTransferedActualCreditAccount]);
-                //pallets number on the new credit account
-                $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->theoricalNumberPallets;
-                Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered' => $$numberPalletsLoadingPlaceK]);
-                //pallets number on the debit account in memory
-                $actualTheoricalNumberPalletsActualDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
-                $lastNumberPalletsTransferedActualDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->lastNumberPalletsTransfered;
-                Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsActualDebitAccount - $lastNumberPalletsTransferedActualDebitAccount]);
-                //pallets number on the new debit account
-                $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->theoricalNumberPallets;
-                Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsDebitAccount - $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered' => -$$numberPalletsLoadingPlaceK]);
+            if (isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && isset($$numberPalletsLoadingPlaceK)) {
+                if ($actualCreditAccount <> null && $actualDebitAccount <> null && $actualNumberPallets <> null) {
+                    //the pallets transfer has alredy been done, we have to take it the former off and then to put the new one
 
-                if ($actualCreditAccount == $$accountCreditLoadingPlaceK && $actualDebitAccount <> $$accountDebitLoadingPlaceK) {
-                    session()->flash('testFirstTime', 'sameC-diffD');
-                } elseif ($actualCreditAccount <> $$accountCreditLoadingPlaceK && $actualDebitAccount == $$accountDebitLoadingPlaceK) {
-                    session()->flash('testFirstTime', 'diffC-sameD');
-                } elseif ($actualCreditAccount <> $$accountCreditLoadingPlaceK && $actualDebitAccount <> $$accountDebitLoadingPlaceK) {
-                    session()->flash('testFirstTime', 'diffC-diffD');
-                } elseif ($actualCreditAccount == $$accountCreditLoadingPlaceK && $actualDebitAccount == $$accountDebitLoadingPlaceK) {
-                    session()->flash('testFirstTime', 'sameC-sameD');
-                }
-                session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
-                session()->flash('lastNumberPalletsTransferedActualCreditAccount', $lastNumberPalletsTransferedActualCreditAccount);
-                session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
-                session()->flash('lastNumberPalletsTransferedActualDebitAccount', $lastNumberPalletsTransferedActualDebitAccount);
-            } else {
-                //0 pallets have been done ->1st time we will do it -> credit and debit
-                if (isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && isset($$numberPalletsLoadingPlaceK)) {
+                    //pallets number on the credit account in memory
+                    $actualTheoricalNumberPalletsActualCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsActualCreditAccount - $actualNumberPallets]);
+                    //pallets number on the new credit account
+                    $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK]);
+                    //pallets number on the debit account in memory
+                    $actualTheoricalNumberPalletsActualDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsActualDebitAccount + $actualNumberPallets]);
+                    //pallets number on the new debit account
+                    $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->theoricalNumberPallets;
+                    Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsDebitAccount - $$numberPalletsLoadingPlaceK]);
+
+                    if ($actualCreditAccount == $$accountCreditLoadingPlaceK && $actualDebitAccount <> $$accountDebitLoadingPlaceK) {
+                        session()->flash('testFirstTime', 'sameC-diffD');
+                        session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsActualCreditAccount);
+                        session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                    } elseif ($actualCreditAccount <> $$accountCreditLoadingPlaceK && $actualDebitAccount == $$accountDebitLoadingPlaceK) {
+                        session()->flash('testFirstTime', 'diffC-sameD');
+                        session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
+                        session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsActualDebitAccount);
+                    } elseif ($actualCreditAccount <> $$accountCreditLoadingPlaceK && $actualDebitAccount <> $$accountDebitLoadingPlaceK) {
+                        session()->flash('testFirstTime', 'diffC-diffD');
+                        session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
+                        session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                    } elseif ($actualCreditAccount == $$accountCreditLoadingPlaceK && $actualDebitAccount == $$accountDebitLoadingPlaceK) {
+                        session()->flash('testFirstTime', 'sameC-sameD');
+                        session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsActualCreditAccount);
+                        session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsActualDebitAccount);
+                    }
+                    session()->flash('creditAccount', $$accountCreditLoadingPlaceK);
+                    session()->flash('debitAccount', $$accountDebitLoadingPlaceK);
+                    session()->flash('palletsNumber', $$numberPalletsLoadingPlaceK);
+                    session()->flash('lastPalletsNumber', $actualNumberPallets);
+                } else {
+                    //0 pallets have been done ->1st time we will do it -> credit and debit
                     $actualTheoricalNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->theoricalNumberPallets;
                     Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['theoricalNumberPallets' => $actualTheoricalNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK, 'lastNumberPalletsTransfered' => $$numberPalletsLoadingPlaceK]);
                     $actualTheoricalNumberPalletsDebitAccount = Palletsaccount::where('name', $$accountDebitLoadingPlaceK)->first()->theoricalNumberPallets;
@@ -285,6 +292,13 @@ class DetailsLoadingController extends Controller
                     session()->flash('testFirstTime', '1stTime');
                     session()->flash('actualTheoricalNumberPalletsCreditAccount', $actualTheoricalNumberPalletsCreditAccount);
                     session()->flash('actualTheoricalNumberPalletsDebitAccount', $actualTheoricalNumberPalletsDebitAccount);
+                    session()->flash('creditAccount', $$accountCreditLoadingPlaceK);
+                    session()->flash('debitAccount', $$accountDebitLoadingPlaceK);
+                    session()->flash('palletsNumber', $$numberPalletsLoadingPlaceK);
+                }
+            }else{
+                if ($actualNumberPallets <> null) {
+                    session()->flash('messageErrorSubmit', 'Error ! The pallets number of the loading place '.$k." hasn't been updated. Pallets number on credit/debit accounts hasn't been updated too.");
                 }
             }
 
@@ -397,6 +411,10 @@ class DetailsLoadingController extends Controller
                 }
                 Loading::where('atrnr', $atrnr)->update(['stateLoadingPlace' . $k => $$stateLoadingPlaceK]);
             }
+
+            session()->flash('openPanelLoading', 'openPanelLoading');
+        } elseif (isset($closeSubmitLoadingModal)) {
+            session()->flash('messageSuccessSubmit', 'Successfully updated pallets location');
             session()->flash('openPanelLoading', 'openPanelLoading');
         } elseif (isset($addOffloadingPlace)) {
             ////OFFLOADING PLACES/////
@@ -566,11 +584,6 @@ class DetailsLoadingController extends Controller
             $validate = true;
             Loading::where('atrnr', $atrnr)->update(['validate' . $type . $k => $validate]);
         }
-    }
-
-    public function countTime($atrnr, $accountCredit, $accountDebit, $numberPallets, $countTime, $type, $k)
-    {
-
     }
 
     public function uploadDocuments($atrnr, $documents, $type)
