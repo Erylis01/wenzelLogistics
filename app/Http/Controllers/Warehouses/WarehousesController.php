@@ -27,41 +27,59 @@ class WarehousesController extends Controller
         if (Auth::check()) {
             $query=DB::table('warehouses');
 
-            if (isset($searchQuery) && $searchQuery <> '') {
-                if (in_array('ALL', $searchColumns)) {
-                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
-                        foreach ($listColumns as $column) {
-                            foreach ($searchQueryArray as $searchQ){
-                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+            if (request()->has('sortby') && request()->has('order')) {
+                $sortby = $request->get('sortby'); // Order by what column?
+                $order = $request->get('order'); // Order direction: asc or desc
+                $searchColumnsString=$request->get('searchColumnsString');;
+                $searchColumns=explode('-', $searchColumnsString);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    if (in_array('ALL', explode('-',$searchColumnsString ))) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
                             }
-                        }
-                    });
-                } else {
-                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
-                        foreach ($searchColumns as $column) {
-                            foreach ($searchQueryArray as $searchQ){
-                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }
+                $count = count($query->get());
+                $listWarehouses = $query->orderBy($sortby, $order)->paginate(10);
+                $links = $listWarehouses->appends(['sortby' => $sortby, 'order' => $order])->render();
+            }else {
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    $searchColumnsString=implode('-',$searchColumns);
+                    if (in_array('ALL', $searchColumns)) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
                 }
                 $count = count($query->get());
                 $listWarehouses = $query->paginate(10);
                 $links = '';
-            }else{
-                if (request()->has('sortby') && request()->has('order')) {
-                    $sortby = $request->get('sortby'); // Order by what column?
-                    $order = $request->get('order'); // Order direction: asc or desc
-                    $count = count($query->get());
-                    $listWarehouses = $query->orderBy($sortby, $order)->paginate(10);
-                    $links = $listWarehouses->appends(['sortby' => $sortby, 'order' => $order])->render();
-                } else {
-                    $count = count($query->get());
-                    $listWarehouses = $query->paginate(10);
-                    $links = '';
-                }
             }
-            return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchQueryArray','searchColumns', 'listColumns'));
+            return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }

@@ -133,19 +133,19 @@
                                     @if(isset($searchQuery))
                                         <th class="text-center colName">Name<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=name&order=asc')}}"></a><a
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=name&order=desc')}}"></a></th>
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=desc')}}"></a></th>
                                         <th class="text-center colType">Type<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=type&order=asc')}}"></a><a
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=type&order=desc')}}"></a></th>
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a></th>
                                         <th class="text-center colTotal">Total<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=realNumberPallets&order=asc')}}"></a><a
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&sortby=realNumberPallets&order=desc')}}"></a>
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=desc')}}"></a>
                                         </th>
                                         @else
                                     <th class="text-center colName">Name<br><a

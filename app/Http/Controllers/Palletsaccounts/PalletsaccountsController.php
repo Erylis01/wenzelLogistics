@@ -35,38 +35,55 @@ class PalletsaccountsController extends Controller
 
             $query = DB::table('palletsaccounts');
 
-            if (isset($searchQuery) && $searchQuery <> '') {
-                if (in_array('ALL', $searchColumns)) {
-                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
-                        foreach ($listColumns as $column) {
-                            foreach ($searchQueryArray as $searchQ) {
-                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
-                            }
-                        }
-                    });
-                } else {
-                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
-                        foreach ($searchColumns as $column) {
-                            foreach ($searchQueryArray as $searchQ) {
-                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
-                            }
-                        }
-                    });
-                }
-                $listPalletsaccounts = $query->get();
-
-            }else {
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
+                $searchColumnsString=$request->get('searchColumnsString');;
+                $searchColumns=explode('-', $searchColumnsString);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    if (in_array('ALL', explode('-',$searchColumnsString ))) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
+                }
                 $listPalletsaccounts = $query->orderBy($sortby, $order)->get();
-
-            } else {
+            }else {
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    $searchColumnsString=implode('-',$searchColumns);
+                    if (in_array('ALL', $searchColumns)) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
+                }
                 $listPalletsaccounts = $query->get();
-
             }
-        }
-        return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'searchQuery', 'searchQueryArray', 'searchColumns', 'listColumns'));
+        return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
     } else
 {
 return view('auth.login');

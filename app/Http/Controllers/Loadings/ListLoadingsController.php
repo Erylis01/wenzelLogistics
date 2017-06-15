@@ -45,7 +45,6 @@ class ListLoadingsController extends Controller
                 $order = $request->get('order'); // Order direction: asc or desc
                 $searchColumnsString=$request->get('searchColumnsString');;
                 $searchColumns=explode('-', $searchColumnsString);
-//                dd($searchQuery,$searchQueryArray,$searchColumnsStringArray);
                 if (isset($searchQuery) && $searchQuery <> '') {
                     if (in_array('ALL', explode('-',$searchColumnsString ))) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
@@ -69,9 +68,8 @@ class ListLoadingsController extends Controller
                     $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
                     $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
             }else {
-                $searchColumnsString=implode('-',$searchColumns);
-                $searchColumnsStringArray=explode('-', $searchColumnsString);
                 if (isset($searchQuery) && $searchQuery <> '') {
+                    $searchColumnsString=implode('-',$searchColumns);
                     if (in_array('ALL', $searchColumns)) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
