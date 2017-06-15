@@ -18,7 +18,8 @@ class Loading extends Model
     'numberPalletsLoadingPlace4', 'accountCreditLoadingPlace4','accountDebitLoadingPlace4','stateLoadingPlace4', 'validateLoadingPlace4','countTimeLoadingPlace4',
         'numberPalletsOffloadingPlace4', 'accountCreditOffloadingPlace4','accountDebitOffloadingPlace4','stateOffloadingPlace4', 'validateOffloadingPlace4','countTimeOffloadingPlace4',
     'numberPalletsLoadingPlace5', 'accountCreditLoadingPlace5','accountDebitLoadingPlace5','stateLoadingPlace5', 'validateLoadingPlace5','countTimeLoadingPlace5',
-        'numberPalletsOffloadingPlace5', 'accountCreditOffloadingPlace5','accountDebitOffloadingPlace5','stateOffloadingPlace5', 'validateOffloadingPlace5', 'countTimeOffloadingPlace5'
+        'numberPalletsOffloadingPlace5', 'accountCreditOffloadingPlace5','accountDebitOffloadingPlace5','stateOffloadingPlace5', 'validateOffloadingPlace5', 'countTimeOffloadingPlace5',
+        'accountTruck', 'stateTruck', 'validateTruck', 'firstTimeTruck'
     ];
 
     public function palletstransfers(){

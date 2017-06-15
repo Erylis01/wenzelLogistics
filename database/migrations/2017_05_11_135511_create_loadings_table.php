@@ -118,7 +118,10 @@ $table->integer('numberLoadingPlace')->default(1);
             $table->boolean('validateOffloadingPlace5')->default(false);
             $table->integer('countTimeOffloadingPlace5')->default(0);
 
-//            $table->string('firstTimeLoadingPlace')->default('true true');
+            $table->string('accountTruck')->nullable();
+            $table->string('stateTruck')->default('Untreated');
+            $table->boolean('validateTruck')->default(false);
+            $table->boolean('firstTimeTruck')->default(true);
 
 
             $table->timestamps();

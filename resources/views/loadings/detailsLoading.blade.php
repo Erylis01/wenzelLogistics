@@ -354,7 +354,7 @@
                                                         <div class="panel-heading">
                                                             <a class="col-lg-3 text-left"
                                                                data-toggle="collapse"
-                                                               href="#PanSub2collapse">Unloading</a>
+                                                               href="#PanSub2collapse">Offloading</a>
                                                             <div class="col-lg-5 col-lg-offset-1 text-right details-loading">
                                                                 <input type="date" name="entladedatum"
                                                                        class="form-control"
@@ -582,7 +582,7 @@
                             <div class="panel-heading">
                                 <a data-toggle="collapse" href="#Pan2collapse">Pallets location ?</a>
                             </div>
-                            @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading'))
+                            @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading')||Session::has('openPanelTruck'))
                                 <div id="Pan2collapse" class="panel-collapse in collapse">
                                     @else
                                         <div id="Pan2collapse" class="panel-collapse collapse">
@@ -608,14 +608,192 @@
                                                            name="_token"
                                                            value="{{ csrf_token() }}">
 
+                                                    <!-- truck panel-->
+                                                    <div class="panel subpanel">
+                                                        <div class="panel-heading">
+                                                            <a class="col-lg-3 text-left" data-toggle="collapse"
+                                                               href="#Pan2Sub3collapse">Truck</a>
+                                                            <span class="col-lg-offset-2">{{$anz-$totalPalletsLoadingPlace+ $totalPalletsOffloadingPlace}} / 25</span>
+                                                        </div>
+                                                        @if (Session::has('openPanelTruck'))
+                                                            <div id="Pan2Sub3collapse"
+                                                                 class="panel-collapse in collapse">
+                                                                @else
+                                                                    <div id="Pan2Sub3collapse"
+                                                                         class="panel-collapse collapse">
+                                                                        @endif
+                                                                        <div class="panel-body">
+                                                                            <div class="panel subpanel">
+                                                                                <div class="panel-body">
+                                                                                    <!--documents proof upload-->
+                                                                                    <div class="form-group text-center">
+                                                                                        <label for="documentsTruck">Do
+                                                                                            you
+                                                                                            have proof
+                                                                                            documents (CMR/Exchange
+                                                                                            bill/Pallets bill)
+                                                                                            ?</label>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-lg-offset-1 col-lg-4">
+                                                                                            <input type="file"
+                                                                                                   name="documentsTruck[]"
+                                                                                                   multiple>
+                                                                                        </div>
+                                                                                        <!--button upload-->
+                                                                                        <div class="col-lg-4 col-lg-offset-2">
+                                                                                            <input type="submit"
+                                                                                                   class="btn btn-primary btn-block btn-form"
+                                                                                                   value="Upload"
+                                                                                                   name="uploadTruck"/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        @if(isset($filesNamesTruck))
+                                                                                            <ul class="col-lg-offset-1">
+                                                                                                @foreach($filesNamesTruck as $name)
+                                                                                                    <div>
+                                                                                                        <button type="submit"
+                                                                                                                name="deleteDocument"
+                                                                                                                class="btn-add glyphicon glyphicon-remove"
+                                                                                                                value="{{$name}}"></button>
+                                                                                                        <a href="../../storage/app/proofsPallets/{{$atrnr}}/documentsTruck/{{$name}}"
+                                                                                                           class="link">{{$name}}</a>
+                                                                                                    </div>
+                                                                                                @endforeach
+                                                                                            </ul>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="panel subpanel">
+                                                                                <div class="panel-body">
+                                                                                    <!--initial pallets number truck-->
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-lg-7 ">
+                                                                                            <table class="table table-hover table-bordered">
+                                                                                                <thead>
+                                                                                                <tr>
+                                                                                                    <th class="text-center">Initial - Offloaded</th>
+                                                                                                    <th class="text-center">Loaded - Initial</th>
+                                                                                                    <th class="text-center">Initial - Offloaded + Loaded</th>
+                                                                                                </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                <tr>
+                                                                                                    <td class="text-center">{{$anz - $totalPalletsOffloadingPlace}} / 0</td>
+                                                                                                    <td class="text-center">{{$totalPalletsLoadingPlace - $anz}} / 0</td>
+                                                                                                    <td class="text-center">{{$anz - $totalPalletsOffloadingPlace + $totalPalletsLoadingPlace}} / 0</td>
+                                                                                                </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                        @if(isset($anz))
+                                                                                            <div class="col-lg-4 col-lg-offset-1">
+                                                                                                <label for="numberPalletsInitialTruck"
+                                                                                                       class="control-label">Initial pallets number : {{$anz}}</label>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <!--Account credit-->
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-lg-2">
+                                                                                            <label for="accountTruck"
+                                                                                                   class="control-label">Truck
+                                                                                                Account :</label>
+                                                                                        </div>
+                                                                                        <div class="col-lg-5">
+                                                                                            <select class="selectpicker show-tick form-control"
+                                                                                                    data-size="5"
+                                                                                                    data-live-search="true"
+                                                                                                    data-live-search-style="startsWith"
+                                                                                                    title="Pallets Account Truck"
+                                                                                                    name="accountTruck">
+                                                                                                @foreach($listPalletsAccountsCarrier as $palletsAccount )
+                                                                                                    @if(Illuminate\Support\Facades\Input::old('accountTruck') && $palletsAccount->name==old('accountTruck'))
+                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                    @elseif(isset($accountTruck)&& $palletsAccount->name==$accountTruck)
+                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                    @elseif(!isset($accountTruck)&&isset($palletsAccountFavoriteTruck)&& $palletsAccount->name==$palletsAccountFavoriteTruck)
+                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                    @else
+                                                                                                        <option>{{$palletsAccount->name}}</option>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <!--validate truck ?-->
+                                                                                    <div class="form-group">
+                                                                                        @if(isset($filesNamesTruck)&&isset($accountTruck))
+                                                                                            <div class="col-lg-2">
+                                                                                                <label for="validateTruck"
+                                                                                                       class="control-label">Validated
+                                                                                                    ?</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-3">
+                                                                                                @if($validateTruck==1)
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="true"
+                                                                                                                checked>Yes</label>
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="false">No</label>
+                                                                                                @else
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="true">Yes</label>
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="false"
+                                                                                                                checked>No</label>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-lg-offset-2">
+                                                                                                <button type="submit"
+                                                                                                        class="btn btn-primary btn-block btn-form"
+                                                                                                        value="submitTruck"
+                                                                                                        name="submitTruck">
+                                                                                                    Submit
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        @else
+                                                                                            <div class="col-lg-4 col-lg-offset-7">
+                                                                                                <button type="submit"
+                                                                                                        class="btn btn-primary btn-block btn-form"
+                                                                                                        value="submitTruck"
+                                                                                                        name="submitTruck"
+                                                                                                        data-toggle="modal"
+                                                                                                        data-target="#submitTruck_modal">
+                                                                                                    Submit
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        @if (Session::has('openPanelTruck'))
+                                                                    </div>
+                                                                    @else
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
                                                     <!-- loading panel-->
                                                     <div class="panel subpanel">
                                                         <div class="panel-heading">
                                                             <a class="col-lg-3 text-left" data-toggle="collapse"
                                                                href="#Pan2Sub1collapse">Loading
                                                                 place</a>
+                                                            <span class="col-lg-offset-2">{{$totalPalletsLoadingPlace}} / {{$anz}}</span>
                                                             <button type="submit"
-                                                                    class="col-lg-offset-7 btn btn-add glyphicon glyphicon-plus"
+                                                                    class="col-lg-offset-4 btn btn-add glyphicon glyphicon-plus"
                                                                     value="addLoadingPlace"
                                                                     name="addLoadingPlace"></button>
                                                             <button type="submit"
@@ -1121,8 +1299,9 @@
                                                             <a class="col-lg-3 text-left" data-toggle="collapse"
                                                                href="#Pan2Sub2collapse">Offloading
                                                                 place</a>
+                                                            <span class="col-lg-offset-2">{{$totalPalletsOffloadingPlace}} / {{$anz}}</span>
                                                             <button type="submit"
-                                                                    class="col-lg-offset-7 btn btn-add glyphicon glyphicon-plus"
+                                                                    class="col-lg-offset-4 btn btn-add glyphicon glyphicon-plus"
                                                                     value="addOffloadingPlace"
                                                                     name="addOffloadingPlace"></button>
                                                             <button type="submit"
@@ -1618,37 +1797,9 @@
                                                             </div>
                                                         @endif
                                                     </div>
-
-                                                    <!-- truck panel-->
-                                                    <div class="panel subpanel">
-                                                        <div class="panel-heading">
-                                                            <a data-toggle="collapse"
-                                                               href="#Pan2Sub3collapse">Truck</a>
-                                                        </div>
-                                                        <div id="Pan2Sub3collapse"
-                                                             class="panel-collapse collapse">
-                                                            <div class="panel-body">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- other places-->
-                                                    <div class="panel subpanel">
-                                                        <div class="panel-heading">
-                                                            <a data-toggle="collapse"
-                                                               href="#Pan2Sub4collapse">Other
-                                                                place</a>
-                                                        </div>
-                                                        <div id="Pan2Sub4collapse"
-                                                             class="panel-collapse collapse">
-                                                            <div class="panel-body">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
                                                 </form>
                                             </div>
-                                            @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading'))
+                                            @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading')||Session::has('openPanelTruck'))
                                         </div>
                                         @else
                                 </div>
