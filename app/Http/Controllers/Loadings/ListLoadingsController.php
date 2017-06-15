@@ -33,47 +33,68 @@ class ListLoadingsController extends Controller
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
             $searchColumns = $request->get('searchColumns');
+
             $listColumns = ['atrnr', 'ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb', 'lande', 'plze', 'orte', 'anz', 'art', 'subfrachter', 'kennzeichen', 'zusladestellen'];
 
             $query = DB::table('loadings')
                 ->where('pt', 'ja')
                 ->where('ladedatum', '>=', $limitDate);
 
-            if (isset($searchQuery) && $searchQuery <> '') {
-                if (in_array('ALL', $searchColumns)) {
-                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
-                        foreach ($listColumns as $column) {
-                            foreach ($searchQueryArray as $searchQ){
-                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
-                        }
-                        }
-                    });
-                } else {
-                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
-                        foreach ($searchColumns as $column) {
-                            foreach ($searchQueryArray as $searchQ){
-                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+            if (request()->has('sortby') && request()->has('order')) {
+                $sortby = $request->get('sortby'); // Order by what column?
+                $order = $request->get('order'); // Order direction: asc or desc
+                $searchColumnsString=$request->get('searchColumnsString');;
+                $searchColumns=explode('-', $searchColumnsString);
+//                dd($searchQuery,$searchQueryArray,$searchColumnsStringArray);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    if (in_array('ALL', explode('-',$searchColumnsString ))) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
+                }
+                    $count = count($query->get());
+                    $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
+                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
+            }else {
+                $searchColumnsString=implode('-',$searchColumns);
+                $searchColumnsStringArray=explode('-', $searchColumnsString);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    if (in_array('ALL', $searchColumns)) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
                 }
                 $count = count($query->get());
                 $listLoadings = $query->paginate(10);
                 $links = '';
-            }else{
-                if (request()->has('sortby') && request()->has('order')) {
-                    $sortby = $request->get('sortby'); // Order by what column?
-                    $order = $request->get('order'); // Order direction: asc or desc
-                    $count = count($query->get());
-                    $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
-                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
-                } else {
-                    $count = count($query->get());
-                    $listLoadings = $query->paginate(10);
-                    $links = '';
-                }
             }
-            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchQueryArray', 'searchColumns', 'listColumns'));
+            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }
