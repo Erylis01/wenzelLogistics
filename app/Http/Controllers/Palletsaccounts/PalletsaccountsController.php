@@ -199,13 +199,6 @@ function showDetails($id, Request $request)
         $realNumberPallets = $palletsaccount->realNumberPallets;
         $theoricalNumberPallets = $palletsaccount->theoricalNumberPallets;
 
-        //table data
-        $currentDate = Carbon::now();
-        $limitDate = $currentDate->subDays(60)->format('Y-m-d');
-        $searchQuery = $request->get('search');
-        $searchColumn = $request->get('searchColumn');
-        $listColumns = ['atrnr', 'date', 'subfrachter', 'planned pallets nbr'];
-
         if ($type == 'Network') {
             $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
             foreach ($warehousesAssociated as $warehouse) {
@@ -219,96 +212,172 @@ function showDetails($id, Request $request)
             $trucksAssociated = Truck::where('palletsaccount_name', $name)->get();
         }
 
-        if (isset($searchQuery) && $searchQuery <> '') {
-//                    //search query
-            if ($searchColumn == 'all') {
-                for ($k = 1; $k <= 5; $k++) {
-                    $listLoadingsAssociated[] = Loading::where([['accountCreditLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
-                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
-                    })->get();
-                    $listLoadingsAssociated[] = Loading::where([['accountDebitLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
-                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
-                    })->get();
-                    $listLoadingsAssociated[] = Loading::where([['accountCreditOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
-                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
-                    })->get();
-                    $listLoadingsAssociated[] = Loading::where([['accountDebitOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
-                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
-                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
-                    })->get();
+        //table data
+        $currentDate = Carbon::now();
+        $limitDate = $currentDate->subDays(60)->format('Y-m-d');
+        $searchQuery = $request->get('search');
+        $searchQueryArray = explode(' ', $searchQuery);
+        $searchColumns = $request->get('searchColumns');
+        $listColumns = ['atrnr', 'ladedatum', 'subfrachter'];
+
+        $listType=['CreditLoadingPlace', 'DebitLoadingPlace', 'CreditOffloadingPlace', 'DebitOffloadingPlace'];
+        $query = Loading::where('pt', 'ja')
+            ->where('ladedatum', '>=', $limitDate)->where(function ($q) use ($listType, $name) {
+                for ($k=1;$k<=5;$k++) {
+                    foreach($listType as $type){
+                        $q->orWhere('account'.$type.$k, $name);
+                    }
                 }
-            } else {
-                for ($k = 1; $k <= 5; $k++) {
-                    $listLoadingsAssociated[] = Loading::where([['accountCreditLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
-                    $listLoadingsAssociated[] = Loading::where([['accountDebitLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
-                    $listLoadingsAssociated[] = Loading::where([['accountCreditOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
-                    $listLoadingsAssociated[] = Loading::where([['accountDebitOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
+                $q->orWhere('accountTruck', $name);
+            });
+
+        if (request()->has('sortby') && request()->has('order')) {
+            $sortby = $request->get('sortby'); // Order by what column?
+            $order = $request->get('order'); // Order direction: asc or desc
+            $searchColumnsString=$request->get('searchColumnsString');;
+            $searchColumns=explode('-', $searchColumnsString);
+            if (isset($searchQuery) && $searchQuery <> '') {
+                if (in_array('ALL', explode('-',$searchColumnsString ))) {
+                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                        foreach ($listColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ) {
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
+                } else {
+                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                        foreach ($searchColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ) {
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
                 }
             }
-        } else {
-            for ($k = 1; $k <= 5; $k++) {
-                $listLoadingsAssociated[] = Loading::where([['accountCreditLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->get();
-                $listLoadingsAssociated[] = Loading::where([['accountDebitLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->get();
-                $listLoadingsAssociated[] = Loading::where([['accountCreditOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->get();
-                $listLoadingsAssociated[] = Loading::where([['accountDebitOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->get();
+            $listLoadings = $query->orderBy($sortby, $order)->get();
+
+        }else {
+            if (isset($searchQuery) && $searchQuery <> '') {
+                $searchColumnsString=implode('-',$searchColumns);
+                if (in_array('ALL', $searchColumns)) {
+                    $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                        foreach ($listColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ) {
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
+                } else {
+                    $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                        foreach ($searchColumns as $column) {
+                            foreach ($searchQueryArray as $searchQ) {
+                                $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                            }
+                        }
+                    });
+                }
             }
+            $listLoadings = $query->get();
+        }
+
+        return view('palletsaccounts.detailsPalletsaccount', compact('typePlaceAccount', 'searchColumn', 'searchQuery', 'listColumns','searchColumnsString','searchColumns','listLoadings', 'totalpallets', 'listWarehouses', 'listTrucks', 'id', 'name', 'nickname', 'realNumberPallets', 'theoricalNumberPallets', 'type', 'namewarehouses', 'trucksAssociated', 'adress', 'email', 'phone', 'namecontact'));
+    } else {
+        return view('auth.login');
+    }
+}
+
+
+//        if (isset($searchQuery) && $searchQuery <> '') {
+////                    //search query
+//            if ($searchColumn == 'all') {
+//                for ($k = 1; $k <= 5; $k++) {
+//                    $listLoadingsAssociated[] = Loading::where([['accountCreditLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
+//                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
+//                    })->get();
+//                    $listLoadingsAssociated[] = Loading::where([['accountDebitLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
+//                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
+//                    })->get();
+//                    $listLoadingsAssociated[] = Loading::where([['accountCreditOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
+//                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
+//                    })->get();
+//                    $listLoadingsAssociated[] = Loading::where([['accountDebitOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where(function ($q) use ($searchQuery, $listColumns) {
+//                        $q->where('atrnr', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('ladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('entladedatum', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('subfrachter', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace1', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace2', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace3', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace4', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsOffloadingPlace5', 'LIKE', '%' . $searchQuery . '%')
+//                            ->orWhere('numberPalletsLoadingPlace5', 'LIKE', '%' . $searchQuery . '%');
+//                    })->get();
+//                }
+//            } else {
+//                for ($k = 1; $k <= 5; $k++) {
+//                    $listLoadingsAssociated[] = Loading::where([['accountCreditLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
+//                    $listLoadingsAssociated[] = Loading::where([['accountDebitLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
+//                    $listLoadingsAssociated[] = Loading::where([['accountCreditOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
+//                    $listLoadingsAssociated[] = Loading::where([['accountDebitOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->where($searchColumn, 'LIKE', '%' . $searchQuery . '%')->get();
+//                }
+//            }
+//        } else {
+//            for ($k = 1; $k <= 5; $k++) {
+//                $listLoadingsAssociated[] = Loading::where([['accountCreditLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->get();
+//                $listLoadingsAssociated[] = Loading::where([['accountDebitLoadingPlace' . $k, $name], ['ladedatum', '>=', $limitDate]])->get();
+//                $listLoadingsAssociated[] = Loading::where([['accountCreditOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->get();
+//                $listLoadingsAssociated[] = Loading::where([['accountDebitOffloadingPlace' . $k, $name], ['entladedatum', '>=', $limitDate]])->get();
+//            }
 //                    for($k=0;$k<20;$k++){
 //                        $links[]='';
 //                        $count=0;
 //                        $count=$count+count($listLoadingsAssociated[$k]);
 //                    }
-        }
+//        }
 
 
 //            if (request()->has('sortby') && request()->has('order')) {
@@ -332,11 +401,6 @@ function showDetails($id, Request $request)
 //
 //                $listPalletstransfers = DB::table('palletstransfers')->where([['palletsaccount_name', $name], ['date', '>=', $limitDate]])->paginate(10);
 
-        return view('palletsaccounts.detailsPalletsaccount', compact('typePlaceAccount', 'searchColumn', 'searchQuery', 'listColumns', 'listLoadingsAssociated', 'totalpallets', 'listWarehouses', 'listTrucks', 'id', 'name', 'nickname', 'realNumberPallets', 'theoricalNumberPallets', 'type', 'namewarehouses', 'trucksAssociated', 'adress', 'email', 'phone', 'namecontact', 'count', 'links'));
-    } else {
-        return view('auth.login');
-    }
-}
 
 /**
  * update the pallets account n° ID

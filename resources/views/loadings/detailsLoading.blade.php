@@ -1827,4 +1827,6 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+
+    <script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
 @endsection

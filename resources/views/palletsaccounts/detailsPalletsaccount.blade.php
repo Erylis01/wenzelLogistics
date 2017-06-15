@@ -404,16 +404,14 @@
 
                                             <!--search bar-->
                                             <br>
-                                            <div>
-                                                <form class="searchForm" role="form" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
+                                            <div >
+                                                <form role="form" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
                                                     {{ csrf_field() }}
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn searchCheckbox col-lg-offset-4">
-                                                        <label class="checkbox-inline searchBar"><input type="checkbox" value="loading">Loading Place</label>
-                                                        <label class="checkbox-inline searchBar"><input type="checkbox" value="offloading">Offloading Place</label>
-                                                        <label class="checkbox-inline searchBar"><input type="checkbox" value="credit">Credit</label>
-                                                        <label class="checkbox-inline searchBar"><input type="checkbox" value="debit">Debit          </label>
-                                                    </span>
+                                                    <div class="input-group col-lg-offset-3 col-lg-7">
+                                                        {{--<span class="input-group-btn searchCheckbox col-lg-offset-4">--}}
+                                                        {{--<label class="checkbox-inline searchBar"><input type="checkbox" value="loading">Loading Place</label>--}}
+                                                        {{--<label class="checkbox-inline searchBar"><input type="checkbox" value="offloading">Offloading Place</label>--}}
+                                                        {{--</span>--}}
                             <span class="input-group-btn searchInput">
                                 @if(isset($searchQuery))
                                     <input type="text" class="form-control searchBar" name="search" value="{{$searchQuery}}"
@@ -471,123 +469,107 @@
                                                 </form>
                                                 <br>
                                             </div>
+
+                                            <!--table list loadings associated-->
                                             <div class="table-responsive table-loading-account">
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
+                                                        @if(isset($searchQuery))
                                                         <th class="text-center col1">Atrnr
-                                                            {{--<a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listLoadingsAssociated->currentPage().'&sortby=atrnr&order=asc')}}"></a><a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listLoadingsAssociated->currentPage().'&sortby=atrnr&order=desc')}}"></a>--}}
+                                                            <a
+                                                            class="glyphicon glyphicon-chevron-up general-sorting"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=atrnr&order=asc')}}"></a><a
+                                                            class="glyphicon glyphicon-chevron-down general-sorting"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=atrnr&order=desc')}}"></a>
                                                         </th>
                                                         <th class="text-center col3">Date transfer
-                                                            {{--<a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>--}}
+                                                            <a
+                                                            class="glyphicon glyphicon-chevron-up general-sorting"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=ladedatum&order=asc')}}"></a><a
+                                                            class="glyphicon glyphicon-chevron-down general-sorting"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=ladedatum&order=desc')}}"></a>
                                                         </th>
                                                         <th class="text-center col4">Subfrachter
+                                                            <a
+                                                            class="glyphicon glyphicon-chevron-up general-sorting"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=asc')}}"></a><a
+                                                            class="glyphicon glyphicon-chevron-down general-sorting"
+                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=desc')}}"></a>
+                                                        </th>
+                                                        <th class="text-center col2">Planned pallets nbr
                                                             {{--<a--}}
                                                             {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a--}}
                                                             {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>--}}
+                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>--}}
                                                         </th>
-                                                        <th class="text-center col3">Planned<br>pallets nbr
-                                                            {{--<a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>--}}
-                                                        </th>
-                                                        <th class="text-center col2">Type<br>place
-                                                            {{--<a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>--}}
-                                                        </th>
-                                                        <th class="text-center col2">Type transfer
-                                                            {{--<a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>--}}
-                                                        </th>
+                                                            @else
+                                                            <th class="text-center col1">Atrnr
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=atrnr&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=atrnr&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center col3">Date transfer
+                                                                <a
+                                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=ladedatum&order=asc')}}"></a><a
+                                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=ladedatum&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center col4">Subfrachter
+                                                                <a
+                                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=subfrachter&order=asc')}}"></a><a
+                                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=subfrachter&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center col2">Planned pallets nbr
+                                                                {{--<a--}}
+                                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=asc')}}"></a><a--}}
+                                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=desc')}}"></a>--}}
+                                                            </th>
+                                                        @endif
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @for($k=0;$k<5;$k++)
-                                                        @for($i=0;$i<4;$i++)
-                                                            @if(isset($listLoadingsAssociated)&&!$listLoadingsAssociated[$i+4*$k]->isEmpty())
-                                                                @php($j=$k+1)
-                                                                @if($i==0)
-                                                                    @php($numberPalletsI='numberPalletsLoadingPlace'.$j)
-                                                                    <!--loading place credit account-->
-                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
-                                                                        <tr>
-                                                                            <td class="text-center col1"><a
-                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
-                                                                                        class="link">{{$loading->atrnr}}</a></td>
-                                                                            <td class="text-center col3">{{$loading->ladedatum}}</td>
-                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
-                                                                            <td class="text-center col3">{{$loading->$numberPalletsI}}</td>
-                                                                            <td class="text-center col2">Loading place</td>
-                                                                            <td class="text-center col2">Credit</td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                    @elseif($i==1)
-                                                                    @php($numberPalletsI='numberPalletsLoadingPlace'.$j)
-                                                                    <!--loading place debit account-->
-                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
-                                                                        <tr>
-                                                                            <td class="text-center col1"><a
-                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
-                                                                                        class="link">{{$loading->atrnr}}</a></td>
-                                                                            <td class="text-center col3">{{$loading->ladedatum}}</td>
-                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
-                                                                            <td class="text-center col3">-{{$loading->$numberPalletsI}}</td>
-                                                                            <td class="text-center col2">Loading place</td>
-                                                                            <td class="text-center col2">Debit</td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @elseif($i==2)
-                                                                    @php($numberPalletsI='numberPalletsOffloadingPlace'.$j)
-                                                                    <!--offloading place credit account-->
-                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
-                                                                        <tr>
-                                                                            <td class="text-center col1"><a
-                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
-                                                                                        class="link">{{$loading->atrnr}}</a></td>
-                                                                            <td class="text-center col3">{{$loading->entladedatum}}</td>
-                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
-                                                                            <td class="text-center col3">{{$loading->$numberPalletsI}}</td>
-                                                                            <td class="text-center col2">Offloading place</td>
-                                                                            <td class="text-center col2">Credit</td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @elseif($i==3)
-                                                                    @php($numberPalletsI='numberPalletsOffloadingPlace'.$j)
-                                                                    <!--offloading place debit account-->
-                                                                    @foreach($listLoadingsAssociated[$i+4*$k] as $loading)
-                                                                        <tr>
-                                                                            <td class="text-center col1"><a
-                                                                                        href="{{route('showDetailsLoading', $loading->atrnr)}}"
-                                                                                        class="link">{{$loading->atrnr}}</a></td>
-                                                                            <td class="text-center col3">{{$loading->entladedatum}}</td>
-                                                                            <td class="text-center col4">{{$loading->subfrachter}}</td>
-                                                                            <td class="text-center col3">-{{$loading->$numberPalletsI}}</td>
-                                                                            <td class="text-center col2">Offloading place</td>
-                                                                            <td class="text-center col2">Debit</td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                    @endif
+                                                    @foreach($listLoadings as $loading)
+                                                        @php($idPalletsaccount=\App\Palletsaccount::where('name', trim(explode(',', $loading->subfrachter)[0]))->first()->id)
+                                                        @for($k=1;$k<=$loading->numberLoadingPlace; $k++)
+                                                    <tr>
+                                                        <td class="text-center col1"><a class="link" href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a></td>
+                                                        <td class="text-center col3">{{$loading->ladedatum}}</td>
+                                                        <td class="text-center col4"><a class="link" href="{{route('showDetailsPalletsaccount',$idPalletsaccount)}}">{{$loading->subfrachter}}</a></td>
+                                                            @php($accountDebitLoadingPlaceK='accountDebitLoadingPlace'.$k)
+                                                            @php($accountCreditLoadingPlaceK='accountCreditLoadingPlace'.$k)
+                                                            @php($numberPalletsLoadingPlaceK='numberPalletsLoadingPlace'.$k)
+                                                            @if($name==$loading->$accountCreditLoadingPlaceK)
+                                                                <td class="text-center col2">{{$loading->$numberPalletsLoadingPlaceK}}</td>
+                                                                @elseif($name==$loading->$accountDebitLoadingPlaceK)
+                                                                <td class="text-center col2">{{- $loading->$numberPalletsLoadingPlaceK}}</td>
                                                                 @endif
-                                                    @endfor
-                                                    @endfor
+                                                    </tr>
+                                                            @endfor
+                                                        <tr>
+                                                        @for($k=1;$k<=$loading->numberOffloadingPlace; $k++)
+                                                                <td class="text-center col1"><a class="link" href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a></td>
+                                                                <td class="text-center col3">{{$loading->ladedatum}}</td>
+                                                                <td class="text-center col4"><a class="link" href="{{route('showDetailsPalletsaccount',$idPalletsaccount)}}">{{$loading->subfrachter}}</a></td>
+                                                            @php($accountDebitOffloadingPlaceK='accountDebitOffloadingPlace'.$k)
+                                                            @php($accountCreditOffloadingPlaceK='accountCreditOffloadingPlace'.$k)
+                                                            @php($numberPalletsOffloadingPlaceK='numberPalletsOffloadingPlace'.$k)
+                                                            @if($name==$loading->$accountCreditOffloadingPlaceK)
+                                                                <td class="text-center col2">{{$loading->$numberPalletsOffloadingPlaceK}}</td>
+                                                            @elseif($name==$loading->$accountDebitOffloadingPlaceK)
+                                                                <td class="text-center col2">{{- $loading->$numberPalletsOffloadingPlaceK}}</td>
+                                                            @endif
+                                                    </tr>
+                                                        @endfor
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>

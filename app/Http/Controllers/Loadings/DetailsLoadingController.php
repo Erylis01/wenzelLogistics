@@ -858,17 +858,46 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
 
         //general state
         $stateTruck=$loading->stateTruck;
-        if($stateTruck=='Complete Validated' && $stateOffloadingPlace=='Complete Validated'&& $stateLoadingPlace=='Complete Validated'){
-            $state='Complete Validated';
-        }elseif(($stateTruck=='Complete Validated'||$stateTruck=='Complete') && ($stateOffloadingPlace=='Complete Validated'||$stateOffloadingPlace=='Complete')&& ($stateLoadingPlace=='Complete' || $stateLoadingPlace=='Complete Validated')){
-            $state='Complete';
-        }elseif($stateTruck=='Waiting documents' || $stateOffloadingPlace=='Waiting documents'|| $stateLoadingPlace=='Waiting documents'){
-            $state='Waiting documents';
-        }elseif($stateTruck=='Untreated' && $stateOffloadingPlace=='Untreated'&& $stateLoadingPlace=='Untreated'){
-            $state='Untreated';
-        }elseif($stateTruck<>'Waiting documents' && $stateOffloadingPlace<>'Waiting documents'&& $stateLoadingPlace<>'Waiting documents'){
-            $state='In progress';
+        if(isset($stateOffloadingPlace) && isset($stateLoadingPlace)){
+            if($stateTruck=='Complete Validated' && $stateOffloadingPlace=='Complete Validated'&& $stateLoadingPlace=='Complete Validated'){
+                $state='Complete Validated';
+            }elseif(($stateTruck=='Complete Validated'||$stateTruck=='Complete') && ($stateOffloadingPlace=='Complete Validated'||$stateOffloadingPlace=='Complete')&& ($stateLoadingPlace=='Complete' || $stateLoadingPlace=='Complete Validated')){
+                $state='Complete';
+            }elseif($stateTruck=='Waiting documents' || $stateOffloadingPlace=='Waiting documents'|| $stateLoadingPlace=='Waiting documents'){
+                $state='Waiting documents';
+            }elseif($stateTruck=='Untreated' && $stateOffloadingPlace=='Untreated'&& $stateLoadingPlace=='Untreated'){
+                $state='Untreated';
+            }elseif($stateTruck<>'Waiting documents' && $stateOffloadingPlace<>'Waiting documents'&& $stateLoadingPlace<>'Waiting documents'){
+                $state='In progress';
+            }
+        }elseif(isset($stateOffloadingPlace) && !isset($stateLoadingPlace)){
+            if($stateTruck=='Complete Validated' && $stateOffloadingPlace=='Complete Validated'){
+                $state='Complete Validated';
+            }elseif(($stateTruck=='Complete Validated'||$stateTruck=='Complete') && ($stateOffloadingPlace=='Complete Validated'||$stateOffloadingPlace=='Complete')){
+                $state='Complete';
+            }elseif($stateTruck=='Waiting documents' || $stateOffloadingPlace=='Waiting documents'){
+                $state='Waiting documents';
+            }elseif($stateTruck=='Untreated' && $stateOffloadingPlace=='Untreated'){
+                $state='Untreated';
+            }elseif($stateTruck<>'Waiting documents' && $stateOffloadingPlace<>'Waiting documents'){
+                $state='In progress';
+            }
+        }elseif(!isset($stateOffloadingPlace) && isset($stateLoadingPlace)){
+            if($stateTruck=='Complete Validated' && $stateLoadingPlace=='Complete Validated'){
+                $state='Complete Validated';
+            }elseif(($stateTruck=='Complete Validated'||$stateTruck=='Complete') && ($stateLoadingPlace=='Complete Validated'||$stateLoadingPlace=='Complete')){
+                $state='Complete';
+            }elseif($stateTruck=='Waiting documents' || $stateLoadingPlace=='Waiting documents'){
+                $state='Waiting documents';
+            }elseif($stateTruck=='Untreated' && $stateLoadingPlace=='Untreated'){
+                $state='Untreated';
+            }elseif($stateTruck<>'Waiting documents' && $stateLoadingPlace<>'Waiting documents'){
+                $state='In progress';
+            }
+        }elseif(!isset($stateOffloadingPlace) && !isset($stateLoadingPlace)){
+            $state=$stateTruck;
         }
+
         Loading::where('atrnr', $atrnr)->update(['state' => $state]);
     }
 }

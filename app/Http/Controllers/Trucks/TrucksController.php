@@ -153,7 +153,7 @@ class TrucksController extends Controller
             $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
-        $truckTest = Truck::where([['name', $name], ['adress',$adress],['licensePlate', $licensePlate]])->first();
+        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
 
         //validation
         $rules = array(
@@ -233,7 +233,7 @@ class TrucksController extends Controller
             $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
-        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
+        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->get();
 
         //validation
         $rules = array(
