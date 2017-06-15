@@ -134,7 +134,11 @@ function add(Request $request)
             ->withErrors($validator)
             ->withInput();
     } else {
-        if ($type == 'Network' && isset($warehousesAssociatedName)) {
+        if ($type == 'Network') {
+            Palletsaccount::create(
+                ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
+            );
+        } elseif($type == 'Network' && isset($warehousesAssociatedName)) {
             Palletsaccount::create(
                 ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
             )->warehouses()->sync($idwarehouses);
