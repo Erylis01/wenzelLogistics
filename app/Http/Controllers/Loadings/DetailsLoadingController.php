@@ -286,7 +286,6 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
         //state
             $accountTruck=Input::get('accountTruck');
             $validateTruck=Input::get('validateTruck');
-            $firstTimeTruck=$loading->firstTimeTruck;
 
             if (isset($accountTruck) && $validateTruck==true && (isset($documentsTruck) || !empty($actualDocumentsTruck))) {
                 $stateTruck = 'Complete Validated';
@@ -448,7 +447,7 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
 
             //state
             $stateLoadingPlaceK = 'stateLoadingPlace' . $k;
-            if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading)) && $$validateLoadingPlaceK == true) {
+            if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading)) && $$validateLoadingPlaceK == 'true') {
                 $$stateLoadingPlaceK = 'Complete Validated';
                 $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->realNumberPallets;
                 Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK]);
@@ -488,7 +487,7 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
                 $validateLoadingPlaceK = 'validateLoadingPlace' . $k;
                 $$validateLoadingPlaceK = Input::get('validateLoadingPlace' . $k);
 
-                if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading)) && $$validateLoadingPlaceK == true) {
+                if (isset($$numberPalletsLoadingPlaceK) && isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && (isset($documentsLoading) || !empty($actualDocumentsLoading)) && $$validateLoadingPlaceK == 'true') {
                     $$stateLoadingPlaceK = 'Complete Validated';
                     $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->first()->realNumberPallets;
                     Palletsaccount::where('name', $$accountCreditLoadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsLoadingPlaceK]);
@@ -602,7 +601,8 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
 
             //state
             $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
-            if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
+            if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && $$validateOffloadingPlaceK == 'true' && (isset($documentsOffloading) || !empty($actualDocumentsOffloading))) {
+
                 $$stateOffloadingPlaceK = 'Complete Validated';
                 $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->first()->realNumberPallets;
                 Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsOffloadingPlaceK]);
@@ -642,7 +642,7 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
                 $validateOffloadingPlaceK = 'validateOffloadingPlace' . $k;
                 $$validateOffloadingPlaceK = Input::get('validateOffloadingPlace' . $k);
 
-                if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == true) {
+                if (isset($$numberPalletsOffloadingPlaceK) && isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && (isset($documentsOffloading) || !empty($actualDocumentsOffloading)) && $$validateOffloadingPlaceK == 'true') {
                     $$stateOffloadingPlaceK = 'Complete Validated';
                     $actualRealNumberPalletsCreditAccount = Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->first()->realNumberPallets;
                     Palletsaccount::where('name', $$accountCreditOffloadingPlaceK)->update(['realNumberPallets' => $actualRealNumberPalletsCreditAccount + $$numberPalletsOffloadingPlaceK]);
@@ -660,9 +660,14 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
                 Loading::where('atrnr', $atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
             }
             session()->flash('openPanelOffloading', 'openPanelOffloading');
+
         } elseif (isset($deleteDocument)) {
             $this->deleteDocument($atrnr, $deleteDocument);
         }
+        if(!isset($addLoadingPlace)||!isset($addOffloadingPlace)){
+        $this->state($loading, $atrnr);
+    }
+
         return redirect()->back();
     }
 
@@ -702,12 +707,11 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
     {
         if ($validate == 'true') {
             $validate = true;
-            if($k=-1000){
-                Loading::where('atrnr', $atrnr)->update(['validate'.$type => $validate]);
-            }else{
+            if ($k = -1000) {
+                Loading::where('atrnr', $atrnr)->update(['validate' . $type => $validate]);
+            } else {
                 Loading::where('atrnr', $atrnr)->update(['validate' . $type . $k => $validate]);
             }
-
         }
     }
 
@@ -778,5 +782,93 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
     public function addPlace($atrnr, $type, $numberPlace)
     {
         Loading::where('atrnr', $atrnr)->update(['number' . $type => $numberPlace + 1]);
+    }
+
+    public function state($loading, $atrnr){
+        //////STATE GENERAL////
+        //state loading place
+        if($loading->numberLoadingPlace>0){
+            for($k=1; $k<=$loading->numberLoadingPlace; $k++){
+                $stateLoadingPlaceK='stateLoadingPlace'.$k;
+                $$stateLoadingPlaceK=$loading->$stateLoadingPlaceK;
+                $stateCompleteValidated=0;
+                $stateComplete=0;
+                $stateWaitingDocuments=0;
+                $stateInProgress=0;
+                $stateUntreated=0;
+                if($$stateLoadingPlaceK=='Complete Validated'){
+                    $stateCompleteValidated++;
+                }elseif($$stateLoadingPlaceK=='Complete'){
+                    $stateComplete++;
+                }elseif($$stateLoadingPlaceK=='Waiting documents'){
+                    $stateWaitingDocuments++;
+                }elseif($$stateLoadingPlaceK=='In progress'){
+                    $stateInProgress++;
+                }elseif($$stateLoadingPlaceK=='Untreated'){
+                    $stateUntreated++;
+                }
+            }
+            if($stateCompleteValidated==$loading->numberLoadingPlace){
+                $stateLoadingPlace='Complete Validated';
+            }elseif($stateWaitingDocuments==0 && $stateInProgress==0 && $stateUntreated==0){
+                $stateLoadingPlace='Complete';
+            }elseif($stateWaitingDocuments>0){
+                $stateLoadingPlace='Waiting documents';
+            }elseif($stateWaitingDocuments=0 && ($stateInProgress>0 || ($stateUntreated<$loading->numberLoadingPlace && $stateUntreated>0))){
+                $stateLoadingPlace='In progress';
+            }elseif($stateUntreated==$loading->numberLoadingPlace){
+                $stateLoadingPlace='Untreated';
+            }
+        }
+
+        //state offloading place
+        if($loading->numberOffloadingPlace>0){
+            for($k=1; $k<=$loading->numberOffloadingPlace; $k++){
+                $stateOffloadingPlaceK='stateOffloadingPlace'.$k;
+                $$stateOffloadingPlaceK=$loading->$stateOffloadingPlaceK;
+                $stateCompleteValidated=0;
+                $stateComplete=0;
+                $stateWaitingDocuments=0;
+                $stateInProgress=0;
+                $stateUntreated=0;
+                if($$stateOffloadingPlaceK=='Complete Validated'){
+                    $stateCompleteValidated++;
+                }elseif($$stateOffloadingPlaceK=='Complete'){
+                    $stateComplete++;
+                }elseif($$stateOffloadingPlaceK=='Waiting documents'){
+                    $stateWaitingDocuments++;
+                }elseif($$stateOffloadingPlaceK=='In progress'){
+                    $stateInProgress++;
+                }elseif($$stateOffloadingPlaceK=='Untreated'){
+                    $stateUntreated++;
+                }
+            }
+            if($stateCompleteValidated==$loading->numberLoadingPlace){
+                $stateOffloadingPlace='Complete Validated';
+            }elseif($stateWaitingDocuments==0 && $stateInProgress==0 && $stateUntreated==0){
+                $stateOffloadingPlace='Complete';
+            }elseif($stateWaitingDocuments>0){
+                $stateOffloadingPlace='Waiting documents';
+            }elseif($stateWaitingDocuments=0 && ($stateInProgress>0 || ($stateUntreated<$loading->numberLoadingPlace && $stateUntreated>0))){
+                $stateOffloadingPlace='In progress';
+            }elseif($stateUntreated==$loading->numberLoadingPlace){
+                $stateOffloadingPlace='Untreated';
+            }
+        }
+
+        //general state
+        $stateTruck=$loading->stateTruck;
+        if($stateTruck=='Complete Validated' && $stateOffloadingPlace=='Complete Validated'&& $stateLoadingPlace=='Complete Validated'){
+            $state='Complete Validated';
+        }elseif(($stateTruck=='Complete Validated'||$stateTruck=='Complete') && ($stateOffloadingPlace=='Complete Validated'||$stateOffloadingPlace=='Complete')&& ($stateLoadingPlace=='Complete' || $stateLoadingPlace=='Complete Validated')){
+            $state='Complete';
+        }elseif($stateTruck=='Waiting documents' || $stateOffloadingPlace=='Waiting documents'|| $stateLoadingPlace=='Waiting documents'){
+            $state='Waiting documents';
+        }elseif($stateTruck=='Untreated' && $stateOffloadingPlace=='Untreated'&& $stateLoadingPlace=='Untreated'){
+            $state='Untreated';
+        }elseif($stateTruck<>'Waiting documents' && $stateOffloadingPlace<>'Waiting documents'&& $stateLoadingPlace<>'Waiting documents'){
+            $state='In progress';
+        }
+        Loading::where('atrnr', $atrnr)->update(['state' => $state]);
     }
 }

@@ -45,8 +45,8 @@ class CreateLoadingsTable extends Migration
 
             $table->string('state')->default('Untreated');
             $table->string('reasonUpdatePT')->nullable();
-$table->integer('numberLoadingPlace')->default(1);
-            $table->integer('numberOffloadingPlace')->default(1);
+$table->integer('numberLoadingPlace')->default(0);
+            $table->integer('numberOffloadingPlace')->default(0);
 
             $table->integer('numberPalletsLoadingPlace1')->nullable();
             $table->string('accountCreditLoadingPlace1')->nullable();

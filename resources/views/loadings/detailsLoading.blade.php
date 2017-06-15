@@ -809,6 +809,7 @@
                                                                          class="panel-collapse collapse">
                                                                         @endif
                                                                         <div class="panel-body">
+                                                                            @if($numberLoadingPlace>0)
                                                                             <div class="panel subpanel">
                                                                                 <div class="panel-body">
                                                                                     <!--documents proof upload-->
@@ -1285,6 +1286,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             @endfor
+                                                                                @endif
                                                                         </div>
                                                                         @if (Session::has('openPanelLoading'))
                                                                     </div>
@@ -1317,6 +1319,7 @@
                                                                          class="panel-collapse collapse">
                                                                         @endif
                                                                         <div class="panel-body">
+                                                                            @if($numberOffloadingPlace>0)
                                                                             <div class="panel subpanel">
                                                                                 <div class="panel-body">
                                                                                     <!--documents proof upload-->
@@ -1790,6 +1793,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             @endfor
+                                                                                @endif
                                                                         </div>
                                                                         @if (Session::has('openPanelOffloading'))
                                                                     </div>
