@@ -161,14 +161,87 @@
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Add"
-                                           name="addPalletstransfer">
+                                           name="addPalletstransfer" data-toggle="modal"
+                                           data-target="#submitAdd_modal">
                                 </div>
                                 <div class="col-lg-2 col-lg-offset-3 text-left">
                                     <a href="{{route('showAddPalletsaccount')}}" class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
+                            <!-- Modal submit -->
+                            @if(isset($addPalletstransfer))
+                            <div class="modal show"
+                                 id="submitAdd_modal"
+                                 role="dialog">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="submit"
+                                                    class="close"
+                                                    value="close"
+                                                    name="closeSubmitAddModal">
+                                                &times;
+                                            </button>
+                                            <h4 class="modal-title text-center">
+                                                Information
+                                                :</h4>
+                                        </div>
+                                        <div class="modal-body center">
+                                                <p class="text-center">
+                                                    Here,
+                                                    planned
+                                                    pallets
+                                                    number</p>
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">
+                                                            CREDIT
+                                                        </th>
+                                                        <th class="text-center">
+                                                            DEBIT
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            + {{request()->session()->get('palletsNumber')}}</td>
+                                                        <td class="text-center">
+                                                            - {{request()->session()->get('palletsNumber')}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            = {{request()->session()->get('palletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                        <td class="text-center">
+                                                            = {{request()->session()->get('palletsNumberDebitAccount')-request()->session()->get('palletsNumber')}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit"
+                                                    class="btn btn-default btn-modal"
+                                                    value="close"
+                                                    name="okSubmitAddModal">
+                                                OK
+                                            </button>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
                         </form>
+
                     </div>
 
                 </div>
