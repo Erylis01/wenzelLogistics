@@ -79,8 +79,6 @@ if (Truck::where('name', trim(explode(',', $subfrachter)[0]))->where('licensePla
                 $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
             }
         }
-//        dd($palletsAccountFavoriteTruck);
-
 
             //loading panel
             $totalPalletsLoadingPlace = 0;

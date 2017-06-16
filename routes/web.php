@@ -59,7 +59,7 @@ Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addP
 Route::get('/addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
 Route::get('/detailsPalletstransfer/{id}', 'PalletstransfersController@showDetails')->name('showDetailsPalletstransfer');
 Route::post('/detailsPalletstransfer/{id}', 'PalletstransfersController@update')->name('updatePalletstransfer');
-Route::post('/detailsPalletstransfer/{id}/{palletsaccount_name}', 'PalletstransfersController@saveVerification')->name('saveVerificationPalletstransfer');
+//Route::post('/detailsPalletstransfer/{id}/{palletsaccount_name}', 'PalletstransfersController@saveVerification')->name('saveVerificationPalletstransfer');
 Route::delete('/detailsPalletstransfer/{id}', 'PalletstransfersController@delete')->name('deletePalletstransfer');
 
 //MAILS

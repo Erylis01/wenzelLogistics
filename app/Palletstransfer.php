@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Palletstransfer extends Model
 {
     protected $fillable = [
-        'creditAccount', 'debitAccount', 'palletsNumber', 'type' , 'date', 'state'
+        'creditAccount', 'debitAccount', 'palletsNumber', 'type' , 'date', 'state', 'validate'
     ];
 
 //    public function loading(){

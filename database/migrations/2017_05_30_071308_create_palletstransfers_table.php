@@ -20,7 +20,8 @@ class CreatePalletstransfersTable extends Migration
             $table->string('debitAccount');
             $table->integer('palletsNumber');
             $table->date('date');
-            $table->string('state')->default('Untreated');
+            $table->string('state')->default('Waiting documents');
+            $table->boolean('validate')->default(false);
             $table->string('type')->nullable();
 //            $table->date('dateLastReminder')->nullable();
 //            $table->integer('remindersNumber')->nullable();
