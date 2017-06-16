@@ -405,6 +405,13 @@
                                             <!--search bar-->
                                             <br>
                                             <div >
+                                                <div class="col-lg-2">
+                                                    <form role="form" method="GET" action="{{route('showAddPalletstransfer')}}">
+                                                        {{ csrf_field() }}
+                                <button type="submit" class="btn btn-add" name="addTransferAccount" value="{{$name}}"> Add transfer</button>
+                         
+                                                    </form>
+                                                </div>
                                                 <form role="form" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
                                                     {{ csrf_field() }}
                                                     <div class="input-group col-lg-offset-3 col-lg-7">
@@ -469,6 +476,7 @@
                                                 </form>
                                                 <br>
                                             </div>
+
 
                                             <!--table list loadings associated-->
                                             <div class="table-responsive table-loading-account">

@@ -13,4 +13,8 @@ class Document extends Model
     public function loadings(){
         return $this->belongsToMany('App\Loading','document_loading');
     }
+
+    public function palletstransfers(){
+        return $this->belongsToMany('App\Palletstransfer','document_palletstransfer');
+    }
 }

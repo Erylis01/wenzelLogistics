@@ -35,7 +35,7 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general">
-                    <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-3">{{$totalpallets}} - {{$realTotalpallets}} pallets</span><span class="col-lg-offset-2">
+                    <div class="panel-heading">List of all pallets transfers <span class="col-lg-offset-7">
                             <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span class="glyphicon glyphicon-plus-sign"></span> Add transfers</a>
                         </span></div>
 
@@ -65,37 +65,38 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Loading Atrnr<br><a
+                                    <th class="text-center">Type<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Pallets Account<br><a
+                                    <th class="text-center">Credit Account<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Theorical Pal. Nr<br><a
+                                    <th class="text-center">Debit Account<br><a
+                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"></a><a
+                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"></a>
+                                    </th>
+                                    <th class="text-center">Pallets Nbr<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center">Real Pal. Nr<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=realPalletsNumber&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">Documents ?<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=documents&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=documents&order=desc')}}"></a>
-                                    </th>
-                                    <th class="text-center">State ?<br><a
+                                    {{--<th class="text-center">Documents ?<br>--}}
+                                        {{--<a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=documents&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=documents&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
+                                    <th class="text-center">State<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
@@ -107,31 +108,29 @@
                                 @foreach($listPalletstransfers as $transfer)
                                     {{--@php(dd(\App\Palletstransfer::find($transfer->id)->with('loading')->first()->loading))--}}
 
-                                    @if($transfer->state==true && $transfer->documents==true && $transfer->realPalletsNumber==$transfer->palletsNumber)
-                                        @php($class="success")
-                                    @elseif ($transfer->state==false && $transfer->documents==false && $transfer->realPalletsNumber<>$transfer->palletsNumber)
-                                        @php($class="danger")
-                                    @else
-                                        @php ($class="warning")
-                                    @endif
-                                    <tr class={{$class}}>
+                                    {{--@if($transfer->state==true && $transfer->documents==true && $transfer->realPalletsNumber==$transfer->palletsNumber)--}}
+                                        {{--@php($class="success")--}}
+                                    {{--@elseif ($transfer->state==false && $transfer->documents==false && $transfer->realPalletsNumber<>$transfer->palletsNumber)--}}
+                                        {{--@php($class="danger")--}}
+                                    {{--@else--}}
+                                        {{--@php ($class="warning")--}}
+                                    {{--@endif--}}
+                                    <tr>
                                         <td class="text-center"><a class="link" href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
                                         <td class="text-center">{{date('d-m-Y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center"><a class="link" href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a></td>
-                                        <td class="text-center">{{$transfer->palletsaccount_name}}</td>
+                                        <td class="text-center">{{$transfer->type}}</td>
+                                        @php($creditAccountId=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
+                                        <td class="text-center"><a class="link" href="{{route('showDetailsPalletsaccount',$creditAccountId)}}">{{$transfer->creditAccount}}</a></td>
+                                        @php($debitAccountId=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
+                                        <td class="text-center"><a class="link" href="{{route('showDetailsPalletsaccount',$debitAccountId)}}">{{$transfer->debitAccount}}</a></td>
                                         <td class="text-center">{{$transfer->palletsNumber}}</td>
-                                        <td class="text-center">{{$transfer->realPalletsNumber}}</td>
-                                        @if($transfer->documents==false)
-                                            <td class="text-center">No</td>
-                                        @else
-                                            <td class="text-center">Yes</td>
-                                        @endif
-                                        @if($transfer->state==false)
-                                            <td class="text-center">No</td>
-                                        @else
-                                            <td class="text-center">Yes</td>
-                                        @endif
+                                        {{--@if($transfer->documents==false)--}}
+                                            {{--<td class="text-center">No</td>--}}
+                                        {{--@else--}}
+                                            {{--<td class="text-center">Yes</td>--}}
+                                        {{--@endif--}}
+                                            <td class="text-center">{{$transfer->state}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

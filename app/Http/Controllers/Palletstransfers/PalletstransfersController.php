@@ -24,12 +24,12 @@ class PalletstransfersController extends Controller
         if (Auth::check()) {
             $currentDate = Carbon::now();
             $limitDate = $currentDate->subDays(60)->format('Y-m-d');
-            $totalpallets = DB::table('palletstransfers')->where([
-                ['date', '>=', $limitDate],
-            ])->sum('palletsNumber');
-            $realTotalpallets = DB::table('palletstransfers')->where([
-                ['date', '>=', $limitDate],
-            ])->sum('realPalletsNumber');
+//            $totalpallets = DB::table('palletstransfers')->where([
+//                ['date', '>=', $limitDate],
+//            ])->sum('palletsNumber');
+//            $realTotalpallets = DB::table('palletstransfers')->where([
+//                ['date', '>=', $limitDate],
+//            ])->sum('realPalletsNumber');
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
@@ -39,15 +39,15 @@ class PalletstransfersController extends Controller
                 ])->orderBy($sortby, $order)->paginate(10);
                 $links = $listPalletstransfers->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
-                $listPalletstransfers = DB::table('palletstransfers')->where([
+                $listPalletstransfers = Palletstransfer::where([
                     ['date', '>=', $limitDate],
                 ])->paginate(10);
                 $links = '';
             }
-            $count = count(DB::table('palletstransfers')->where([
+            $count = count(Palletstransfer::where([
                 ['date', '>=', $limitDate],
             ])->get());
-            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'realTotalpallets','totalpallets', 'sortby', 'order', 'links', 'count'));
+            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'sortby', 'order', 'links', 'count'));
         } else {
             return view('auth.login');
         }
@@ -57,12 +57,17 @@ class PalletstransfersController extends Controller
      * show the add form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAdd()
+    public function showAdd(Request $request)
     {
         if (Auth::check()) {
             $listPalletsaccounts = DB::table('palletsaccounts')->get();
+            $listTypes=['Other','Purchase'];
+            $account=$request->get('addTransferAccount');
+            $creditAccount=$account;
+            $debitAccount=$account;
+            $date=Carbon::now()->format('Y-m-d');
 
-            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts'));
+            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts', 'date','creditAccount','debitAccount', 'listTypes' ));
         } else {
             return view('auth.login');
         }
@@ -74,12 +79,16 @@ class PalletstransfersController extends Controller
     public function add(Request $request)
     {
         $date = Input::get('date');
-        $loading_atrnr = Input::get('loading_atrnr');
-        $palletsaccount_name = Input::get('palletsaccount_name');
+        $type = Input::get('type');
+        $creditAccount = Input::get('creditAccount');
+        $debitAccount = Input::get('debitAccount');
         $palletsNumber = Input::get('palletsNumber');
 
+
         $rules = array(
-            'loading_atrnr' => 'required|string|max:255',
+            'creditAccount' => 'required',
+            'debitAccount' => 'required',
+            'palletsNumber' => 'required',
             'date' => 'required|date',
         );
         $validator = Validator::make(Input::all(), $rules);
@@ -89,9 +98,15 @@ class PalletstransfersController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            Palletstransfer::create(['date' => $date, 'loading_atrnr' => $loading_atrnr, 'palletsaccount_name' => $palletsaccount_name, 'palletsNumber' => $palletsNumber]);
-            $actualPalletsNumber = DB::table('palletsaccounts')->where('name', $palletsaccount_name)->value('theoricalNumberPallets');
-            Palletsaccount::where('name',$palletsaccount_name)->update(['theoricalNumberPallets'=> $actualPalletsNumber+$palletsNumber]);
+            if(isset($type)){
+                Palletstransfer::create(['date' => $date, 'type'=>$type, 'creditAccount'=>$creditAccount, 'debitAccount'=>$debitAccount, 'palletsNumber'=>$palletsNumber]);
+            }else{
+                Palletstransfer::create(['date' => $date, 'creditAccount'=>$creditAccount, 'debitAccount'=>$debitAccount, 'palletsNumber'=>$palletsNumber]);
+            }
+            $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
+            $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
+            Palletsaccount::where('name',$creditAccount)->update(['theoricalNumberPallets'=> $actualTheoricalCreditPalletsNumber+$palletsNumber]);
+            Palletsaccount::where('name',$debitAccount)->update(['theoricalNumberPallets'=> $actualTheoricalDebitPalletsNumber-$palletsNumber]);
 
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
             return redirect('/allPalletstransfers');

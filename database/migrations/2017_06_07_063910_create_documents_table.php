@@ -26,6 +26,14 @@ class CreateDocumentsTable extends Migration
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('loading_id')->references('id')->on('loadings')->onDelete('cascade');
         });
+
+        Schema::create('document_palletstransfer',function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('document_id')->unsigned();
+            $table->integer('palletstransfer_id')->unsigned();
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+            $table->foreign('palletstransfer_id')->references('id')->on('palletstransfers')->onDelete('cascade');
+        });
     }
 
     /**

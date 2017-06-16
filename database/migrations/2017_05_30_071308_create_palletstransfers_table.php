@@ -15,21 +15,20 @@ class CreatePalletstransfersTable extends Migration
     {
         Schema::create('palletstransfers', function (Blueprint $table) {
             $table->increments('id')->unique();
-            $table->integer('loading_atrnr')->unsigned()->index();
-            $table->string('palletsaccount_name');
+//            $table->integer('loading_atrnr')->unsigned()->index();
+            $table->string('creditAccount');
+            $table->string('debitAccount');
             $table->integer('palletsNumber');
-//            $table->string('palletsaccount_name');
             $table->date('date');
-            $table->integer('realPalletsNumber')->nullable();
-            $table->boolean('documents')->default(false);
-            $table->boolean('state')->default(false);
-            $table->date('dateLastReminder')->nullable();
-            $table->integer('remindersNumber')->nullable();
-            $table->string('reminderWarehouse')->nullable();
+            $table->string('state')->default('Untreated');
+            $table->string('type')->nullable();
+//            $table->date('dateLastReminder')->nullable();
+//            $table->integer('remindersNumber')->nullable();
+//            $table->string('reminderWarehouse')->nullable();
             $table->timestamps();
-
-            $table->foreign('loading_atrnr')->references('atrnr')->on('loadings');
-            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccounts');
+//
+//            $table->foreign('loading_atrnr')->references('atrnr')->on('loadings');
+//            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccounts');
         });
     }
 

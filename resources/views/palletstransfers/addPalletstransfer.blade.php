@@ -41,14 +41,20 @@
                         <form class="form-horizontal text-right" role="form" method="POST"
                               action="{{route('addPalletstransfer')}}">
                             {{ csrf_field() }}
+                            <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
                                 <!--date-->
-                                <div class="col-lg-2">
-                                    <label for="date" class="control-label">Date :</label>
+                                <div class="col-lg-1 col-lg-offset-1">
+                                    <label for="date" class="control-label"><span>*</span> Date :</label>
                                 </div>
                                 <div class="col-lg-2">
+                                    @if(isset($date))
+                                        <input id="date" type="date" class="form-control" name="date"
+                                               value="{{ $date }}" placeholder="Date" required autofocus>
+                                        @else
                                     <input id="date" type="date" class="form-control" name="date"
-                                           value="" placeholder="Date" required autofocus>
+                                           value="{{ old('date') }}" placeholder="Date" required autofocus>
+                                    @endif
                                     @if ($errors->has('date'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('date') }}</strong>
@@ -56,60 +62,108 @@
                                     @endif
                                 </div>
 
-                                <!--loading atrnr-->
-                                <div class="col-lg-3">
-                                    <label for="loading_atrnr" class="control-label">Loading atrnr :</label>
-                                </div>
-                                <div class="col-lg-5">
-                                    <input id="loading_atrnr" type="number" min="0" class="form-control" name="loading_atrnr"
-                                           value="" placeholder="Loading atrnr" required autofocus>
-                                    @if ($errors->has('loading_atrnr'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('loading_atrnr') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <!--number of pallets-->
-                                <div class="col-lg-2">
-                                    <label for="palletsNumber" class="control-label">Pallets number
+                                <div class="col-lg-2 col-lg-offset-2">
+                                    <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
                                         :</label>
                                 </div>
                                 <div class="col-lg-1">
+                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
                                     <input id="palletsNumber" type="number" class="form-control"
                                            name="palletsNumber"
-                                           value="0" placeholder="Pallets Number"
+                                           value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
                                            required autofocus>
+                                        @else
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="0" placeholder="Nbr"
+                                               required autofocus>
+                                    @endif
                                 </div>
 
-                                <!--pallets account-->
-                                <div class="col-lg-2 col-lg-offset-2">
-                                    <label for="warehousesAssociated" class="control-label">Pallets
-                                        account
+                                <!--type-->
+                                <div class="col-lg-1">
+                                    <label for="type" class="control-label">Type
                                         :</label>
                                 </div>
-                                <div class="col-lg-5">
+                                <div class="col-lg-2">
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Pallets Account" name="palletsAccount" required>
-                                        @foreach($listPalletsaccounts as $account )
-                                            <option>{{$account->name}}</option>
+                                            title="Type" name="type"
+                                            >
+                                        @foreach($listTypes as $type )
+                                            @if(Illuminate\Support\Facades\Input::old('type') && $type==old('type'))
+                                                <option selected>{{$type}}</option>
+                                            @else
+                                                <option>{{$type}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
-
                             <div class="form-group">
-                                <div class="col-lg-3 col-lg-offset-2">
+                                <!--credit account-->
+                                <div class="col-lg-2">
+                                    <label for="creditAccount" class="control-label"><span>*</span> Credit
+                                        account
+                                        :</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Credit Account" name="creditAccount" required>
+                                        @foreach($listPalletsaccounts as $palletsAccount )
+                                            @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount->name==old('creditAccount'))
+                                                <option selected>{{$palletsAccount->name}}</option>
+                                            @elseif(isset($creditAccount)&& $palletsAccount->name==$creditAccount)
+                                                <option selected>{{$palletsAccount->name}}</option>
+                                            @else
+                                                <option>{{$palletsAccount->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('creditAccount'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('creditAccount') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                                <!--credit account-->
+                                <div class="col-lg-2">
+                                    <label for="debitAccount" class="control-label"><span>*</span> Debit
+                                        account
+                                        :</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Debit Account" name="debitAccount" required>
+                                        @foreach($listPalletsaccounts as $palletsAccount )
+                                            @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount->name==old('debitAccount'))
+                                                <option selected>{{$palletsAccount->name}}</option>
+                                            @elseif(isset($debitAccount)&& $palletsAccount->name==$debitAccount)
+                                                <option selected>{{$palletsAccount->name}}</option>
+                                            @else
+                                                <option>{{$palletsAccount->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('debitAccount'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('debitAccount') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-4 col-lg-offset-2">
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Add"
                                            name="addPalletstransfer">
                                 </div>
-                                <div class="col-lg-2 col-lg-offset-2 text-left">
+                                <div class="col-lg-2 col-lg-offset-3 text-left">
                                     <a href="{{route('showAddPalletsaccount')}}" class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
