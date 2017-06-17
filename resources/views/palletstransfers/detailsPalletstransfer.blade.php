@@ -277,18 +277,18 @@
                              role="dialog">
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
-                                    <div class="modal-header">
+                                    <div class="modal-header modalHeaderTransfer">
                                         <button value="close"
                                                 class="close"
                                                 type="submit"
                                                 name="closeSubmitUpdateModal">
                                             &times;
                                         </button>
-                                        <h4 class="modal-title text-center">
-                                            Information
-                                            :</h4>
+                                        <h4 class="modal-title text-center ">
+                                            INFORMATION
+                                            </h4>
                                     </div>
-                                    <div class="modal-body center">
+                                    <div class="modal-body center modalBodyTransfer">
                                         <p class="text-center">
                                             Here,
                                             PLANNED
@@ -298,6 +298,7 @@
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th class="text-center">
                                                             CREDIT
                                                         </th>
@@ -308,26 +309,31 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr>
+                                                        <td></td>
                                                         <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                         <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Actual</td>
                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Last transfer</td>
                                                         <td class="text-center">
-                                                            - {{request()->session()->get('actualPalletsNumber')}} (last transfer)</td>
+                                                            - {{request()->session()->get('actualPalletsNumber')}}</td>
                                                         <td class="text-center">
-                                                            + {{request()->session()->get('actualPalletsNumber')}} (last transfer)</td>
+                                                            + {{request()->session()->get('actualPalletsNumber')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">New transfer</td>
                                                         <td class="text-center">
-                                                            + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                            + {{request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
-                                                            - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                            - {{request()->session()->get('palletsNumber')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Total</td>
                                                         <td class="text-center">
                                                             = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
@@ -339,6 +345,7 @@
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th class="text-center">
                                                             CREDIT
                                                         </th>
@@ -349,20 +356,24 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr>
+                                                        <td></td>
                                                         <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                         <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Actual</td>
                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">New transfer</td>
                                                         <td class="text-center">
-                                                            + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                            + {{request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
-                                                            - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                            - {{request()->session()->get('palletsNumber')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Total</td>
                                                         <td class="text-center">
                                                             = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
@@ -374,6 +385,7 @@
                                             <table class="table table-hover table-bordered">
                                                 <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th class="text-center">
                                                         CREDIT
                                                     </th>
@@ -384,26 +396,31 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Actual</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Last transfer</td>
                                                     <td class="text-center">
-                                                         {{request()->session()->get('actualPalletsNumber')}} (last transfer)</td>
+                                                         {{request()->session()->get('actualPalletsNumber')}}</td>
                                                     <td class="text-center">
                                                         </td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">New transfer</td>
                                                     <td class="text-center">
-                                                        + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                        + {{request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
-                                                        - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                        - {{request()->session()->get('palletsNumber')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Total</td>
                                                     <td class="text-center">
                                                         = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
@@ -415,6 +432,7 @@
                                             <table class="table table-hover table-bordered">
                                                 <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th class="text-center">
                                                         CREDIT
                                                     </th>
@@ -425,26 +443,31 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Actual</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Last transfer</td>
                                                     <td class="text-center">
                                                         </td>
                                                     <td class="text-center">
-                                                        + {{request()->session()->get('actualPalletsNumber')}} (last transfer)</td>
+                                                        + {{request()->session()->get('actualPalletsNumber')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">New transfer</td>
                                                     <td class="text-center">
-                                                        + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                        + {{request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
-                                                        - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                        - {{request()->session()->get('palletsNumber')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Total</td>
                                                     <td class="text-center">
                                                         = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
@@ -456,7 +479,7 @@
                                 </div>
                                     <div class="modal-footer">
                                         <button type="submit"
-                                                class="btn btn-default btn-modal"
+                                                class="btn btn-default btn-form btn-modal"
                                                 value="yes"
                                                 name="okSubmitUpdateModal" data-toggle="modal"
                                                 data-target="#submitUpdateValidate_modal">
@@ -474,7 +497,7 @@
                              role="dialog">
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
-                                    <div class="modal-header">
+                                    <div class="modal-header modalHeaderTransfer">
                                         <button value="close"
                                                 class="close"
                                                 type="submit"
@@ -482,10 +505,10 @@
                                             &times;
                                         </button>
                                         <h4 class="modal-title text-center">
-                                            Information
-                                            :</h4>
+                                            INFORMATION
+                                            </h4>
                                     </div>
-                                    <div class="modal-body center">
+                                    <div class="modal-body center modalBodyTransfer">
                                         <p class="text-center">
                                             Here,
                                             CONFIRMED
@@ -494,6 +517,7 @@
                                         <table class="table table-hover table-bordered">
                                                 <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th class="text-center">
                                                         CREDIT
                                                     </th>
@@ -504,20 +528,24 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Actual</td>
                                                     <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">New transfer</td>
                                                     <td class="text-center">
-                                                        + {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                        + {{request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
-                                                        - {{request()->session()->get('palletsNumber')}} (new transfer)</td>
+                                                        - {{request()->session()->get('palletsNumber')}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="text-center">Total</td>
                                                     <td class="text-center">
                                                         = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
@@ -528,7 +556,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit"
-                                                class="btn btn-default btn-modal"
+                                                class="btn btn-default btn-form btn-modal"
                                                 value="yes"
                                                 name="okSubmitUpdateValidateModal" data-toggle="modal"
                                                 data-target="#submitUpdateValidate_modal">

@@ -181,7 +181,7 @@
                                  role="dialog">
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">
-                                        <div class="modal-header">
+                                        <div class="modal-header modalHeaderTransfer">
                                             <button type="submit"
                                                     class="close"
                                                     value="close"
@@ -189,10 +189,10 @@
                                                 &times;
                                             </button>
                                             <h4 class="modal-title text-center">
-                                                Information
-                                                :</h4>
+                                                INFORMATION
+                                                </h4>
                                         </div>
-                                        <div class="modal-body center">
+                                        <div class="modal-body center modalBodyTransfer">
                                                 <p class="text-center">
                                                     Here,
                                                     planned
@@ -215,16 +215,19 @@
                                                         <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Actual</td>
                                                         <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
                                                         <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">New transfer</td>
                                                         <td class="text-center">
                                                             + {{request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
                                                             - {{request()->session()->get('palletsNumber')}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-center">Total</td>
                                                         <td class="text-center">
                                                             = {{request()->session()->get('palletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
@@ -235,7 +238,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit"
-                                                    class="btn btn-default btn-modal"
+                                                    class="btn btn-default btn-form btn-modal"
                                                     value="yes"
                                                     name="okSubmitAddModal">
                                                 Confirm
