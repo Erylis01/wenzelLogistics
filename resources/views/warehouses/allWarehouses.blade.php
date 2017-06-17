@@ -260,10 +260,9 @@
                         </div>
                         <div class="row">
                             <div class="general-pagination text-left">{!! $listWarehouses->render() !!}</div>
-                            {{--->appends($links)--}}
                             @if ($listWarehouses->currentPage()==$listWarehouses->lastPage())
                                 <div class="general-legend col-lg-offset-8">
-                                    Showing @php($legend1=1+ ($listWarehouses->currentPage() -1) * 5)  {{$legend1}}
+                                    Showing @php($legend1=1+ ($listWarehouses->currentPage() -1) * 10)  {{$legend1}}
                                     to {{$count}} of {{$count}} results
                                 </div>
                             @elseif($listWarehouses->isEmpty())
@@ -272,8 +271,8 @@
                                 </div>
                             @else
                                 <div class="general-legend col-lg-offset-8">
-                                    Showing @php($legend1=1+ ($listWarehouses->currentPage() -1) * 5)  {{$legend1}}
-                                    to @php($legend2= $listWarehouses->currentPage() * 5) {{$legend2}} of {{$count}}
+                                    Showing @php($legend1=1+ ($listWarehouses->currentPage() -1) * 10)  {{$legend1}}
+                                    to @php($legend2= $listWarehouses->currentPage() * 10) {{$legend2}} of {{$count}}
                                     results
                                 </div>
                             @endif

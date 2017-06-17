@@ -201,6 +201,7 @@
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th class="text-center">
                                                             CREDIT
                                                         </th>
@@ -211,6 +212,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr>
+                                                        <td></td>
                                                         <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                         <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                     </tr>

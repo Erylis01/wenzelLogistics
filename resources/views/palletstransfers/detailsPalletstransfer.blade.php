@@ -64,6 +64,10 @@
                         <div class="panel-body panel-body-general">
                             @if(Session::has('messageUpdatePalletstransfer'))
                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletstransfer') }}</div>
+                                @elseif(Session::has('messageErrorUpload'))
+                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>
+                            @elseif(Session::has('messageUpdateValidatePalletstransfer'))
+                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateValidatePalletstransfer') }}</div>
                             @endif
                             <div class="form-group">
                                 <!--date-->

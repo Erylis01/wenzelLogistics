@@ -22,34 +22,72 @@ class PalletstransfersController extends Controller
      */
     public function showAll(Request $request)
     {
+        $searchQuery = $request->get('search');
+        $searchQueryArray = explode(' ', $searchQuery);
+        $searchColumns=$request->get('searchColumns');
+        $listColumns=['id','date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'state'];
 
         if (Auth::check()) {
             $currentDate = Carbon::now();
             $limitDate = $currentDate->subDays(60)->format('Y-m-d');
-//            $totalpallets = DB::table('palletstransfers')->where([
-//                ['date', '>=', $limitDate],
-//            ])->sum('palletsNumber');
-//            $realTotalpallets = DB::table('palletstransfers')->where([
-//                ['date', '>=', $limitDate],
-//            ])->sum('realPalletsNumber');
+
+            $query=Palletstransfer::where([
+                ['date', '>=', $limitDate],
+            ]);
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
-                $listPalletstransfers = Palletstransfer::where([
-                    ['date', '>=', $limitDate],
-                ])->orderBy($sortby, $order)->paginate(10);
+                $searchColumnsString=$request->get('searchColumnsString');;
+                $searchColumns=explode('-', $searchColumnsString);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    if (in_array('ALL', explode('-',$searchColumnsString ))) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
+                }
+                $count = count($query->get());
+                $listPalletstransfers = $query->orderBy($sortby, $order)->paginate(10);
                 $links = $listPalletstransfers->appends(['sortby' => $sortby, 'order' => $order])->render();
             } else {
-                $listPalletstransfers = Palletstransfer::where([
-                    ['date', '>=', $limitDate],
-                ])->paginate(10);
+                if (isset($searchQuery) && $searchQuery <> '') {
+                    $searchColumnsString=implode('-',$searchColumns);
+                    if (in_array('ALL', $searchColumns)) {
+                        $query->where(function ($q) use ($searchQueryArray, $listColumns) {
+                            foreach ($listColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    } else {
+                        $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
+                            foreach ($searchColumns as $column) {
+                                foreach ($searchQueryArray as $searchQ) {
+                                    $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
+                                }
+                            }
+                        });
+                    }
+                }
+                $count = count($query->get());
+                $listPalletstransfers = $query->paginate(10);
                 $links = '';
             }
-            $count = count(Palletstransfer::where([
-                ['date', '>=', $limitDate],
-            ])->get());
-            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'sortby', 'order', 'links', 'count'));
+            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'sortby', 'order', 'links', 'count', 'searchColumns', 'searchQuery', 'searchQueryArray', 'listColumns', 'searchColumnsString'));
         } else {
             return view('auth.login');
         }
@@ -78,12 +116,12 @@ class PalletstransfersController extends Controller
     /**
      * add a new pallets transfer to the list
      */
-    public function add(Request $request)
+    public function add()
     {
-        $date = Input::get('date');
-        $type = Input::get('type');
         $listPalletsaccounts = DB::table('palletsaccounts')->get();
         $listTypes = ['Other', 'Purchase'];
+        $date = Input::get('date');
+        $type = Input::get('type');
         $creditAccount = Input::get('creditAccount');
         $debitAccount = Input::get('debitAccount');
         $palletsNumber = Input::get('palletsNumber');
@@ -104,7 +142,6 @@ class PalletstransfersController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
             $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
 
@@ -128,7 +165,6 @@ class PalletstransfersController extends Controller
             } elseif (isset($closeSubmitAddModal)) {
                 return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsaccounts', 'listTypes'));
             }
-
         }
     }
 
@@ -139,9 +175,9 @@ class PalletstransfersController extends Controller
     public function showDetails($id)
     {
         if (Auth::check()) {
-            $listPalletsaccounts = DB::table('palletsaccounts')->get();
-
             $palletsTransfer = DB::table('palletstransfers')->where('id', $id)->first();
+            $listPalletsaccounts = DB::table('palletsaccounts')->get();
+            $listTypes = ['Other', 'Purchase'];
             $date = $palletsTransfer->date;
             $type = $palletsTransfer->type;
             $palletsNumber = $palletsTransfer->palletsNumber;
@@ -150,7 +186,6 @@ class PalletstransfersController extends Controller
             $state = $palletsTransfer->state;
             $validateM = $palletsTransfer->validate;
 
-            $listTypes = ['Other', 'Purchase'];
             $files = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
             if (!$files->isEmpty()) {
                 foreach ($files as $f) {
@@ -173,12 +208,17 @@ class PalletstransfersController extends Controller
     public function update(Request $request, $id)
     {
        $transfer= Palletstransfer::where('id', $id)->first();
+
+       //buttons
         $upload = Input::get('upload');
         $update = Input::get('update');
-
         $deleteDocument = Input::get('deleteDocument');
-        $documents = $request->file('documentsTransfer');
+        $okSubmitUpdateModal = Input::get('okSubmitUpdateModal');
+        $okSubmitUpdateValidateModal = Input::get('okSubmitUpdateValidateModal');
+        $closeSubmitUpdateModal = Input::get('closeSubmitUpdateModal');
 
+        //data
+        $documents = $request->file('documentsTransfer');
         $date = Input::get('date');
         $type = Input::get('type');
         $creditAccount = Input::get('creditAccount');
@@ -190,73 +230,43 @@ class PalletstransfersController extends Controller
         }
         $state = $transfer->state;
 
-        $okSubmitUpdateModal = Input::get('okSubmitUpdateModal');
-        $okSubmitUpdateValidateModal = Input::get('okSubmitUpdateValidateModal');
-        $closeSubmitUpdateModal = Input::get('closeSubmitUpdateModal');
         $listPalletsaccounts = DB::table('palletsaccounts')->get();
         $listTypes = ['Other', 'Purchase'];
 
         if (isset($upload)) {
-            $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
-            if (!$actualDocuments_Palletstransfers->isEmpty()) {
-                foreach ($actualDocuments_Palletstransfers as $actualDoc) {
-                    $actualDocuments[] = Document::where('id', $actualDoc->document_id)->first();
-                }
-            }
-            $this->upload($documents, $id);
+            $filesNames=$this->upload($documents, $id);
 
-            if ((isset($documents) || !empty($actualDoc)) && (($validate<>null && $validate == 'true')||($validate==null && $validateM==1))) {
+            if ((isset($documents) || !empty($filesNames)) && (($validate<>null && $validate == 'true')||($validate==null && $validateM==1))) {
                 $state = 'Complete Validated';
-            } elseif ((isset($documents) || !empty($actualDoc)) && (($validate<>null && $validate == 'false')||($validate==null && $validateM==0))) {
+            } elseif ((isset($documents) || !empty($filesNames)) && (($validate<>null && $validate == 'false')||($validate==null && $validateM==0))) {
                 $state = 'Complete';
-            } elseif (!isset($documents) && empty($actualDoc)) {
+            } elseif (!isset($documents) && empty($filesNames)) {
                 $state = 'Waiting documents';
             }
             Palletstransfer::where('id', $id)->update(['state' => $state]);
             return redirect()->back();
         } elseif (isset($update)) {
-            $actualCreditAccount =$transfer->creditAccount;
-            $actualDebitAccount = $transfer->debitAccount;
-            $actualPalletsNumber = $transfer->palletsNumber;
             if ($state == 'Complete Validated') {
-                $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->realNumberPallets;
-                Palletsaccount::where('name', $actualCreditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $actualPalletsNumber]);
-                $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->realNumberPallets;
-                Palletsaccount::where('name', $actualDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $actualPalletsNumber]);
-            }
-
-            $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
-            if (!$actualDocuments_Palletstransfers->isEmpty()) {
-                foreach ($actualDocuments_Palletstransfers as $actualDoc) {
-                    $filesNames[] = Document::where('id', $actualDoc->document_id)->first()->name;
+                $this->inverseRealPalletsNumber($transfer->creditAccount,$transfer->debitAccount, $transfer->palletsNumber);
                 }
-            }
+            $filesNames= $this->actualDocuments($id);
             session()->flash('palletsNumber', $palletsNumber);
             session()->flash('creditAccount', $creditAccount);
             session()->flash('debitAccount', $debitAccount);
-            session()->flash('actualCreditAccount', $actualCreditAccount);
-            session()->flash('actualDebitAccount', $actualDebitAccount);
-            session()->flash('actualPalletsNumber', $actualPalletsNumber);
+            session()->flash('actualCreditAccount', $transfer->creditAccount);
+            session()->flash('actualDebitAccount',  $transfer->debitAccount);
+            session()->flash('actualPalletsNumber', $transfer->palletsNumber);
             session()->flash('thPalletsNumberCreditAccount', Palletsaccount::where('name', $creditAccount)->first()->theoricalNumberPallets);
             session()->flash('thPalletsNumberDebitAccount', Palletsaccount::where('name', $debitAccount)->first()->theoricalNumberPallets);
-
             return view('palletstransfers.detailsPalletstransfer', compact('id', 'date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'update', 'listPalletsaccounts', 'listTypes', 'documents', 'filesNames', 'validate','validateM', 'state'));
 
         } elseif (isset($deleteDocument)) {
-            $this->deleteDocument($id, $transfer, $deleteDocument, $documents, $validate, $state, $transfer->creditAccount, $transfer->debitAccount, $transfer->palletsNumber);
+            $this->deleteDocument($id, $deleteDocument, $state, $transfer->creditAccount, $transfer->debitAccount, $transfer->palletsNumber);
             return redirect()->back();
         } elseif (isset($okSubmitUpdateModal)) {
-            $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
-            $actualDocuments = [];
-            if (!$actualDocuments_Palletstransfers->isEmpty()) {
-                foreach ($actualDocuments_Palletstransfers as $actualDoc) {
-                    $actualDocuments[] = Document::where('id', $actualDoc->document_id)->first();
-                }
-            }
-            $this->updateInfo($id, $transfer, $date, $type, $palletsNumber, $creditAccount, $debitAccount, $validate, $state, $documents, $actualDocuments);
-
+            $filesNames=$this->actualDocuments($id);
+            $this->updateInfo($id, $transfer, $date, $type, $palletsNumber, $creditAccount, $debitAccount, $validate, $state, $documents, $filesNames);
             $state = Palletstransfer::where('id',$id)->first()->state;
-
             if ($state == 'Complete Validated') {
                 session()->flash('palletsNumber', $palletsNumber);
                 session()->flash('creditAccount', $creditAccount);
@@ -275,6 +285,7 @@ class PalletstransfersController extends Controller
             Palletsaccount::where('name', $creditAccount)->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $palletsNumber]);
             $realPalletsNumberDebitAccount = Palletsaccount::where('name', $debitAccount)->first()->realNumberPallets;
             Palletsaccount::where('name', $debitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $palletsNumber]);
+            session()->flash('messageUpdateValidatePalletstransfer', 'VALIDATE ! Successfully updated and validated pallets transfer');
             return redirect()->back();
         }
     }
@@ -287,6 +298,7 @@ class PalletstransfersController extends Controller
      */
     public function delete($id)
     {
+        //inverse operation
         $actualPalletsNumber = Palletstransfer::where('id', $id)->first()->palletsNumber;
         $actualCreditAccount = Palletstransfer::where('id', $id)->first()->creditAccount;
         $actualDebitAccount = Palletstransfer::where('id', $id)->first()->debitAccount;
@@ -297,10 +309,7 @@ class PalletstransfersController extends Controller
 
         $state = Palletstransfer::where('id', $id)->first()->state;
         if ($state == 'Complete Validated') {
-            $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->realNumberPallets;
-            Palletsaccount::where('name', $actualCreditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $actualPalletsNumber]);
-            $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->realNumberPallets;
-            Palletsaccount::where('name', $actualDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $actualPalletsNumber]);
+        $this->inverseRealPalletsNumber($actualCreditAccount, $actualDebitAccount, $actualPalletsNumber);
         }
 
         $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
@@ -332,6 +341,7 @@ class PalletstransfersController extends Controller
      */
     public function upload($documents, $id)
     {
+        $filesNames=$this->actualDocuments($id);
         if (isset($documents)) {
             foreach ($documents as $doc) {
                 $filename = $doc->getClientOriginalName();
@@ -344,15 +354,24 @@ class PalletstransfersController extends Controller
                         'name' => $filename,
                         'type' => 'Transfer'
                     ])->palletstransfers()->attach($id);
-                    session()->flash('messageSuccessUpload', 'Successfully uploaded the files');
                 } else {
                     session()->flash('messageErrorUpload', 'Error ! The file type is not supported (png, jgp, pdf, msg, htm, rtf only');
                 }
             }
         }
+        return $filesNames;
     }
 
-    public function deleteDocument($id, $transfer, $name, $documents, $validate, $state, $actualCreditAccount, $actualDebitAccount, $actualPalletsNumber)
+    /**
+     * delete a document attach to this transfer
+     * @param $id
+     * @param $name
+     * @param $state
+     * @param $actualCreditAccount
+     * @param $actualDebitAccount
+     * @param $actualPalletsNumber
+     */
+    public function deleteDocument($id, $name, $state, $actualCreditAccount, $actualDebitAccount, $actualPalletsNumber)
     {
         $doc = Document::where('name', $name)->first();
         $doc->palletstransfers()->detach($id);
@@ -364,23 +383,58 @@ class PalletstransfersController extends Controller
         if ($actualDocuments_Palletstransfers->isEmpty()) {
             Palletstransfer::where('id', $id)->update(['validate' => false]);
             if ($state == 'Complete Validated') {
-                $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->realNumberPallets;
-                Palletsaccount::where('name', $actualCreditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $actualPalletsNumber]);
-                $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->realNumberPallets;
-                Palletsaccount::where('name', $actualDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $actualPalletsNumber]);
-            }
+                $this->inverseRealPalletsNumber($actualCreditAccount,$actualDebitAccount, $actualPalletsNumber );
+                }
             $state = 'Waiting documents';
             Palletstransfer::where('id', $id)->update(['state' => $state]);
-//        }else{
-//            foreach ($actualDocuments_Palletstransfers as $actualDoc) {
-//                $actualDocuments[] = Document::where('id', $actualDoc->document_id)->first();
-//            }
-//
         }
-        // redirect
-        session()->flash('messageSuccessDeleteDocument', 'Successfully deleted the document!');
     }
 
+    /**
+     * find the documents currently attach to this transfer
+     * @param $id
+     * @return $filesNames
+     */
+    public function actualDocuments($id){
+        $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
+        $filesNames=[];
+        if (!$actualDocuments_Palletstransfers->isEmpty()) {
+            foreach ($actualDocuments_Palletstransfers as $actualDoc) {
+                $filesNames[] = Document::where('id', $actualDoc->document_id)->first()->name;
+            }
+        }
+        return $filesNames;
+    }
+
+    /**
+     * remove the last confirmed pallets transfer made for this transfer
+     * @param $creditAccount
+     * @param $debitAccount
+     * @param $palletsNumber
+     */
+    public function inverseRealPalletsNumber($creditAccount, $debitAccount, $palletsNumber){
+        $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $creditAccount)->first()->realNumberPallets;
+        Palletsaccount::where('name', $creditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $palletsNumber]);
+        $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name',  $debitAccount)->first()->realNumberPallets;
+        Palletsaccount::where('name',  $debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $palletsNumber]);
+
+    }
+
+    /**
+     * update all information about the transfer
+     * @param $id
+     * @param $transfer
+     * @param $date
+     * @param $type
+     * @param $palletsNumber
+     * @param $creditAccount
+     * @param $debitAccount
+     * @param $validate
+     * @param $state
+     * @param $documents
+     * @param $actualDoc
+     * @return $this
+     */
     public function updateInfo($id, $transfer, $date, $type, $palletsNumber, $creditAccount, $debitAccount, $validate, $state, $documents, $actualDoc)
     {
         $rules = array(
@@ -431,10 +485,8 @@ class PalletstransfersController extends Controller
                 $state = 'Waiting documents';
             }
             Palletstransfer::where('id', $id)->update(['state' => $state]);
-
         }
         session()->flash('messageUpdatePalletstransfer', 'Successfully updated pallets transfer');
-
     }
 }
 
