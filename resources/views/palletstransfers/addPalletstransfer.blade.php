@@ -73,6 +73,11 @@
                                            name="palletsNumber"
                                            value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
                                            required autofocus>
+                                        @elseif(isset($palletsNumber))
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="{{$palletsNumber}}" placeholder="Nbr"
+                                               required autofocus>
                                         @else
                                         <input id="palletsNumber" type="number" class="form-control"
                                                name="palletsNumber"
@@ -110,7 +115,7 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-4">
-                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                    <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Credit Account" name="creditAccount" required>
                                         @foreach($listPalletsaccounts as $palletsAccount )
@@ -136,7 +141,7 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-4">
-                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                    <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Debit Account" name="debitAccount" required>
                                         @foreach($listPalletsaccounts as $palletsAccount )
@@ -221,9 +226,9 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="text-center">
-                                                            = {{request()->session()->get('palletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                            = {{request()->session()->get('palletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                         <td class="text-center">
-                                                            = {{request()->session()->get('palletsNumberDebitAccount')-request()->session()->get('palletsNumber')}}</td>
+                                                            = {{request()->session()->get('palletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -231,15 +236,15 @@
                                         <div class="modal-footer">
                                             <button type="submit"
                                                     class="btn btn-default btn-modal"
-                                                    value="close"
+                                                    value="yes"
                                                     name="okSubmitAddModal">
-                                                OK
+                                                Confirm
                                             </button>
                                         </div>
                                     </div>
-                                    @endif
                                 </div>
                             </div>
+                                @endif
                         </form>
 
                     </div>
