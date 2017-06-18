@@ -188,12 +188,6 @@ class PalletstransfersController extends Controller
 
            $filesNames=$this->actualDocuments($id);
 
-//           if($validateM==1){
-//               $disableFields=true;
-//           }elseif($validateM==0){
-//               $disableFields=false;
-//           }
-//            session()->flash('disableFields', $disableFields);
             return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts', 'date', 'type', 'id', 'palletsNumber', 'creditAccount', 'debitAccount', 'state', 'filesNames', 'validateM', 'listTypes'));
         } else {
             return view('auth.login');

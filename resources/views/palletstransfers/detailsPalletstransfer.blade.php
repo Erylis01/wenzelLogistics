@@ -583,8 +583,7 @@
                                         <button type="submit"
                                                 class="btn btn-default btn-form btn-modal"
                                                 value="yes"
-                                                name="okSubmitUpdateValidateModal" data-toggle="modal"
-                                                data-target="#submitUpdateValidate_modal">
+                                                name="okSubmitUpdateValidateModal" >
                                             Confirm
                                         </button>
                                     </div>
