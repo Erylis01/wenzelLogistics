@@ -321,11 +321,14 @@ class PalletstransfersController extends Controller
                 $actualDocuments[] = Document::where('id', $actualDoc->document_id)->first();
             }
             foreach ($actualDocuments as $actDoc) {
-                $doc = Document::where('name', $actDoc->name)->first();
+                $doc = Document::where('name', $actDoc)->where('type', 'Transfer')->first();
                 $doc->palletstransfers()->detach($id);
-                $path = '/proofsPallets/documentsTransfer/';
-                Storage::delete($path . $actDoc->name);
-                $doc->delete();
+                $path = '/proofsPallets/documentsTransfer/'.$id.'/';
+                Storage::delete($path . $actDoc);
+                $actualTransferAssociated=DB::table('document_palletstransfer')->where('document_id', $doc->id)->get();
+                if($actualTransferAssociated->isEmpty()){
+                    $doc->delete();
+                }
             }
         }
 
@@ -375,11 +378,14 @@ class PalletstransfersController extends Controller
      */
     public function deleteDocument($id, $name, $state, $actualCreditAccount, $actualDebitAccount, $actualPalletsNumber)
     {
-        $doc = Document::where('name', $name)->first();
+        $doc = Document::where('name', $name)->where('type', 'Transfer')->first();
         $doc->palletstransfers()->detach($id);
-        $path = '/proofsPallets/documentsTransfer/'.$id;
+        $path = '/proofsPallets/documentsTransfer/'.$id.'/';
         Storage::delete($path . $name);
-        $doc->delete();
+        $actualTransferAssociated=DB::table('document_palletstransfer')->where('document_id', $doc->id)->get();
+        if($actualTransferAssociated->isEmpty()){
+            $doc->delete();
+        }
 
         $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
         if ($actualDocuments_Palletstransfers->isEmpty()) {
@@ -461,10 +467,8 @@ class PalletstransfersController extends Controller
 
             if ($validate == 'true') {
                 Palletstransfer::where('id', $id)->update(['validate' => true]);
-//                $disableFields=true;
             }else{
                 Palletstransfer::where('id', $id)->update(['validate' => false]);
-//                $disableFields=false;
             }
 
             if ((isset($documents) || !empty($actualDoc)) && (($validate<>null && $validate == 'true')||($validate==null && $transfer->validate==1))) {
@@ -476,7 +480,6 @@ class PalletstransfersController extends Controller
             }
             Palletstransfer::where('id', $id)->update(['state' => $state]);
         }
-//        session()->flash('disableFields', $disableFields);
         session()->flash('messageUpdatePalletstransfer', 'Successfully updated pallets transfer');
     }
 }
