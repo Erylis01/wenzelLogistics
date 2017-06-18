@@ -186,13 +186,14 @@ class PalletstransfersController extends Controller
             $state = $palletsTransfer->state;
             $validateM = $palletsTransfer->validate;
 
-            $files = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
-            if (!$files->isEmpty()) {
-                foreach ($files as $f) {
-                    $filesNames[] = Document::where('id', $f->document_id)->first()->name;
-                }
-            }
+           $filesNames=$this->actualDocuments($id);
 
+//           if($validateM==1){
+//               $disableFields=true;
+//           }elseif($validateM==0){
+//               $disableFields=false;
+//           }
+//            session()->flash('disableFields', $disableFields);
             return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts', 'date', 'type', 'id', 'palletsNumber', 'creditAccount', 'debitAccount', 'state', 'filesNames', 'validateM', 'listTypes'));
         } else {
             return view('auth.login');
@@ -266,6 +267,7 @@ class PalletstransfersController extends Controller
         } elseif (isset($okSubmitUpdateModal)) {
             $filesNames=$this->actualDocuments($id);
             $this->updateInfo($id, $transfer, $date, $type, $palletsNumber, $creditAccount, $debitAccount, $validate, $state, $documents, $filesNames);
+
             $state = Palletstransfer::where('id',$id)->first()->state;
             if ($state == 'Complete Validated') {
                 session()->flash('palletsNumber', $palletsNumber);
@@ -349,7 +351,7 @@ class PalletstransfersController extends Controller
                 $size = $doc->getSize();
                 //if file is an image, a pdf or an email
                 if (($extension == 'png' || $extension == 'jpg' || $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
-                    Storage::putFileAs('/proofsPallets/documentsTransfer', $doc, $filename);
+                    Storage::putFileAs('/proofsPallets/documentsTransfer/'.$id, $doc, $filename);
                     Document::firstOrCreate([
                         'name' => $filename,
                         'type' => 'Transfer'
@@ -375,7 +377,7 @@ class PalletstransfersController extends Controller
     {
         $doc = Document::where('name', $name)->first();
         $doc->palletstransfers()->detach($id);
-        $path = '/proofsPallets/documentsTransfer/';
+        $path = '/proofsPallets/documentsTransfer/'.$id;
         Storage::delete($path . $name);
         $doc->delete();
 
@@ -420,21 +422,6 @@ class PalletstransfersController extends Controller
 
     }
 
-    /**
-     * update all information about the transfer
-     * @param $id
-     * @param $transfer
-     * @param $date
-     * @param $type
-     * @param $palletsNumber
-     * @param $creditAccount
-     * @param $debitAccount
-     * @param $validate
-     * @param $state
-     * @param $documents
-     * @param $actualDoc
-     * @return $this
-     */
     public function updateInfo($id, $transfer, $date, $type, $palletsNumber, $creditAccount, $debitAccount, $validate, $state, $documents, $actualDoc)
     {
         $rules = array(
@@ -450,6 +437,7 @@ class PalletstransfersController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+
             //inverse transfer : we delete the last transfer
             $actualPalletsNumber = $transfer->palletsNumber;
             $actualCreditAccount = $transfer->creditAccount;
@@ -473,8 +461,10 @@ class PalletstransfersController extends Controller
 
             if ($validate == 'true') {
                 Palletstransfer::where('id', $id)->update(['validate' => true]);
+//                $disableFields=true;
             }else{
                 Palletstransfer::where('id', $id)->update(['validate' => false]);
+//                $disableFields=false;
             }
 
             if ((isset($documents) || !empty($actualDoc)) && (($validate<>null && $validate == 'true')||($validate==null && $transfer->validate==1))) {
@@ -486,6 +476,7 @@ class PalletstransfersController extends Controller
             }
             Palletstransfer::where('id', $id)->update(['state' => $state]);
         }
+//        session()->flash('disableFields', $disableFields);
         session()->flash('messageUpdatePalletstransfer', 'Successfully updated pallets transfer');
     }
 }
