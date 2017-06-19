@@ -237,15 +237,19 @@
                                 <div class="col-lg-10 col-lg-offset-1 text-left">
                                     @if(isset($filesNames))
                                         <ul>
+                                            @php($list=[])
                                             @foreach($filesNames as $nameF)
-                                                <div>
-                                                    <button type="submit"
-                                                            name="deleteDocument"
-                                                            class="btn-add glyphicon glyphicon-remove"
-                                                            value="{{$nameF}}"></button>
-                                                    <a href="../../storage/app/proofsPallets/documentsTransfer/{{$id}}/{{$nameF}}"
-                                                       class="link">{{$nameF}}</a>
-                                                </div>
+                                                @if(!in_array($name, $list))
+                                                    <div>
+                                                        <button type="submit"
+                                                                name="deleteDocument"
+                                                                class="btn-add glyphicon glyphicon-remove"
+                                                                value="{{$nameF}}"></button>
+                                                        <a href="../../storage/app/proofsPallets/documentsTransfer/{{$id}}/{{$nameF}}"
+                                                           class="link">{{$nameF}}</a>
+                                                    </div>
+                                                    @php(array_push($list,$nameF))
+                                                @endif
                                             @endforeach
                                         </ul>
                                     @endif

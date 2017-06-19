@@ -574,8 +574,8 @@
                                         <div id="Pan2collapse" class="panel-collapse collapse">
                                             @endif
                                             <div class="panel-body">
-                                                @if (Session::has('messageErrorSubmit'))
-                                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorSubmit') }}</div>
+                                                @if (Session::has('messageUpdateValidate'))
+                                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateValidate') }}</div>
                                                 @elseif(Session::has('messageSuccessSubmit'))
                                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessSubmit') }}</div>
                                                 @elseif (Session::has('messageSuccessDeleteDocument'))
@@ -635,15 +635,19 @@
                                                                                     <div class="form-group">
                                                                                         @if(isset($filesNamesTruck))
                                                                                             <ul class="col-lg-offset-1">
+                                                                                                @php($list=[])
                                                                                                 @foreach($filesNamesTruck as $name)
-                                                                                                    <div>
-                                                                                                        <button type="submit"
-                                                                                                                name="deleteDocument"
-                                                                                                                class="btn-add glyphicon glyphicon-remove"
-                                                                                                                value="{{$name}}"></button>
-                                                                                                        <a href="../../storage/app/proofsPallets/{{$loading->atrnr}}/documentsTruck/{{$name}}"
-                                                                                                           class="link">{{$name}}</a>
-                                                                                                    </div>
+                                                                                                    @if(!in_array($name, $list))
+                                                                                                        <div>
+                                                                                                            <button type="submit"
+                                                                                                                    name="deleteDocument"
+                                                                                                                    class="btn-add glyphicon glyphicon-remove"
+                                                                                                                    value="{{$name}}-Truck"></button>
+                                                                                                            <a href="../../storage/app/proofsPallets/{{$loading->atrnr}}/documentsTruck/{{$name}}"
+                                                                                                               class="link">{{$name}}</a>
+                                                                                                        </div>
+                                                                                                        @php(array_push($list,$name))
+                                                                                                    @endif
                                                                                                 @endforeach
                                                                                             </ul>
                                                                                         @endif
