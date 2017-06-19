@@ -597,7 +597,8 @@
                                                         <div class="panel-heading">
                                                             <a class="col-lg-3 text-left" data-toggle="collapse"
                                                                href="#Pan2Sub3collapse">Truck</a>
-                                                            <span class="col-lg-offset-2">{{$loading->anz-$totalPalletsLoadingPlace+ $totalPalletsOffloadingPlace}} / 25</span>
+                                                            <span class="col-lg-offset-2">{{$loading->anz-$totalPalletsLoadingPlace+ $totalPalletsOffloadingPlace}}
+                                                                / 25</span>
                                                         </div>
                                                         @if (Session::has('openPanelTruck'))
                                                             <div id="Pan2Sub3collapse"
@@ -662,16 +663,31 @@
                                                                                             <table class="table table-hover table-bordered">
                                                                                                 <thead>
                                                                                                 <tr>
-                                                                                                    <th class="text-center">Initial - Offloaded</th>
-                                                                                                    <th class="text-center">Loaded - Initial</th>
-                                                                                                    <th class="text-center">Initial - Offloaded + Loaded</th>
+                                                                                                    <th class="text-center">
+                                                                                                        Initial -
+                                                                                                        Offloaded
+                                                                                                    </th>
+                                                                                                    <th class="text-center">
+                                                                                                        Loaded - Initial
+                                                                                                    </th>
+                                                                                                    <th class="text-center">
+                                                                                                        Initial -
+                                                                                                        Offloaded +
+                                                                                                        Loaded
+                                                                                                    </th>
                                                                                                 </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
                                                                                                 <tr>
-                                                                                                    <td class="text-center">{{$loading->anz - $totalPalletsOffloadingPlace}} / 0</td>
-                                                                                                    <td class="text-center">{{$totalPalletsLoadingPlace - $loading->anz}} / 0</td>
-                                                                                                    <td class="text-center">{{$loading->anz - $totalPalletsOffloadingPlace + $totalPalletsLoadingPlace}} / 0</td>
+                                                                                                    <td class="text-center">{{$loading->anz - $totalPalletsOffloadingPlace}}
+                                                                                                        / 0
+                                                                                                    </td>
+                                                                                                    <td class="text-center">{{$totalPalletsLoadingPlace - $loading->anz}}
+                                                                                                        / 0
+                                                                                                    </td>
+                                                                                                    <td class="text-center">{{$loading->anz - $totalPalletsOffloadingPlace + $totalPalletsLoadingPlace}}
+                                                                                                        / 0
+                                                                                                    </td>
                                                                                                 </tr>
                                                                                                 </tbody>
                                                                                             </table>
@@ -679,7 +695,9 @@
                                                                                         @if(isset($loading->anz))
                                                                                             <div class="col-lg-4 col-lg-offset-1">
                                                                                                 <label for="numberPalletsInitialTruck"
-                                                                                                       class="control-label">Initial pallets number : {{$loading->anz}}</label>
+                                                                                                       class="control-label">Initial
+                                                                                                    pallets number
+                                                                                                    : {{$loading->anz}}</label>
                                                                                             </div>
                                                                                         @endif
                                                                                     </div>
@@ -779,7 +797,8 @@
                                                             <a class="col-lg-3 text-left" data-toggle="collapse"
                                                                href="#Pan2Sub1collapse">Loading
                                                                 place</a>
-                                                            <span class="col-lg-offset-2">{{$totalPalletsLoadingPlace}} / {{$loading->anz}}</span>
+                                                            <span class="col-lg-offset-2">{{$totalPalletsLoadingPlace}}
+                                                                / {{$loading->anz}}</span>
                                                             <button type="submit"
                                                                     class="col-lg-offset-4 btn btn-add glyphicon glyphicon-plus"
                                                                     value="addLoadingPlace"
@@ -798,245 +817,509 @@
                                                                         @endif
                                                                         <div class="panel-body">
                                                                             @if($loading->numberLoadingPlace>0)
-                                                                            <div class="panel subpanel">
-                                                                                <div class="panel-body">
-                                                                                    <!--documents proof upload-->
-                                                                                    <div class="form-group text-center">
-                                                                                        <label for="documentsLoading">Do
-                                                                                            you
-                                                                                            have proof
-                                                                                            documents (CMR/Exchange
-                                                                                            bill/Pallets bill)
-                                                                                            ?</label>
-                                                                                    </div>
-                                                                                    <div class="form-group">
-                                                                                        <div class="col-lg-offset-1 col-lg-4">
-                                                                                            <input type="file"
-                                                                                                   name="documentsLoading[]"
-                                                                                                   multiple>
+                                                                                <div class="panel subpanel">
+                                                                                    <div class="panel-body">
+                                                                                        <!--documents proof upload-->
+                                                                                        <div class="form-group text-center">
+                                                                                            <label for="documentsLoading">Do
+                                                                                                you
+                                                                                                have proof
+                                                                                                documents (CMR/Exchange
+                                                                                                bill/Pallets bill)
+                                                                                                ?</label>
                                                                                         </div>
-                                                                                        <!--button upload-->
-                                                                                        <div class="col-lg-4 col-lg-offset-2">
-                                                                                            <input type="submit"
-                                                                                                   class="btn btn-primary btn-block btn-form"
-                                                                                                   value="Upload"
-                                                                                                   name="uploadLoading"/>
+                                                                                        <div class="form-group">
+                                                                                            <div class="col-lg-offset-1 col-lg-4">
+                                                                                                <input type="file"
+                                                                                                       name="documentsLoading[]"
+                                                                                                       multiple>
+                                                                                            </div>
+                                                                                            <!--button upload-->
+                                                                                            <div class="col-lg-4 col-lg-offset-2">
+                                                                                                <input type="submit"
+                                                                                                       class="btn btn-primary btn-block btn-form"
+                                                                                                       value="Upload"
+                                                                                                       name="uploadLoading"/>
+                                                                                            </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="form-group">
-                                                                                        {{--@php(dd($filesNamesLoadingPlace))--}}
-                                                                                        @if(isset($filesNamesLoadingPlace))
-                                                                                            <ul class="col-lg-offset-1">
-                                                                                                @php($list=[])
-                                                                                                @foreach($filesNamesLoadingPlace as $name)
-                                                                                                    @if(!in_array($name, $list))
-                                                                                                    <div>
-                                                                                                        <button type="submit"
-                                                                                                                name="deleteDocument"
-                                                                                                                class="btn-add glyphicon glyphicon-remove"
-                                                                                                                value="{{$name}}-Loading"></button>
-                                                                                                        <a href="../../storage/app/proofsPallets/{{$loading->atrnr}}/documentsLoading/{{$name}}"
-                                                                                                           class="link">{{$name}}</a>
-                                                                                                    </div>
-                                                                                                        @php(array_push($list,$name))
-                                                                                                    @endif
-                                                                                                @endforeach
-                                                                                            </ul>
-                                                                                        @endif
+                                                                                        <div class="form-group">
+                                                                                            {{--@php(dd($filesNamesLoadingPlace))--}}
+                                                                                            @if(isset($filesNamesLoadingPlace))
+                                                                                                <ul class="col-lg-offset-1">
+                                                                                                    @php($list=[])
+                                                                                                    @foreach($filesNamesLoadingPlace as $name)
+                                                                                                        @if(!in_array($name, $list))
+                                                                                                            <div>
+                                                                                                                <button type="submit"
+                                                                                                                        name="deleteDocument"
+                                                                                                                        class="btn-add glyphicon glyphicon-remove"
+                                                                                                                        value="{{$name}}-Loading"></button>
+                                                                                                                <a href="../../storage/app/proofsPallets/{{$loading->atrnr}}/documentsLoading/{{$name}}"
+                                                                                                                   class="link">{{$name}}</a>
+                                                                                                            </div>
+                                                                                                            @php(array_push($list,$name))
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                </ul>
+                                                                                            @endif
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            @for($k=1; $k<=$loading->numberLoadingPlace; $k++)
-                                                                                <div class="panel subpanel">
-                                                                                    @php($stateLoadingPlaceK='stateLoadingPlace'.$k)
-                                                                                    @php($validateLoadingPlaceK ='validateLoadingPlace'.$k)
-                                                                                    <div class="panel-body">
-                                                                                        <!--pallets number brought to loading place-->
-                                                                                        <div class="form-group">
-                                                                                            <div class="col-lg-4">
-                                                                                                <label for="numberPalletsLoadingPlace{{$k}}"
-                                                                                                       class="control-label">How
-                                                                                                    many pallets
-                                                                                                    were
-                                                                                                    brought
-                                                                                                    ?</label>
-                                                                                            </div>
-                                                                                            <div class="col-lg-2">
-                                                                                                @php($numberPalletsLoadingPlaceK ='numberPalletsLoadingPlace'.$k)
-                                                                                                @if(isset($loading->$numberPalletsLoadingPlaceK)&& (isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1))
-                                                                                                    <input class="form-control col-lg-10"
-                                                                                                           type="number"
-                                                                                                           name="numberPalletsLoadingPlace{{$k}}"
-                                                                                                           value="{{$loading->$numberPalletsLoadingPlaceK}}" readonly>
-                                                                                                @elseif(isset($loading->$numberPalletsLoadingPlaceK))
-                                                                                                    <input class="form-control col-lg-10"
-                                                                                                           type="number"
-                                                                                                           name="numberPalletsLoadingPlace{{$k}}"
-                                                                                                           value="{{$loading->$numberPalletsLoadingPlaceK}}" >
-                                                                                                @else
-                                                                                                    <input class="form-control col-lg-10"
-                                                                                                           type="number"
-                                                                                                           name="numberPalletsLoadingPlace{{$k}}"
-                                                                                                           value="">
-                                                                                                @endif
-                                                                                            </div>
-                                                                                            @if(isset($loading->$numberPalletsLoadingPlaceK))
-                                                                                                <div class="col-lg-2">
-                                                                                                    @php($diffK ='diff'.$k)
-                                                                                                    @php($$diffK=$loading->$numberPalletsLoadingPlaceK-$loading->anz)
-                                                                                                    <label for="differencePalletsLoadingPlace{{$k}}"
-                                                                                                           class="control-label">Diff
-                                                                                                        : {{$$diffK}}</label>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        </div>
-                                                                                        <!--Account credit/debit-->
-                                                                                        <div class="form-group">
-                                                                                            <div class="col-lg-2">
-                                                                                                <label for="accountCreditLoadingPlace{{$k}}"
-                                                                                                       class="control-label">Credit
-                                                                                                    Account :</label>
-                                                                                            </div>
-                                                                                            <div class="col-lg-4">
-                                                                                                @php($accountCreditLoadingPlaceK ='accountCreditLoadingPlace'.$k)
-                                                                                                @if(isset($loading->$accountCreditLoadingPlaceK)&&(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1))
-                                                                                                    <input type="text" name="accountCreditLoadingPlace{{$k}}" class="form-control"
-                                                                                                           value="{{$loading->$accountCreditLoadingPlaceK}}" readonly>
-                                                                                                @else
-                                                                                                <select class="selectpicker show-tick form-control"
-                                                                                                        data-size="10"
-                                                                                                        data-live-search="true"
-                                                                                                        data-live-search-style="startsWith"
-                                                                                                        title="Pallets Account Credit"
-                                                                                                        name="accountCreditLoadingPlace{{$k}}">
-                                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
-                                                                                                        @if(Illuminate\Support\Facades\Input::old('accountCreditLoadingPlace'.$k) && $palletsAccount->name==old('accountCreditLoadingPlace'.$k))
-                                                                                                            <option selected>{{$palletsAccount->name}}</option>
-                                                                                                        @elseif(isset($loading->$accountCreditLoadingPlaceK)&& $palletsAccount->name==$loading->$accountCreditLoadingPlaceK)
-                                                                                                            <option selected>{{$palletsAccount->name}}</option>
-                                                                                                        @elseif(!isset($loading->$accountCreditLoadingPlaceK)&&isset($accountZipcodeLoadingPlace)&& $palletsAccount->name==$accountZipcodeLoadingPlace)
-                                                                                                            <option selected>{{$palletsAccount->name}}</option>
-                                                                                                        @else
-                                                                                                            <option>{{$palletsAccount->name}}</option>
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                </select>
-                                                                                                    @endif
-                                                                                            </div>
-                                                                                            <!--Account debited-->
-                                                                                            <div class="col-lg-2">
-                                                                                                <label for="accountDebitLoadingPlace{{$k}}"
-                                                                                                       class="control-label">Debit
-                                                                                                    Account :</label>
-                                                                                            </div>
-                                                                                            <div class="col-lg-4">
-                                                                                                @php($accountDebitLoadingPlaceK ='accountDebitLoadingPlace'.$k)
-                                                                                                @if(isset($loading->$accountDebitLoadingPlaceK)&&(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1))
-                                                                                                    <input type="text" name="accountDebitLoadingPlace{{$k}}" class="form-control"
-                                                                                                           value="{{$loading->$accountDebitLoadingPlaceK}}" readonly>
-                                                                                                @else
-                                                                                                <select class="selectpicker show-tick form-control"
-                                                                                                        data-size="10"
-                                                                                                        data-live-search="true"
-                                                                                                        data-live-search-style="startsWith"
-                                                                                                        title="Pallets Account Debit"
-                                                                                                        name="accountDebitLoadingPlace{{$k}}">
-                                                                                                    @php($accountDebitLoadingPlaceK ='accountDebitLoadingPlace'.$k)
-                                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
-                                                                                                        @if(Illuminate\Support\Facades\Input::old('accountDebitLoadingPlace'.$k) && $palletsAccount->name==old('accountDebitLoadingPlace'.$k))
-                                                                                                            <option selected>{{$palletsAccount->name}}</option>
-                                                                                                        @elseif(isset($loading->$accountDebitLoadingPlaceK)&& $palletsAccount->name==$loading->$accountDebitLoadingPlaceK)
-                                                                                                            <option selected>{{$palletsAccount->name}}</option>
-                                                                                                        @else
-                                                                                                            <option>{{$palletsAccount->name}}</option>
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                </select>
-                                                                                                    @endif
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <!--validate loading ?-->
-                                                                                        <div class="form-group">
-                                                                                            @if(!empty($filesNamesLoadingPlace)&&isset($loading->$numberPalletsLoadingPlaceK)&&isset($loading->$accountCreditLoadingPlaceK)&&isset($loading->$accountDebitLoadingPlaceK))
-                                                                                                <div class="col-lg-2">
-                                                                                                    <label for="validateLoadingPlace{{$k}}"
-                                                                                                           class="control-label">Validated
+                                                                                @for($k=1; $k<=$loading->numberLoadingPlace; $k++)
+                                                                                    <div class="panel subpanel">
+                                                                                        @php($stateLoadingPlaceK='stateLoadingPlace'.$k)
+                                                                                        @php($validateLoadingPlaceK ='validateLoadingPlace'.$k)
+                                                                                        <div class="panel-body">
+                                                                                            <!--pallets number brought to loading place-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-4">
+                                                                                                    <label for="numberPalletsLoadingPlace{{$k}}"
+                                                                                                           class="control-label">How
+                                                                                                        many pallets
+                                                                                                        were
+                                                                                                        brought
                                                                                                         ?</label>
                                                                                                 </div>
-                                                                                                <div class="col-lg-3">
-                                                                                                    @if(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1)
-                                                                                                        <label class="radio-inline"><input
-                                                                                                                    type="radio"
-                                                                                                                    name="validateLoadingPlace{{$k}}"
-                                                                                                                    value="true"
-                                                                                                                    checked>Yes</label>
-                                                                                                        <label class="radio-inline"><input
-                                                                                                                    type="radio"
-                                                                                                                    name="validateLoadingPlace{{$k}}"
-                                                                                                                    value="false">No</label>
-                                                                                                    @elseif(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==0)
-                                                                                                        <label class="radio-inline"><input
-                                                                                                                    type="radio"
-                                                                                                                    name="validateLoadingPlace{{$k}}"
-                                                                                                                    value="true">Yes</label>
-                                                                                                        <label class="radio-inline"><input
-                                                                                                                    type="radio"
-                                                                                                                    name="validateLoadingPlace{{$k}}"
-                                                                                                                    value="false"
-                                                                                                                    checked>No</label>
+                                                                                                <div class="col-lg-2">
+                                                                                                    @php($numberPalletsLoadingPlaceK ='numberPalletsLoadingPlace'.$k)
+                                                                                                    @if(isset($loading->$numberPalletsLoadingPlaceK)&& (isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1))
+                                                                                                        <input class="form-control col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsLoadingPlace{{$k}}"
+                                                                                                               value="{{$loading->$numberPalletsLoadingPlaceK}}"
+                                                                                                               readonly>
+                                                                                                    @elseif(isset($loading->$numberPalletsLoadingPlaceK))
+                                                                                                        <input class="form-control col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsLoadingPlace{{$k}}"
+                                                                                                               value="{{$loading->$numberPalletsLoadingPlaceK}}">
+                                                                                                    @else
+                                                                                                        <input class="form-control col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsLoadingPlace{{$k}}"
+                                                                                                               value="">
                                                                                                     @endif
                                                                                                 </div>
-                                                                                                <!--button submit-->
-                                                                                                <div class="col-lg-4 col-lg-offset-1">
-                                                                                                    <button type="submit"
-                                                                                                            class="btn btn-primary btn-block btn-form"
-                                                                                                            value="{{$k}}"
-                                                                                                            name="submitLoading"
-                                                                                                            data-toggle="modal"
-                                                                                                            data-target="#submitLoading_modal">
-                                                                                                        Submit
-                                                                                                    </button>
+                                                                                                @if(isset($loading->$numberPalletsLoadingPlaceK))
+                                                                                                    <div class="col-lg-2">
+                                                                                                        @php($diffK ='diff'.$k)
+                                                                                                        @php($$diffK=$loading->$numberPalletsLoadingPlaceK-$loading->anz)
+                                                                                                        <label for="differencePalletsLoadingPlace{{$k}}"
+                                                                                                               class="control-label">Diff
+                                                                                                            : {{$$diffK}}</label>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <!--Account credit/debit-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-2">
+                                                                                                    <label for="accountCreditLoadingPlace{{$k}}"
+                                                                                                           class="control-label">Credit
+                                                                                                        Account
+                                                                                                        :</label>
                                                                                                 </div>
-                                                                                            @else
-                                                                                            <!--button submit-->
-                                                                                                <div class="col-lg-4 col-lg-offset-6">
-                                                                                                    <button type="submit"
-                                                                                                            class="btn btn-primary btn-block btn-form"
-                                                                                                            value="{{$k}}"
-                                                                                                            name="submitLoading"
-                                                                                                            data-toggle="modal"
-                                                                                                            data-target="#submitLoading_modal">
-                                                                                                        Submit
-                                                                                                    </button>
+                                                                                                <div class="col-lg-4">
+                                                                                                    @php($accountCreditLoadingPlaceK ='accountCreditLoadingPlace'.$k)
+                                                                                                    @if(isset($loading->$accountCreditLoadingPlaceK)&&(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1))
+                                                                                                        <input type="text"
+                                                                                                               name="accountCreditLoadingPlace{{$k}}"
+                                                                                                               class="form-control"
+                                                                                                               value="{{$loading->$accountCreditLoadingPlaceK}}"
+                                                                                                               readonly>
+                                                                                                    @else
+                                                                                                        <select class="selectpicker show-tick form-control"
+                                                                                                                data-size="10"
+                                                                                                                data-live-search="true"
+                                                                                                                data-live-search-style="startsWith"
+                                                                                                                title="Pallets Account Credit"
+                                                                                                                name="accountCreditLoadingPlace{{$k}}">
+                                                                                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                                @if(Illuminate\Support\Facades\Input::old('accountCreditLoadingPlace'.$k) && $palletsAccount->name==old('accountCreditLoadingPlace'.$k))
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @elseif(isset($loading->$accountCreditLoadingPlaceK)&& $palletsAccount->name==$loading->$accountCreditLoadingPlaceK)
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @elseif(!isset($loading->$accountCreditLoadingPlaceK)&&isset($accountZipcodeLoadingPlace)&& $palletsAccount->name==$accountZipcodeLoadingPlace)
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @else
+                                                                                                                    <option>{{$palletsAccount->name}}</option>
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        </select>
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                                <!--Account debited-->
+                                                                                                <div class="col-lg-2">
+                                                                                                    <label for="accountDebitLoadingPlace{{$k}}"
+                                                                                                           class="control-label">Debit
+                                                                                                        Account
+                                                                                                        :</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-4">
+                                                                                                    @php($accountDebitLoadingPlaceK ='accountDebitLoadingPlace'.$k)
+                                                                                                    @if(isset($loading->$accountDebitLoadingPlaceK)&&(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1))
+                                                                                                        <input type="text"
+                                                                                                               name="accountDebitLoadingPlace{{$k}}"
+                                                                                                               class="form-control"
+                                                                                                               value="{{$loading->$accountDebitLoadingPlaceK}}"
+                                                                                                               readonly>
+                                                                                                    @else
+                                                                                                        <select class="selectpicker show-tick form-control"
+                                                                                                                data-size="10"
+                                                                                                                data-live-search="true"
+                                                                                                                data-live-search-style="startsWith"
+                                                                                                                title="Pallets Account Debit"
+                                                                                                                name="accountDebitLoadingPlace{{$k}}">
+                                                                                                            @php($accountDebitLoadingPlaceK ='accountDebitLoadingPlace'.$k)
+                                                                                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                                @if(Illuminate\Support\Facades\Input::old('accountDebitLoadingPlace'.$k) && $palletsAccount->name==old('accountDebitLoadingPlace'.$k))
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @elseif(isset($loading->$accountDebitLoadingPlaceK)&& $palletsAccount->name==$loading->$accountDebitLoadingPlaceK)
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @else
+                                                                                                                    <option>{{$palletsAccount->name}}</option>
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        </select>
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--validate loading ?-->
+                                                                                            <div class="form-group">
+                                                                                                @if(!empty($filesNamesLoadingPlace)&&isset($loading->$numberPalletsLoadingPlaceK)&&isset($loading->$accountCreditLoadingPlaceK)&&isset($loading->$accountDebitLoadingPlaceK))
+                                                                                                    <div class="col-lg-2">
+                                                                                                        <label for="validateLoadingPlace{{$k}}"
+                                                                                                               class="control-label">Validated
+                                                                                                            ?</label>
+                                                                                                    </div>
+                                                                                                    <div class="col-lg-3">
+                                                                                                        @if(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==1)
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace{{$k}}"
+                                                                                                                        value="true"
+                                                                                                                        checked>Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace{{$k}}"
+                                                                                                                        value="false">No</label>
+                                                                                                        @elseif(isset($loading->$validateLoadingPlaceK) && $loading->$validateLoadingPlaceK==0)
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace{{$k}}"
+                                                                                                                        value="true">Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateLoadingPlace{{$k}}"
+                                                                                                                        value="false"
+                                                                                                                        checked>No</label>
+                                                                                                        @endif
+                                                                                                    </div>
+                                                                                                    <!--button submit-->
+                                                                                                    <div class="col-lg-4 col-lg-offset-1">
+                                                                                                        <button type="submit"
+                                                                                                                class="btn btn-primary btn-block btn-form"
+                                                                                                                value="{{$k}}"
+                                                                                                                name="submitLoading"
+                                                                                                                data-toggle="modal"
+                                                                                                                data-target="#submitLoading_modal">
+                                                                                                            Submit
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                @else
+                                                                                                <!--button submit-->
+                                                                                                    <div class="col-lg-4 col-lg-offset-6">
+                                                                                                        <button type="submit"
+                                                                                                                class="btn btn-primary btn-block btn-form"
+                                                                                                                value="{{$k}}"
+                                                                                                                name="submitLoading"
+                                                                                                                data-toggle="modal"
+                                                                                                                data-target="#submitLoading_modal">
+                                                                                                            Submit
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                        @if(isset($submitLoading) &&isset($loading->$numberPalletsLoadingPlaceK)&&isset($loading->$accountCreditLoadingPlaceK)&&isset($loading->$accountDebitLoadingPlaceK))
+                                                                                            <!-- Modal submit -->
+                                                                                                <div class="modal show"
+                                                                                                     id="submitLoading_modal"
+                                                                                                     role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-content">
+                                                                                                            <div class="modal-header modalHeaderLoading">
+                                                                                                                <button type="submit"
+                                                                                                                        class="close"
+                                                                                                                        value="close"
+                                                                                                                        name="closeSubmitLoadingModal">
+                                                                                                                    &times;
+                                                                                                                </button>
+                                                                                                                <h4 class="modal-title text-center ">
+                                                                                                                    INFORMATION
+                                                                                                                </h4>
+                                                                                                            </div>
+                                                                                                            <div class="modal-body center modalBodyLoading">
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    PLANNED
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                @if(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Last
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @elseif(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Last
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')   -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Last
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @endif
+                                                                                                            </div>
+                                                                                                            <div class="modal-footer">
+                                                                                                                <button type="submit"
+                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                        value="{{$k}}"
+                                                                                                                        name="okSubmitLoadingModal"
+                                                                                                                        data-toggle="modal"
+                                                                                                                        data-target="#submitValidateLoading_modal">
+                                                                                                                    Confirm
+                                                                                                                </button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             @endif
-                                                                                        </div>
-{{--@php(dd(isset($submitLoading),isset($loading->$numberPalletsLoadingPlaceK), isset($loading->$accountCreditLoadingPlaceK),isset($loading->$accountDebitLoadingPlaceK) ))--}}
-                                                                                        @if(isset($submitLoading) &&isset($loading->$numberPalletsLoadingPlaceK)&&isset($loading->$accountCreditLoadingPlaceK)&&isset($loading->$accountDebitLoadingPlaceK))
-                                                                                        <!-- Modal submit -->
-                                                                                            <div class="modal show"
-                                                                                                 id="submitLoading_modal"
-                                                                                                 role="dialog">
-                                                                                                <div class="modal-dialog modal-md">
-                                                                                                    <div class="modal-content">
-                                                                                                        <div class="modal-header modalHeaderLoading">
-                                                                                                            <button type="submit"
-                                                                                                                    class="close"
-                                                                                                                    value="close"
-                                                                                                                    name="closeSubmitLoadingModal">
-                                                                                                                &times;
-                                                                                                            </button>
-                                                                                                            <h4 class="modal-title text-center ">
-                                                                                                                INFORMATION
-                                                                                                            </h4>
-                                                                                                        </div>
-                                                                                                        <div class="modal-body center modalBodyLoading">
-                                                                                                                    <p class="text-center">
-                                                                                                            Here,
-                                                                                                            PLANNED
-                                                                                                            pallets
-                                                                                                            number</p>
-                                                                                                        @if(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                            @if(isset($okSubmitLoadingModal) && $loading->$stateLoadingPlaceK=='Complete Validated')
+                                                                                                <div class="modal show"
+                                                                                                     id="submitLoadingValidate_modal"
+                                                                                                     role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-content">
+                                                                                                            <div class="modal-header modalHeaderLoading">
+                                                                                                                <button value="close"
+                                                                                                                        class="close"
+                                                                                                                        type="submit"
+                                                                                                                        name="closeSubmitLoadingModal">
+                                                                                                                    &times;
+                                                                                                                </button>
+                                                                                                                <h4 class="modal-title text-center">
+                                                                                                                    INFORMATION
+                                                                                                                </h4>
+                                                                                                            </div>
+                                                                                                            <div class="modal-body center modalBodyLoading">
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    CONFIRMED
+                                                                                                                    pallets
+                                                                                                                    number</p>
                                                                                                                 <table class="table table-hover table-bordered">
                                                                                                                     <thead>
                                                                                                                     <tr>
@@ -1056,263 +1339,52 @@
                                                                                                                         <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
-                                                                                                                        <td class="text-center">Actual</td>
-                                                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            Actual
+                                                                                                                        </td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
-                                                                                                                        <td class="text-center">Last transfer</td>
                                                                                                                         <td class="text-center">
-                                                                                                                            - {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                                                        <td class="text-center">
-                                                                                                                            + {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td class="text-center">New transfer</td>
+                                                                                                                            New
+                                                                                                                            transfer
+                                                                                                                        </td>
                                                                                                                         <td class="text-center">
                                                                                                                             + {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                         <td class="text-center">
                                                                                                                             - {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
-                                                                                                                        <td class="text-center">Total</td>
                                                                                                                         <td class="text-center">
-                                                                                                                            = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            Total
+                                                                                                                        </td>
                                                                                                                         <td class="text-center">
-                                                                                                                            = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
                                                                                                                     </tr>
                                                                                                                     </tbody>
                                                                                                                 </table>
-                                                                                                        @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
-                                                                                                            <table class="table table-hover table-bordered">
-                                                                                                                <thead>
-                                                                                                                <tr>
-                                                                                                                    <th></th>
-                                                                                                                    <th class="text-center">
-                                                                                                                        CREDIT
-                                                                                                                    </th>
-                                                                                                                    <th class="text-center">
-                                                                                                                        DEBIT
-                                                                                                                    </th>
-                                                                                                                </tr>
-                                                                                                                </thead>
-                                                                                                                <tbody>
-                                                                                                                <tr>
-                                                                                                                    <td></td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Actual</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">New transfer</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Total</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                </tbody>
-                                                                                                            </table>
-                                                                                                        @elseif(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
-                                                                                                            <table class="table table-hover table-bordered">
-                                                                                                                <thead>
-                                                                                                                <tr>
-                                                                                                                    <th></th>
-                                                                                                                    <th class="text-center">
-                                                                                                                        CREDIT
-                                                                                                                    </th>
-                                                                                                                    <th class="text-center">
-                                                                                                                        DEBIT
-                                                                                                                    </th>
-                                                                                                                </tr>
-                                                                                                                </thead>
-                                                                                                                <tbody>
-                                                                                                                <tr>
-                                                                                                                    <td></td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Actual</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Last transfer</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                    </td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">New transfer</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Total</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')   -request()->session()->get('palletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                </tbody>
-                                                                                                            </table>
-                                                                                                        @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
-                                                                                                            <table class="table table-hover table-bordered">
-                                                                                                                <thead>
-                                                                                                                <tr>
-                                                                                                                    <th></th>
-                                                                                                                    <th class="text-center">
-                                                                                                                        CREDIT
-                                                                                                                    </th>
-                                                                                                                    <th class="text-center">
-                                                                                                                        DEBIT
-                                                                                                                    </th>
-                                                                                                                </tr>
-                                                                                                                </thead>
-                                                                                                                <tbody>
-                                                                                                                <tr>
-                                                                                                                    <td></td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Actual</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Last transfer</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                    </td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        + {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">New transfer</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center">Total</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
-                                                                                                                </tr>
-                                                                                                                </tbody>
-                                                                                                            </table>
-                                                                                                        @endif
-                                                                                                        </div>
-                                                                                                        <div class="modal-footer">
-                                                                                                            <button type="submit"
-                                                                                                                    class="btn btn-default btn-form btn-modal"
-                                                                                                                    value="{{$k}}"
-                                                                                                                    name="okSubmitLoadingModal" data-toggle="modal"
-                                                                                                                    data-target="#submitValidateLoading_modal">
-                                                                                                                Confirm
-                                                                                                            </button>
+                                                                                                            </div>
+                                                                                                            <div class="modal-footer">
+                                                                                                                <button type="submit"
+                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                        value="{{$k}}"
+                                                                                                                        name="okSubmitValidateLoadingModal">
+                                                                                                                    Confirm
+                                                                                                                </button>
+                                                                                                            </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                            </div>
-                                                                                        @endif
-                                                                                    @if(isset($okSubmitLoadingModal) && $loading->$stateLoadingPlaceK=='Complete Validated')
-                                                                                        <div class="modal show"
-                                                                                             id="submitLoadingValidate_modal"
-                                                                                             role="dialog">
-                                                                                            <div class="modal-dialog modal-md">
-                                                                                                <div class="modal-content">
-                                                                                                    <div class="modal-header modalHeaderLoading">
-                                                                                                        <button value="close"
-                                                                                                                class="close"
-                                                                                                                type="submit"
-                                                                                                                name="closeSubmitLoadingModal">
-                                                                                                            &times;
-                                                                                                        </button>
-                                                                                                        <h4 class="modal-title text-center">
-                                                                                                            INFORMATION
-                                                                                                        </h4>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body center modalBodyLoading">
-                                                                                                        <p class="text-center">
-                                                                                                            Here,
-                                                                                                            CONFIRMED
-                                                                                                            pallets
-                                                                                                            number</p>
-                                                                                                        <table class="table table-hover table-bordered">
-                                                                                                            <thead>
-                                                                                                            <tr>
-                                                                                                                <th></th>
-                                                                                                                <th class="text-center">
-                                                                                                                    CREDIT
-                                                                                                                </th>
-                                                                                                                <th class="text-center">
-                                                                                                                    DEBIT
-                                                                                                                </th>
-                                                                                                            </tr>
-                                                                                                            </thead>
-                                                                                                            <tbody>
-                                                                                                            <tr>
-                                                                                                                <td></td>
-                                                                                                                <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                                                <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td class="text-center">Actual</td>
-                                                                                                                <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
-                                                                                                                <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td class="text-center">New transfer</td>
-                                                                                                                <td class="text-center">
-                                                                                                                    + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                                <td class="text-center">
-                                                                                                                    - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td class="text-center">Total</td>
-                                                                                                                <td class="text-center">
-                                                                                                                    = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
-                                                                                                                <td class="text-center">
-                                                                                                                    = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
-                                                                                                            </tr>
-                                                                                                            </tbody>
-                                                                                                        </table>
-                                                                                                    </div>
-                                                                                                    <div class="modal-footer">
-                                                                                                        <button type="submit"
-                                                                                                                class="btn btn-default btn-form btn-modal"
-                                                                                                                value="{{$k}}"
-                                                                                                                name="okSubmitValidateLoadingModal">
-                                                                                                            Confirm
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
+                                                                                            @endif
+
+
                                                                                         </div>
-                                                                                    @endif
-
-
                                                                                     </div>
-                                                                                </div>
-                                                                            @endfor
-                                                                                @endif
+                                                                                @endfor
+                                                                            @endif
                                                                         </div>
                                                                         @if (Session::has('openPanelLoading'))
                                                                     </div>
@@ -1327,7 +1399,8 @@
                                                             <a class="col-lg-3 text-left" data-toggle="collapse"
                                                                href="#Pan2Sub2collapse">Offloading
                                                                 place</a>
-                                                            <span class="col-lg-offset-2">{{$totalPalletsOffloadingPlace}} / {{$loading->anz}}</span>
+                                                            <span class="col-lg-offset-2">{{$totalPalletsOffloadingPlace}}
+                                                                / {{$loading->anz}}</span>
                                                             <button type="submit"
                                                                     class="col-lg-offset-4 btn btn-add glyphicon glyphicon-plus"
                                                                     value="addOffloadingPlace"
@@ -1414,12 +1487,13 @@
                                                                                                         <input class="form-control col-lg-10"
                                                                                                                type="number"
                                                                                                                name="numberPalletsOffloadingPlace{{$k}}"
-                                                                                                               value="{{$loading->$numberPalletsOffloadingPlaceK}}" readonly>
+                                                                                                               value="{{$loading->$numberPalletsOffloadingPlaceK}}"
+                                                                                                               readonly>
                                                                                                     @elseif(isset($loading->$numberPalletsOffloadingPlaceK))
                                                                                                         <input class="form-control col-lg-10"
                                                                                                                type="number"
                                                                                                                name="numberPalletsOffloadingPlace{{$k}}"
-                                                                                                               value="{{$loading->$numberPalletsOffloadingPlaceK}}" >
+                                                                                                               value="{{$loading->$numberPalletsOffloadingPlaceK}}">
                                                                                                     @else
                                                                                                         <input class="form-control col-lg-10"
                                                                                                                type="number"
@@ -1442,13 +1516,17 @@
                                                                                                 <div class="col-lg-2">
                                                                                                     <label for="accountCreditOffloadingPlace{{$k}}"
                                                                                                            class="control-label">Credit
-                                                                                                        Account :</label>
+                                                                                                        Account
+                                                                                                        :</label>
                                                                                                 </div>
                                                                                                 <div class="col-lg-4">
                                                                                                     @php($accountCreditOffloadingPlaceK ='accountCreditOffloadingPlace'.$k)
                                                                                                     @if(isset($loading->$accountCreditOffloadingPlaceK)&&(isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==1))
-                                                                                                        <input type="text" name="accountCreditOffloadingPlace{{$k}}" class="form-control"
-                                                                                                               value="{{$loading->$accountCreditOffloadingPlaceK}}" readonly>
+                                                                                                        <input type="text"
+                                                                                                               name="accountCreditOffloadingPlace{{$k}}"
+                                                                                                               class="form-control"
+                                                                                                               value="{{$loading->$accountCreditOffloadingPlaceK}}"
+                                                                                                               readonly>
                                                                                                     @else
                                                                                                         <select class="selectpicker show-tick form-control"
                                                                                                                 data-size="10"
@@ -1474,13 +1552,17 @@
                                                                                                 <div class="col-lg-2">
                                                                                                     <label for="accountDebitOffloadingPlace{{$k}}"
                                                                                                            class="control-label">Debit
-                                                                                                        Account :</label>
+                                                                                                        Account
+                                                                                                        :</label>
                                                                                                 </div>
                                                                                                 <div class="col-lg-4">
                                                                                                     @php($accountDebitOffloadingPlaceK ='accountDebitOffloadingPlace'.$k)
                                                                                                     @if(isset($loading->$accountDebitOffloadingPlaceK)&&(isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==1))
-                                                                                                        <input type="text" name="accountDebitOffloadingPlace{{$k}}" class="form-control"
-                                                                                                               value="{{$loading->$accountDebitOffloadingPlaceK}}" readonly>
+                                                                                                        <input type="text"
+                                                                                                               name="accountDebitOffloadingPlace{{$k}}"
+                                                                                                               class="form-control"
+                                                                                                               value="{{$loading->$accountDebitOffloadingPlaceK}}"
+                                                                                                               readonly>
                                                                                                     @else
                                                                                                         <select class="selectpicker show-tick form-control"
                                                                                                                 data-size="10"
@@ -1602,26 +1684,36 @@
                                                                                                                             <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Last transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Last
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 - {{request()->session()->get('actualPalletsNumber')}}</td>
                                                                                                                             <td class="text-center">
                                                                                                                                 + {{request()->session()->get('actualPalletsNumber')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 + {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
                                                                                                                                 - {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
@@ -1649,19 +1741,26 @@
                                                                                                                             <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 + {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
                                                                                                                                 - {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
@@ -1689,26 +1788,36 @@
                                                                                                                             <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Last transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Last
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 {{request()->session()->get('actualPalletsNumber')}}</td>
                                                                                                                             <td class="text-center">
                                                                                                                             </td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 + {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
                                                                                                                                 - {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
@@ -1736,26 +1845,36 @@
                                                                                                                             <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Actual
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                                                             <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Last transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Last
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                             </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 + {{request()->session()->get('actualPalletsNumber')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                New
+                                                                                                                                transfer
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 + {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
                                                                                                                                 - {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                         </tr>
                                                                                                                         <tr>
-                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                Total
+                                                                                                                            </td>
                                                                                                                             <td class="text-center">
                                                                                                                                 = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
                                                                                                                             <td class="text-center">
@@ -1769,7 +1888,8 @@
                                                                                                                 <button type="submit"
                                                                                                                         class="btn btn-default btn-form btn-modal"
                                                                                                                         value="{{$k}}"
-                                                                                                                        name="okSubmitOffloadingModal" data-toggle="modal"
+                                                                                                                        name="okSubmitOffloadingModal"
+                                                                                                                        data-toggle="modal"
                                                                                                                         data-target="#submitValidateOffloading_modal">
                                                                                                                     Confirm
                                                                                                                 </button>
@@ -1820,19 +1940,26 @@
                                                                                                                         <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
-                                                                                                                        <td class="text-center">Actual</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            Actual
+                                                                                                                        </td>
                                                                                                                         <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
                                                                                                                         <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
-                                                                                                                        <td class="text-center">New transfer</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            New
+                                                                                                                            transfer
+                                                                                                                        </td>
                                                                                                                         <td class="text-center">
                                                                                                                             + {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                         <td class="text-center">
                                                                                                                             - {{request()->session()->get('palletsNumber')}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
-                                                                                                                        <td class="text-center">Total</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            Total
+                                                                                                                        </td>
                                                                                                                         <td class="text-center">
                                                                                                                             = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
                                                                                                                         <td class="text-center">

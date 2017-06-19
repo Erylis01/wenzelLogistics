@@ -88,25 +88,15 @@
 
 /*!*PALLETS*!*/
 
-/*.glyphicon-green{*/
-    /*color : rgb(0, 160, 0) ;*/
-/*}*/
+.modalHeaderLoading>h4{
+    font-size:20px;
+    color:rgb(0, 160, 0);
+    font-weight: bold;
+}
 
-/*.table-loading-pallets>tbody {*/
-    /*font-size:16px;*/
-/*}*/
-
-/*.table-loading-pallets>thead>tr>th, .table-loading-pallets>tbody>tr>td{*/
-    /*border-color:black ;*/
-    /*border-style: solid;*/
-    /*border-width: 1px;*/
-/*}*/
-
-/*.table-loading-pallets{*/
-    /*border-color:rgb(0, 160, 0) ;*/
-    /*border-style: solid;*/
-    /*border-width: 3px;*/
-/*}*/
+.modalBodyLoading{
+    font-size:16px;
+}
 
 
 /*HIDDEN DIV*/
