@@ -593,181 +593,181 @@
                                                            value="{{ csrf_token() }}">
 
                                                     <!-- truck panel-->
-                                                    {{--<div class="panel subpanel">--}}
-                                                        {{--<div class="panel-heading">--}}
-                                                            {{--<a class="col-lg-3 text-left" data-toggle="collapse"--}}
-                                                               {{--href="#Pan2Sub3collapse">Truck</a>--}}
-                                                            {{--<span class="col-lg-offset-2">{{$anz-$totalPalletsLoadingPlace+ $totalPalletsOffloadingPlace}} / 25</span>--}}
-                                                        {{--</div>--}}
-                                                        {{--@if (Session::has('openPanelTruck'))--}}
-                                                            {{--<div id="Pan2Sub3collapse"--}}
-                                                                 {{--class="panel-collapse in collapse">--}}
-                                                                {{--@else--}}
-                                                                    {{--<div id="Pan2Sub3collapse"--}}
-                                                                         {{--class="panel-collapse collapse">--}}
-                                                                        {{--@endif--}}
-                                                                        {{--<div class="panel-body">--}}
-                                                                            {{--<div class="panel subpanel">--}}
-                                                                                {{--<div class="panel-body">--}}
-                                                                                    {{--<!--documents proof upload-->--}}
-                                                                                    {{--<div class="form-group text-center">--}}
-                                                                                        {{--<label for="documentsTruck">Do--}}
-                                                                                            {{--you--}}
-                                                                                            {{--have proof--}}
-                                                                                            {{--documents (CMR/Exchange--}}
-                                                                                            {{--bill/Pallets bill)--}}
-                                                                                            {{--?</label>--}}
-                                                                                    {{--</div>--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--<div class="col-lg-offset-1 col-lg-4">--}}
-                                                                                            {{--<input type="file"--}}
-                                                                                                   {{--name="documentsTruck[]"--}}
-                                                                                                   {{--multiple>--}}
-                                                                                        {{--</div>--}}
-                                                                                        {{--<!--button upload-->--}}
-                                                                                        {{--<div class="col-lg-4 col-lg-offset-2">--}}
-                                                                                            {{--<input type="submit"--}}
-                                                                                                   {{--class="btn btn-primary btn-block btn-form"--}}
-                                                                                                   {{--value="Upload"--}}
-                                                                                                   {{--name="uploadTruck"/>--}}
-                                                                                        {{--</div>--}}
-                                                                                    {{--</div>--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--@if(isset($filesNamesTruck))--}}
-                                                                                            {{--<ul class="col-lg-offset-1">--}}
-                                                                                                {{--@foreach($filesNamesTruck as $name)--}}
-                                                                                                    {{--<div>--}}
-                                                                                                        {{--<button type="submit"--}}
-                                                                                                                {{--name="deleteDocument"--}}
-                                                                                                                {{--class="btn-add glyphicon glyphicon-remove"--}}
-                                                                                                                {{--value="{{$name}}"></button>--}}
-                                                                                                        {{--<a href="../../storage/app/proofsPallets/{{$atrnr}}/documentsTruck/{{$name}}"--}}
-                                                                                                           {{--class="link">{{$name}}</a>--}}
-                                                                                                    {{--</div>--}}
-                                                                                                {{--@endforeach--}}
-                                                                                            {{--</ul>--}}
-                                                                                        {{--@endif--}}
-                                                                                    {{--</div>--}}
-                                                                                {{--</div>--}}
-                                                                            {{--</div>--}}
-                                                                            {{--<div class="panel subpanel">--}}
-                                                                                {{--<div class="panel-body">--}}
-                                                                                    {{--<!--initial pallets number truck-->--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--<div class="col-lg-7 ">--}}
-                                                                                            {{--<table class="table table-hover table-bordered">--}}
-                                                                                                {{--<thead>--}}
-                                                                                                {{--<tr>--}}
-                                                                                                    {{--<th class="text-center">Initial - Offloaded</th>--}}
-                                                                                                    {{--<th class="text-center">Loaded - Initial</th>--}}
-                                                                                                    {{--<th class="text-center">Initial - Offloaded + Loaded</th>--}}
-                                                                                                {{--</tr>--}}
-                                                                                                {{--</thead>--}}
-                                                                                                {{--<tbody>--}}
-                                                                                                {{--<tr>--}}
-                                                                                                    {{--<td class="text-center">{{$anz - $totalPalletsOffloadingPlace}} / 0</td>--}}
-                                                                                                    {{--<td class="text-center">{{$totalPalletsLoadingPlace - $anz}} / 0</td>--}}
-                                                                                                    {{--<td class="text-center">{{$anz - $totalPalletsOffloadingPlace + $totalPalletsLoadingPlace}} / 0</td>--}}
-                                                                                                {{--</tr>--}}
-                                                                                                {{--</tbody>--}}
-                                                                                            {{--</table>--}}
-                                                                                        {{--</div>--}}
-                                                                                        {{--@if(isset($anz))--}}
-                                                                                            {{--<div class="col-lg-4 col-lg-offset-1">--}}
-                                                                                                {{--<label for="numberPalletsInitialTruck"--}}
-                                                                                                       {{--class="control-label">Initial pallets number : {{$anz}}</label>--}}
-                                                                                            {{--</div>--}}
-                                                                                        {{--@endif--}}
-                                                                                    {{--</div>--}}
-                                                                                    {{--<!--Account credit-->--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--<div class="col-lg-2">--}}
-                                                                                            {{--<label for="accountTruck"--}}
-                                                                                                   {{--class="control-label">Truck--}}
-                                                                                                {{--Account :</label>--}}
-                                                                                        {{--</div>--}}
-                                                                                        {{--<div class="col-lg-5">--}}
-                                                                                            {{--<select class="selectpicker show-tick form-control"--}}
-                                                                                                    {{--data-size="5"--}}
-                                                                                                    {{--data-live-search="true"--}}
-                                                                                                    {{--data-live-search-style="startsWith"--}}
-                                                                                                    {{--title="Pallets Account Truck"--}}
-                                                                                                    {{--name="accountTruck">--}}
-                                                                                                {{--@foreach($listPalletsAccountsCarrier as $palletsAccount )--}}
-                                                                                                    {{--@if(Illuminate\Support\Facades\Input::old('accountTruck') && $palletsAccount->name==old('accountTruck'))--}}
-                                                                                                        {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                    {{--@elseif(isset($accountTruck)&& $palletsAccount->name==$accountTruck)--}}
-                                                                                                        {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                    {{--@elseif(!isset($accountTruck)&&isset($palletsAccountFavoriteTruck)&& $palletsAccount->name==$palletsAccountFavoriteTruck)--}}
-                                                                                                        {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                    {{--@else--}}
-                                                                                                        {{--<option>{{$palletsAccount->name}}</option>--}}
-                                                                                                    {{--@endif--}}
-                                                                                                {{--@endforeach--}}
-                                                                                            {{--</select>--}}
-                                                                                        {{--</div>--}}
-                                                                                    {{--</div>--}}
-                                                                                    {{--<!--validate truck ?-->--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--@if(isset($filesNamesTruck)&&isset($accountTruck))--}}
-                                                                                            {{--<div class="col-lg-2">--}}
-                                                                                                {{--<label for="validateTruck"--}}
-                                                                                                       {{--class="control-label">Validated--}}
-                                                                                                    {{--?</label>--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--<div class="col-lg-3">--}}
-                                                                                                {{--@if($validateTruck==1)--}}
-                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                {{--type="radio"--}}
-                                                                                                                {{--name="validateTruck"--}}
-                                                                                                                {{--value="true"--}}
-                                                                                                                {{--checked>Yes</label>--}}
-                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                {{--type="radio"--}}
-                                                                                                                {{--name="validateTruck"--}}
-                                                                                                                {{--value="false">No</label>--}}
-                                                                                                {{--@else--}}
-                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                {{--type="radio"--}}
-                                                                                                                {{--name="validateTruck"--}}
-                                                                                                                {{--value="true">Yes</label>--}}
-                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                {{--type="radio"--}}
-                                                                                                                {{--name="validateTruck"--}}
-                                                                                                                {{--value="false"--}}
-                                                                                                                {{--checked>No</label>--}}
-                                                                                                {{--@endif--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--<div class="col-lg-4 col-lg-offset-2">--}}
-                                                                                                {{--<button type="submit"--}}
-                                                                                                        {{--class="btn btn-primary btn-block btn-form"--}}
-                                                                                                        {{--value="submitTruck"--}}
-                                                                                                        {{--name="submitTruck">--}}
-                                                                                                    {{--Submit--}}
-                                                                                                {{--</button>--}}
-                                                                                            {{--</div>--}}
-                                                                                        {{--@else--}}
-                                                                                            {{--<div class="col-lg-4 col-lg-offset-7">--}}
-                                                                                                {{--<button type="submit"--}}
-                                                                                                        {{--class="btn btn-primary btn-block btn-form"--}}
-                                                                                                        {{--value="submitTruck"--}}
-                                                                                                        {{--name="submitTruck"--}}
-                                                                                                        {{--data-toggle="modal"--}}
-                                                                                                        {{--data-target="#submitTruck_modal">--}}
-                                                                                                    {{--Submit--}}
-                                                                                                {{--</button>--}}
-                                                                                            {{--</div>--}}
-                                                                                        {{--@endif--}}
-                                                                                    {{--</div>--}}
-                                                                                {{--</div>--}}
-                                                                            {{--</div>--}}
-                                                                        {{--</div>--}}
-                                                                        {{--@if (Session::has('openPanelTruck'))--}}
-                                                                    {{--</div>--}}
-                                                                    {{--@else--}}
-                                                            {{--</div>--}}
-                                                        {{--@endif--}}
-                                                    {{--</div>--}}
+                                                    <div class="panel subpanel">
+                                                        <div class="panel-heading">
+                                                            <a class="col-lg-3 text-left" data-toggle="collapse"
+                                                               href="#Pan2Sub3collapse">Truck</a>
+                                                            <span class="col-lg-offset-2">{{$loading->anz-$totalPalletsLoadingPlace+ $totalPalletsOffloadingPlace}} / 25</span>
+                                                        </div>
+                                                        @if (Session::has('openPanelTruck'))
+                                                            <div id="Pan2Sub3collapse"
+                                                                 class="panel-collapse in collapse">
+                                                                @else
+                                                                    <div id="Pan2Sub3collapse"
+                                                                         class="panel-collapse collapse">
+                                                                        @endif
+                                                                        <div class="panel-body">
+                                                                            <div class="panel subpanel">
+                                                                                <div class="panel-body">
+                                                                                    <!--documents proof upload-->
+                                                                                    <div class="form-group text-center">
+                                                                                        <label for="documentsTruck">Do
+                                                                                            you
+                                                                                            have proof
+                                                                                            documents (CMR/Exchange
+                                                                                            bill/Pallets bill)
+                                                                                            ?</label>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-lg-offset-1 col-lg-4">
+                                                                                            <input type="file"
+                                                                                                   name="documentsTruck[]"
+                                                                                                   multiple>
+                                                                                        </div>
+                                                                                        <!--button upload-->
+                                                                                        <div class="col-lg-4 col-lg-offset-2">
+                                                                                            <input type="submit"
+                                                                                                   class="btn btn-primary btn-block btn-form"
+                                                                                                   value="Upload"
+                                                                                                   name="uploadTruck"/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        @if(isset($filesNamesTruck))
+                                                                                            <ul class="col-lg-offset-1">
+                                                                                                @foreach($filesNamesTruck as $name)
+                                                                                                    <div>
+                                                                                                        <button type="submit"
+                                                                                                                name="deleteDocument"
+                                                                                                                class="btn-add glyphicon glyphicon-remove"
+                                                                                                                value="{{$name}}"></button>
+                                                                                                        <a href="../../storage/app/proofsPallets/{{$loading->atrnr}}/documentsTruck/{{$name}}"
+                                                                                                           class="link">{{$name}}</a>
+                                                                                                    </div>
+                                                                                                @endforeach
+                                                                                            </ul>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="panel subpanel">
+                                                                                <div class="panel-body">
+                                                                                    <!--initial pallets number truck-->
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-lg-7 ">
+                                                                                            <table class="table table-hover table-bordered">
+                                                                                                <thead>
+                                                                                                <tr>
+                                                                                                    <th class="text-center">Initial - Offloaded</th>
+                                                                                                    <th class="text-center">Loaded - Initial</th>
+                                                                                                    <th class="text-center">Initial - Offloaded + Loaded</th>
+                                                                                                </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                <tr>
+                                                                                                    <td class="text-center">{{$loading->anz - $totalPalletsOffloadingPlace}} / 0</td>
+                                                                                                    <td class="text-center">{{$totalPalletsLoadingPlace - $loading->anz}} / 0</td>
+                                                                                                    <td class="text-center">{{$loading->anz - $totalPalletsOffloadingPlace + $totalPalletsLoadingPlace}} / 0</td>
+                                                                                                </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                        @if(isset($loading->anz))
+                                                                                            <div class="col-lg-4 col-lg-offset-1">
+                                                                                                <label for="numberPalletsInitialTruck"
+                                                                                                       class="control-label">Initial pallets number : {{$loading->anz}}</label>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <!--Account credit-->
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-lg-2">
+                                                                                            <label for="accountTruck"
+                                                                                                   class="control-label">Truck
+                                                                                                Account :</label>
+                                                                                        </div>
+                                                                                        <div class="col-lg-5">
+                                                                                            <select class="selectpicker show-tick form-control"
+                                                                                                    data-size="5"
+                                                                                                    data-live-search="true"
+                                                                                                    data-live-search-style="startsWith"
+                                                                                                    title="Pallets Account Truck"
+                                                                                                    name="accountTruck">
+                                                                                                @foreach($listPalletsAccountsCarrier as $palletsAccount )
+                                                                                                    @if(Illuminate\Support\Facades\Input::old('accountTruck') && $palletsAccount->name==old('accountTruck'))
+                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                    @elseif(isset($accountTruck)&& $palletsAccount->name==$accountTruck)
+                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                    @elseif(!isset($accountTruck)&&isset($palletsAccountFavoriteTruck)&& $palletsAccount->name==$palletsAccountFavoriteTruck)
+                                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                                    @else
+                                                                                                        <option>{{$palletsAccount->name}}</option>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <!--validate truck ?-->
+                                                                                    <div class="form-group">
+                                                                                        @if(isset($filesNamesTruck)&&isset($accountTruck))
+                                                                                            <div class="col-lg-2">
+                                                                                                <label for="validateTruck"
+                                                                                                       class="control-label">Validated
+                                                                                                    ?</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-3">
+                                                                                                @if($loading->validateTruck==1)
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="true"
+                                                                                                                checked>Yes</label>
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="false">No</label>
+                                                                                                @else
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="true">Yes</label>
+                                                                                                    <label class="radio-inline"><input
+                                                                                                                type="radio"
+                                                                                                                name="validateTruck"
+                                                                                                                value="false"
+                                                                                                                checked>No</label>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-lg-offset-2">
+                                                                                                <button type="submit"
+                                                                                                        class="btn btn-primary btn-block btn-form"
+                                                                                                        value="submitTruck"
+                                                                                                        name="submitTruck">
+                                                                                                    Submit
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        @else
+                                                                                            <div class="col-lg-4 col-lg-offset-7">
+                                                                                                <button type="submit"
+                                                                                                        class="btn btn-primary btn-block btn-form"
+                                                                                                        value="submitTruck"
+                                                                                                        name="submitTruck"
+                                                                                                        data-toggle="modal"
+                                                                                                        data-target="#submitTruck_modal">
+                                                                                                    Submit
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        @if (Session::has('openPanelTruck'))
+                                                                    </div>
+                                                                    @else
+                                                            </div>
+                                                        @endif
+                                                    </div>
 
                                                     <!-- loading panel-->
                                                     <div class="panel subpanel">
@@ -1318,511 +1318,552 @@
                                                     </div>
 
                                                     <!--offloading panel-->
-                                                    {{--<div class="panel subpanel">--}}
-                                                        {{--<div class="panel-heading">--}}
-                                                            {{--<a class="col-lg-3 text-left" data-toggle="collapse"--}}
-                                                               {{--href="#Pan2Sub2collapse">Offloading--}}
-                                                                {{--place</a>--}}
-                                                            {{--<span class="col-lg-offset-2">{{$totalPalletsOffloadingPlace}} / {{$anz}}</span>--}}
-                                                            {{--<button type="submit"--}}
-                                                                    {{--class="col-lg-offset-4 btn btn-add glyphicon glyphicon-plus"--}}
-                                                                    {{--value="addOffloadingPlace"--}}
-                                                                    {{--name="addOffloadingPlace"></button>--}}
-                                                            {{--<button type="submit"--}}
-                                                                    {{--name="deleteOffloadingPlace"--}}
-                                                                    {{--class="btn btn-add glyphicon glyphicon-minus"--}}
-                                                                    {{--value="deleteOffloadingPlace"></button>--}}
-                                                        {{--</div>--}}
-                                                        {{--@if (Session::has('openPanelOffloading'))--}}
-                                                            {{--<div id="Pan2Sub2collapse"--}}
-                                                                 {{--class="panel-collapse in collapse">--}}
-                                                                {{--@else--}}
-                                                                    {{--<div id="Pan2Sub2collapse"--}}
-                                                                         {{--class="panel-collapse collapse">--}}
-                                                                        {{--@endif--}}
-                                                                        {{--<div class="panel-body">--}}
-                                                                            {{--@if($numberOffloadingPlace>0)--}}
-                                                                            {{--<div class="panel subpanel">--}}
-                                                                                {{--<div class="panel-body">--}}
-                                                                                    {{--<!--documents proof upload-->--}}
-                                                                                    {{--<div class="form-group text-center">--}}
-                                                                                        {{--<label for="documentsOffloading">Do--}}
-                                                                                            {{--you--}}
-                                                                                            {{--have proof--}}
-                                                                                            {{--documents (CMR/Exchange--}}
-                                                                                            {{--bill/Pallets bill)--}}
-                                                                                            {{--?</label>--}}
-                                                                                    {{--</div>--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--<div class="col-lg-offset-1 col-lg-4">--}}
-                                                                                            {{--<input type="file"--}}
-                                                                                                   {{--name="documentsOffloading[]"--}}
-                                                                                                   {{--multiple>--}}
-                                                                                        {{--</div>--}}
-                                                                                        {{--<!--button upload-->--}}
-                                                                                        {{--<div class="col-lg-4 col-lg-offset-2">--}}
-                                                                                            {{--<input type="submit"--}}
-                                                                                                   {{--class="btn btn-primary btn-block btn-form"--}}
-                                                                                                   {{--value="Upload"--}}
-                                                                                                   {{--name="uploadOffloading"/>--}}
-                                                                                        {{--</div>--}}
-                                                                                    {{--</div>--}}
-                                                                                    {{--<div class="form-group">--}}
-                                                                                        {{--@if(isset($filesNamesOffloadingPlace))--}}
-                                                                                            {{--<ul class="col-lg-offset-1">--}}
-                                                                                                {{--@foreach($filesNamesOffloadingPlace as $name)--}}
-                                                                                                    {{--<div>--}}
-                                                                                                        {{--<button type="submit"--}}
-                                                                                                                {{--name="deleteDocument"--}}
-                                                                                                                {{--class="btn-add glyphicon glyphicon-remove"--}}
-                                                                                                                {{--value="{{$name}}"></button>--}}
-                                                                                                        {{--<a href="../../storage/app/proofsPallets/{{$atrnr}}/documentsOffloading/{{$name}}"--}}
-                                                                                                           {{--class="link">{{$name}}</a>--}}
-                                                                                                    {{--</div>--}}
-                                                                                                {{--@endforeach--}}
-                                                                                            {{--</ul>--}}
-                                                                                        {{--@endif--}}
-                                                                                    {{--</div>--}}
-                                                                                {{--</div>--}}
-                                                                            {{--</div>--}}
-                                                                            {{--@for($k=1; $k<=$numberOffloadingPlace; $k++)--}}
-                                                                                {{--<div class="panel subpanel">--}}
-                                                                                    {{--<div class="panel-body">--}}
-                                                                                        {{--<!--pallets number taken from offloading place-->--}}
-                                                                                        {{--<div class="form-group">--}}
-                                                                                            {{--<div class="col-lg-4">--}}
-                                                                                                {{--<label for="numberPalletsOffloadingPlace{{$k}}"--}}
-                                                                                                       {{--class="control-label">How--}}
-                                                                                                    {{--many pallets--}}
-                                                                                                    {{--were--}}
-                                                                                                    {{--taken--}}
-                                                                                                    {{--?</label>--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--<div class="col-lg-2">--}}
-                                                                                                {{--@php($numberPalletsOffloadingPlaceK ='numberPalletsOffloadingPlace'.$k)--}}
-                                                                                                {{--@if(isset($$numberPalletsOffloadingPlaceK))--}}
-                                                                                                    {{--<input class="col-lg-10"--}}
-                                                                                                           {{--type="number"--}}
-                                                                                                           {{--name="numberPalletsOffloadingPlace{{$k}}"--}}
-                                                                                                           {{--value="{{$$numberPalletsOffloadingPlaceK}}">--}}
-                                                                                                {{--@else--}}
-                                                                                                    {{--<input class="col-lg-10"--}}
-                                                                                                           {{--type="number"--}}
-                                                                                                           {{--name="numberPalletsOffloadingPlace{{$k}}"--}}
-                                                                                                           {{--value="">--}}
-                                                                                                {{--@endif--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--@if(isset($$numberPalletsOffloadingPlaceK))--}}
-                                                                                                {{--<div class="col-lg-2">--}}
-                                                                                                    {{--@php($diffK ='diff'.$k)--}}
-                                                                                                    {{--@php($$diffK=$$numberPalletsOffloadingPlaceK-$anz)--}}
-                                                                                                    {{--<label for="differencePalletsOffloadingPlace{{$k}}"--}}
-                                                                                                           {{--class="control-label">Diff--}}
-                                                                                                        {{--: {{$$diffK}}</label>--}}
-                                                                                                {{--</div>--}}
-                                                                                            {{--@endif--}}
-                                                                                        {{--</div>--}}
-                                                                                        {{--<!--Account credit-->--}}
-                                                                                        {{--<div class="form-group">--}}
-                                                                                            {{--<div class="col-lg-2">--}}
-                                                                                                {{--<label for="accountCreditOffloadingPlace{{$k}}"--}}
-                                                                                                       {{--class="control-label">Credit--}}
-                                                                                                    {{--Account :</label>--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--<div class="col-lg-4">--}}
-                                                                                                {{--<select class="selectpicker show-tick form-control"--}}
-                                                                                                        {{--data-size="5"--}}
-                                                                                                        {{--data-live-search="true"--}}
-                                                                                                        {{--data-live-search-style="startsWith"--}}
-                                                                                                        {{--title="Pallets Account Credit"--}}
-                                                                                                        {{--name="accountCreditOffloadingPlace{{$k}}">--}}
-                                                                                                    {{--@php($accountCreditOffloadingPlaceK ='accountCreditOffloadingPlace'.$k)--}}
-                                                                                                    {{--@foreach($listPalletsAccounts as $palletsAccount )--}}
-                                                                                                        {{--@if(Illuminate\Support\Facades\Input::old('accountCreditOffloadingPlace'.$k) && $palletsAccount->name==old('accountCreditOffloadingPlace'.$k))--}}
-                                                                                                            {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@elseif(isset($$accountCreditOffloadingPlaceK)&& $palletsAccount->name==$$accountCreditOffloadingPlaceK)--}}
-                                                                                                            {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@else--}}
-                                                                                                            {{--<option>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@endif--}}
-                                                                                                    {{--@endforeach--}}
-                                                                                                {{--</select>--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--<!--Account debited-->--}}
-                                                                                            {{--<div class="col-lg-2">--}}
-                                                                                                {{--<label for="accountDebitOffloadingPlace{{$k}}"--}}
-                                                                                                       {{--class="control-label">Debit--}}
-                                                                                                    {{--Account :</label>--}}
-                                                                                            {{--</div>--}}
-                                                                                            {{--<div class="col-lg-4">--}}
-                                                                                                {{--<select class="selectpicker show-tick form-control"--}}
-                                                                                                        {{--data-size="5"--}}
-                                                                                                        {{--data-live-search="true"--}}
-                                                                                                        {{--data-live-search-style="startsWith"--}}
-                                                                                                        {{--title="Pallets Account Debit"--}}
-                                                                                                        {{--name="accountDebitOffloadingPlace{{$k}}">--}}
-                                                                                                    {{--@php($accountDebitOffloadingPlaceK ='accountDebitOffloadingPlace'.$k)--}}
-                                                                                                    {{--@foreach($listPalletsAccounts as $palletsAccount )--}}
-                                                                                                        {{--@if(Illuminate\Support\Facades\Input::old('accountDebitOffloadingPlace'.$k) && $palletsAccount->name==old('accountDebitOffloadingPlace'.$k))--}}
-                                                                                                            {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@elseif(isset($$accountDebitOffloadingPlaceK)&& $palletsAccount->name==$$accountDebitOffloadingPlaceK)--}}
-                                                                                                            {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@elseif(!isset($$accountDebitOffloadingPlaceK)&&isset($accountZipcodeOffloadingPlace)&& $palletsAccount->name==$accountZipcodeOffloadingPlace)--}}
-                                                                                                            {{--<option selected>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@else--}}
-                                                                                                            {{--<option>{{$palletsAccount->name}}</option>--}}
-                                                                                                        {{--@endif--}}
-                                                                                                    {{--@endforeach--}}
-                                                                                                {{--</select>--}}
-                                                                                            {{--</div>--}}
-                                                                                        {{--</div>--}}
-                                                                                        {{--<!--validate offloading ?-->--}}
-                                                                                        {{--@php($validateOffloadingPlaceK ='validateOffloadingPlace'.$k)--}}
-                                                                                        {{--<div class="form-group">--}}
-                                                                                            {{--@if(isset($filesNamesOffloadingPlace)&&isset($$numberPalletsOffloadingPlaceK)&&isset($$accountCreditOffloadingPlaceK)&&isset($$accountDebitOffloadingPlaceK))--}}
-                                                                                                {{--<div class="col-lg-2">--}}
-                                                                                                    {{--<label for="validateOffloadingPlace{{$k}}"--}}
-                                                                                                           {{--class="control-label">Validated--}}
-                                                                                                        {{--?</label>--}}
-                                                                                                {{--</div>--}}
-                                                                                                {{--<div class="col-lg-3">--}}
-                                                                                                    {{--@if($$validateOffloadingPlaceK==1)--}}
-                                                                                                        {{--<label class="radio-inline"><input--}}
-                                                                                                                    {{--type="radio"--}}
-                                                                                                                    {{--name="validateOffloadingPlace{{$k}}"--}}
-                                                                                                                    {{--value="true"--}}
-                                                                                                                    {{--checked>Yes</label>--}}
-                                                                                                        {{--<label class="radio-inline"><input--}}
-                                                                                                                    {{--type="radio"--}}
-                                                                                                                    {{--name="validateOffloadingPlace{{$k}}"--}}
-                                                                                                                    {{--value="false">No</label>--}}
-                                                                                                    {{--@else--}}
-                                                                                                        {{--<label class="radio-inline"><input--}}
-                                                                                                                    {{--type="radio"--}}
-                                                                                                                    {{--name="validateOffloadingPlace{{$k}}"--}}
-                                                                                                                    {{--value="true">Yes</label>--}}
-                                                                                                        {{--<label class="radio-inline"><input--}}
-                                                                                                                    {{--type="radio"--}}
-                                                                                                                    {{--name="validateOffloadingPlace{{$k}}"--}}
-                                                                                                                    {{--value="false"--}}
-                                                                                                                    {{--checked>No</label>--}}
-                                                                                                    {{--@endif--}}
-                                                                                                {{--</div>--}}
-                                                                                                {{--<div class="col-lg-4 col-lg-offset-1">--}}
-                                                                                                    {{--<button type="submit"--}}
-                                                                                                            {{--class="btn btn-primary btn-block btn-form"--}}
-                                                                                                            {{--value="{{$k}}"--}}
-                                                                                                            {{--name="submitOffloading">--}}
-                                                                                                        {{--Submit--}}
-                                                                                                    {{--</button>--}}
-                                                                                                {{--</div>--}}
-                                                                                            {{--@else--}}
-                                                                                                {{--<div class="col-lg-4 col-lg-offset-6">--}}
-                                                                                                    {{--<button type="submit"--}}
-                                                                                                            {{--class="btn btn-primary btn-block btn-form"--}}
-                                                                                                            {{--value="{{$k}}"--}}
-                                                                                                            {{--name="submitOffloading"--}}
-                                                                                                            {{--data-toggle="modal"--}}
-                                                                                                            {{--data-target="#submitOffloading_modal">--}}
-                                                                                                        {{--Submit--}}
-                                                                                                    {{--</button>--}}
-                                                                                                {{--</div>--}}
-                                                                                            {{--@endif--}}
-                                                                                        {{--</div>--}}
+                                                    <div class="panel subpanel">
+                                                        <div class="panel-heading">
+                                                            <a class="col-lg-3 text-left" data-toggle="collapse"
+                                                               href="#Pan2Sub2collapse">Offloading
+                                                                place</a>
+                                                            <span class="col-lg-offset-2">{{$totalPalletsOffloadingPlace}} / {{$loading->anz}}</span>
+                                                            <button type="submit"
+                                                                    class="col-lg-offset-4 btn btn-add glyphicon glyphicon-plus"
+                                                                    value="addOffloadingPlace"
+                                                                    name="addOffloadingPlace"></button>
+                                                            <button type="submit"
+                                                                    name="deleteOffloadingPlace"
+                                                                    class="btn btn-add glyphicon glyphicon-minus"
+                                                                    value="deleteOffloadingPlace"></button>
+                                                        </div>
+                                                        @if (Session::has('openPanelOffloading'))
+                                                            <div id="Pan2Sub2collapse"
+                                                                 class="panel-collapse in collapse">
+                                                                @else
+                                                                    <div id="Pan2Sub2collapse"
+                                                                         class="panel-collapse collapse">
+                                                                        @endif
+                                                                        <div class="panel-body">
+                                                                            @if($loading->numberOffloadingPlace>0)
+                                                                                <div class="panel subpanel">
+                                                                                    <div class="panel-body">
+                                                                                        <!--documents proof upload-->
+                                                                                        <div class="form-group text-center">
+                                                                                            <label for="documentsOffloading">Do
+                                                                                                you
+                                                                                                have proof
+                                                                                                documents (CMR/Exchange
+                                                                                                bill/Pallets bill)
+                                                                                                ?</label>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <div class="col-lg-offset-1 col-lg-4">
+                                                                                                <input type="file"
+                                                                                                       name="documentsOffloading[]"
+                                                                                                       multiple>
+                                                                                            </div>
+                                                                                            <!--button upload-->
+                                                                                            <div class="col-lg-4 col-lg-offset-2">
+                                                                                                <input type="submit"
+                                                                                                       class="btn btn-primary btn-block btn-form"
+                                                                                                       value="Upload"
+                                                                                                       name="uploadOffloading"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            @if(isset($filesNamesOffloadingPlace))
+                                                                                                <ul class="col-lg-offset-1">
+                                                                                                    @php($list=[])
+                                                                                                    @foreach($filesNamesOffloadingPlace as $name)
+                                                                                                        @if(!in_array($name, $list))
+                                                                                                            <div>
+                                                                                                                <button type="submit"
+                                                                                                                        name="deleteDocument"
+                                                                                                                        class="btn-add glyphicon glyphicon-remove"
+                                                                                                                        value="{{$name}}-Offloading"></button>
+                                                                                                                <a href="../../storage/app/proofsPallets/{{$loading->atrnr}}/documentsOffloading/{{$name}}"
+                                                                                                                   class="link">{{$name}}</a>
+                                                                                                            </div>
+                                                                                                            @php(array_push($list,$name))
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                </ul>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                @for($k=1; $k<=$loading->numberOffloadingPlace; $k++)
+                                                                                    <div class="panel subpanel">
+                                                                                        @php($stateOffloadingPlaceK='stateOffloadingPlace'.$k)
+                                                                                        @php($validateOffloadingPlaceK ='validateOffloadingPlace'.$k)
+                                                                                        <div class="panel-body">
+                                                                                            <!--pallets number brought to loading place-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-4">
+                                                                                                    <label for="numberPalletsOffloadingPlace{{$k}}"
+                                                                                                           class="control-label">How
+                                                                                                        many pallets
+                                                                                                        were
+                                                                                                        brought
+                                                                                                        ?</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-2">
+                                                                                                    @php($numberPalletsOffloadingPlaceK ='numberPalletsOffloadingPlace'.$k)
+                                                                                                    @if(isset($loading->$numberPalletsOffloadingPlaceK)&& (isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==1))
+                                                                                                        <input class="form-control col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsOffloadingPlace{{$k}}"
+                                                                                                               value="{{$loading->$numberPalletsOffloadingPlaceK}}" readonly>
+                                                                                                    @elseif(isset($loading->$numberPalletsOffloadingPlaceK))
+                                                                                                        <input class="form-control col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsOffloadingPlace{{$k}}"
+                                                                                                               value="{{$loading->$numberPalletsOffloadingPlaceK}}" >
+                                                                                                    @else
+                                                                                                        <input class="form-control col-lg-10"
+                                                                                                               type="number"
+                                                                                                               name="numberPalletsOffloadingPlace{{$k}}"
+                                                                                                               value="">
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                                @if(isset($loading->$numberPalletsOffloadingPlaceK))
+                                                                                                    <div class="col-lg-2">
+                                                                                                        @php($diffK ='diff'.$k)
+                                                                                                        @php($$diffK=$loading->$numberPalletsOffloadingPlaceK-$loading->anz)
+                                                                                                        <label for="differencePalletsOffloadingPlace{{$k}}"
+                                                                                                               class="control-label">Diff
+                                                                                                            : {{$$diffK}}</label>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <!--Account credit/debit-->
+                                                                                            <div class="form-group">
+                                                                                                <div class="col-lg-2">
+                                                                                                    <label for="accountCreditOffloadingPlace{{$k}}"
+                                                                                                           class="control-label">Credit
+                                                                                                        Account :</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-4">
+                                                                                                    @php($accountCreditOffloadingPlaceK ='accountCreditOffloadingPlace'.$k)
+                                                                                                    @if(isset($loading->$accountCreditOffloadingPlaceK)&&(isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==1))
+                                                                                                        <input type="text" name="accountCreditOffloadingPlace{{$k}}" class="form-control"
+                                                                                                               value="{{$loading->$accountCreditOffloadingPlaceK}}" readonly>
+                                                                                                    @else
+                                                                                                        <select class="selectpicker show-tick form-control"
+                                                                                                                data-size="10"
+                                                                                                                data-live-search="true"
+                                                                                                                data-live-search-style="startsWith"
+                                                                                                                title="Pallets Account Credit"
+                                                                                                                name="accountCreditOffloadingPlace{{$k}}">
+                                                                                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                                @if(Illuminate\Support\Facades\Input::old('accountCreditOffloadingPlace'.$k) && $palletsAccount->name==old('accountCreditOffloadingPlace'.$k))
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @elseif(isset($loading->$accountCreditOffloadingPlaceK)&& $palletsAccount->name==$loading->$accountCreditOffloadingPlaceK)
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @elseif(!isset($loading->$accountCreditOffloadingPlaceK)&&isset($accountZipcodeOffloadingPlace)&& $palletsAccount->name==$accountZipcodeOffloadingPlace)
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @else
+                                                                                                                    <option>{{$palletsAccount->name}}</option>
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        </select>
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                                <!--Account debited-->
+                                                                                                <div class="col-lg-2">
+                                                                                                    <label for="accountDebitOffloadingPlace{{$k}}"
+                                                                                                           class="control-label">Debit
+                                                                                                        Account :</label>
+                                                                                                </div>
+                                                                                                <div class="col-lg-4">
+                                                                                                    @php($accountDebitOffloadingPlaceK ='accountDebitOffloadingPlace'.$k)
+                                                                                                    @if(isset($loading->$accountDebitOffloadingPlaceK)&&(isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==1))
+                                                                                                        <input type="text" name="accountDebitOffloadingPlace{{$k}}" class="form-control"
+                                                                                                               value="{{$loading->$accountDebitOffloadingPlaceK}}" readonly>
+                                                                                                    @else
+                                                                                                        <select class="selectpicker show-tick form-control"
+                                                                                                                data-size="10"
+                                                                                                                data-live-search="true"
+                                                                                                                data-live-search-style="startsWith"
+                                                                                                                title="Pallets Account Debit"
+                                                                                                                name="accountDebitOffloadingPlace{{$k}}">
+                                                                                                            @php($accountDebitOffloadingPlaceK ='accountDebitOffloadingPlace'.$k)
+                                                                                                            @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                                                @if(Illuminate\Support\Facades\Input::old('accountDebitOffloadingPlace'.$k) && $palletsAccount->name==old('accountDebitOffloadingPlace'.$k))
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @elseif(isset($loading->$accountDebitOffloadingPlaceK)&& $palletsAccount->name==$loading->$accountDebitOffloadingPlaceK)
+                                                                                                                    <option selected>{{$palletsAccount->name}}</option>
+                                                                                                                @else
+                                                                                                                    <option>{{$palletsAccount->name}}</option>
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        </select>
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--validate loading ?-->
+                                                                                            <div class="form-group">
+                                                                                                @if(!empty($filesNamesOffloadingPlace)&&isset($loading->$numberPalletsOffloadingPlaceK)&&isset($loading->$accountCreditOffloadingPlaceK)&&isset($loading->$accountDebitOffloadingPlaceK))
+                                                                                                    <div class="col-lg-2">
+                                                                                                        <label for="validateOffloadingPlace{{$k}}"
+                                                                                                               class="control-label">Validated
+                                                                                                            ?</label>
+                                                                                                    </div>
+                                                                                                    <div class="col-lg-3">
+                                                                                                        @if(isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==1)
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace{{$k}}"
+                                                                                                                        value="true"
+                                                                                                                        checked>Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace{{$k}}"
+                                                                                                                        value="false">No</label>
+                                                                                                        @elseif(isset($loading->$validateOffloadingPlaceK) && $loading->$validateOffloadingPlaceK==0)
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace{{$k}}"
+                                                                                                                        value="true">Yes</label>
+                                                                                                            <label class="radio-inline"><input
+                                                                                                                        type="radio"
+                                                                                                                        name="validateOffloadingPlace{{$k}}"
+                                                                                                                        value="false"
+                                                                                                                        checked>No</label>
+                                                                                                        @endif
+                                                                                                    </div>
+                                                                                                    <!--button submit-->
+                                                                                                    <div class="col-lg-4 col-lg-offset-1">
+                                                                                                        <button type="submit"
+                                                                                                                class="btn btn-primary btn-block btn-form"
+                                                                                                                value="{{$k}}"
+                                                                                                                name="submitOffloading"
+                                                                                                                data-toggle="modal"
+                                                                                                                data-target="#submitOffloading_modal">
+                                                                                                            Submit
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                @else
+                                                                                                <!--button submit-->
+                                                                                                    <div class="col-lg-4 col-lg-offset-6">
+                                                                                                        <button type="submit"
+                                                                                                                class="btn btn-primary btn-block btn-form"
+                                                                                                                value="{{$k}}"
+                                                                                                                name="submitOffloading"
+                                                                                                                data-toggle="modal"
+                                                                                                                data-target="#submitOffloading_modal">
+                                                                                                            Submit
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                        @if(isset($submitOffloading) &&isset($loading->$numberPalletsOffloadingPlaceK)&&isset($loading->$accountCreditOffloadingPlaceK)&&isset($loading->$accountDebitOffloadingPlaceK))
+                                                                                            <!-- Modal submit -->
+                                                                                                <div class="modal show"
+                                                                                                     id="submitOffloading_modal"
+                                                                                                     role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-content">
+                                                                                                            <div class="modal-header modalHeaderLoading">
+                                                                                                                <button type="submit"
+                                                                                                                        class="close"
+                                                                                                                        value="close"
+                                                                                                                        name="closeSubmitOffloadingModal">
+                                                                                                                    &times;
+                                                                                                                </button>
+                                                                                                                <h4 class="modal-title text-center ">
+                                                                                                                    INFORMATION
+                                                                                                                </h4>
+                                                                                                            </div>
+                                                                                                            <div class="modal-body center modalBodyLoading">
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    PLANNED
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                @if(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Last transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @elseif(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Last transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')   -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                                                    <table class="table table-hover table-bordered">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th></th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                CREDIT
+                                                                                                                            </th>
+                                                                                                                            <th class="text-center">
+                                                                                                                                DEBIT
+                                                                                                                            </th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td></td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Actual</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
+                                                                                                                            <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Last transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                            </td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">New transfer</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td class="text-center">Total</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
+                                                                                                                            <td class="text-center">
+                                                                                                                                = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                @endif
+                                                                                                            </div>
+                                                                                                            <div class="modal-footer">
+                                                                                                                <button type="submit"
+                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                        value="{{$k}}"
+                                                                                                                        name="okSubmitOffloadingModal" data-toggle="modal"
+                                                                                                                        data-target="#submitValidateOffloading_modal">
+                                                                                                                    Confirm
+                                                                                                                </button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                            @if(isset($okSubmitOffloadingModal) && $loading->$stateOffloadingPlaceK=='Complete Validated')
+                                                                                                <div class="modal show"
+                                                                                                     id="submitOffloadingValidate_modal"
+                                                                                                     role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-content">
+                                                                                                            <div class="modal-header modalHeaderLoading">
+                                                                                                                <button value="close"
+                                                                                                                        class="close"
+                                                                                                                        type="submit"
+                                                                                                                        name="closeSubmitOffloadingModal">
+                                                                                                                    &times;
+                                                                                                                </button>
+                                                                                                                <h4 class="modal-title text-center">
+                                                                                                                    INFORMATION
+                                                                                                                </h4>
+                                                                                                            </div>
+                                                                                                            <div class="modal-body center modalBodyLoading">
+                                                                                                                <p class="text-center">
+                                                                                                                    Here,
+                                                                                                                    CONFIRMED
+                                                                                                                    pallets
+                                                                                                                    number</p>
+                                                                                                                <table class="table table-hover table-bordered">
+                                                                                                                    <thead>
+                                                                                                                    <tr>
+                                                                                                                        <th></th>
+                                                                                                                        <th class="text-center">
+                                                                                                                            CREDIT
+                                                                                                                        </th>
+                                                                                                                        <th class="text-center">
+                                                                                                                            DEBIT
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                    </thead>
+                                                                                                                    <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td></td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">Actual</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
+                                                                                                                        <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">New transfer</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td class="text-center">Total</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                                                                                    </tr>
+                                                                                                                    </tbody>
+                                                                                                                </table>
+                                                                                                            </div>
+                                                                                                            <div class="modal-footer">
+                                                                                                                <button type="submit"
+                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                        value="{{$k}}"
+                                                                                                                        name="okSubmitValidateOffloadingModal">
+                                                                                                                    Confirm
+                                                                                                                </button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            @endif
 
-                                                                                        {{--@if(Session::has('testFirstTime'))--}}
-                                                                                        {{--<!-- Modal submit -->--}}
-                                                                                            {{--<div class="modal show"--}}
-                                                                                                 {{--id="submitOffloading_modal"--}}
-                                                                                                 {{--role="dialog">--}}
-                                                                                                {{--<div class="modal-dialog modal-md">--}}
-                                                                                                    {{--<div class="modal-content">--}}
-                                                                                                        {{--<div class="modal-header">--}}
-                                                                                                            {{--<button type="submit"--}}
-                                                                                                                    {{--class="close"--}}
-                                                                                                                    {{--value="close"--}}
-                                                                                                                    {{--name="closeSubmitOffloadingModal">--}}
-                                                                                                                {{--&times;--}}
-                                                                                                            {{--</button>--}}
-                                                                                                            {{--<h4 class="modal-title text-center">--}}
-                                                                                                                {{--Information--}}
-                                                                                                                {{--:</h4>--}}
-                                                                                                        {{--</div>--}}
-                                                                                                        {{--<div class="modal-body center">--}}
 
-                                                                                                        {{--@if(request()->session()->get('testFirstTime')=='1stTime' ||request()->session()->get('testFirstTime')=='diffC-diffD')--}}
-                                                                                                            {{--<!-- 1st time or none account changed-->--}}
-                                                                                                                {{--@if(request()->session()->get('testFirstTime')=='1stTime')--}}
-                                                                                                                    {{--<p class="text-center">--}}
-                                                                                                                        {{--It--}}
-                                                                                                                        {{--is--}}
-                                                                                                                        {{--the--}}
-                                                                                                                        {{--1st--}}
-                                                                                                                        {{--time--}}
-                                                                                                                        {{--this--}}
-                                                                                                                        {{--pallets--}}
-                                                                                                                        {{--transfer--}}
-                                                                                                                        {{--is--}}
-                                                                                                                        {{--done--}}
-                                                                                                                        {{--for--}}
-                                                                                                                        {{--this--}}
-                                                                                                                        {{--loading--}}
-                                                                                                                        {{--place.--}}
-                                                                                                                    {{--</p>--}}
-                                                                                                                {{--@elseif(request()->session()->get('testFirstTime')=='diffC-diffD')--}}
-                                                                                                                    {{--<p class="text-center">--}}
-                                                                                                                        {{--Both--}}
-                                                                                                                        {{--accounts--}}
-                                                                                                                        {{--have--}}
-                                                                                                                        {{--been--}}
-                                                                                                                        {{--updated--}}
-                                                                                                                        {{--for--}}
-                                                                                                                        {{--this--}}
-                                                                                                                        {{--loading--}}
-                                                                                                                        {{--place.--}}
-                                                                                                                    {{--</p>--}}
-                                                                                                                {{--@endif--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--Here,--}}
-                                                                                                                    {{--planned--}}
-                                                                                                                    {{--pallets--}}
-                                                                                                                    {{--number</p>--}}
-                                                                                                                {{--<table class="table table-hover table-bordered">--}}
-                                                                                                                    {{--<thead>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--CREDIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--DEBIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</thead>--}}
-                                                                                                                    {{--<tbody>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('creditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('debitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--+ {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--- {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</tbody>--}}
-                                                                                                                {{--</table>--}}
-                                                                                                            {{--@elseif(request()->session()->get('testFirstTime')=='sameC-sameD')--}}
-                                                                                                            {{--<!-- credit and debit accounts haven't changed-->--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--These--}}
-                                                                                                                    {{--accounts--}}
-                                                                                                                    {{--have--}}
-                                                                                                                    {{--already--}}
-                                                                                                                    {{--been--}}
-                                                                                                                    {{--credited/debited--}}
-                                                                                                                    {{--for--}}
-                                                                                                                    {{--this--}}
-                                                                                                                    {{--loading--}}
-                                                                                                                    {{--place.--}}
-                                                                                                                {{--</p>--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--Here,--}}
-                                                                                                                    {{--planned--}}
-                                                                                                                    {{--pallets--}}
-                                                                                                                    {{--number</p>--}}
-                                                                                                                {{--<table class="table table-hover table-bordered">--}}
-                                                                                                                    {{--<thead>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--CREDIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--DEBIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</thead>--}}
-                                                                                                                    {{--<tbody>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('creditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('debitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--- {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--+ {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--+ {{request()->session()->get('palletsNumber')}} (new transfer)</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--- {{request()->session()->get('palletsNumber')}} (new transfer)</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')- request()->session()->get('lastPalletsNumber')+request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')+ request()->session()->get('lastPalletsNumber')-request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</tbody>--}}
-                                                                                                                {{--</table>--}}
-                                                                                                            {{--@elseif(request()->session()->get('testFirstTime')=='sameC-diffD')--}}
-                                                                                                            {{--<!-- debit account has changed-->--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--Debit--}}
-                                                                                                                    {{--account--}}
-                                                                                                                    {{--has--}}
-                                                                                                                    {{--been--}}
-                                                                                                                    {{--updated--}}
-                                                                                                                    {{--for--}}
-                                                                                                                    {{--this--}}
-                                                                                                                    {{--loading--}}
-                                                                                                                    {{--place.--}}
-                                                                                                                {{--</p>--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--Here,--}}
-                                                                                                                    {{--planned--}}
-                                                                                                                    {{--pallets--}}
-                                                                                                                    {{--number</p>--}}
-                                                                                                                {{--<table class="table table-hover table-bordered">--}}
-                                                                                                                    {{--<thead>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--CREDIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--DEBIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</thead>--}}
-                                                                                                                    {{--<tbody>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('creditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('debitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--- {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                        {{--</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--+ {{request()->session()->get('palletsNumber')}} (new transfer)</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--- {{request()->session()->get('palletsNumber')}} (new transfer)</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')- request()->session()->get('lastPalletsNumber')+request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')-request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</tbody>--}}
-                                                                                                                {{--</table>--}}
-                                                                                                            {{--@elseif(request()->session()->get('testFirstTime')=='diffC-sameD')--}}
-                                                                                                            {{--<!-- credit account has changed-->--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--Credit--}}
-                                                                                                                    {{--account--}}
-                                                                                                                    {{--has--}}
-                                                                                                                    {{--been--}}
-                                                                                                                    {{--updated--}}
-                                                                                                                    {{--for--}}
-                                                                                                                    {{--this--}}
-                                                                                                                    {{--loading--}}
-                                                                                                                    {{--place.--}}
-                                                                                                                {{--</p>--}}
-                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                    {{--Here,--}}
-                                                                                                                    {{--planned--}}
-                                                                                                                    {{--pallets--}}
-                                                                                                                    {{--number</p>--}}
-                                                                                                                {{--<table class="table table-hover table-bordered">--}}
-                                                                                                                    {{--<thead>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--CREDIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                        {{--<th class="text-center">--}}
-                                                                                                                            {{--DEBIT--}}
-                                                                                                                        {{--</th>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</thead>--}}
-                                                                                                                    {{--<tbody>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('creditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('debitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">{{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                        {{--</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--+ {{request()->session()->get('lastPalletsNumber')}} (last transfer)</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--+ {{request()->session()->get('palletsNumber')}} (new transfer)</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--- {{request()->session()->get('palletsNumber')}} (new transfer)</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--<tr>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsCreditAccount')+request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                            {{--= {{request()->session()->get('actualTheoricalNumberPalletsDebitAccount')+ request()->session()->get('lastPalletsNumber')-request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                    {{--</tr>--}}
-                                                                                                                    {{--</tbody>--}}
-                                                                                                                {{--</table>--}}
-                                                                                                            {{--@endif--}}
-                                                                                                        {{--</div>--}}
-                                                                                                        {{--<div class="modal-footer">--}}
-                                                                                                            {{--<button type="submit"--}}
-                                                                                                                    {{--class="btn btn-default btn-modal"--}}
-                                                                                                                    {{--value="close"--}}
-                                                                                                                    {{--name="closeSubmitOffloadingModal">--}}
-                                                                                                                {{--OK--}}
-                                                                                                            {{--</button>--}}
-                                                                                                        {{--</div>--}}
-                                                                                                    {{--</div>--}}
-                                                                                                {{--</div>--}}
-                                                                                            {{--</div>--}}
-                                                                                        {{--@endif--}}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endfor
+                                                                            @endif
+                                                                        </div>
+                                                                        @if (Session::has('openPanelOffloading'))
+                                                                    </div>
+                                                                    @else
+                                                            </div>
+                                                        @endif
+                                                    </div>
 
 
-                                                                                    {{--</div>--}}
-                                                                                {{--</div>--}}
-                                                                            {{--@endfor--}}
-                                                                                {{--@endif--}}
-                                                                        {{--</div>--}}
-                                                                        {{--@if (Session::has('openPanelOffloading'))--}}
-                                                                    {{--</div>--}}
-                                                                    {{--@else--}}
-                                                            {{--</div>--}}
-                                                        {{--@endif--}}
-                                                    {{--</div>--}}
                                                 </form>
                                             </div>
                                             @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading')||Session::has('openPanelTruck'))
