@@ -53,11 +53,13 @@
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Type" name="type" required
                                     >
-                                        @foreach($listTypes as $type )
-                                            @if(Illuminate\Support\Facades\Input::old('type') && $type==old('type'))
-                                                <option selected>{{$type}}</option>
-                                            @else
-                                                <option>{{$type}}</option>
+                                        @foreach($listTypes as $t )
+                                            @if(Illuminate\Support\Facades\Input::old('type') && $t==old('type'))
+                                                <option selected>{{$t}}</option>
+                                            @elseif(isset($type)&&$t==$type)
+                                                <option selected>{{$t}}</option>
+                                                @else
+                                                <option>{{$t}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -69,7 +71,37 @@
                                     <textarea class="form-control" rows="1" id="details" placeholder="Details">{{old('details')}}</textarea>
                                         @endif
                                 </div>
-                            </div>
+
+                                    <div class="col-lg-2">
+                                        <label for="state"
+                                               class="control-label">Multi-Transfers ?
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-2 text-center">
+                                        @if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="true"
+                                                        checked>Yes</label>
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="false">No</label>
+                                        @else
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="true">Yes</label>
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="false"
+                                                        checked>No</label>
+                                        @endif
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <!--number of pallets-->
                                     <div class="col-lg-2">
@@ -96,26 +128,37 @@
                                     </div>
                                 <!--date-->
                                 <div class="col-lg-1 col-lg-offset-1">
-                                    <label for="date" class="control-label"><span>*</span> Date :</label>
+                                    <label for="date" class="control-label">Date :</label>
                                 </div>
                                 <div class="col-lg-2">
                                     @if(isset($date))
                                         <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ $date }}" placeholder="Date" required autofocus>
+                                               value="{{ $date }}" placeholder="Date" autofocus>
                                         @else
                                     <input id="date" type="date" class="form-control" name="date"
-                                           value="{{ old('date') }}" placeholder="Date" required autofocus>
-                                    @endif
-                                    @if ($errors->has('date'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('date') }}</strong>
-                                    </span>
+                                           value="{{ old('date') }}" placeholder="Date" autofocus>
                                     @endif
                                 </div>
-
-
-
-
+                                    <!--atrnr-->
+                                    <div class="col-lg-1 col-lg-offset-2">
+                                        <label for="loading_atrnr" class="control-label">Atrnr
+                                            :</label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <select class="selectpicker show-tick form-control" data-size="5"
+                                                data-live-search="true" data-live-search-style="startsWith"
+                                                title="Loading_atrnr" name="loading_atrnr" >
+                                            @foreach($listAtrnr as $atrnr )
+                                                @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
+                                                    <option selected>{{$atrnr}}</option>
+                                                @elseif(isset($atrnr)&&$atrnr==$loading_atrnr)
+                                                    <option selected>{{$atrnr}}</option>
+                                                @else
+                                                    <option>{{$atrnr}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
                             </div>
 
                             <div class="form-group">
@@ -139,13 +182,8 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('creditAccount'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('creditAccount') }}</strong>
-                                    </span>
-                                    @endif
                                 </div>
-                                <!--credit account-->
+                                <!--debit account-->
                                 <div class="col-lg-2">
                                     <label for="debitAccount" class="control-label"><span>*</span> Debit
                                         account
@@ -165,11 +203,6 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('debitAccount'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('debitAccount') }}</strong>
-                                    </span>
-                                    @endif
                                 </div>
                             </div>
                             <div class="form-group">
@@ -206,7 +239,7 @@
                                         <div class="modal-body center modalBodyTransfer">
                                                 <p class="text-center">
                                                     Here,
-                                                    planned
+                                                    PLANNED
                                                     pallets
                                                     number</p>
                                                 <table class="table table-hover table-bordered">

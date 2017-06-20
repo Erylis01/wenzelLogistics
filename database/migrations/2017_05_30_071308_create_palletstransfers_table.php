@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -15,7 +16,7 @@ class CreatePalletstransfersTable extends Migration
     {
         Schema::create('palletstransfers', function (Blueprint $table) {
             $table->increments('id')->unique();
-            $table->integer('loading_atrnr')->unsigned()->index();
+            $table->integer('loading_atrnr')->unsigned()->index()->nullable();
             $table->string('creditAccount');
             $table->string('debitAccount');
             $table->integer('palletsNumber');

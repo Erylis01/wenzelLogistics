@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Document;
+use App\Loading;
 use App\Palletsaccount;
 use App\Palletstransfer;
 use Carbon\Carbon;
@@ -102,13 +103,16 @@ class PalletstransfersController extends Controller
         if (Auth::check()) {
             $listPalletsaccounts = DB::table('palletsaccounts')->get();
             $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+            foreach(Loading::get()->where('pt', 'JA') as $loading){
+                $listAtrnr[]=$loading->atrnr;
+            }
             $account = $request->get('addTransferAccount');
             $loading_atrnr=$request->get('addTransferLoading');
             $creditAccount = $account;
             $debitAccount = $account;
             $date = Carbon::now()->format('Y-m-d');
 
-            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'loading_atrnr'));
+            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'loading_atrnr', 'listAtrnr'));
         } else {
             return view('auth.login');
         }
@@ -121,10 +125,14 @@ class PalletstransfersController extends Controller
     {
         $listPalletsaccounts = DB::table('palletsaccounts')->get();
         $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+        foreach(Loading::get()->where('pt', 'JA') as $loading){
+            $listAtrnr[]=$loading->atrnr;
+        }
         $date = Input::get('date');
         $type = Input::get('type');
         $multiTransfer=Input::get('multiTransfer');
         $details=Input::get('details');
+        $loading_atrnr=Input::get('loading_atrnr');
         $creditAccount = Input::get('creditAccount');
         $debitAccount = Input::get('debitAccount');
         $palletsNumber = Input::get('palletsNumber');
@@ -132,19 +140,6 @@ class PalletstransfersController extends Controller
         $okSubmitAddModal = Input::get('okSubmitAddModal');
         $closeSubmitAddModal = Input::get('closeSubmitAddModal');
 
-        $rules = array(
-            'creditAccount' => 'required',
-            'debitAccount' => 'required',
-            'palletsNumber' => 'required',
-            'type'=>'required',
-        );
-        $validator = Validator::make(Input::all(), $rules);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        } else {
             $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
             $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
 
@@ -154,16 +149,20 @@ class PalletstransfersController extends Controller
                 session()->flash('debitAccount', $debitAccount);
                 session()->flash('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
                 session()->flash('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
-                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details'));
+                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details', 'loading_atrnr', 'listAtrnr'));
             } elseif (isset($okSubmitAddModal)) {
                 if($multiTransfer=='true'){
                     $multiTransfer=true;
                 }elseif($multiTransfer=='false'){
                     $multiTransfer=false;
                 }
-                if (isset($date)) {
-                    Palletstransfer::create(['date' => $date, 'type' => $type,'details'=>$details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer]);
-                } else {
+                if (isset($date)&&isset($loading_atrnr)) {
+                    Palletstransfer::create(['date' => $date, 'type' => $type,'details'=>$details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer, 'loading_atrnr'=>$loading_atrnr]);
+                } elseif(isset($date)) {
+                    Palletstransfer::create(['date' => $date,'type' => $type, 'details'=>$details,'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer]);
+                }elseif(isset($loading_atrnr)) {
+                    Palletstransfer::create(['loading_atrnr' => $loading_atrnr,'type' => $type, 'details'=>$details,'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer]);
+                }else {
                     Palletstransfer::create(['type' => $type, 'details'=>$details,'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer]);
                 }
                 Palletsaccount::where('name', $creditAccount)->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
@@ -174,7 +173,7 @@ class PalletstransfersController extends Controller
                 return redirect()->back();
 //                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details'));
             }
-        }
+
     }
 
     /**
