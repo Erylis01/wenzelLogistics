@@ -35,7 +35,7 @@ Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('de
 Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
 Route::get('/addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
-//WAREHOUSES
+//TRUCKS
 Route::get('/allTrucks', 'TrucksController@showAll')->name('showAllTrucks');
 Route::get('/detailsTruck/{id}', 'TrucksController@showDetails')->name('showDetailsTruck');
 Route::post('/detailsTruck/{id}', 'TrucksController@update')->name('updateTruck');
@@ -55,9 +55,10 @@ Route::get('/addPalletsaccount', 'PalletsaccountsController@showAdd')->name('sho
 Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
 Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');
 Route::get('/addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
+Route::get('/addPalletstransfer/{other}', 'PalletstransfersController@showAddOther')->name('showAddPalletstransferOther');
+//Route::get('/addPalletstransfer/{atrnr}', 'PalletstransfersController@showAddLoading')->name('showAddPalletstransferLoading');
 Route::get('/detailsPalletstransfer/{id}', 'PalletstransfersController@showDetails')->name('showDetailsPalletstransfer');
 Route::post('/detailsPalletstransfer/{id}', 'PalletstransfersController@update')->name('updatePalletstransfer');
-//Route::post('/detailsPalletstransfer/{id}/{palletsaccount_name}', 'PalletstransfersController@saveVerification')->name('saveVerificationPalletstransfer');
 Route::delete('/detailsPalletstransfer/{id}', 'PalletstransfersController@delete')->name('deletePalletstransfer');
 
 //MAILS

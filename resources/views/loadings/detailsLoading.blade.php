@@ -567,7 +567,10 @@
                         <div class="panel subpanel">
                             <div class="panel-heading">
                                 <a data-toggle="collapse" href="#Pan2collapse">Pallets location ?</a>
-                            </div>
+                                <span>
+                                <a href="{{route('showAddPalletstransferOther', $loading->atrnr)}}" class="col-lg-offset-8 btn btn-add">Add transfer</a>
+                                </span>
+                                </div>
                             @if (Session::has('openPanelLoading')||Session::has('openPanelOffloading')||Session::has('openPanelTruck'))
                                 <div id="Pan2collapse" class="panel-collapse in collapse">
                                     @else

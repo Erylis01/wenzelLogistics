@@ -94,25 +94,48 @@ class PalletstransfersController extends Controller
         }
     }
 
+    public function showAddOther($other){
+        if (Auth::check()) {
+            foreach(Palletsaccount::get() as $account){
+                $listNamesPalletsaccounts[]=$account->name;
+            }
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+            $date = Carbon::now()->format('Y-m-d');
+            foreach(Loading::get()->where('pt', 'JA') as $loading){
+                $listAtrnr[]=$loading->atrnr;
+            }
+            if(in_array($other, $listAtrnr)){
+                $loading_atrnr=$other;
+                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr', 'loading_atrnr'));
+            }elseif(in_array($other, $listNamesPalletsaccounts)) {
+                $creditAccount = $other;
+                $debitAccount = $other;
+
+                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'listAtrnr'));
+            }else{
+                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr'));
+            }
+        } else {
+            return view('auth.login');
+        }
+    }
+
     /**
      * show the add form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAdd(Request $request)
+    public function showAdd()
     {
         if (Auth::check()) {
-            $listPalletsaccounts = DB::table('palletsaccounts')->get();
+            foreach(Palletsaccount::get() as $account){
+                $listNamesPalletsaccounts[]=$account->name;
+            }
             $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+        $date = Carbon::now()->format('Y-m-d');
             foreach(Loading::get()->where('pt', 'JA') as $loading){
                 $listAtrnr[]=$loading->atrnr;
             }
-            $account = $request->get('addTransferAccount');
-            $loading_atrnr=$request->get('addTransferLoading');
-            $creditAccount = $account;
-            $debitAccount = $account;
-            $date = Carbon::now()->format('Y-m-d');
-
-            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'loading_atrnr', 'listAtrnr'));
+            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr'));
         } else {
             return view('auth.login');
         }
@@ -123,7 +146,9 @@ class PalletstransfersController extends Controller
      */
     public function add()
     {
-        $listPalletsaccounts = DB::table('palletsaccounts')->get();
+        foreach(Palletsaccount::get() as $account){
+            $listNamesPalletsaccounts[]=$account->name;
+        }
         $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
         foreach(Loading::get()->where('pt', 'JA') as $loading){
             $listAtrnr[]=$loading->atrnr;
@@ -149,7 +174,7 @@ class PalletstransfersController extends Controller
                 session()->flash('debitAccount', $debitAccount);
                 session()->flash('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
                 session()->flash('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
-                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details', 'loading_atrnr', 'listAtrnr'));
+                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer', 'listNamesPalletsaccounts', 'listTypes', 'multiTransfer', 'details', 'loading_atrnr', 'listAtrnr'));
             } elseif (isset($okSubmitAddModal)) {
                 if($multiTransfer=='true'){
                     $multiTransfer=true;

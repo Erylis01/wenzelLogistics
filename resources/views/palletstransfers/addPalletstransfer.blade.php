@@ -151,7 +151,7 @@
                                             @foreach($listAtrnr as $atrnr )
                                                 @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
                                                     <option selected>{{$atrnr}}</option>
-                                                @elseif(isset($atrnr)&&$atrnr==$loading_atrnr)
+                                                @elseif(isset($loading_atrnr)&&$atrnr==$loading_atrnr)
                                                     <option selected>{{$atrnr}}</option>
                                                 @else
                                                     <option>{{$atrnr}}</option>
@@ -172,13 +172,13 @@
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Credit Account" name="creditAccount" required>
-                                        @foreach($listPalletsaccounts as $palletsAccount )
-                                            @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount->name==old('creditAccount'))
-                                                <option selected>{{$palletsAccount->name}}</option>
-                                            @elseif(isset($creditAccount)&& $palletsAccount->name==$creditAccount)
-                                                <option selected>{{$palletsAccount->name}}</option>
+                                        @foreach($listNamesPalletsaccounts as $palletsAccount )
+                                            @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
+                                                <option selected>{{$palletsAccount}}</option>
+                                            @elseif(isset($creditAccount)&& $palletsAccount==$creditAccount)
+                                                <option selected>{{$palletsAccount}}</option>
                                             @else
-                                                <option>{{$palletsAccount->name}}</option>
+                                                <option>{{$palletsAccount}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -193,13 +193,13 @@
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Debit Account" name="debitAccount" required>
-                                        @foreach($listPalletsaccounts as $palletsAccount )
-                                            @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount->name==old('debitAccount'))
-                                                <option selected>{{$palletsAccount->name}}</option>
-                                            @elseif(isset($debitAccount)&& $palletsAccount->name==$debitAccount)
-                                                <option selected>{{$palletsAccount->name}}</option>
+                                        @foreach($listNamesPalletsaccounts as $palletsAccount )
+                                            @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
+                                                <option selected>{{$palletsAccount}}</option>
+                                            @elseif(isset($debitAccount)&& $palletsAccount==$debitAccount)
+                                                <option selected>{{$palletsAccount}}</option>
                                             @else
-                                                <option>{{$palletsAccount->name}}</option>
+                                                <option>{{$palletsAccount}}</option>
                                             @endif
                                         @endforeach
                                     </select>

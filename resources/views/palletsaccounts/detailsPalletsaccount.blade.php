@@ -406,11 +406,7 @@
                                             <br>
                                             <div >
                                                 <div class="col-lg-2">
-                                                    <form role="form" method="GET" action="{{route('showAddPalletstransfer')}}">
-                                                        {{ csrf_field() }}
-                                <button type="submit" class="btn btn-add" name="addTransferAccount" value="{{$name}}"> Add transfer</button>
-
-                                                    </form>
+                                                    <a href="{{route('showAddPalletstransferOther', $name)}}" class="btn btn-add">Add transfer</a>
                                                 </div>
                                                 <form role="form" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
                                                     {{ csrf_field() }}
