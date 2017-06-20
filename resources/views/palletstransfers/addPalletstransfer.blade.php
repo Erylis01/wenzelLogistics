@@ -65,43 +65,36 @@
                                     </select>
                                 </div>
                                 <!--details-->
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
                                     @if(isset($details))
                                         <textarea class="form-control" rows="1" id="details" placeholder="Details">{{$details}}</textarea>
                                         @else
                                     <textarea class="form-control" rows="1" id="details" placeholder="Details">{{old('details')}}</textarea>
                                         @endif
                                 </div>
-                                <!--multitransfer-->
-                                    <div class="col-lg-2 text-left">
-                                        <label for="state"
-                                               class="control-label ">Multi-Transfers ?
-                                        </label>
-                                    </div>
-                                    <div class="col-lg-2 text-left">
-                                        @if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="true"
-                                                        checked>Yes</label>
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="false">No</label>
-                                        @else
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="true">Yes</label>
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="false"
-                                                        checked>No</label>
-                                        @endif
-                                    </div>
+                                <!--atrnr-->
+                                <div class="col-lg-1 text-left">
+                                    <label for="loading_atrnr" class="control-label">Atrnr
+                                        :</label>
                                 </div>
+                                <div class="col-lg-2">
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Loading_atrnr" name="loading_atrnr" id="loading_atrnrSelect"
+                                            onchange="displayFields(this);">
+                                        <option value="">No loading</option>
+                                        @foreach($listAtrnr as $atrnr )
+                                            @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
+                                                <option selected>{{$atrnr}}</option>
+                                            @elseif(isset($loading_atrnr)&&$atrnr==$loading_atrnr)
+                                                <option selected>{{$atrnr}}</option>
+                                            @else
+                                                <option>{{$atrnr}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
                                 <div class="form-group">
                                     <!--number of pallets-->
@@ -140,26 +133,45 @@
                                            value="{{ old('date') }}" placeholder="Date" autofocus>
                                     @endif
                                 </div>
-                                    <!--atrnr-->
-                                    <div class="col-lg-1 col-lg-offset-1">
-                                        <label for="loading_atrnr" class="control-label">Atrnr
-                                            :</label>
+                                    <!--multitransfer-->
+                                    @if(isset($loading_atrnr))
+                                        <div>
+                                            @else
+                                                <div id="loading_atrnrLink">
+                                                    @endif
+                                    <div class="col-lg-2 col-lg-offset-1 text-left">
+                                        <label for="state"
+                                               class="control-label ">Multi-Transfers ?
+                                        </label>
                                     </div>
-                                    <div class="col-lg-2">
-                                        <select class="selectpicker show-tick form-control" data-size="5"
-                                                data-live-search="true" data-live-search-style="startsWith"
-                                                title="Loading_atrnr" name="loading_atrnr" >
-                                            @foreach($listAtrnr as $atrnr )
-                                                @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
-                                                    <option selected>{{$atrnr}}</option>
-                                                @elseif(isset($loading_atrnr)&&$atrnr==$loading_atrnr)
-                                                    <option selected>{{$atrnr}}</option>
-                                                @else
-                                                    <option>{{$atrnr}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
+                                    <div class="col-lg-2 text-left">
+                                        @if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="true"
+                                                        checked>Yes</label>
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="false">No</label>
+                                        @else
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="true">Yes</label>
+                                            <label class="radio-inline"><input
+                                                        type="radio"
+                                                        name="multiTransfer"
+                                                        value="false"
+                                                        checked>No</label>
+                                        @endif
                                     </div>
+                                                    @if(isset($loading_atrnr))
+                                                        </div>
+                                                            @else
+                                                                </div>
+                                                                    @endif
                             </div>
 
                             <div class="form-group">
@@ -304,3 +316,5 @@
             </div>
     </div>
 @endsection
+<script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}">
+</script>

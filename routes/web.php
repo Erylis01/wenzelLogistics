@@ -56,7 +56,6 @@ Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('
 Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');
 Route::get('/addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
 Route::get('/addPalletstransfer/{other}', 'PalletstransfersController@showAddOther')->name('showAddPalletstransferOther');
-//Route::get('/addPalletstransfer/{atrnr}', 'PalletstransfersController@showAddLoading')->name('showAddPalletstransferLoading');
 Route::get('/detailsPalletstransfer/{id}', 'PalletstransfersController@showDetails')->name('showDetailsPalletstransfer');
 Route::post('/detailsPalletstransfer/{id}', 'PalletstransfersController@update')->name('updatePalletstransfer');
 Route::delete('/detailsPalletstransfer/{id}', 'PalletstransfersController@delete')->name('deletePalletstransfer');

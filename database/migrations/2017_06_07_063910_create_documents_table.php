@@ -16,16 +16,15 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('type');
             $table->timestamps();
         });
-        Schema::create('document_loading',function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('document_id')->unsigned();
-            $table->integer('loading_id')->unsigned();
-            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
-            $table->foreign('loading_id')->references('id')->on('loadings')->onDelete('cascade');
-        });
+//        Schema::create('document_loading',function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->integer('document_id')->unsigned();
+//            $table->integer('loading_id')->unsigned();
+//            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+//            $table->foreign('loading_id')->references('id')->on('loadings')->onDelete('cascade');
+//        });
 
         Schema::create('document_palletstransfer',function (Blueprint $table) {
             $table->increments('id');

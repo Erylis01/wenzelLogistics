@@ -41,6 +41,7 @@
                 {{--@else--}}
                 {{--<div class="panel panel-warning">--}}
                 {{--@endif--}}
+
                 <form class="form-horizontal text-right" role="form" method="POST"
                       action="{{route('updatePalletstransfer', $transfer->id)}}" enctype="multipart/form-data">
                     <input type="hidden"
@@ -50,7 +51,7 @@
                         <div class="panel-heading">
                             <div class="col-lg-5 text-left">Details of the pallets transfer n° {{$transfer->id}}
                             </div>
-                            <div class="col-lg-offset-8">
+                            <div>
                                 <button type="button"
                                         class=" btn btn-primary btn-form glyphicon glyphicon-remove"
                                         data-toggle="modal"
@@ -76,7 +77,7 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-2">
-                                    @if(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                    @if(isset($transfer->validate) && $transfer->validate==1)
                                         <input type="text" name="type" class="form-control" value="{{$transfer->type}}"
                                                readonly>
                                     @else
@@ -96,14 +97,14 @@
                                     @endif
                                 </div>
                                 <!--details-->
-                                <div class="col-lg-4">
-                                    @if(isset($transfer->details)&&(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true'))
+                                <div class="col-lg-3">
+                                    @if(isset($transfer->details)&&(isset($transfer->validate) && $transfer->validate==1))
                                         <textarea class="form-control" rows="1" id="details" placeholder="Details"
                                                   readonly>{{$transfer->details}}</textarea>
                                     @elseif(isset($transfer->details))
                                         <textarea class="form-control" rows="1" id="details"
                                                   placeholder="Details">{{$transfer->details}}</textarea>
-                                    @elseif(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                    @elseif(isset($transfer->validate) && $transfer->validate==1)
                                         <textarea class="form-control" rows="1" id="details" placeholder="Details"
                                                   readonly>{{old('details')}}</textarea>
                                     @else
@@ -111,97 +112,16 @@
                                                   placeholder="Details">{{old('details')}}</textarea>
                                     @endif
                                 </div>
-                                <!--multitransfer-->
-                                <div class="col-lg-2 text-left">
-                                    <label for="state"
-                                           class="control-label">Multi-Transfers ?
-                                    </label>
-                                </div>
-                                <div class="col-lg-2 text-left">
-                                    @if((isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')&&(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true')))
-                                        <input type="text" name="multiTransfer" class="form-control"
-                                               value="Yes" readonly>
-                                    @elseif(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))
-                                        <input type="text" name="multiTransfer" class="form-control"
-                                               value="No" readonly>
-                                    @elseif((isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true'))
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="true"
-                                                    readonly>Yes</label>
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="false" checked readonly>No</label>
-                                    @else
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="true">Yes</label>
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="false"
-                                                    checked>No</label>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <!--number of pallets-->
-                                <div class="col-lg-2">
-                                    <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
-                                        :</label>
-                                </div>
-                                <div class="col-lg-1">
-                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
-                                               required autofocus>
-                                    @elseif(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr"
-                                               required autofocus readonly>
-                                    @else
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr"
-                                               required autofocus>
-                                    @endif
-                                </div>
-                                <!--date-->
-                                <div class="col-lg-1">
-                                    <label for="date" class="control-label"><span>*</span> Date :</label>
-                                </div>
-                                <div class="col-lg-2">
-                                    @if(isset($transfer->date)&&(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true'))
-                                        <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ $transfer->date }}" placeholder="Date" required autofocus
-                                               readonly>
-                                    @elseif(isset($transfer->date))
-                                        <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ $transfer->date }}" placeholder="Date" required autofocus>
-
-                                    @elseif(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
-                                        <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ old('date') }}" placeholder="Date" required autofocus readonly>
-                                    @else(Illuminate\Support\Facades\Input::old('palletsNumber'))
-                                        <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ old('date') }}" placeholder="Date" required autofocus>
-                                    @endif
-                                </div>
                                 <!--atrnr-->
-                                <div class="col-lg-1 col-lg-offset-1">
+                                <div class="col-lg-1 text-left">
                                     <label for="loading_atrnr" class="control-label">Atrnr
                                         :</label>
                                 </div>
                                 <div class="col-lg-2">
-                                    @if(isset($transfer->loading_atrnr)&&(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true'))
+                                    @if(isset($transfer->loading_atrnr)&&(isset($transfer->validate) && $transfer->validate==1))
                                         <input type="text" name="loading_atrnr" class="form-control"
                                                value="{{$transfer->loading_atrnr}}" readonly>
-                                    @elseif(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                    @elseif(isset($transfer->validate) && $transfer->validate==1)
                                         <input type="text" name="loading_atrnr" class="form-control"
                                                value="{{old('loading_atrnr')}}" readonly>
                                     @else
@@ -222,21 +142,122 @@
                                     @endif
                                 </div>
                                 <!--Link loading-->
-                                    @if(isset($transfer->loading_atrnr)||(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true'))
-                                        <div class="col-lg-2 text-left">
-                                            @else
-                                                <div class="col-lg-2 text-left" id="loading_atrnrLink">
-                                                    @endif
-                                                    <a href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}"
-                                                       class="link"><span
-                                                                class="glyphicon glyphicon-info-sign"></span>
-                                                        See loading</a>
-                                                    @if(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
-                                                </div>
-                                                @else
-                                        </div>
-                                    @endif
+                                @if(isset($transfer->loading_atrnr))
+                                    <div class="col-lg-2 text-left">
+                                        <a href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}"
+                                           class="link"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                            See loading</a>
+                                    </div>
+                                @endif
                             </div>
+                            <div class="form-group">
+                                <!--number of pallets-->
+                                <div class="col-lg-2">
+                                    <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
+                                        :</label>
+                                </div>
+                                <div class="col-lg-1">
+                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
+                                               required autofocus>
+                                    @elseif(isset($transfer->validate) && $transfer->validate==1)
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr"
+                                               required autofocus readonly>
+                                    @else
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr"
+                                               required autofocus>
+                                    @endif
+                                </div>
+                                <!--date-->
+                                <div class="col-lg-1">
+                                    <label for="date" class="control-label"><span>*</span> Date :</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    @if(isset($transfer->date)&&(isset($transfer->validate) && $transfer->validate==1))
+                                        <input id="date" type="date" class="form-control" name="date"
+                                               value="{{ $transfer->date }}" placeholder="Date" required autofocus
+                                               readonly>
+                                    @elseif(isset($transfer->date))
+                                        <input id="date" type="date" class="form-control" name="date"
+                                               value="{{ $transfer->date }}" placeholder="Date" required autofocus>
+
+                                    @elseif(isset($transfer->validate) && $transfer->validate==1)
+                                        <input id="date" type="date" class="form-control" name="date"
+                                               value="{{ old('date') }}" placeholder="Date" required autofocus readonly>
+                                    @else(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                        <input id="date" type="date" class="form-control" name="date"
+                                               value="{{ old('date') }}" placeholder="Date" required autofocus>
+                                    @endif
+                                </div>
+                                <!--multitransfer-->
+                                @if(isset($transfer->loading_atrnr))
+                                    <div>
+                                        @else
+                                            <div id="loading_atrnrLink">
+                                                @endif
+                                <div class="col-lg-2 col-lg-offset-1 text-left">
+                                    <label for="state"
+                                           class="control-label">Multi-Transfers ?
+                                    </label>
+                                </div>
+                                <div class="col-lg-2 text-left">
+                                    @if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))
+                                        <input type="text" name="multiTransfer" class="form-control"
+                                               value="Yes" readonly>
+                                    @elseif(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))
+                                        <label class="radio-inline"><input
+                                                    type="radio"
+                                                    name="multiTransfer"
+                                                    value="true"
+                                                    checked>Yes</label>
+                                        <label class="radio-inline"><input
+                                                    type="radio"
+                                                    name="multiTransfer"
+                                                    value="false">No</label>
+                                    @elseif((isset($transfer->validate) && $transfer->validate==1))
+                                        <input type="text" name="multiTransfer" class="form-control"
+                                               value="No" readonly>
+                                    @else
+                                        <label class="radio-inline"><input
+                                                    type="radio"
+                                                    name="multiTransfer"
+                                                    value="true">Yes</label>
+                                        <label class="radio-inline"><input
+                                                    type="radio"
+                                                    name="multiTransfer"
+                                                    value="false"
+                                                    checked>No</label>
+                                    @endif
+                                </div>
+                                                @if(isset($transfer->loading_atrnr))
+                                                    </div>
+                                                        @else
+                                                            </div>
+                                                                @endif
+                            </div>
+                                {{--<!--Link other transfer-->--}}
+                                {{--@if(($transfer->multitransfer==1 && $transfer->type=='Withdrawal'))--}}
+                                    {{--<div class="col-lg-2 text-left">--}}
+                                        {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->debitAccount)}}"--}}
+                                           {{--class="link"><span--}}
+                                                    {{--class="glyphicon glyphicon-info-sign"></span>--}}
+                                            {{--See transfers associated</a>--}}
+                                    {{--</div>--}}
+                                    {{--@elseif(($transfer->multitransfer==1 && $transfer->type=='Deposit'))--}}
+                                    {{--<div class="col-lg-2 text-left">--}}
+                                        {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->creditAccount)}}"--}}
+                                           {{--class="link"><span--}}
+                                                    {{--class="glyphicon glyphicon-info-sign"></span>--}}
+                                            {{--See transfers associated</a>--}}
+                                    {{--</div>--}}
+                                {{--@endif--}}
 
                             <div class="form-group">
                                 <!--credit account-->
@@ -246,7 +267,7 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-4">
-                                    @if(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                    @if(isset($transfer->validate) && $transfer->validate==1)
                                         <input type="text" name="creditAccount" class="form-control"
                                                value="{{$transfer->creditAccount}}" readonly>
                                     @else
@@ -273,7 +294,7 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-4">
-                                    @if(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                    @if(isset($transfer->validate) && $transfer->validate==1)
                                         <input type="text" name="debitAccount" class="form-control"
                                                value="{{$transfer->debitAccount}}" readonly>
                                     @else
@@ -329,13 +350,13 @@
                                         <ul>
                                             @php($list=[])
                                             @foreach($filesNames as $nameF)
-                                                @if(!in_array($name, $list))
+                                                @if(!in_array($nameF, $list))
                                                     <div>
                                                         <button type="submit"
                                                                 name="deleteDocument"
                                                                 class="btn-add glyphicon glyphicon-remove"
                                                                 value="{{$nameF}}"></button>
-                                                        <a href="../../storage/app/proofsPallets/documentsTransfer/{{$id}}/{{$nameF}}"
+                                                        <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transfer->id}}/{{$nameF}}"
                                                            class="link">{{$nameF}}</a>
                                                     </div>
                                                     @php(array_push($list,$nameF))
@@ -347,14 +368,15 @@
                             </div>
                             <!--validation-->
                             <div class="form-group">
+
                                 @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&isset($transfer->creditAccount)&&isset($transfer->debitAccount))
                                     <div class="col-lg-2">
                                         <label for="state"
                                                class="control-label">Validated ?
                                         </label>
                                     </div>
-                                    <div class="col-lg-3">
-                                        @if(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                    <div class="col-lg-2 text-left">
+                                        @if(isset($transfer->validate) && $transfer->validate==1)
                                             <label class="radio-inline"><input
                                                         type="radio"
                                                         name="validate"
@@ -364,7 +386,7 @@
                                                         type="radio"
                                                         name="validate"
                                                         value="false" id="validateNo">No</label>
-                                        @elseif(isset($transfer->validate) && $transfer->validate==1 || isset($validate) && $validate=='true')
+                                        @elseif(isset($transfer->validate) && $transfer->validate==0)
                                             <label class="radio-inline"><input
                                                         type="radio"
                                                         name="validate"
@@ -376,17 +398,28 @@
                                                         checked id="validateNo">No</label>
                                         @endif
                                     </div>
+                                <!--submit-->
+                                    <div class="col-lg-4 col-lg-offset-1">
+                                        <input type="submit"
+                                               class="btn btn-primary btn-block btn-form"
+                                               value="Update"
+                                               name="update" data-toggle="modal"
+                                               data-target="#submitUpdate_modal">
+                                    </div>
+                                @else
+                                <!--submit-->
+                                    <div class="col-lg-4 col-lg-offset-5">
+                                        <input type="submit"
+                                               class="btn btn-primary btn-block btn-form"
+                                               value="Update"
+                                               name="update" data-toggle="modal"
+                                               data-target="#submitUpdate_modal">
+                                    </div>
                                 @endif
                             </div>
-                            <!--submit-->
+
                             <div class="form-group">
-                                <div class="col-lg-4 col-lg-offset-1">
-                                    <input type="submit"
-                                           class="btn btn-primary btn-block btn-form"
-                                           value="Update"
-                                           name="update" data-toggle="modal"
-                                           data-target="#submitUpdate_modal">
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -438,19 +471,19 @@
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
+                                                {{--<tr>--}}
+                                                    {{--<td class="text-center">Last transfer</td>--}}
+                                                    {{--<td class="text-center">--}}
+                                                        {{--- {{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                    {{--<td class="text-center">--}}
+                                                        {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                {{--</tr>--}}
                                                 <tr>
-                                                    <td class="text-center">Last transfer</td>
+                                                    <td class="text-center">Pallets number update</td>
                                                     <td class="text-center">
-                                                        - {{request()->session()->get('actualPalletsNumber')}}</td>
+                                                        +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
                                                     <td class="text-center">
-                                                        + {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">New transfer</td>
-                                                    <td class="text-center">
-                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                    <td class="text-center">
-                                                        - {{request()->session()->get('palletsNumber')}}</td>
+                                                        - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-center">Total</td>
@@ -525,17 +558,17 @@
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
+                                                {{--<tr>--}}
+                                                    {{--<td class="text-center">Last transfer</td>--}}
+                                                    {{--<td class="text-center">--}}
+                                                        {{--{{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                    {{--<td class="text-center">--}}
+                                                    {{--</td>--}}
+                                                {{--</tr>--}}
                                                 <tr>
-                                                    <td class="text-center">Last transfer</td>
+                                                    <td class="text-center">Pallets number update</td>
                                                     <td class="text-center">
-                                                        {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                    <td class="text-center">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">New transfer</td>
-                                                    <td class="text-center">
-                                                        + {{request()->session()->get('palletsNumber')}}</td>
+                                                        + {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
                                                     <td class="text-center">
                                                         - {{request()->session()->get('palletsNumber')}}</td>
                                                 </tr>
@@ -572,19 +605,19 @@
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
+                                                {{--<tr>--}}
+                                                    {{--<td class="text-center">Last transfer</td>--}}
+                                                    {{--<td class="text-center">--}}
+                                                    {{--</td>--}}
+                                                    {{--<td class="text-center">--}}
+                                                        {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                {{--</tr>--}}
                                                 <tr>
-                                                    <td class="text-center">Last transfer</td>
-                                                    <td class="text-center">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        + {{request()->session()->get('actualPalletsNumber')}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">New transfer</td>
+                                                    <td class="text-center">Pallets number update</td>
                                                     <td class="text-center">
                                                         + {{request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">
-                                                        - {{request()->session()->get('palletsNumber')}}</td>
+                                                        - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-center">Total</td>
