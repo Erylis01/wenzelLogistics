@@ -14,16 +14,10 @@ class Palletsaccount extends Model
         return $this->belongsToMany('App\Warehouse','palletsaccount_warehouse');
     }
 
-//    public function loadings(){
-//        return $this->belongsToMany('App\Loading','loading_palletsaccount');
-//    }
-
     public function truck(){
-        return $this->hasOne('App\Truck','palletsaccount_name', 'name');
+        return $this->hasMany('App\Truck','palletsaccount_name', 'name');
     }
 
-    public function palletstransfers(){
-        return $this->hasMany('App\Palletstransfer','palletsaccount_name', 'name');
-    }
+
 }
 

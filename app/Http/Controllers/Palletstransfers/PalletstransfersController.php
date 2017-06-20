@@ -101,13 +101,14 @@ class PalletstransfersController extends Controller
     {
         if (Auth::check()) {
             $listPalletsaccounts = DB::table('palletsaccounts')->get();
-            $listTypes = ['Other', 'Purchase'];
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
             $account = $request->get('addTransferAccount');
+            $loading_atrnr=$request->get('addTransferLoading');
             $creditAccount = $account;
             $debitAccount = $account;
             $date = Carbon::now()->format('Y-m-d');
 
-            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes'));
+            return view('palletstransfers.addPalletstransfer', compact('listPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'loading_atrnr'));
         } else {
             return view('auth.login');
         }
@@ -119,9 +120,11 @@ class PalletstransfersController extends Controller
     public function add()
     {
         $listPalletsaccounts = DB::table('palletsaccounts')->get();
-        $listTypes = ['Other', 'Purchase'];
+        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
         $date = Input::get('date');
         $type = Input::get('type');
+        $multiTransfer=Input::get('multiTransfer');
+        $details=Input::get('details');
         $creditAccount = Input::get('creditAccount');
         $debitAccount = Input::get('debitAccount');
         $palletsNumber = Input::get('palletsNumber');
@@ -133,7 +136,7 @@ class PalletstransfersController extends Controller
             'creditAccount' => 'required',
             'debitAccount' => 'required',
             'palletsNumber' => 'required',
-            'date' => 'required|date',
+            'type'=>'required',
         );
         $validator = Validator::make(Input::all(), $rules);
 
@@ -151,19 +154,25 @@ class PalletstransfersController extends Controller
                 session()->flash('debitAccount', $debitAccount);
                 session()->flash('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
                 session()->flash('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
-                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer', 'listPalletsaccounts', 'listTypes'));
+                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details'));
             } elseif (isset($okSubmitAddModal)) {
-                if (isset($type)) {
-                    Palletstransfer::create(['date' => $date, 'type' => $type, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber]);
+                if($multiTransfer=='true'){
+                    $multiTransfer=true;
+                }elseif($multiTransfer=='false'){
+                    $multiTransfer=false;
+                }
+                if (isset($date)) {
+                    Palletstransfer::create(['date' => $date, 'type' => $type,'details'=>$details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer]);
                 } else {
-                    Palletstransfer::create(['date' => $date, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber]);
+                    Palletstransfer::create(['type' => $type, 'details'=>$details,'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer'=>$multiTransfer]);
                 }
                 Palletsaccount::where('name', $creditAccount)->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
                 Palletsaccount::where('name', $debitAccount)->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
                 session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
                 return redirect('/allPalletstransfers');
             } elseif (isset($closeSubmitAddModal)) {
-                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsaccounts', 'listTypes'));
+                return redirect()->back();
+//                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details'));
             }
         }
     }

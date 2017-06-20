@@ -22,15 +22,11 @@ class Loading extends Model
         'accountTruck', 'stateTruck', 'validateTruck', 'firstTimeTruck'
     ];
 
-//    public function palletstransfers(){
-//        return $this->hasMany('App\Palletstransfer','loading_atrnr', 'atrnr');
-//    }
+    public function palletstransfers(){
+        return $this->hasMany('App\Palletstransfer','loading_atrnr', 'atrnr');
+    }
 
     public function documents(){
         return $this->belongsToMany('App\Document', 'document_loading');
     }
-
-//    public function palletsaccounts(){
-//        return $this->belongsToMany('App\Palletsaccount', 'loading_palletsaccount');
-//    }
 }

@@ -15,21 +15,23 @@ class CreatePalletstransfersTable extends Migration
     {
         Schema::create('palletstransfers', function (Blueprint $table) {
             $table->increments('id')->unique();
-//            $table->integer('loading_atrnr')->unsigned()->index();
+            $table->integer('loading_atrnr')->unsigned()->index();
             $table->string('creditAccount');
             $table->string('debitAccount');
             $table->integer('palletsNumber');
-            $table->date('date');
+            $table->date('date')->default(Carbon::now()->format('Y-m-d'));
             $table->string('state')->default('Waiting documents');
             $table->boolean('validate')->default(false);
-            $table->string('type')->nullable();
+            $table->string('type');
+            $table->boolean('multiTransfer')->default(false);
+            $table->string('details')->nullable();
 //            $table->date('dateLastReminder')->nullable();
 //            $table->integer('remindersNumber')->nullable();
 //            $table->string('reminderWarehouse')->nullable();
             $table->timestamps();
-//
-//            $table->foreign('loading_atrnr')->references('atrnr')->on('loadings');
-//            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccounts');
+
+            $table->foreign('loading_atrnr')->references('atrnr')->on('loadings');
+
         });
     }
 

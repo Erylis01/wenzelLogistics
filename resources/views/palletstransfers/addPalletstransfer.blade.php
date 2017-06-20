@@ -43,6 +43,57 @@
                             {{ csrf_field() }}
                             <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
+                                <!--type-->
+                                <div class="col-lg-1 col-lg-offset-1">
+                                    <label for="type" class="control-label"><span>*</span>Type
+                                        :</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Type" name="type" required
+                                    >
+                                        @foreach($listTypes as $type )
+                                            @if(Illuminate\Support\Facades\Input::old('type') && $type==old('type'))
+                                                <option selected>{{$type}}</option>
+                                            @else
+                                                <option>{{$type}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    @if(isset($details))
+                                        <textarea class="form-control" rows="1" id="details" placeholder="Details">{{$details}}</textarea>
+                                        @else
+                                    <textarea class="form-control" rows="1" id="details" placeholder="Details">{{old('details')}}</textarea>
+                                        @endif
+                                </div>
+                            </div>
+                                <div class="form-group">
+                                    <!--number of pallets-->
+                                    <div class="col-lg-2">
+                                        <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
+                                            :</label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                            <input id="palletsNumber" type="number" class="form-control"
+                                                   name="palletsNumber"
+                                                   value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
+                                                   required autofocus>
+                                        @elseif(isset($palletsNumber))
+                                            <input id="palletsNumber" type="number" class="form-control"
+                                                   name="palletsNumber"
+                                                   value="{{$palletsNumber}}" placeholder="Nbr"
+                                                   required autofocus>
+                                        @else
+                                            <input id="palletsNumber" type="number" class="form-control"
+                                                   name="palletsNumber"
+                                                   value="0" placeholder="Nbr"
+                                                   required autofocus>
+                                        @endif
+                                    </div>
                                 <!--date-->
                                 <div class="col-lg-1 col-lg-offset-1">
                                     <label for="date" class="control-label"><span>*</span> Date :</label>
@@ -62,49 +113,9 @@
                                     @endif
                                 </div>
 
-                                <!--number of pallets-->
-                                <div class="col-lg-2 col-lg-offset-2">
-                                    <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
-                                        :</label>
-                                </div>
-                                <div class="col-lg-1">
-                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
-                                    <input id="palletsNumber" type="number" class="form-control"
-                                           name="palletsNumber"
-                                           value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
-                                           required autofocus>
-                                        @elseif(isset($palletsNumber))
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="{{$palletsNumber}}" placeholder="Nbr"
-                                               required autofocus>
-                                        @else
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="0" placeholder="Nbr"
-                                               required autofocus>
-                                    @endif
-                                </div>
 
-                                <!--type-->
-                                <div class="col-lg-1">
-                                    <label for="type" class="control-label">Type
-                                        :</label>
-                                </div>
-                                <div class="col-lg-2">
-                                    <select class="selectpicker show-tick form-control" data-size="5"
-                                            data-live-search="true" data-live-search-style="startsWith"
-                                            title="Type" name="type"
-                                            >
-                                        @foreach($listTypes as $type )
-                                            @if(Illuminate\Support\Facades\Input::old('type') && $type==old('type'))
-                                                <option selected>{{$type}}</option>
-                                            @else
-                                                <option>{{$type}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
+
+
                             </div>
 
                             <div class="form-group">
