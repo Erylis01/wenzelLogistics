@@ -64,6 +64,7 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <!--details-->
                                 <div class="col-lg-4">
                                     @if(isset($details))
                                         <textarea class="form-control" rows="1" id="details" placeholder="Details">{{$details}}</textarea>
@@ -71,13 +72,13 @@
                                     <textarea class="form-control" rows="1" id="details" placeholder="Details">{{old('details')}}</textarea>
                                         @endif
                                 </div>
-
-                                    <div class="col-lg-2">
+                                <!--multitransfer-->
+                                    <div class="col-lg-2 text-left">
                                         <label for="state"
-                                               class="control-label">Multi-Transfers ?
+                                               class="control-label ">Multi-Transfers ?
                                         </label>
                                     </div>
-                                    <div class="col-lg-2 text-center">
+                                    <div class="col-lg-2 text-left">
                                         @if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))
                                             <label class="radio-inline"><input
                                                         type="radio"
@@ -127,7 +128,7 @@
                                         @endif
                                     </div>
                                 <!--date-->
-                                <div class="col-lg-1 col-lg-offset-1">
+                                <div class="col-lg-1">
                                     <label for="date" class="control-label">Date :</label>
                                 </div>
                                 <div class="col-lg-2">
@@ -140,7 +141,7 @@
                                     @endif
                                 </div>
                                     <!--atrnr-->
-                                    <div class="col-lg-1 col-lg-offset-2">
+                                    <div class="col-lg-1 col-lg-offset-1">
                                         <label for="loading_atrnr" class="control-label">Atrnr
                                             :</label>
                                     </div>

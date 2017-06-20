@@ -41,3 +41,7 @@
     min-width: 180px;
     width:180px;
 }
+
+#loading_atrnrLink{
+    display:none;
+}

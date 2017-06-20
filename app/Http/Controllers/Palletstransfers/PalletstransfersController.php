@@ -94,6 +94,10 @@ class PalletstransfersController extends Controller
         }
     }
 
+    /**
+     * show the add form according to one parameter
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showAddOther($other){
         if (Auth::check()) {
             foreach(Palletsaccount::get() as $account){
@@ -208,20 +212,26 @@ class PalletstransfersController extends Controller
     public function showDetails($id)
     {
         if (Auth::check()) {
-            $palletsTransfer = DB::table('palletstransfers')->where('id', $id)->first();
-            $listPalletsaccounts = DB::table('palletsaccounts')->get();
-            $listTypes = ['Other', 'Purchase'];
-            $date = $palletsTransfer->date;
-            $type = $palletsTransfer->type;
-            $palletsNumber = $palletsTransfer->palletsNumber;
-            $creditAccount = $palletsTransfer->creditAccount;
-            $debitAccount = $palletsTransfer->debitAccount;
-            $state = $palletsTransfer->state;
-            $validateM = $palletsTransfer->validate;
+            $transfer = Palletstransfer::where('id', $id)->first();
+            foreach(Palletsaccount::get() as $account){
+                $listNamesPalletsaccounts[]=$account->name;
+            }
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+            foreach(Loading::get()->where('pt', 'JA') as $loading){
+                $listAtrnr[]=$loading->atrnr;
+            }
+//            $date = $palletsTransfer->date;
+//            $type = $palletsTransfer->type;
+//            $palletsNumber = $palletsTransfer->palletsNumber;
+//            $creditAccount = $palletsTransfer->creditAccount;
+//            $debitAccount = $palletsTransfer->debitAccount;
+//            $multiTransfer=$palletsTransfer
+//            $state = $palletsTransfer->state;
+//            $validateM = $palletsTransfer->validate;
 
            $filesNames=$this->actualDocuments($id);
 
-            return view('palletstransfers.detailsPalletstransfer', compact('listPalletsaccounts', 'date', 'type', 'id', 'palletsNumber', 'creditAccount', 'debitAccount', 'state', 'filesNames', 'validateM', 'listTypes'));
+            return view('palletstransfers.detailsPalletstransfer', compact('transfer','listNamesPalletsaccounts', 'listAtrnr','filesNames', 'listTypes'));
         } else {
             return view('auth.login');
         }
