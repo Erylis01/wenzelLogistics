@@ -8,6 +8,7 @@ use App\PalletsAccount;
 use App\Palletstransfer;
 use App\Truck;
 use App\Warehouse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,17 +27,17 @@ class DetailsLoadingController extends Controller
      */
     public function show($atrnr)
     {
-
         if (Auth::check()) {
             ////////PANEL INFO///////
-            $loading = DB::table('loadings')->where('atrnr', '=', $atrnr)->first();
+            $loading = Loading::where('atrnr', '=', $atrnr)->first();
 
             //////PALLETS PANEL//////
             //all pallets account
-            $listPalletsAccounts = DB::table('palletsaccounts')->get();
+            $listPalletsAccounts = Palletsaccount::get();
+$listPalletstransfers=Palletstransfer::where('loading_atrnr', $atrnr)->get();
 
-           //truck
-            $listPalletsAccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
+            //truck
+            $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
             //looking for the account that contains the license plate if it's set
             if ($loading->kennzeichen == "") {
                 $licensePlate = 'OTHER';
@@ -50,55 +51,17 @@ class DetailsLoadingController extends Controller
                 }
             }
 
-            //loading panel
-            $totalPalletsLoadingPlace = 0;
-            for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
-                $numberPalletsLoadingPlaceK = 'numberPalletsLoadingPlace' . $k;
-                $$numberPalletsLoadingPlaceK = $loading->$numberPalletsLoadingPlaceK;
-                $totalPalletsLoadingPlace = $totalPalletsLoadingPlace + $$numberPalletsLoadingPlaceK;
-            }
+//            $filesNamesTruck = $this->actualDocuments($loading->atrnr, 'Truck');
 
-            //looking for the account of the warehouse which zipcode is plz beladestelle
-            if (Warehouse::where('zipcode', $loading->plzb)->first() <> null) {
-                $idWarehouseZipcodeLoadingPlace = Warehouse::where('zipcode', $loading->plzb)->first()->id;
-                $accountZipcodeLoadingPlace1 = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeLoadingPlace)->first();
-                if ($accountZipcodeLoadingPlace1 <> null) {
-                    $accountZipcodeLoadingPlace = Palletsaccount::where('id', $accountZipcodeLoadingPlace1->palletsaccount_id)->first()->name;
-                }
-            };
-
-            //offloading panel
-            $totalPalletsOffloadingPlace = 0;
-            for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
-                $numberPalletsOffloadingPlaceK = 'numberPalletsOffloadingPlace' . $k;
-                $$numberPalletsOffloadingPlaceK = $loading->$numberPalletsOffloadingPlaceK;
-                $totalPalletsOffloadingPlace = $totalPalletsOffloadingPlace + $$numberPalletsOffloadingPlaceK;
-            }
-
-            if (Warehouse::where('zipcode', $loading->plze)->first() <> null) {
-                $idWarehouseZipcodeOffloadingPlace = Warehouse::where('zipcode', $loading->plze)->first()->id;
-                $accountZipcodeOffloadingPlace1 = DB::table('palletsaccount_warehouse')->where('warehouse_id', $idWarehouseZipcodeOffloadingPlace)->first();
-                if ($accountZipcodeOffloadingPlace1 <> null) {
-                    $accountZipcodeOffloadingPlace = Palletsaccount::where('id', $accountZipcodeOffloadingPlace1->palletsaccount_id)->first()->name;
-                }
-            };
-
-            //offloading-loading-truck
-            $filesNamesLoadingPlace = $this->actualDocuments($loading->atrnr, 'Loading');
-            $filesNamesOffloadingPlace = $this->actualDocuments($loading->atrnr, 'Offloading');
-            $filesNamesTruck = $this->actualDocuments($loading->atrnr, 'Truck');
-
-            return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts',
-                'filesNamesLoadingPlace', 'accountZipcodeLoadingPlace', 'totalPalletsLoadingPlace',
-                'filesNamesOffloadingPlace', 'accountZipcodeOffloadingPlace', 'totalPalletsOffloadingPlace',
-                'filesNamesTruck', 'palletsAccountFavoriteTruck', 'listPalletsAccountsCarrier'
+            return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts','listPalletstransfers',
+                'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier'
             ));
         } else {
             return view('auth.login');
         }
     }
 
-    public function update(Request $request, $atrnr)
+    public function updatePanel1(Request $request, $atrnr)
     {
         $ladedatum = Input::get('ladedatum');
         $entladedatum = Input::get('entladedatum');
@@ -150,6 +113,41 @@ class DetailsLoadingController extends Controller
 
         //buttons
         $update = Input::get('update');
+        $addTransfer = Input::get('addTransfer');
+        $truckAccount = Input::get('truckAccount');
+
+        if (isset($update)) {
+            $this->update($request, $loading->atrnr);
+        } elseif (isset($addTransfer)) {
+            foreach (Palletsaccount::get() as $account) {
+                $listNamesPalletsaccounts[] = $account->name;
+            }
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
+            $date = Carbon::now()->format('Y-m-d');
+            foreach (Loading::get()->where('pt', 'JA') as $loading) {
+                $listAtrnr[] = $loading->atrnr;
+            }
+            $loading_atrnr = $atrnr;
+
+            if (isset($truckAccount)) {
+                $creditAccount = $truckAccount;
+                $debitAccount = $truckAccount;
+            }
+            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr', 'loading_atrnr', 'creditAccount', 'debitAccount'));
+        }
+    }
+
+    public function addTransfer($atrnr, $truckAccount)
+    {
+
+    }
+
+    public function submitUpdateUd($atrnr, Request $request)
+    {
+        $loading = Loading::where('atrnr', $atrnr)->first();
+
+        //buttons
+        $update = Input::get('update');
         $uploadLoading = Input::get('uploadLoading');
         $submitLoading = Input::get('submitLoading');
         $addLoadingPlace = Input::get('addLoadingPlace');
@@ -176,18 +174,18 @@ class DetailsLoadingController extends Controller
 
         $listPalletsAccounts = DB::table('palletsaccounts')->get();
 
-            $listPalletsAccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
-            if ($loading->kennzeichen == "") {
-                $licensePlate = 'OTHER';
-            } else {
-                $licensePlate = $loading->kennzeichen;
+        $listPalletsAccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
+        if ($loading->kennzeichen == "") {
+            $licensePlate = 'OTHER';
+        } else {
+            $licensePlate = $loading->kennzeichen;
+        }
+        if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
+            $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
+            if ($namePalletsAccountTruck <> null) {
+                $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
             }
-            if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
-                $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
-                if ($namePalletsAccountTruck <> null) {
-                    $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
-                }
-            }
+        }
 
         $totalPalletsLoadingPlace = 0;
         for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
@@ -350,7 +348,7 @@ class DetailsLoadingController extends Controller
             Palletsaccount::where('name', $listDataK[1][1])->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $listDataK[1][0]]);
             $realPalletsNumberDebitAccount = Palletsaccount::where('name', $listDataK[1][2])->first()->realNumberPallets;
             Palletsaccount::where('name', $listDataK[1][2])->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $listDataK[1][0]]);
-            session()->flash('messageUpdateValidate', 'VALIDATE ! Successfully updated and validated pallets transfer for the place ' . $k.'. Confirmed pallets number on both account has been updated');
+            session()->flash('messageUpdateValidate', 'VALIDATE ! Successfully updated and validated pallets transfer for the place ' . $k . '. Confirmed pallets number on both account has been updated');
             session()->flash('openPanelLoading', 'openPanelLoading');
             return redirect()->back();
         } elseif (isset($uploadLoading)) {
@@ -372,7 +370,7 @@ class DetailsLoadingController extends Controller
                 }
                 Loading::where('atrnr', $loading->atrnr)->update(['stateLoadingPlace' . $k => $listDataK[1][3]]);
             }
-            $loading=Loading::where('atrnr', $loading->atrnr)->first();
+            $loading = Loading::where('atrnr', $loading->atrnr)->first();
             $this->state($loading);
             session()->flash('openPanelLoading', 'openPanelLoading');
             return redirect()->back();
@@ -478,7 +476,7 @@ class DetailsLoadingController extends Controller
                 return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts',
                     'filesNamesTruck', 'palletsAccountFavoriteTruck', 'listPalletsAccountsCarrier',
                     'filesNamesLoadingPlace', 'accountZipcodeLoadingPlace', 'totalPalletsLoadingPlace',
-                    'filesNamesOffloadingPlace', 'accountZipcodeOffloadingPlace', 'totalPalletsOffloadingPlace','okSubmitOffloadingModal'));
+                    'filesNamesOffloadingPlace', 'accountZipcodeOffloadingPlace', 'totalPalletsOffloadingPlace', 'okSubmitOffloadingModal'));
             } else {
                 session()->flash('openPanelOffloading', 'openPanelOffloading');
                 return redirect()->back();
@@ -493,7 +491,7 @@ class DetailsLoadingController extends Controller
             Palletsaccount::where('name', $listDataK[1][1])->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $listDataK[1][0]]);
             $realPalletsNumberDebitAccount = Palletsaccount::where('name', $listDataK[1][2])->first()->realNumberPallets;
             Palletsaccount::where('name', $listDataK[1][2])->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $listDataK[1][0]]);
-            session()->flash('messageUpdateValidate', 'VALIDATE ! Successfully updated and validated pallets transfer for the place ' . $k .'. Confirmed pallets number on both account has been updated');
+            session()->flash('messageUpdateValidate', 'VALIDATE ! Successfully updated and validated pallets transfer for the place ' . $k . '. Confirmed pallets number on both account has been updated');
             session()->flash('openPanelOffloading', 'openPanelOffloading');
             return redirect()->back();
         } elseif (isset($uploadOffloading)) {
@@ -514,7 +512,7 @@ class DetailsLoadingController extends Controller
                 }
                 Loading::where('atrnr', $loading->atrnr)->update(['stateOffloadingPlace' . $k => $listDataK[1][3]]);
             }
-            $loading=Loading::where('atrnr', $loading->atrnr)->first();
+            $loading = Loading::where('atrnr', $loading->atrnr)->first();
             $this->state($loading);
             session()->flash('openPanelOffloading', 'openPanelOffloading');
             return redirect()->back();
@@ -686,7 +684,7 @@ class DetailsLoadingController extends Controller
             $listDataK[1][3] = 'Untreated';
         }
         Loading::where('atrnr', $loading->atrnr)->update(['state' . $type . $k => $listDataK[1][3]]);
-$this->state($loading);
+        $this->state($loading);
     }
 
     public function accountTruck($atrnr, $anz, $account, $firstTime)

@@ -124,6 +124,7 @@ class PalletstransfersController extends Controller
         }
     }
 
+
     /**
      * show the add form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -287,6 +288,13 @@ class PalletstransfersController extends Controller
             session()->put('actualCreditAccount', $transfer->creditAccount);
             session()->put('actualDebitAccount', $transfer->debitAccount);
             session()->put('actualPalletsNumber', $transfer->palletsNumber);
+            session()->put('actualType', $transfer->type);
+            session()->put('actualDetails', $transfer->details);
+            session()->put('actualLoadingAtrnr', $transfer->loading_atrnr);
+            session()->put('actualDate', $transfer->date);
+            session()->put('actualValidate', $transfer->validate);
+            session()->put('actualMultiTransfer', $transfer->multiTransfer);
+
             session()->flash('palletsNumber', $palletsNumber);
             session()->flash('creditAccount', $creditAccount);
             session()->flash('debitAccount', $debitAccount);
@@ -316,9 +324,6 @@ class PalletstransfersController extends Controller
             $actualDebitAccount = session('actualDebitAccount');
             $actualPalletsNumber = session('actualPalletsNumber');
             $this->updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $documents, $filesNames);
-            session()->pull('actualCreditAccount');
-            session()->pull('actualDebitAccount');
-            session()->pull('actualPalletsNumber');
             $transfer=Palletstransfer::where('id', $id)->first();
             if ($transfer->state == 'Complete Validated') {
                 session()->flash('palletsNumber', $transfer->palletsNumber);
@@ -328,9 +333,37 @@ class PalletstransfersController extends Controller
                 session()->flash('realPalletsNumberDebitAccount', Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets);
                 return view('palletstransfers.detailsPalletstransfer', compact( 'transfer','listNamesPalletsaccounts','listAtrnr','okSubmitUpdateModal',  'listTypes', 'documents', 'filesNames'));
             } else {
+                session()->pull('actualCreditAccount');
+                session()->pull('actualDebitAccount');
+                session()->pull('actualPalletsNumber');
+                session()->pull('actualType');
+                session()->pull('actualDetails');
+                session()->pull('actualLoadingAtrnr');
+                session()->pull('actualDate');
+                session()->pull('actualMultiTransfer');
+                session()->pull('actualValidate');
                 return redirect()->back();
             }
         } elseif (isset($closeSubmitUpdateModal)) {
+            $actualCreditAccount = session('actualCreditAccount');
+            $actualDebitAccount = session('actualDebitAccount');
+            $actualPalletsNumber = session('actualPalletsNumber');
+            $actualType = session('actualType');
+            $actualDetails = session('actualDetails');
+            $actualLoadingAtrnr = session('actualLoadingAtrnr');
+            $actualDate = session('actualDate');
+            $actualMultiTransfer = session('actualMultiTransfer');
+            $actualValidate = session('actualValidate');
+            Palletstransfer::where('id', $id)->update(['multiTransfer'=>$actualMultiTransfer,'validate'=>$actualValidate, 'type'=>$actualType, 'details'=>$actualDetails,'loading_atrnr'=>$actualLoadingAtrnr,'palletsNumber'=>$actualPalletsNumber,'date'=>$actualDate,  'creditAccount'=>$actualCreditAccount, 'debitAccount'=>$actualDebitAccount]);
+            session()->pull('actualCreditAccount');
+            session()->pull('actualDebitAccount');
+            session()->pull('actualPalletsNumber');
+            session()->pull('actualType');
+            session()->pull('actualDetails');
+            session()->pull('actualLoadingAtrnr');
+            session()->pull('actualDate');
+            session()->pull('actualMultiTransfer');
+            session()->pull('actualValidate');
             return redirect()->back();
         } elseif (isset($okSubmitUpdateValidateModal)) {
             $realPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets;
@@ -338,6 +371,15 @@ class PalletstransfersController extends Controller
             $realPalletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets;
             Palletsaccount::where('name', $transfer->debitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $transfer->palletsNumber]);
             session()->flash('messageUpdateValidatePalletstransfer', 'VALIDATE ! Successfully updated and validated pallets transfer');
+            session()->pull('actualCreditAccount');
+            session()->pull('actualDebitAccount');
+            session()->pull('actualPalletsNumber');
+            session()->pull('actualType');
+            session()->pull('actualDetails');
+            session()->pull('actualLoadingAtrnr');
+            session()->pull('actualDate');
+            session()->pull('actualMultiTransfer');
+            session()->pull('actualValidate');
             return redirect()->back();
         }
     }

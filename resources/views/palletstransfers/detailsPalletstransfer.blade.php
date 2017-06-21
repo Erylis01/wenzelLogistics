@@ -551,7 +551,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-center">Actual</td>
@@ -598,7 +598,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-center">Actual</td>

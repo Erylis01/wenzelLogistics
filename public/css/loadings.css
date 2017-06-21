@@ -86,20 +86,15 @@
     font-size:18px;
 }
 
-/*!*PALLETS*!*/
+/*PALLETS*/
 
-.modalHeaderLoading>h4{
-    font-size:20px;
-    color:rgb(0, 160, 0);
-    font-weight: bold;
-}
+/*.modalHeaderLoading>h4{*/
+    /*font-size:20px;*/
+    /*color:rgb(0, 160, 0);*/
+    /*font-weight: bold;*/
+/*}*/
 
-.modalBodyLoading{
-    font-size:16px;
-}
+/*.modalBodyLoading{*/
+    /*font-size:16px;*/
+/*}*/
 
-
-/*HIDDEN DIV*/
-#validateLoading1, #validateLoading2, #validateLoading3, #validateLoading4, #validateLoading5{
-    display: none;
-}
