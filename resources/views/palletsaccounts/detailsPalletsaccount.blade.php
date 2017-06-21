@@ -406,7 +406,7 @@
                                             <br>
                                             <div >
                                                 <div class="col-lg-2">
-                                                    <a href="{{route('showAddPalletstransferOther', $name)}}" class="btn btn-add">Add transfer</a>
+                                                    <a href="{{route('showAddPalletstransferAccount', $name)}}" class="btn btn-add">Add transfer</a>
                                                 </div>
                                                 <form role="form" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
                                                     {{ csrf_field() }}

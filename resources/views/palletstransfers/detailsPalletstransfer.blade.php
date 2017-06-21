@@ -476,7 +476,7 @@
                                                 {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
                                                 {{--</tr>--}}
                                                 <tr>
-                                                    <td class="text-center">Pallets number update</td>
+                                                    <td class="text-center">Update number</td>
                                                     <td class="text-center">
                                                         +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
                                                     <td class="text-center">
@@ -563,7 +563,7 @@
                                                 {{--</td>--}}
                                                 {{--</tr>--}}
                                                 <tr>
-                                                    <td class="text-center">Pallets number update</td>
+                                                    <td class="text-center">Update number</td>
                                                     <td class="text-center">
                                                         + {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
                                                     <td class="text-center">
@@ -610,7 +610,7 @@
                                                 {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
                                                 {{--</tr>--}}
                                                 <tr>
-                                                    <td class="text-center">Pallets number update</td>
+                                                    <td class="text-center">Update number</td>
                                                     <td class="text-center">
                                                         + {{request()->session()->get('palletsNumber')}}</td>
                                                     <td class="text-center">

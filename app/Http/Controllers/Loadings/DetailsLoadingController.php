@@ -51,9 +51,6 @@ class DetailsLoadingController extends Controller
                     $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
                 }
             }
-
-//            $filesNamesTruck = $this->actualDocuments($loading->atrnr, 'Truck');
-
             return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listPalletstransfers',
                 'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier', 'listTypes'
             ));
@@ -121,7 +118,10 @@ class DetailsLoadingController extends Controller
         $uploadDocument = Input::get('upload');
         $delete = Input::get('delete');
         $deleteDocument = Input::get('deleteDocument');
-
+$submitPallets=Input::get('submitPallets');
+       $closeSubmitPalletsModal=Input::get('closeSubmitPalletsModal');
+       $okSubmitPalletsModal=Input::get('okSubmitPalletsModal');
+       $okSubmitPalletsValidateModal=Input::get('okSubmitPalletsValidateModal');
 
         $truckAccount = Input::get('truckAccount');
 
@@ -211,8 +211,7 @@ class DetailsLoadingController extends Controller
             return redirect()->back();
         } elseif (isset($uploadDocument)) {
             $transfer = Palletstransfer::where('id', $uploadDocument)->first();
-            $documentsK = 'documents' . $uploadDocument;
-            $$documentsK = $request->file('documentsTransfer' . $uploadDocument);
+            $documents  = $request->file('documentsTransfer' . $uploadDocument);
             $state = $transfer->state;
             $validate = $transfer->validate;
             $type = $transfer->type;
@@ -220,15 +219,15 @@ class DetailsLoadingController extends Controller
             $debitAccount = $transfer->debitAccount;
             $palletsNumber = $transfer->palletsNumber;
 
-            $filesNames = $this->upload($$documentsK, $transfer->id);
+            $filesNames = $this->upload($documents, $transfer->id);
 
-            if (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($$documentsK) || !empty($filesNames)) && ($validate <> null && $validate == 1)) {
+            if (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($documents) || !empty($filesNames)) && ($validate <> null && $validate == 1)) {
                 $state = 'Complete Validated';
             } elseif (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($documents) || !empty($filesNames)) && ($validate <> null && $validate == 0)) {
                 $state = 'Complete';
-            } elseif (!isset($$documentsK) && empty($filesNames)) {
+            } elseif (!isset($documents) && empty($filesNames)) {
                 $state = 'Waiting documents';
-            } elseif (isset($creditAccount) || isset($debitAccount) || isset($palletsNumber) || isset($type) || (isset($$documentsK) || !empty($filesNames))) {
+            } elseif (isset($creditAccount) || isset($debitAccount) || isset($palletsNumber) || isset($type) || (isset($documents) || !empty($filesNames))) {
                 $state = 'In progress';
             }
             Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
@@ -247,6 +246,117 @@ class DetailsLoadingController extends Controller
             return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listAtrnr', 'listTypes', 'listNamesPalletsaccounts', 'filesNames', 'delete'));
         } elseif (isset($deleteDocument)) {
             $this->deleteDocument(Palletstransfer::where('id', trim(explode('-', $deleteDocument)[1]))->first(), trim(explode('-', $deleteDocument)[0]));
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return redirect()->back();
+        }elseif(isset($submitPallets)){
+            $transfer = Palletstransfer::where('id', $submitPallets)->first();
+            $loading_atrnr = $atrnr;
+            $palletsNumber=Input::get('palletsNumber'.$submitPallets);
+            $type=Input::get('type'.$submitPallets);
+            $details=Input::get('details'.$submitPallets);
+            $date=Input::get('date'.$submitPallets);
+            $multiTransfer=Input::get('multiTransfer'.$submitPallets);
+            $creditAccount=Input::get('creditAccount'.$submitPallets);
+            $debitAccount=Input::get('debitAccount'.$submitPallets);
+            $validate=Input::get('validate'.$submitPallets);
+
+            if ($transfer->state == 'Complete Validated') {
+                $this->inverseRealPalletsNumber($transfer);
+            }
+            $filesNames= $this->actualDocuments($transfer->id);
+            session()->put('actualCreditAccount', $transfer->creditAccount);
+            session()->put('actualDebitAccount', $transfer->debitAccount);
+            session()->put('actualPalletsNumber', $transfer->palletsNumber);
+            session()->put('actualType', $transfer->type);
+            session()->put('actualDetails', $transfer->details);
+            session()->put('actualDate', $transfer->date);
+            session()->put('actualValidate', $transfer->validate);
+            session()->put('actualMultiTransfer', $transfer->multiTransfer);
+
+            session()->flash('palletsNumber', $palletsNumber);
+            session()->flash('creditAccount', $creditAccount);
+            session()->flash('debitAccount', $debitAccount);
+            session()->flash('thPalletsNumberCreditAccount', Palletsaccount::where('name', $creditAccount)->first()->theoricalNumberPallets);
+            session()->flash('thPalletsNumberDebitAccount', Palletsaccount::where('name', $debitAccount)->first()->theoricalNumberPallets);
+
+            Palletstransfer::where('id', $transfer->id)->update(['type'=>$type, 'details'=>$details,'loading_atrnr'=>$loading_atrnr,'palletsNumber'=>$palletsNumber,'date'=>$date,  'creditAccount'=>$creditAccount, 'debitAccount'=>$debitAccount]);
+            if($validate<>null && $validate=='true'){
+                Palletstransfer::where('id', $transfer->id)->update(['validate'=>true]);
+            }elseif($validate<>null&&$validate=='false'){
+                Palletstransfer::where('id', $transfer->id)->update(['validate'=>false]);
+            }
+            if($multiTransfer<>null && $multiTransfer=='true'){
+                Palletstransfer::where('id', $transfer->id)->update(['multiTransfer'=>true]);
+            }elseif($multiTransfer<>null&&$multiTransfer=='false'){
+                Palletstransfer::where('id', $transfer->id)->update(['multiTransfer'=>false]);
+            }
+            $transfer=Palletstransfer::where('id', $transfer->id)->first();
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listPalletstransfers',
+                 'listPalletsaccountsCarrier', 'listTypes', 'transfer', 'submitPallets', 'filesNames'));
+        }elseif(isset($okSubmitPalletsModal)){
+            $transfer=Palletstransfer::where('id', $okSubmitPalletsModal)->first();
+            $filesNames=$this->actualDocuments($transfer->id);
+            $actualCreditAccount = session('actualCreditAccount');
+            $actualDebitAccount = session('actualDebitAccount');
+            $actualPalletsNumber = session('actualPalletsNumber');
+            $this->updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $filesNames);
+            $transfer=Palletstransfer::where('id', $okSubmitPalletsModal)->first();
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            if ($transfer->state == 'Complete Validated') {
+                session()->flash('palletsNumber', $transfer->palletsNumber);
+                session()->flash('creditAccount', $transfer->creditAccount);
+                session()->flash('debitAccount', $transfer->debitAccount);
+                session()->flash('realPalletsNumberCreditAccount', Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets);
+                session()->flash('realPalletsNumberDebitAccount', Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets);
+                return view('loadings.detailsLoading',compact( 'loading', 'listPalletsAccounts', 'listPalletstransfers',
+                    'listPalletsaccountsCarrier', 'listTypes', 'transfer', 'okSubmitPalletsModal', 'filesNames'));
+            } else {
+                session()->pull('actualCreditAccount');
+                session()->pull('actualDebitAccount');
+                session()->pull('actualPalletsNumber');
+                session()->pull('actualType');
+                session()->pull('actualDetails');
+                session()->pull('actualDate');
+                session()->pull('actualMultiTransfer');
+                session()->pull('actualValidate');
+                return redirect()->back();
+            }
+        }elseif(isset($closeSubmitPalletsModal)){
+            $actualCreditAccount = session('actualCreditAccount');
+            $actualDebitAccount = session('actualDebitAccount');
+            $actualPalletsNumber = session('actualPalletsNumber');
+            $actualType = session('actualType');
+            $actualDetails = session('actualDetails');
+            $actualDate = session('actualDate');
+            $actualMultiTransfer = session('actualMultiTransfer');
+            $actualValidate = session('actualValidate');
+            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['multiTransfer'=>$actualMultiTransfer,'validate'=>$actualValidate, 'type'=>$actualType, 'details'=>$actualDetails,'palletsNumber'=>$actualPalletsNumber,'date'=>$actualDate,  'creditAccount'=>$actualCreditAccount, 'debitAccount'=>$actualDebitAccount]);
+            session()->pull('actualCreditAccount');
+            session()->pull('actualDebitAccount');
+            session()->pull('actualPalletsNumber');
+            session()->pull('actualType');
+            session()->pull('actualDetails');
+            session()->pull('actualDate');
+            session()->pull('actualMultiTransfer');
+            session()->pull('actualValidate');
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return redirect()->back();
+        }elseif(isset($okSubmitPalletsValidateModal)){
+            $transfer=Palletstransfer::where('id', $okSubmitPalletsValidateModal)->first();
+            $realPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets;
+            Palletsaccount::where('name', $transfer->creditAccount)->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $transfer->palletsNumber]);
+            $realPalletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets;
+            Palletsaccount::where('name', $transfer->debitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $transfer->palletsNumber]);
+            session()->flash('messageUpdateValidatePalletstransfer', 'VALIDATE ! Successfully updated and validated pallets transfer');
+            session()->pull('actualCreditAccount');
+            session()->pull('actualDebitAccount');
+            session()->pull('actualPalletsNumber');
+            session()->pull('actualType');
+            session()->pull('actualDetails');
+            session()->pull('actualDate');
+            session()->pull('actualMultiTransfer');
+            session()->pull('actualValidate');
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         }
@@ -311,6 +421,46 @@ class DetailsLoadingController extends Controller
             Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
         }
     }
+
+
+    public function inverseRealPalletsNumber($transfer)
+    {
+        $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets;
+        Palletsaccount::where('name', $transfer->creditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount -$transfer->palletsNumber]);
+        $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets;
+        Palletsaccount::where('name', $transfer->debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $transfer->palletsNumber]);
+    }
+
+    public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $actualDoc)
+    {
+        //inverse transfer : we delete the last transfer
+        $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
+        Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
+        $actualPalletsNumberDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
+        Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
+
+        //we do the new transfer
+        $palletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->theoricalNumberPallets;
+        Palletsaccount::where('name', $transfer->creditAccount)->update(['theoricalNumberPallets' => $palletsNumberCreditAccount + $transfer->palletsNumber]);
+        $palletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->theoricalNumberPallets;
+        Palletsaccount::where('name', $transfer->debitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
+
+        if (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) && !empty($filesNames) && ($transfer->validate <> null && $transfer->validate == 1)) {
+            $state = 'Complete Validated';
+        } elseif (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) &&  !empty($filesNames) && ($transfer->validate <> null && $transfer->validate == 0)) {
+            $state = 'Complete';
+        } elseif (empty($filesNames)) {
+            $state = 'Waiting documents';
+        } elseif (isset($transfer->creditAccount) || isset($transfer->debitAccount) || isset($transfer->palletsNumber) || isset($transfer->type) || !empty($filesNames)) {
+            $state = 'In progress';
+        }
+        Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
+
+        session()->flash('messageSubmitPalletstransfer', 'Successfully updated and pallets transfer');
+    }
+
+
+
 
 
     public function submitUpdateUd($atrnr, Request $request)
@@ -756,14 +906,6 @@ class DetailsLoadingController extends Controller
 
         $listData = [$listTitleVariable, $listContentVariable];
         return $listData;
-    }
-
-    public function inverseRealPalletsNumber($creditAccount, $debitAccount, $palletsNumber)
-    {
-        $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $creditAccount)->first()->realNumberPallets;
-        Palletsaccount::where('name', $creditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $palletsNumber]);
-        $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name', $debitAccount)->first()->realNumberPallets;
-        Palletsaccount::where('name', $debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $palletsNumber]);
     }
 
     public function update1stTime($listDataK, $loading, $k, $type)

@@ -98,7 +98,7 @@ class PalletstransfersController extends Controller
      * show the add form according to one parameter
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAddOther($other){
+    public function showAddAccount($nameAccount){
         if (Auth::check()) {
             foreach(Palletsaccount::get() as $account){
                 $listNamesPalletsaccounts[]=$account->name;
@@ -108,17 +108,10 @@ class PalletstransfersController extends Controller
             foreach(Loading::get()->where('pt', 'JA') as $loading){
                 $listAtrnr[]=$loading->atrnr;
             }
-            if(in_array($other, $listAtrnr)){
-                $loading_atrnr=$other;
-                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr', 'loading_atrnr'));
-            }elseif(in_array($other, $listNamesPalletsaccounts)) {
-                $creditAccount = $other;
-                $debitAccount = $other;
-
+                $creditAccount = $nameAccount;
+                $debitAccount = $nameAccount;
                 return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'listAtrnr'));
-            }else{
-                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr'));
-            }
+
         } else {
             return view('auth.login');
         }
@@ -281,7 +274,7 @@ class PalletstransfersController extends Controller
             return redirect()->back();
         } elseif (isset($update)) {
             if ($state == 'Complete Validated') {
-                $this->inverseRealPalletsNumber($transfer->creditAccount,$transfer->debitAccount, $transfer->palletsNumber);
+                $this->inverseRealPalletsNumber($transfer);
                 }
             $filesNames= $this->actualDocuments($id);
             session()->put('actualCreditAccount', $transfer->creditAccount);
@@ -312,7 +305,7 @@ class PalletstransfersController extends Controller
                 Palletstransfer::where('id', $id)->update(['multiTransfer'=>false]);
             }
             $transfer=Palletstransfer::where('id', $id)->first();
-            return view('palletstransfers.detailsPalletstransfer', compact('transfer','listNamesPalletsaccounts','listAtrnr','update', 'listTypes', 'documents', 'filesNames'));
+            return view('palletstransfers.detailsPalletstransfer', compact('transfer','listNamesPalletsaccounts','listAtrnr','update', 'listTypes', 'filesNames'));
 
         } elseif (isset($deleteDocument)) {
             $this->deleteDocument($transfer, $deleteDocument);
@@ -330,7 +323,7 @@ class PalletstransfersController extends Controller
                 session()->flash('debitAccount', $transfer->debitAccount);
                 session()->flash('realPalletsNumberCreditAccount', Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets);
                 session()->flash('realPalletsNumberDebitAccount', Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets);
-                return view('palletstransfers.detailsPalletstransfer', compact( 'transfer','listNamesPalletsaccounts','listAtrnr','okSubmitUpdateModal',  'listTypes', 'documents', 'filesNames'));
+                return view('palletstransfers.detailsPalletstransfer', compact( 'transfer','listNamesPalletsaccounts','listAtrnr','okSubmitUpdateModal',  'listTypes', 'filesNames'));
             } else {
                 session()->pull('actualCreditAccount');
                 session()->pull('actualDebitAccount');
@@ -393,17 +386,14 @@ class PalletstransfersController extends Controller
     {
         $transfer=Palletstransfer::where('id', $id)->first();
         //inverse operation
-        $actualPalletsNumber = $transfer->palletsNumber;
-        $actualCreditAccount = $transfer->creditAccount;
-        $actualDebitAccount = $transfer->debitAccount;
-        $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
-        Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
-        $actualPalletsNumberDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
-        Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
+        $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->theoricalNumberPallets;
+        Palletsaccount::where('name', $transfer->creditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $transfer->palletsNumber]);
+        $actualPalletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->theoricalNumberPallets;
+        Palletsaccount::where('name', $transfer->debitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $transfer->palletsNumber]);
 
         $state = $transfer->state;
         if ($state == 'Complete Validated') {
-        $this->inverseRealPalletsNumber($actualCreditAccount, $actualDebitAccount, $actualPalletsNumber);
+        $this->inverseRealPalletsNumber($transfer);
         }
 
         $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
@@ -476,7 +466,7 @@ class PalletstransfersController extends Controller
         if ($actualDocuments_Palletstransfers->isEmpty()) {
             Palletstransfer::where('id', $transfer->id)->update(['validate' => false]);
             if ($transfer->state == 'Complete Validated') {
-                $this->inverseRealPalletsNumber($transfer->creditAccount,$transfer->debitAccount, $transfer->palletsNumber );
+                $this->inverseRealPalletsNumber($transfer);
                 }
 
             Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
@@ -501,15 +491,13 @@ class PalletstransfersController extends Controller
 
     /**
      * remove the last confirmed pallets transfer made for this transfer
-     * @param $creditAccount
-     * @param $debitAccount
-     * @param $palletsNumber
+     * @param $transfer
      */
-    public function inverseRealPalletsNumber($creditAccount, $debitAccount, $palletsNumber){
-        $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $creditAccount)->first()->realNumberPallets;
-        Palletsaccount::where('name', $creditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $palletsNumber]);
-        $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name',  $debitAccount)->first()->realNumberPallets;
-        Palletsaccount::where('name',  $debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $palletsNumber]);
+    public function inverseRealPalletsNumber($transfer){
+        $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets;
+        Palletsaccount::where('name', $transfer->creditAccount)->update(['realNumberPallets' => $actualRealPalletsNumberCreditAccount - $transfer->palletsNumber]);
+        $actualRealPalletsNumberDebitAccount = Palletsaccount::where('name',  $transfer->debitAccount)->first()->realNumberPallets;
+        Palletsaccount::where('name',  $transfer->debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $transfer->palletsNumber]);
 
     }
 
