@@ -119,7 +119,8 @@ class DetailsLoadingController extends Controller
         $okSubmitAddModal = Input::get('okSubmitAddModal');
         $closeSubmitAddModal = Input::get('closeSubmitAddModal');
         $uploadDocument = Input::get('upload');
-$delete=Input::get('delete');
+        $delete = Input::get('delete');
+        $deleteDocument = Input::get('deleteDocument');
 
 
         $truckAccount = Input::get('truckAccount');
@@ -173,7 +174,7 @@ $delete=Input::get('delete');
             session()->flash('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
             session()->flash('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
             session()->flash('openPanelPallets', 'openPanelPallets');
-            return view('loadings.DetailsLoading', compact('loading', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'listFilesNames', 'loading_atrnr', 'date', 'type', 'multiTransfer', 'details', 'listTypes', 'creditAccount', 'debitAccount','palletsNumber', 'addPalletstransfer'));
+            return view('loadings.DetailsLoading', compact('loading', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'listFilesNames', 'loading_atrnr', 'date', 'type', 'multiTransfer', 'details', 'listTypes', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer'));
         } elseif (isset($okSubmitAddModal)) {
             $date = Input::get('date');
             $type = Input::get('type');
@@ -213,37 +214,41 @@ $delete=Input::get('delete');
             $documentsK = 'documents' . $uploadDocument;
             $$documentsK = $request->file('documentsTransfer' . $uploadDocument);
             $state = $transfer->state;
-            $validate=$transfer->validate;
-            $type=$transfer->type;
-            $creditAccount=$transfer->creditAccount;
-            $debitAccount=$transfer->debitAccount;
-            $palletsNumber=$transfer->palletsNumber;
+            $validate = $transfer->validate;
+            $type = $transfer->type;
+            $creditAccount = $transfer->creditAccount;
+            $debitAccount = $transfer->debitAccount;
+            $palletsNumber = $transfer->palletsNumber;
 
             $filesNames = $this->upload($$documentsK, $transfer->id);
 
-            if (isset($creditAccount)&&isset($debitAccount)&&isset($palletsNumber)&&isset($type)&&(isset($$documentsK) || !empty($filesNames)) && ($validate <> null && $validate == 1)) {
+            if (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($$documentsK) || !empty($filesNames)) && ($validate <> null && $validate == 1)) {
                 $state = 'Complete Validated';
-            } elseif (isset($creditAccount)&&isset($debitAccount)&&isset($palletsNumber)&&isset($type)&&(isset($documents) || !empty($filesNames)) && ($validate <> null && $validate ==0)) {
+            } elseif (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($documents) || !empty($filesNames)) && ($validate <> null && $validate == 0)) {
                 $state = 'Complete';
             } elseif (!isset($$documentsK) && empty($filesNames)) {
                 $state = 'Waiting documents';
-            }elseif(isset($creditAccount)||isset($debitAccount)||isset($palletsNumber)||isset($type)||(isset($$documentsK) || !empty($filesNames))){
-                $state='In progress';
+            } elseif (isset($creditAccount) || isset($debitAccount) || isset($palletsNumber) || isset($type) || (isset($$documentsK) || !empty($filesNames))) {
+                $state = 'In progress';
             }
             Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
-        }elseif(isset($delete)){
-            $transfer=Palletstransfer::where('id', $delete)->first();
-            foreach(Palletsaccount::get() as $account){
-                $listNamesPalletsaccounts[]=$account->name;
+        } elseif (isset($delete)) {
+            $transfer = Palletstransfer::where('id', $delete)->first();
+            foreach (Palletsaccount::get() as $account) {
+                $listNamesPalletsaccounts[] = $account->name;
             }
-            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
-            foreach(Loading::get()->where('pt', 'JA') as $loading){
-                $listAtrnr[]=$loading->atrnr;
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
+            foreach (Loading::get()->where('pt', 'JA') as $loading) {
+                $listAtrnr[] = $loading->atrnr;
             }
-            $filesNames=$this->actualDocuments($transfer->id);
+            $filesNames = $this->actualDocuments($transfer->id);
             return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listAtrnr', 'listTypes', 'listNamesPalletsaccounts', 'filesNames', 'delete'));
+        } elseif (isset($deleteDocument)) {
+            $this->deleteDocument(Palletstransfer::where('id', trim(explode('-', $deleteDocument)[1]))->first(), trim(explode('-', $deleteDocument)[0]));
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return redirect()->back();
         }
 
     }
@@ -262,15 +267,15 @@ $delete=Input::get('delete');
 
     public function upload($documents, $id)
     {
-        $filesNames=$this->actualDocuments($id);
+        $filesNames = $this->actualDocuments($id);
         if (isset($documents)) {
             foreach ($documents as $doc) {
                 $filename = $doc->getClientOriginalName();
                 $extension = $doc->getClientOriginalExtension();
                 $size = $doc->getSize();
                 //if file is an image, a pdf or an email
-                if (($extension == 'png' || $extension == 'jpg' || $extension == 'JPG'|| $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
-                    Storage::putFileAs('/proofsPallets/documentsTransfer/'.$id, $doc, $filename);
+                if (($extension == 'png' || $extension == 'jpg' || $extension == 'JPG' || $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
+                    Storage::putFileAs('/proofsPallets/documentsTransfer/' . $id, $doc, $filename);
                     Document::firstOrCreate([
                         'name' => $filename,
                     ])->palletstransfers()->attach($id);
@@ -282,7 +287,30 @@ $delete=Input::get('delete');
         return $filesNames;
     }
 
-
+    /**
+     * delete a document attach to this transfer
+     * @param $transfer
+     * @param $name
+     */
+    public function deleteDocument($transfer, $name)
+    {
+        $doc = Document::where('name', $name)->first();
+        $doc->palletstransfers()->detach($transfer->id);
+        $path = '/proofsPallets/documentsTransfer/' . $transfer->id . '/';
+        Storage::delete($path . $name);
+        $actualTransferAssociated = DB::table('document_palletstransfer')->where('document_id', $doc->id)->get();
+        if ($actualTransferAssociated->isEmpty()) {
+            $doc->delete();
+        }
+        $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $transfer->id)->get();
+        if ($actualDocuments_Palletstransfers->isEmpty()) {
+            Palletstransfer::where('id', $transfer->id)->update(['validate' => false]);
+            if ($transfer->state == 'Complete Validated') {
+                $this->inverseRealPalletsNumber($transfer->creditAccount, $transfer->debitAccount, $transfer->palletsNumber);
+            }
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
+        }
+    }
 
 
     public function submitUpdateUd($atrnr, Request $request)
@@ -847,112 +875,6 @@ $delete=Input::get('delete');
         }
         $filesNames = $this->actualDocuments($atrnr, $type);
         return $filesNames;
-    }
-
-    public function deleteDocument($loading, $typePlace, $name)
-    {
-        $doc = Document::where('name', $name)->where('type', $typePlace)->first();
-
-        $doc->loadings()->detach($loading->atrnr);
-        $path = '/proofsPallets/' . $loading->atrnr . '/documents' . $typePlace . 'Place/';
-
-        Storage::delete($path . $name);
-        $actualLoadingsAssociated = DB::table('document_loading')->where('document_id', $doc->id)->get();
-        if ($actualLoadingsAssociated->isEmpty()) {
-            $doc->delete();
-        }
-        $actualDocuments_Loadings = DB::table('document_loading')->where('loading_id', $loading->atrnr)->get();
-        if ($actualDocuments_Loadings->isEmpty()) {
-            for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
-                $stateLoadingPlaceK = 'stateLoadingPlace' . $k;
-                $$stateLoadingPlaceK = $loading->$stateLoadingPlaceK;
-                if ($$stateLoadingPlaceK == 'Complete Validated') {
-                    $accountCreditLoadingPlaceK = 'accountCreditLoadingPlace' . $k;
-                    $$accountCreditLoadingPlaceK = $loading->$accountCreditLoadingPlaceK;
-                    $accountDebitLoadingPlaceK = 'accountDebitLoadingPlace' . $k;
-                    $$accountDebitLoadingPlaceK = $loading->$accountDebitLoadingPlaceK;
-                    $numberPalletsLoadingPlaceK = 'numberPalletsLoadingPlace' . $k;
-                    $$numberPalletsLoadingPlaceK = $loading->$numberPalletsLoadingPlaceK;
-
-                    if (isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && isset($$numberPalletsLoadingPlaceK)) {
-                        $this->inverseRealPalletsNumber($$accountCreditLoadingPlaceK, $$accountDebitLoadingPlaceK, $$numberPalletsLoadingPlaceK);
-                        session()->flash('messageSuccessDeleteDocument', 'No more documents. The confirmed pallets number on both account has been updated');
-                    }
-                }
-                $$stateLoadingPlaceK = 'Waiting documents';
-                Loading::where('atrnr', $loading->atrnr)->update(['stateLoadingPlace' . $k => $$stateLoadingPlaceK]);
-                Loading::where('atrnr', $loading->atrnr)->update(['validateLoadingPlace' . $k => false]);
-            }
-            for ($k = 1; $k <= $loading->numberOffloadingPlace; $k++) {
-                $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
-                $$stateOffloadingPlaceK = $loading->$stateOffloadingPlaceK;
-                if ($$stateOffloadingPlaceK == 'Complete Validated') {
-                    $accountCreditOffloadingPlaceK = 'accountCreditOffloadingPlace' . $k;
-                    $$accountCreditOffloadingPlaceK = $loading->$accountCreditOffloadingPlaceK;
-                    $accountDebitOffloadingPlaceK = 'accountDebitOffloadingPlace' . $k;
-                    $$accountDebitOffloadingPlaceK = $loading->$accountDebitOffloadingPlaceK;
-                    $numberPalletsOffloadingPlaceK = 'numberPalletsOffloadingPlace' . $k;
-                    $$numberPalletsOffloadingPlaceK = $loading->$numberPalletsOffloadingPlaceK;
-
-                    if (isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && isset($$numberPalletsOffloadingPlaceK)) {
-                        $this->inverseRealPalletsNumber($$accountCreditOffloadingPlaceK, $$accountDebitOffloadingPlaceK, $$numberPalletsOffloadingPlaceK);
-                        session()->flash('messageSuccessDeleteDocument', 'No more documents. The confirmed pallets number on both account has been updated');
-                    }
-                }
-                $$stateOffloadingPlaceK = 'Waiting documents';
-                Loading::where('atrnr', $loading->atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
-                Loading::where('atrnr', $loading->atrnr)->update(['validateOffloadingPlace' . $k => false]);
-            }
-            $this->state($loading);
-        } else {
-            foreach ($actualDocuments_Loadings as $actualDoc) {
-                $doc = Document::where('id', $actualDoc->document_id)->where('type', $typePlace)->first();
-                if ($doc == null && $typePlace == 'Loading') {
-                    for ($k = 1; $k <= $loading->numberLoadingPlace; $k++) {
-                        $stateLoadingPlaceK = 'stateLoadingPlace' . $k;
-                        $$stateLoadingPlaceK = $loading->$stateLoadingPlaceK;
-                        if ($$stateLoadingPlaceK == 'Complete Validated') {
-                            $accountCreditLoadingPlaceK = 'accountCreditLoadingPlace' . $k;
-                            $$accountCreditLoadingPlaceK = $loading->$accountCreditLoadingPlaceK;
-                            $accountDebitLoadingPlaceK = 'accountDebitLoadingPlace' . $k;
-                            $$accountDebitLoadingPlaceK = $loading->$accountDebitLoadingPlaceK;
-                            $numberPalletsLoadingPlaceK = 'numberPalletsLoadingPlace' . $k;
-                            $$numberPalletsLoadingPlaceK = $loading->$numberPalletsLoadingPlaceK;
-
-                            if (isset($$accountCreditLoadingPlaceK) && isset($$accountDebitLoadingPlaceK) && isset($$numberPalletsLoadingPlaceK)) {
-                                $this->inverseRealPalletsNumber($$accountCreditLoadingPlaceK, $$accountDebitLoadingPlaceK, $$numberPalletsLoadingPlaceK);
-                                session()->flash('messageSuccessDeleteDocument', 'No more documents. The confirmed pallets number on both account has been updated');
-                            }
-                        }
-                        $$stateLoadingPlaceK = 'Waiting documents';
-                        Loading::where('atrnr', $loading->atrnr)->update(['stateLoadingPlace' . $k => $$stateLoadingPlaceK]);
-                        Loading::where('atrnr', $loading->atrnr)->update(['validateLoadingPlace' . $k => false]);
-                    }
-                } elseif ($doc == null && $typePlace == 'Offloading') {
-                    for ($k = 1; $k <= $loading->numberOffloadingPlace; $k++) {
-                        $stateOffloadingPlaceK = 'stateOffloadingPlace' . $k;
-                        $$stateOffloadingPlaceK = $loading->$stateOffloadingPlaceK;
-                        if ($$stateOffloadingPlaceK == 'Complete Validated') {
-                            $accountCreditOffloadingPlaceK = 'accountCreditOffloadingPlace' . $k;
-                            $$accountCreditOffloadingPlaceK = $loading->$accountCreditOffloadingPlaceK;
-                            $accountDebitOffloadingPlaceK = 'accountDebitOffloadingPlace' . $k;
-                            $$accountDebitOffloadingPlaceK = $loading->$accountDebitOffloadingPlaceK;
-                            $numberPalletsOffloadingPlaceK = 'numberPalletsOffloadingPlace' . $k;
-                            $$numberPalletsOffloadingPlaceK = $loading->$numberPalletsOffloadingPlaceK;
-
-                            if (isset($$accountCreditOffloadingPlaceK) && isset($$accountDebitOffloadingPlaceK) && isset($$numberPalletsOffloadingPlaceK)) {
-                                $this->inverseRealPalletsNumber($$accountCreditOffloadingPlaceK, $$accountDebitOffloadingPlaceK, $$numberPalletsOffloadingPlaceK);
-                                session()->flash('messageSuccessDeleteDocument', 'No more documents. The confirmed pallets number on both account has been updated');
-                            }
-                        }
-                        $$stateOffloadingPlaceK = 'Waiting documents';
-                        Loading::where('atrnr', $loading->atrnr)->update(['stateOffloadingPlace' . $k => $$stateOffloadingPlaceK]);
-                        Loading::where('atrnr', $loading->atrnr)->update(['validateOffloadingPlace' . $k => false]);
-                    }
-                }
-                $this->state($loading);
-            }
-        }
     }
 
 

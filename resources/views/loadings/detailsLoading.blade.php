@@ -1305,9 +1305,9 @@
                                                                                         @if(!in_array($nameF, $list))
                                                                                             <div>
                                                                                                 <button type="submit"
-                                                                                                        name="deleteDocument{{$transfer->id}}"
+                                                                                                        name="deleteDocument"
                                                                                                         class="btn-add glyphicon glyphicon-remove"
-                                                                                                        value="{{$nameF}}"></button>
+                                                                                                        value="{{$nameF}}-{{$transfer->id}}"></button>
                                                                                                 <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transfer->id}}/{{$nameF}}"
                                                                                                    class="link">{{$nameF}}</a>
                                                                                             </div>

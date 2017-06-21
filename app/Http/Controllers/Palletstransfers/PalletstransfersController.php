@@ -315,7 +315,7 @@ class PalletstransfersController extends Controller
             return view('palletstransfers.detailsPalletstransfer', compact('transfer','listNamesPalletsaccounts','listAtrnr','update', 'listTypes', 'documents', 'filesNames'));
 
         } elseif (isset($deleteDocument)) {
-            $this->deleteDocument($id, $deleteDocument, $state, $transfer->creditAccount, $transfer->debitAccount, $transfer->palletsNumber);
+            $this->deleteDocument($transfer, $deleteDocument);
             return redirect()->back();
         } elseif (isset($okSubmitUpdateModal)) {
             $filesNames=$this->actualDocuments($id);
@@ -459,31 +459,27 @@ class PalletstransfersController extends Controller
 
     /**
      * delete a document attach to this transfer
-     * @param $id
+     * @param $transfer
      * @param $name
-     * @param $state
-     * @param $actualCreditAccount
-     * @param $actualDebitAccount
-     * @param $actualPalletsNumber
      */
-    public function deleteDocument($id, $name, $state, $actualCreditAccount, $actualDebitAccount, $actualPalletsNumber)
+    public function deleteDocument($transfer, $name)
     {
         $doc = Document::where('name', $name)->first();
-        $doc->palletstransfers()->detach($id);
-        $path = '/proofsPallets/documentsTransfer/'.$id.'/';
+        $doc->palletstransfers()->detach($transfer->id);
+        $path = '/proofsPallets/documentsTransfer/'.$transfer->id.'/';
         Storage::delete($path . $name);
         $actualTransferAssociated=DB::table('document_palletstransfer')->where('document_id', $doc->id)->get();
         if($actualTransferAssociated->isEmpty()){
             $doc->delete();
         }
-        $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
+        $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $transfer->id)->get();
         if ($actualDocuments_Palletstransfers->isEmpty()) {
-            Palletstransfer::where('id', $id)->update(['validate' => false]);
-            if ($state == 'Complete Validated') {
-                $this->inverseRealPalletsNumber($actualCreditAccount,$actualDebitAccount, $actualPalletsNumber );
+            Palletstransfer::where('id', $transfer->id)->update(['validate' => false]);
+            if ($transfer->state == 'Complete Validated') {
+                $this->inverseRealPalletsNumber($transfer->creditAccount,$transfer->debitAccount, $transfer->palletsNumber );
                 }
-            $state = 'Waiting documents';
-            Palletstransfer::where('id', $id)->update(['state' => $state]);
+
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
         }
     }
 
