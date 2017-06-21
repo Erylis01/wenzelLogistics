@@ -119,16 +119,8 @@ class DetailsLoadingController extends Controller
         $okSubmitAddModal = Input::get('okSubmitAddModal');
         $closeSubmitAddModal = Input::get('closeSubmitAddModal');
         $uploadDocument = Input::get('upload');
+$delete=Input::get('delete');
 
-//        if(isset($uploadDocument)){
-//            $k=$uploadDocument;
-//        }elseif(isset($updatePallets)){
-//            $k=$updatePallets;
-//        }
-//if(isset($k)) {
-//    $documentsK = 'documents' . $k;
-//    $$documentsK = $request->file('documentsTransfer' . $k);
-//}
 
         $truckAccount = Input::get('truckAccount');
 
@@ -241,6 +233,17 @@ class DetailsLoadingController extends Controller
             Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
+        }elseif(isset($delete)){
+            $transfer=Palletstransfer::where('id', $delete)->first();
+            foreach(Palletsaccount::get() as $account){
+                $listNamesPalletsaccounts[]=$account->name;
+            }
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+            foreach(Loading::get()->where('pt', 'JA') as $loading){
+                $listAtrnr[]=$loading->atrnr;
+            }
+            $filesNames=$this->actualDocuments($transfer->id);
+            return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listAtrnr', 'listTypes', 'listNamesPalletsaccounts', 'filesNames', 'delete'));
         }
 
     }
@@ -952,35 +955,6 @@ class DetailsLoadingController extends Controller
         }
     }
 
-    public function deletePlace($loading, $type, $numberPlace)
-    {
-        $numberPalletsK = 'numberPallets' . $type . $numberPlace;
-        $creditAccountK = 'creditAccount' . $type . $numberPlace;
-        $debitAccountK = 'debitAccount' . $type . $numberPlace;
-        if (isset($loading->$creditAccountK) && isset($loading->$debitAccountK) && isset($loading->$numberPalletsK)) {
-            $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $loading->$creditAccountK)->first()->theoricalNumberPallets;
-            Palletsaccount::where('name', $loading->$creditAccountK)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $loading->$numberPalletsK]);
-            $actualPalletsNumberDebitAccount = Palletsaccount::where('name', $loading->$debitAccountK)->first()->theoricalNumberPallets;
-            Palletsaccount::where('name', $loading->$debitAccountK)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $loading->$numberPalletsK]);
-
-        }
-        $stateK = 'state' . $type . $numberPlace;
-        $$stateK = $loading->$stateK;
-        if ($$stateK == 'Complete Validate') {
-            $this->inverseRealPalletsNumber($loading->$creditAccountK, $loading->$debitAccountK, $loading->$numberPalletsK);
-        }
-        Loading::where('atrnr', $loading->atrnr)->update(['number' . $type => $numberPlace - 1]);
-        Loading::where('atrnr', $loading->atrnr)->update(['numberPallets' . $type . $numberPlace => null]);
-        Loading::where('atrnr', $loading->atrnr)->update(['accountCredit' . $type . $numberPlace => null]);
-        Loading::where('atrnr', $loading->atrnr)->update(['accountDebit' . $type . $numberPlace => null]);
-        Loading::where('atrnr', $loading->atrnr)->update(['validate' . $type . $numberPlace => false]);
-        Loading::where('atrnr', $loading->atrnr)->update(['state' . $type . $numberPlace => 'Untreated']);
-    }
-
-    public function addPlace($atrnr, $type, $numberPlace)
-    {
-        Loading::where('atrnr', $atrnr)->update(['number' . $type => $numberPlace + 1]);
-    }
 
     public function state($loading)
     {

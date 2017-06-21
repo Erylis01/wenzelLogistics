@@ -596,11 +596,15 @@
                                                     <input type="hidden"
                                                            name="_token"
                                                            value="{{ csrf_token() }}">
+                                                    <!--msg-->
                                                     <div class="row">
                                                         @if(Session::has('messageAddPalletstransfer'))
                                                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddPalletstransfer') }}</div>
+                                                        @elseif(Session::has('messageDeletePalletstransfer'))
+                                                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeletePalletstransfer') }}</div>
                                                         @endif
                                                     </div>
+                                                    <!--show add form-->
                                                     <div class="row">
                                                         <div class="from-group">
                                                             <div class="col-lg-2 text-right">
@@ -644,6 +648,7 @@
                                                         </div>
                                                     </div>
                                                     <br>
+                                                    <!--Add form-->
                                                     <div id="addForm" class="row collapse in">
                                                         @if(isset($addTransferForm)||isset($addPalletstransfer))
                                                             <div class="panel subpanel">
@@ -928,6 +933,7 @@
                                                     </div>
                                                 </form>
 
+                                                <!---Table all transfer-->
                                                 <div class="row">
                                                     <div class="table-responsive">
                                                         <table class="table table-hover table-bordered">
@@ -995,6 +1001,7 @@
                                                     </div>
                                                 </div>
 
+                                                <!--Panel for each transfer-->
                                                 <form class="form-horizontal"
                                                       role="form"
                                                       method="POST"
@@ -1007,8 +1014,17 @@
                                                         <div class="row">
                                                             <div class="panel subpanel">
                                                                 <div class="panel-heading">
-                                                                    <a data-toggle="collapse"
-                                                                       href="#PanSubcollapse{{$transfer->id}}">Transfer {{$transfer->id}}</a>
+                                                                    <div class="col-lg-11 text-left"> <a data-toggle="collapse"
+                                                                                                        href="#PanSubcollapse{{$transfer->id}}">Transfer {{$transfer->id}}
+                                                                        </a></div>
+                                                                    <div >
+                                                                        <button type="submit"
+                                                                                class=" btn btn-primary btn-form glyphicon glyphicon-remove"
+                                                                                value="{{$transfer->id}}"
+                                                                                name="delete"
+                                                                        ></button>
+                                                                    </div>
+
                                                                 </div>
                                                                 <div id="PanSubcollapse{{$transfer->id}}"
                                                                      class="panel-collapse collapse panel-body">
@@ -1021,7 +1037,8 @@
                                                                         </div>
                                                                         <div class="col-lg-2">
                                                                             @if(isset($transfer->validate) && $transfer->validate==1)
-                                                                                <input type="text" name="type{{$transfer->id}}"
+                                                                                <input type="text"
+                                                                                       name="type{{$transfer->id}}"
                                                                                        class="form-control"
                                                                                        value="{{$transfer->type}}"
                                                                                        readonly>
@@ -1031,7 +1048,8 @@
                                                                                         data-size="5"
                                                                                         data-live-search="true"
                                                                                         data-live-search-style="startsWith"
-                                                                                        title="Type" name="type{{$transfer->id}}">
+                                                                                        title="Type"
+                                                                                        name="type{{$transfer->id}}">
                                                                                     @foreach($listTypes as $t )
                                                                                         @if(isset($transfer->type)&&$transfer->type==$t)
                                                                                             <option selected>{{$t}}</option>
@@ -1067,6 +1085,7 @@
                                                                             @endif
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-group">
                                                                         <!--number of pallets-->
                                                                         <div class="col-lg-2">
@@ -1108,28 +1127,32 @@
                                                                         </div>
                                                                         <div class="col-lg-2">
                                                                             @if(isset($transfer->date)&&(isset($transfer->validate) && $transfer->validate==1))
-                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                <input id="date{{$transfer->id}}"
+                                                                                       type="date"
                                                                                        class="form-control"
                                                                                        name="date{{$transfer->id}}"
                                                                                        value="{{ $transfer->date }}"
                                                                                        placeholder="Date" autofocus
                                                                                        readonly>
                                                                             @elseif(isset($transfer->date))
-                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                <input id="date{{$transfer->id}}"
+                                                                                       type="date"
                                                                                        class="form-control"
                                                                                        name="date{{$transfer->id}}"
                                                                                        value="{{ $transfer->date }}"
                                                                                        placeholder="Date" autofocus>
 
                                                                             @elseif(isset($transfer->validate) && $transfer->validate==1)
-                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                <input id="date{{$transfer->id}}"
+                                                                                       type="date"
                                                                                        class="form-control"
                                                                                        name="date{{$transfer->id}}"
                                                                                        value="{{ old('date'.$transfer->id) }}"
                                                                                        placeholder="Date" autofocus
                                                                                        readonly>
                                                                             @else(Illuminate\Support\Facades\Input::old('palletsNumber'))
-                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                <input id="date{{$transfer->id}}"
+                                                                                       type="date"
                                                                                        class="form-control"
                                                                                        name="date{{$transfer->id}}"
                                                                                        value="{{ old('date'.$transfer->id) }}"
@@ -1212,7 +1235,6 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             @endif
-
                                                                         </div>
                                                                         <!--debit account-->
                                                                         <div class="col-lg-2">
@@ -1265,9 +1287,10 @@
                                                                         <!--button upload-->
                                                                         <div class="col-lg-2">
                                                                             <button type="submit"
-                                                                                   class="btn btn-primary btn-block btn-form"
-                                                                                   value="{{$transfer->id}}"
-                                                                                    name="upload">Upload</button>
+                                                                                    class="btn btn-primary btn-block btn-form"
+                                                                                    value="{{$transfer->id}}"
+                                                                                    name="upload">Upload
+                                                                            </button>
                                                                         </div>
                                                                     </div>
 

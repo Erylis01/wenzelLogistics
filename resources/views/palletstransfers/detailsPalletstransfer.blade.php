@@ -78,7 +78,8 @@
                                 </div>
                                 <div class="col-lg-2">
                                     @if(isset($transfer->validate) && $transfer->validate==1)
-                                        <input type="text" name="type" class="form-control" value="{{$transfer->type}}" required
+                                        <input type="text" name="type" class="form-control" value="{{$transfer->type}}"
+                                               required
                                                readonly>
                                     @else
                                         <select id="type" class="selectpicker show-tick form-control" data-size="5"
@@ -202,62 +203,62 @@
                                         @else
                                             <div id="loading_atrnrLink">
                                                 @endif
-                                <div class="col-lg-2">
-                                    <label for="multiTransfer"
-                                           class="control-label">Multi-Transfers ?
-                                    </label>
-                                </div>
-                                <div class="col-lg-2 text-left">
-                                    @if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))
-                                        <input type="text" name="multiTransfer" class="form-control"
-                                               value="Yes" readonly>
-                                    @elseif(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="true"
-                                                    checked>Yes</label>
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="false">No</label>
-                                    @elseif((isset($transfer->validate) && $transfer->validate==1))
-                                        <input type="text" name="multiTransfer" class="form-control"
-                                               value="No" readonly>
-                                    @else
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="true">Yes</label>
-                                        <label class="radio-inline"><input
-                                                    type="radio"
-                                                    name="multiTransfer"
-                                                    value="false"
-                                                    checked>No</label>
-                                    @endif
-                                </div>
+                                                <div class="col-lg-2">
+                                                    <label for="multiTransfer"
+                                                           class="control-label">Multi-Transfers ?
+                                                    </label>
+                                                </div>
+                                                <div class="col-lg-2 text-left">
+                                                    @if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))
+                                                        <input type="text" name="multiTransfer" class="form-control"
+                                                               value="Yes" readonly>
+                                                    @elseif(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))
+                                                        <label class="radio-inline"><input
+                                                                    type="radio"
+                                                                    name="multiTransfer"
+                                                                    value="true"
+                                                                    checked>Yes</label>
+                                                        <label class="radio-inline"><input
+                                                                    type="radio"
+                                                                    name="multiTransfer"
+                                                                    value="false">No</label>
+                                                    @elseif((isset($transfer->validate) && $transfer->validate==1))
+                                                        <input type="text" name="multiTransfer" class="form-control"
+                                                               value="No" readonly>
+                                                    @else
+                                                        <label class="radio-inline"><input
+                                                                    type="radio"
+                                                                    name="multiTransfer"
+                                                                    value="true">Yes</label>
+                                                        <label class="radio-inline"><input
+                                                                    type="radio"
+                                                                    name="multiTransfer"
+                                                                    value="false"
+                                                                    checked>No</label>
+                                                    @endif
+                                                </div>
                                                 @if(isset($transfer->loading_atrnr))
-                                                    </div>
-                                                        @else
-                                                            </div>
-                                                                @endif
+                                            </div>
+                                            @else
+                                    </div>
+                                @endif
                             </div>
-                                {{--<!--Link other transfer-->--}}
-                                {{--@if(($transfer->multitransfer==1 && $transfer->type=='Withdrawal'))--}}
-                                    {{--<div class="col-lg-2 text-left">--}}
-                                        {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->debitAccount)}}"--}}
-                                           {{--class="link"><span--}}
-                                                    {{--class="glyphicon glyphicon-info-sign"></span>--}}
-                                            {{--See transfers associated</a>--}}
-                                    {{--</div>--}}
-                                    {{--@elseif(($transfer->multitransfer==1 && $transfer->type=='Deposit'))--}}
-                                    {{--<div class="col-lg-2 text-left">--}}
-                                        {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->creditAccount)}}"--}}
-                                           {{--class="link"><span--}}
-                                                    {{--class="glyphicon glyphicon-info-sign"></span>--}}
-                                            {{--See transfers associated</a>--}}
-                                    {{--</div>--}}
-                                {{--@endif--}}
+                            {{--<!--Link other transfer-->--}}
+                            {{--@if(($transfer->multitransfer==1 && $transfer->type=='Withdrawal'))--}}
+                            {{--<div class="col-lg-2 text-left">--}}
+                            {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->debitAccount)}}"--}}
+                            {{--class="link"><span--}}
+                            {{--class="glyphicon glyphicon-info-sign"></span>--}}
+                            {{--See transfers associated</a>--}}
+                            {{--</div>--}}
+                            {{--@elseif(($transfer->multitransfer==1 && $transfer->type=='Deposit'))--}}
+                            {{--<div class="col-lg-2 text-left">--}}
+                            {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->creditAccount)}}"--}}
+                            {{--class="link"><span--}}
+                            {{--class="glyphicon glyphicon-info-sign"></span>--}}
+                            {{--See transfers associated</a>--}}
+                            {{--</div>--}}
+                            {{--@endif--}}
 
                             <div class="form-group">
                                 <!--credit account-->
@@ -398,7 +399,7 @@
                                                         checked id="validateNo">No</label>
                                         @endif
                                     </div>
-                                <!--submit-->
+                                    <!--submit-->
                                     <div class="col-lg-4 col-lg-offset-1">
                                         <input type="submit"
                                                class="btn btn-primary btn-block btn-form"
@@ -468,11 +469,11 @@
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
                                                 {{--<tr>--}}
-                                                    {{--<td class="text-center">Last transfer</td>--}}
-                                                    {{--<td class="text-center">--}}
-                                                        {{--- {{request()->session()->get('actualPalletsNumber')}}</td>--}}
-                                                    {{--<td class="text-center">--}}
-                                                        {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                {{--<td class="text-center">Last transfer</td>--}}
+                                                {{--<td class="text-center">--}}
+                                                {{--- {{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                {{--<td class="text-center">--}}
+                                                {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
                                                 {{--</tr>--}}
                                                 <tr>
                                                     <td class="text-center">Pallets number update</td>
@@ -555,11 +556,11 @@
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
                                                 {{--<tr>--}}
-                                                    {{--<td class="text-center">Last transfer</td>--}}
-                                                    {{--<td class="text-center">--}}
-                                                        {{--{{request()->session()->get('actualPalletsNumber')}}</td>--}}
-                                                    {{--<td class="text-center">--}}
-                                                    {{--</td>--}}
+                                                {{--<td class="text-center">Last transfer</td>--}}
+                                                {{--<td class="text-center">--}}
+                                                {{--{{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                {{--<td class="text-center">--}}
+                                                {{--</td>--}}
                                                 {{--</tr>--}}
                                                 <tr>
                                                     <td class="text-center">Pallets number update</td>
@@ -602,11 +603,11 @@
                                                     <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                 </tr>
                                                 {{--<tr>--}}
-                                                    {{--<td class="text-center">Last transfer</td>--}}
-                                                    {{--<td class="text-center">--}}
-                                                    {{--</td>--}}
-                                                    {{--<td class="text-center">--}}
-                                                        {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
+                                                {{--<td class="text-center">Last transfer</td>--}}
+                                                {{--<td class="text-center">--}}
+                                                {{--</td>--}}
+                                                {{--<td class="text-center">--}}
+                                                {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
                                                 {{--</tr>--}}
                                                 <tr>
                                                     <td class="text-center">Pallets number update</td>
@@ -718,51 +719,74 @@
                 </form>
 
                 <!-- Modal Delete -->
-                <div class="modal fade" id="deletePalletstransfer_modal"
-                     role="dialog">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close"
-                                        data-dismiss="modal">&times;
-                                </button>
-                                <h4 class="modal-title text-center">Are you sure to
-                                    delete the
-                                    pallets
-                                    transfer {{$transfer->id}} ?</h4>
-                            </div>
-                            <div class="modal-body center">
-                                <form method="post"
-                                      action="{{route('deletePalletstransfer', $transfer->id)}}">
-                                    <input type="hidden" name="_method"
-                                           value="delete">
-                                    {{ csrf_field() }}
-                                    <div class="text-center">
-                                        <button type="submit"
-                                                class="btn btn-danger btn-modal"
-                                                value="yes"
-                                                name="delete"
-                                        >
-                                            Yes
-                                        </button>
-                                        <button type="button"
-                                                class="btn btn-success btn-modal"
-                                                data-dismiss="modal">No
-                                        </button>
+                @if(isset($delete))
+                    <div class="modal show" id="deletePalletstransfer_modal"
+                         role="dialog">
+                        @else
+                            <div class="modal fade" id="deletePalletstransfer_modal"
+                                 role="dialog">
+                                @endif
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            @if(isset($delete))
+                                                <a href="{{route('showDetailsPalletstransfer', $transfer->id)}}"
+                                                   class="close">&times;</a>
+                                            @else
+                                                <button type="button" class="close"
+                                                        data-dismiss="modal">&times;
+                                                </button>
+                                            @endif
+                                            <h4 class="modal-title text-center">Are you sure to
+                                                delete the
+                                                pallets
+                                                transfer {{$transfer->id}} ?</h4>
+                                        </div>
+                                        <div class="modal-body center">
+                                            <form method="post"
+                                                  action="{{route('deletePalletstransfer', $transfer->id)}}">
+                                                <input type="hidden" name="_method"
+                                                       value="delete">
+                                                {{ csrf_field() }}
+                                                <div class="text-center">
+                                                    <button type="submit"
+                                                            class="btn btn-danger btn-modal"
+                                                            value="yes"
+                                                            name="delete"
+                                                    >
+                                                        Yes
+                                                    </button>
+                                                    @if(isset($delete))
+                                                        <a href="{{route('showDetailsPalletstransfer', $transfer->id)}}"
+                                                           class="btn btn-success btn-modal">No</a>
+                                                    @else
+                                                    <button type="button"
+                                                            class="btn btn-success btn-modal"
+                                                            data-dismiss="modal">No
+                                                    </button>
+                                                        @endif
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            @if(isset($delete))
+                                                <a href="{{route('showDetailsPalletstransfer', $transfer->id)}}"
+                                                   class="btn btn-default btn-modal">Close</a>
+                                            @else
+                                            <button type="button"
+                                                    class="btn btn-default btn-modal"
+                                                    data-dismiss="modal">
+                                                Close
+                                            </button>
+                                                @endif
+                                        </div>
                                     </div>
-                                </form>
+                                </div>
+                                @if(isset($delete))
                             </div>
-                            <div class="modal-footer">
-                                <button type="button"
-                                        class="btn btn-default btn-modal"
-                                        data-dismiss="modal">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
+                            @else
                     </div>
-                </div>
-
+                @endif
             </div>
         @endif
     </div>

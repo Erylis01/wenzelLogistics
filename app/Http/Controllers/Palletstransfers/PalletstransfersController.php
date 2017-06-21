@@ -391,16 +391,17 @@ class PalletstransfersController extends Controller
      */
     public function delete($id)
     {
+        $transfer=Palletstransfer::where('id', $id)->first();
         //inverse operation
-        $actualPalletsNumber = Palletstransfer::where('id', $id)->first()->palletsNumber;
-        $actualCreditAccount = Palletstransfer::where('id', $id)->first()->creditAccount;
-        $actualDebitAccount = Palletstransfer::where('id', $id)->first()->debitAccount;
+        $actualPalletsNumber = $transfer->palletsNumber;
+        $actualCreditAccount = $transfer->creditAccount;
+        $actualDebitAccount = $transfer->debitAccount;
         $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
         Palletsaccount::where('name', $actualCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
         $actualPalletsNumberDebitAccount = Palletsaccount::where('name', $actualDebitAccount)->first()->theoricalNumberPallets;
         Palletsaccount::where('name', $actualDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
 
-        $state = Palletstransfer::where('id', $id)->first()->state;
+        $state = $transfer->state;
         if ($state == 'Complete Validated') {
         $this->inverseRealPalletsNumber($actualCreditAccount, $actualDebitAccount, $actualPalletsNumber);
         }
@@ -412,13 +413,12 @@ class PalletstransfersController extends Controller
                 $actualDocuments[] = Document::where('id', $actualDoc->document_id)->first();
             }
             foreach ($actualDocuments as $actDoc) {
-                $doc = Document::where('name', $actDoc)->where('type', 'Transfer')->first();
-                $doc->palletstransfers()->detach($id);
+                $actDoc->palletstransfers()->detach($id);
                 $path = '/proofsPallets/documentsTransfer/'.$id.'/';
-                Storage::delete($path . $actDoc);
-                $actualTransferAssociated=DB::table('document_palletstransfer')->where('document_id', $doc->id)->get();
+                Storage::delete($path . $actDoc->name);
+                $actualTransferAssociated=DB::table('document_palletstransfer')->where('document_id', $actDoc->id)->get();
                 if($actualTransferAssociated->isEmpty()){
-                    $doc->delete();
+                    $actDoc->delete();
                 }
             }
         }
