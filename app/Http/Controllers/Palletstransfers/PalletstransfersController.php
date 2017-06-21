@@ -201,8 +201,7 @@ class PalletstransfersController extends Controller
                 return redirect('/allPalletstransfers');
             } elseif (isset($closeSubmitAddModal)) {
                 return redirect()->back();
-//                return view('palletstransfers.addPalletstransfer', compact('date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsaccounts', 'listTypes', 'multiTransfer', 'details'));
-            }
+      }
 
     }
 

@@ -34,7 +34,8 @@ class DetailsLoadingController extends Controller
             //////PALLETS PANEL//////
             //all pallets account
             $listPalletsAccounts = Palletsaccount::get();
-$listPalletstransfers=Palletstransfer::where('loading_atrnr', $atrnr)->get();
+            $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
 
             //truck
             $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
@@ -53,8 +54,8 @@ $listPalletstransfers=Palletstransfer::where('loading_atrnr', $atrnr)->get();
 
 //            $filesNamesTruck = $this->actualDocuments($loading->atrnr, 'Truck');
 
-            return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts','listPalletstransfers',
-                'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier'
+            return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listPalletstransfers',
+                'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier', 'listTypes'
             ));
         } else {
             return view('auth.login');
@@ -113,28 +114,94 @@ $listPalletstransfers=Palletstransfer::where('loading_atrnr', $atrnr)->get();
 
         //buttons
         $update = Input::get('update');
-        $addTransfer = Input::get('addTransfer');
+        $addTransferForm = Input::get('addTransferForm');
+        $addPalletstransfer=Input::get('addPalletstransfer');
+        $okSubmitAddModal=Input::get('okSubmitAddModal');
+        $closeSubmitAddModal=Input::get('closeSubmitAddModal');
+
         $truckAccount = Input::get('truckAccount');
 
-        if (isset($update)) {
-            $this->update($request, $loading->atrnr);
-        } elseif (isset($addTransfer)) {
-            foreach (Palletsaccount::get() as $account) {
-                $listNamesPalletsaccounts[] = $account->name;
-            }
-            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
-            $date = Carbon::now()->format('Y-m-d');
-            foreach (Loading::get()->where('pt', 'JA') as $loading) {
-                $listAtrnr[] = $loading->atrnr;
-            }
-            $loading_atrnr = $atrnr;
+        $date=$loading->ladedatum;
+        $listPalletsAccounts = Palletsaccount::get();
+        $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
+        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+        //truck
+        $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
 
+        if (isset($update)) {
+            $this->updatePanel1($request, $loading->atrnr);
+        } elseif (isset($addTransferForm)) {
             if (isset($truckAccount)) {
+                Loading::where('atrnr',$atrnr)->update(['truckAccount'=>$truckAccount]);
                 $creditAccount = $truckAccount;
                 $debitAccount = $truckAccount;
+            }else{
+                //looking for the account that contains the license plate if it's set
+                if ($loading->kennzeichen == "") {
+                    $licensePlate = 'OTHER';
+                } else {
+                    $licensePlate = $loading->kennzeichen;
+                }
+                if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
+                    $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
+                    if ($namePalletsAccountTruck <> null) {
+                        $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
+                    }
+                }
             }
-            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr', 'loading_atrnr', 'creditAccount', 'debitAccount'));
+            $loading=Loading::where('atrnr', $atrnr)->first();
+            return view('loadings.DetailsLoading', compact('loading','palletsAccountFavoriteTruck','listPalletsaccountsCarrier','listPalletsAccounts','listPalletstransfers','date', 'listTypes', 'creditAccount', 'debitAccount','addTransferForm'));
+        }elseif(isset($addPalletstransfer)){
+            $date = Input::get('date');
+            $type = Input::get('type');
+            $multiTransfer=Input::get('multiTransfer');
+            $details=Input::get('details');
+            $loading_atrnr=$atrnr;
+            $creditAccount = Input::get('creditAccount');
+            $debitAccount = Input::get('debitAccount');
+            $palletsNumber = Input::get('palletsNumber');
+            $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
+            $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
+            session()->flash('palletsNumber', $palletsNumber);
+            session()->flash('creditAccount', $creditAccount);
+            session()->flash('debitAccount', $debitAccount);
+            session()->flash('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
+            session()->flash('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
+            return view('loadings.DetailsLoading', compact('loading','listPalletsaccountsCarrier','listPalletsAccounts','listPalletstransfers','loading_atrnr','date','type','multiTransfer', 'details','listTypes', 'creditAccount', 'debitAccount','addPalletstransfer'));
+        }elseif (isset($okSubmitAddModal)) {
+            $date = Input::get('date');
+            $type = Input::get('type');
+            $multiTransfer = Input::get('multiTransfer');
+            $details = Input::get('details');
+            $loading_atrnr = $atrnr;
+            $creditAccount = Input::get('creditAccount');
+            $debitAccount = Input::get('debitAccount');
+            $palletsNumber = Input::get('palletsNumber');
+            $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
+            $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
+
+            if ($multiTransfer == 'true') {
+                $multiTransfer = true;
+            } elseif ($multiTransfer == 'false') {
+                $multiTransfer = false;
+            }
+            if (isset($date) && isset($loading_atrnr)) {
+                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer' => $multiTransfer, 'loading_atrnr' => $loading_atrnr]);
+            } elseif (isset($date)) {
+                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer' => $multiTransfer]);
+            } elseif (isset($loading_atrnr)) {
+                Palletstransfer::create(['loading_atrnr' => $loading_atrnr, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer' => $multiTransfer]);
+            } else {
+                Palletstransfer::create(['type' => $type, 'details' => $details, 'creditAccount' => $creditAccount, 'debitAccount' => $debitAccount, 'palletsNumber' => $palletsNumber, 'multiTransfer' => $multiTransfer]);
+            }
+            Palletsaccount::where('name', $creditAccount)->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
+            Palletsaccount::where('name', $debitAccount)->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
+            session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
+            return redirect()->back();
+        }elseif (isset($closeSubmitAddModal)) {
+            return redirect()->back();
         }
+
     }
 
     public function addTransfer($atrnr, $truckAccount)
