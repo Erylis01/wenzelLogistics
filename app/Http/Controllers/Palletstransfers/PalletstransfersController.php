@@ -263,11 +263,11 @@ class PalletstransfersController extends Controller
         if (isset($upload)) {
             $filesNames=$this->upload($documents, $id);
 
-            if ((isset($documents) || !empty($filesNames)) && ($validate<>null && $validate == 'true')) {
+            if (!empty($filesNames) && $validate == 'true') {
                 $state = 'Complete Validated';
-            } elseif ((isset($documents) || !empty($filesNames)) && ($validate<>null && $validate == 'false')) {
+            } elseif ( !empty($filesNames) &&$validate == 'false') {
                 $state = 'Complete';
-            } elseif (!isset($documents) && empty($filesNames)) {
+            } elseif (empty($filesNames)) {
                 $state = 'Waiting documents';
             }
             Palletstransfer::where('id', $id)->update(['state' => $state]);
@@ -315,7 +315,7 @@ class PalletstransfersController extends Controller
             $actualCreditAccount = session('actualCreditAccount');
             $actualDebitAccount = session('actualDebitAccount');
             $actualPalletsNumber = session('actualPalletsNumber');
-            $this->updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $documents, $filesNames);
+            $this->updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $filesNames);
             $transfer=Palletstransfer::where('id', $id)->first();
             if ($transfer->state == 'Complete Validated') {
                 session()->flash('palletsNumber', $transfer->palletsNumber);
@@ -501,7 +501,7 @@ class PalletstransfersController extends Controller
 
     }
 
-    public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount,$documents, $actualDoc)
+    public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $actualDoc)
     {
             //inverse transfer : we delete the last transfer
             $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
@@ -515,11 +515,11 @@ class PalletstransfersController extends Controller
             $palletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->theoricalNumberPallets;
             Palletsaccount::where('name', $transfer->debitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
 
-            if ((isset($documents) || !empty($actualDoc)) && ($transfer->validate<>null && $transfer->validate == 1)) {
+            if ( !empty($actualDoc)&& $transfer->validate == 1) {
                 $state = 'Complete Validated';
-            } elseif ((isset($documents) || !empty($actualDoc)) && ($transfer->validate<>null && $transfer->validate == 0)) {
+            } elseif ( !empty($actualDoc) && $transfer->validate == 0) {
                 $state = 'Complete';
-            } elseif (!isset($documents) && empty($actualDoc)) {
+            } elseif ( empty($actualDoc)) {
                 $state = 'Waiting documents';
             }
             Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);

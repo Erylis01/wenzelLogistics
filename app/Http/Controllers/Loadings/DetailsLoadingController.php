@@ -221,13 +221,13 @@ $submitPallets=Input::get('submitPallets');
 
             $filesNames = $this->upload($documents, $transfer->id);
 
-            if (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($documents) || !empty($filesNames)) && ($validate <> null && $validate == 1)) {
+            if (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) &&  !empty($filesNames) && $validate == 1) {
                 $state = 'Complete Validated';
-            } elseif (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && (isset($documents) || !empty($filesNames)) && ($validate <> null && $validate == 0)) {
+            } elseif (isset($creditAccount) && isset($debitAccount) && isset($palletsNumber) && isset($type) && !empty($filesNames) && $validate == 0) {
                 $state = 'Complete';
-            } elseif (!isset($documents) && empty($filesNames)) {
+            } elseif (empty($filesNames)) {
                 $state = 'Waiting documents';
-            } elseif (isset($creditAccount) || isset($debitAccount) || isset($palletsNumber) || isset($type) || (isset($documents) || !empty($filesNames))) {
+            } elseif (isset($creditAccount) || isset($debitAccount) || isset($palletsNumber) || isset($type) || !empty($filesNames)) {
                 $state = 'In progress';
             }
             Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
@@ -422,7 +422,6 @@ $submitPallets=Input::get('submitPallets');
         }
     }
 
-
     public function inverseRealPalletsNumber($transfer)
     {
         $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets;
@@ -431,7 +430,7 @@ $submitPallets=Input::get('submitPallets');
         Palletsaccount::where('name', $transfer->debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $transfer->palletsNumber]);
     }
 
-    public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $actualDoc)
+    public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $filesNames)
     {
         //inverse transfer : we delete the last transfer
         $actualPalletsNumberCreditAccount = Palletsaccount::where('name', $actualCreditAccount)->first()->theoricalNumberPallets;
@@ -445,9 +444,9 @@ $submitPallets=Input::get('submitPallets');
         $palletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->theoricalNumberPallets;
         Palletsaccount::where('name', $transfer->debitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
 
-        if (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) && !empty($filesNames) && ($transfer->validate <> null && $transfer->validate == 1)) {
+        if (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) && !empty($filesNames) && $transfer->validate == 1) {
             $state = 'Complete Validated';
-        } elseif (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) &&  !empty($filesNames) && ($transfer->validate <> null && $transfer->validate == 0)) {
+        } elseif (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) &&  !empty($filesNames) && $transfer->validate == 0) {
             $state = 'Complete';
         } elseif (empty($filesNames)) {
             $state = 'Waiting documents';
