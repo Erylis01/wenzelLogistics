@@ -35,7 +35,7 @@ class DetailsLoadingController extends Controller
             //all pallets account
             $listPalletsAccounts = Palletsaccount::get();
             $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
-            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
 
             //truck
             $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
@@ -115,16 +115,28 @@ class DetailsLoadingController extends Controller
         //buttons
         $update = Input::get('update');
         $addTransferForm = Input::get('addTransferForm');
-        $addPalletstransfer=Input::get('addPalletstransfer');
-        $okSubmitAddModal=Input::get('okSubmitAddModal');
-        $closeSubmitAddModal=Input::get('closeSubmitAddModal');
+        $addPalletstransfer = Input::get('addPalletstransfer');
+        $okSubmitAddModal = Input::get('okSubmitAddModal');
+        $closeSubmitAddModal = Input::get('closeSubmitAddModal');
+        $uploadDocument = Input::get('upload');
+
+//        if(isset($uploadDocument)){
+//            $k=$uploadDocument;
+//        }elseif(isset($updatePallets)){
+//            $k=$updatePallets;
+//        }
+//if(isset($k)) {
+//    $documentsK = 'documents' . $k;
+//    $$documentsK = $request->file('documentsTransfer' . $k);
+//}
 
         $truckAccount = Input::get('truckAccount');
 
-        $date=$loading->ladedatum;
+        $date = $loading->ladedatum;
         $listPalletsAccounts = Palletsaccount::get();
         $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
-        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+
+        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
         //truck
         $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
 
@@ -132,10 +144,10 @@ class DetailsLoadingController extends Controller
             $this->updatePanel1($request, $loading->atrnr);
         } elseif (isset($addTransferForm)) {
             if (isset($truckAccount)) {
-                Loading::where('atrnr',$atrnr)->update(['truckAccount'=>$truckAccount]);
+                Loading::where('atrnr', $atrnr)->update(['truckAccount' => $truckAccount]);
                 $creditAccount = $truckAccount;
                 $debitAccount = $truckAccount;
-            }else{
+            } else {
                 //looking for the account that contains the license plate if it's set
                 if ($loading->kennzeichen == "") {
                     $licensePlate = 'OTHER';
@@ -149,14 +161,15 @@ class DetailsLoadingController extends Controller
                     }
                 }
             }
-            $loading=Loading::where('atrnr', $atrnr)->first();
-            return view('loadings.DetailsLoading', compact('loading','palletsAccountFavoriteTruck','listPalletsaccountsCarrier','listPalletsAccounts','listPalletstransfers','date', 'listTypes', 'creditAccount', 'debitAccount','addTransferForm'));
-        }elseif(isset($addPalletstransfer)){
+            $loading = Loading::where('atrnr', $atrnr)->first();
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return view('loadings.DetailsLoading', compact('loading', 'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'date', 'listTypes', 'creditAccount', 'debitAccount', 'addTransferForm'));
+        } elseif (isset($addPalletstransfer)) {
             $date = Input::get('date');
             $type = Input::get('type');
-            $multiTransfer=Input::get('multiTransfer');
-            $details=Input::get('details');
-            $loading_atrnr=$atrnr;
+            $multiTransfer = Input::get('multiTransfer');
+            $details = Input::get('details');
+            $loading_atrnr = $atrnr;
             $creditAccount = Input::get('creditAccount');
             $debitAccount = Input::get('debitAccount');
             $palletsNumber = Input::get('palletsNumber');
@@ -167,8 +180,9 @@ class DetailsLoadingController extends Controller
             session()->flash('debitAccount', $debitAccount);
             session()->flash('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
             session()->flash('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
-            return view('loadings.DetailsLoading', compact('loading','listPalletsaccountsCarrier','listPalletsAccounts','listPalletstransfers','loading_atrnr','date','type','multiTransfer', 'details','listTypes', 'creditAccount', 'debitAccount','addPalletstransfer'));
-        }elseif (isset($okSubmitAddModal)) {
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return view('loadings.DetailsLoading', compact('loading', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'listFilesNames', 'loading_atrnr', 'date', 'type', 'multiTransfer', 'details', 'listTypes', 'creditAccount', 'debitAccount','palletsNumber', 'addPalletstransfer'));
+        } elseif (isset($okSubmitAddModal)) {
             $date = Input::get('date');
             $type = Input::get('type');
             $multiTransfer = Input::get('multiTransfer');
@@ -197,17 +211,76 @@ class DetailsLoadingController extends Controller
             Palletsaccount::where('name', $creditAccount)->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
             Palletsaccount::where('name', $debitAccount)->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
             session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
+            session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
-        }elseif (isset($closeSubmitAddModal)) {
+        } elseif (isset($closeSubmitAddModal)) {
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return redirect()->back();
+        } elseif (isset($uploadDocument)) {
+            $transfer = Palletstransfer::where('id', $uploadDocument)->first();
+            $documentsK = 'documents' . $uploadDocument;
+            $$documentsK = $request->file('documentsTransfer' . $uploadDocument);
+            $state = $transfer->state;
+            $validate=$transfer->validate;
+            $type=$transfer->type;
+            $creditAccount=$transfer->creditAccount;
+            $debitAccount=$transfer->debitAccount;
+            $palletsNumber=$transfer->palletsNumber;
+
+            $filesNames = $this->upload($$documentsK, $transfer->id);
+
+            if (isset($creditAccount)&&isset($debitAccount)&&isset($palletsNumber)&&isset($type)&&(isset($$documentsK) || !empty($filesNames)) && ($validate <> null && $validate == 1)) {
+                $state = 'Complete Validated';
+            } elseif (isset($creditAccount)&&isset($debitAccount)&&isset($palletsNumber)&&isset($type)&&(isset($documents) || !empty($filesNames)) && ($validate <> null && $validate ==0)) {
+                $state = 'Complete';
+            } elseif (!isset($$documentsK) && empty($filesNames)) {
+                $state = 'Waiting documents';
+            }elseif(isset($creditAccount)||isset($debitAccount)||isset($palletsNumber)||isset($type)||(isset($$documentsK) || !empty($filesNames))){
+                $state='In progress';
+            }
+            Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
+            session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         }
 
     }
 
-    public function addTransfer($atrnr, $truckAccount)
+    public static function actualDocuments($id)
     {
-
+        $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
+        $filesNames = [];
+        if (!$actualDocuments_Palletstransfers->isEmpty()) {
+            foreach ($actualDocuments_Palletstransfers as $actualDoc) {
+                $filesNames[] = Document::where('id', $actualDoc->document_id)->first()->name;
+            }
+        }
+        return $filesNames;
     }
+
+    public function upload($documents, $id)
+    {
+        $filesNames=$this->actualDocuments($id);
+        if (isset($documents)) {
+            foreach ($documents as $doc) {
+                $filename = $doc->getClientOriginalName();
+                $extension = $doc->getClientOriginalExtension();
+                $size = $doc->getSize();
+                //if file is an image, a pdf or an email
+                if (($extension == 'png' || $extension == 'jpg' || $extension == 'JPG'|| $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
+                    Storage::putFileAs('/proofsPallets/documentsTransfer/'.$id, $doc, $filename);
+                    Document::firstOrCreate([
+                        'name' => $filename,
+                    ])->palletstransfers()->attach($id);
+                } else {
+                    session()->flash('messageErrorUpload', 'Error ! The file type is not supported (png, jgp, pdf, msg, htm, rtf only');
+                }
+            }
+        }
+        return $filesNames;
+    }
+
+
+
 
     public function submitUpdateUd($atrnr, Request $request)
     {
@@ -590,21 +663,6 @@ class DetailsLoadingController extends Controller
             session()->flash('openPanel' . $typePlace, 'openPanel');
             return redirect()->back();
         }
-    }
-
-    public function actualDocuments($atrnr, $type)
-    {
-        $listFilesAssociated = DB::table('document_loading')->where('loading_id', $atrnr)->get();
-        $filesNames = [];
-        if (!$listFilesAssociated->isEmpty()) {
-            foreach ($listFilesAssociated as $fileAssociated) {
-                $file = Document::where('id', $fileAssociated->document_id)->first();
-                if ($file->type == $type) {
-                    $filesNames[] = $file->name;
-                }
-            }
-        }
-        return $filesNames;
     }
 
     public function getDataLoadingPlace($loading, $k)

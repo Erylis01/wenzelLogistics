@@ -48,10 +48,8 @@
                     </div>
                     <div class="panel-body panel-body-general">
 
-                        @if (Session::has('messageUpdateLoading'))
-                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
-                    @endif
-                    <!--subpanel 1 reading form suming up information from the table-->
+
+                        <!--subpanel 1 reading form suming up information from the table-->
                         <div class="panel subpanel">
                             <div class="panel-heading">
                                 <a data-toggle="collapse" href="#Pan1collapse">Information</a>
@@ -60,6 +58,9 @@
                                 <div id="Pan1collapse" class="panel-collapse in collapse">
                                     @else
                                         <div id="Pan1collapse" class="panel-collapse collapse">
+                                            @endif
+                                            @if (Session::has('messageUpdateLoading'))
+                                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
                                             @endif
                                             <div class="panel-body">
                                                 <form class="form-horizontal" role="form"
@@ -571,21 +572,21 @@
 
                                 </span>
                             </div>
-                            @if(isset($addTransferForm)||isset($addPalletstransfer))
+                            @if(Session::has('openPanelPallets'))
                                 <div id="Pan2collapse" class="panel-collapse in collapse">
                                     @else
                                         <div id="Pan2collapse" class="panel-collapse collapse">
                                             @endif
                                             <div class="panel-body">
-                                                @if (Session::has('messageUpdateValidate'))
-                                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateValidate') }}</div>
-                                                @elseif(Session::has('messageSuccessSubmit'))
-                                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessSubmit') }}</div>
-                                                @elseif (Session::has('messageSuccessDeleteDocument'))
-                                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessDeleteDocument') }}</div>
-                                                @elseif(Session::has('messageErrorUpload'))
-                                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>
-                                                @endif
+                                                {{--@if (Session::has('messageUpdateValidate'))--}}
+                                                {{--<div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateValidate') }}</div>--}}
+                                                {{--@elseif(Session::has('messageSuccessSubmit'))--}}
+                                                {{--<div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessSubmit') }}</div>--}}
+                                                {{--@elseif (Session::has('messageSuccessDeleteDocument'))--}}
+                                                {{--<div class="alert alert-success text-alert text-center">{{ Session::get('messageSuccessDeleteDocument') }}</div>--}}
+                                                {{--@elseif(Session::has('messageErrorUpload'))--}}
+                                                {{--<div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>--}}
+                                                {{--@endif--}}
 
                                                 <form class="form-horizontal"
                                                       role="form"
@@ -682,6 +683,13 @@
                                                                                           id="details"
                                                                                           placeholder="Details">{{old('details')}}</textarea>
                                                                             @endif
+                                                                        </div>
+                                                                        <div class="col-lg-offset-11">
+                                                                            <button type="submit"
+                                                                                    class="btn glyphicon glyphicon-remove"
+                                                                                    value="close"
+                                                                                    name="closeSubmitAddModal"
+                                                                            ></button>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
@@ -920,7 +928,6 @@
                                                     </div>
                                                 </form>
 
-                                                <br>
                                                 <div class="row">
                                                     <div class="table-responsive">
                                                         <table class="table table-hover table-bordered">
@@ -987,8 +994,374 @@
                                                         </table>
                                                     </div>
                                                 </div>
+
+                                                <form class="form-horizontal"
+                                                      role="form"
+                                                      method="POST"
+                                                      action="{{route('submitUpdateUpload', $loading->atrnr)}}"
+                                                      enctype="multipart/form-data">
+                                                    <input type="hidden"
+                                                           name="_token"
+                                                           value="{{ csrf_token() }}">
+                                                    @foreach($listPalletstransfers as $transfer)
+                                                        <div class="row">
+                                                            <div class="panel subpanel">
+                                                                <div class="panel-heading">
+                                                                    <a data-toggle="collapse"
+                                                                       href="#PanSubcollapse{{$transfer->id}}">Transfer {{$transfer->id}}</a>
+                                                                </div>
+                                                                <div id="PanSubcollapse{{$transfer->id}}"
+                                                                     class="panel-collapse collapse panel-body">
+                                                                    <div class="form-group">
+                                                                        <!--type-->
+                                                                        <div class="col-lg-1 col-lg-offset-1">
+                                                                            <label for="type{{$transfer->id}}"
+                                                                                   class="control-label">Type
+                                                                                :</label>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input type="text" name="type{{$transfer->id}}"
+                                                                                       class="form-control"
+                                                                                       value="{{$transfer->type}}"
+                                                                                       readonly>
+                                                                            @else
+                                                                                <select id="type"
+                                                                                        class="selectpicker show-tick form-control"
+                                                                                        data-size="5"
+                                                                                        data-live-search="true"
+                                                                                        data-live-search-style="startsWith"
+                                                                                        title="Type" name="type{{$transfer->id}}">
+                                                                                    @foreach($listTypes as $t )
+                                                                                        @if(isset($transfer->type)&&$transfer->type==$t)
+                                                                                            <option selected>{{$t}}</option>
+                                                                                        @elseif(Illuminate\Support\Facades\Input::old('type'.$transfer->id) && $t==old('type'.$transfer->id))
+                                                                                            <option selected>{{$t}}</option>
+                                                                                        @else
+                                                                                            <option>{{$t}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            @endif
+                                                                        </div>
+                                                                        <!--details-->
+                                                                        <div class="col-lg-3">
+                                                                            @if(isset($transfer->details)&&(isset($transfer->validate) && $transfer->validate==1))
+                                                                                <textarea class="form-control" rows="1"
+                                                                                          name="details{{$transfer->id}}"
+                                                                                          placeholder="Details"
+                                                                                          readonly>{{$transfer->details}}</textarea>
+                                                                            @elseif(isset($transfer->details))
+                                                                                <textarea class="form-control" rows="1"
+                                                                                          name="details{{$transfer->id}}"
+                                                                                          placeholder="Details">{{$transfer->details}}</textarea>
+                                                                            @elseif(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <textarea class="form-control" rows="1"
+                                                                                          name="details{{$transfer->id}}"
+                                                                                          placeholder="Details"
+                                                                                          readonly>{{old('details'.$transfer->id)}}</textarea>
+                                                                            @else
+                                                                                <textarea class="form-control" rows="1"
+                                                                                          id="details{{$transfer->id}}"
+                                                                                          placeholder="Details">{{old('details'.$transfer->id)}}</textarea>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <!--number of pallets-->
+                                                                        <div class="col-lg-2">
+                                                                            <label for="palletsNumber{{$transfer->id}}"
+                                                                                   class="control-label">Pallets number
+                                                                                :</label>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            @if(Illuminate\Support\Facades\Input::old('palletsNumber'.$transfer->id))
+                                                                                <input id="palletsNumber{{$transfer->id}}"
+                                                                                       type="number"
+                                                                                       class="form-control"
+                                                                                       name="palletsNumber{{$transfer->id}}"
+                                                                                       value="{{ old('palletsNumber'.$transfer->id) }}"
+                                                                                       placeholder="Pallets Number"
+                                                                                       required autofocus>
+                                                                            @elseif(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input id="palletsNumber{{$transfer->id}}"
+                                                                                       type="number"
+                                                                                       class="form-control"
+                                                                                       name="palletsNumber{{$transfer->id}}"
+                                                                                       value="{{$transfer->palletsNumber}}"
+                                                                                       placeholder="Nbr"
+                                                                                       autofocus readonly>
+                                                                            @else
+                                                                                <input id="palletsNumber{{$transfer->id}}"
+                                                                                       type="number"
+                                                                                       class="form-control"
+                                                                                       name="palletsNumber{{$transfer->id}}"
+                                                                                       value="{{$transfer->palletsNumber}}"
+                                                                                       placeholder="Nbr"
+                                                                                       autofocus>
+                                                                            @endif
+                                                                        </div>
+                                                                        <!--date-->
+                                                                        <div class="col-lg-1">
+                                                                            <label for="date" class="control-label">Date
+                                                                                :</label>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            @if(isset($transfer->date)&&(isset($transfer->validate) && $transfer->validate==1))
+                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                       class="form-control"
+                                                                                       name="date{{$transfer->id}}"
+                                                                                       value="{{ $transfer->date }}"
+                                                                                       placeholder="Date" autofocus
+                                                                                       readonly>
+                                                                            @elseif(isset($transfer->date))
+                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                       class="form-control"
+                                                                                       name="date{{$transfer->id}}"
+                                                                                       value="{{ $transfer->date }}"
+                                                                                       placeholder="Date" autofocus>
+
+                                                                            @elseif(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                       class="form-control"
+                                                                                       name="date{{$transfer->id}}"
+                                                                                       value="{{ old('date'.$transfer->id) }}"
+                                                                                       placeholder="Date" autofocus
+                                                                                       readonly>
+                                                                            @else(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                                                                <input id="date{{$transfer->id}}" type="date"
+                                                                                       class="form-control"
+                                                                                       name="date{{$transfer->id}}"
+                                                                                       value="{{ old('date'.$transfer->id) }}"
+                                                                                       placeholder="Date" autofocus>
+                                                                            @endif
+                                                                        </div>
+                                                                        <!--multitransfer-->
+                                                                        <div class="col-lg-2 text-left">
+                                                                            <label for="multiTransfer{{$transfer->id}}"
+                                                                                   class="control-label">Multi-Transfers
+                                                                                ?
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col-lg-2 text-left">
+                                                                            @if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer'.$transfer->id) && old('multiTransfer'.$transfer->id)=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))
+                                                                                <input type="text"
+                                                                                       name="multiTransfer{{$transfer->id}}"
+                                                                                       class="form-control"
+                                                                                       value="Yes" readonly>
+                                                                            @elseif(Illuminate\Support\Facades\Input::old('multiTransfer'.$transfer->id) && old('multiTransfer'.$transfer->id)=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))
+                                                                                <label class="radio-inline"><input
+                                                                                            type="radio"
+                                                                                            name="multiTransfer{{$transfer->id}}"
+                                                                                            value="true"
+                                                                                            checked>Yes</label>
+                                                                                <label class="radio-inline"><input
+                                                                                            type="radio"
+                                                                                            name="multiTransfer{{$transfer->id}}"
+                                                                                            value="false">No</label>
+                                                                            @elseif((isset($transfer->validate) && $transfer->validate==1))
+                                                                                <input type="text"
+                                                                                       name="multiTransfer{{$transfer->id}}"
+                                                                                       class="form-control"
+                                                                                       value="No" readonly>
+                                                                            @else
+                                                                                <label class="radio-inline"><input
+                                                                                            type="radio"
+                                                                                            name="multiTransfer{{$transfer->id}}"
+                                                                                            value="true">Yes</label>
+                                                                                <label class="radio-inline"><input
+                                                                                            type="radio"
+                                                                                            name="multiTransfer{{$transfer->id}}"
+                                                                                            value="false"
+                                                                                            checked>No</label>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <!--credit account-->
+                                                                        <div class="col-lg-2">
+                                                                            <label for="creditAccount{{$transfer->id}}"
+                                                                                   class="control-label">Credit
+                                                                                account
+                                                                                :</label>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input type="text"
+                                                                                       name="creditAccount{{$transfer->id}}"
+                                                                                       class="form-control"
+                                                                                       value="{{$transfer->creditAccount}}"
+                                                                                       readonly>
+                                                                            @else
+                                                                                <select class="selectpicker show-tick form-control"
+                                                                                        data-size="5"
+                                                                                        data-live-search="true"
+                                                                                        data-live-search-style="startsWith"
+                                                                                        title="Credit Account"
+                                                                                        name="creditAccount{{$transfer->id}}"
+                                                                                        id="creditAccount">
+                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                        @if(isset($transfer->creditAccount)&& $palletsAccount->name==$transfer->creditAccount)
+                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                        @elseif(Illuminate\Support\Facades\Input::old('creditAccount'.$transfer->id) && $palletsAccount->name==old('creditAccount'.$transfer->id))
+                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                        @else
+                                                                                            <option>{{$palletsAccount->name}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            @endif
+
+                                                                        </div>
+                                                                        <!--debit account-->
+                                                                        <div class="col-lg-2">
+                                                                            <label for="debitAccountUpdate"
+                                                                                   class="control-label">Debit
+                                                                                account
+                                                                                :</label>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input type="text"
+                                                                                       name="debitAccount{{$transfer->id}}"
+                                                                                       class="form-control"
+                                                                                       value="{{$transfer->debitAccount}}"
+                                                                                       readonly>
+                                                                            @else
+                                                                                <select class="selectpicker show-tick form-control"
+                                                                                        data-size="5"
+                                                                                        data-live-search="true"
+                                                                                        data-live-search-style="startsWith"
+                                                                                        title="Debit Account"
+                                                                                        name="debitAccount{{$transfer->id}}"
+                                                                                        id="debitAccount{{$transfer->id}}">
+                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                        @if(isset($transfer->debitAccount)&& $palletsAccount->name==$transfer->debitAccount)
+                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                        @elseif(Illuminate\Support\Facades\Input::old('debitAccount'.$transfer->id) && $palletsAccount->name==old('debitAccount'.$transfer->id))
+                                                                                            <option selected>{{$palletsAccount->name}}</option>
+                                                                                        @else
+                                                                                            <option>{{$palletsAccount->name}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--documents proof upload-->
+                                                                    <div class="form-group">
+                                                                        <div class="col-lg-2">
+                                                                            <label for="documentsTransfer{{$transfer->id}}">Proof
+                                                                                docs
+                                                                                ?</label>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            <input type="file"
+                                                                                   name="documentsTransfer{{$transfer->id}}[]"
+                                                                                   multiple
+                                                                                   id="documentsTransfer{{$transfer->id}}">
+                                                                        </div>
+                                                                        <!--button upload-->
+                                                                        <div class="col-lg-2">
+                                                                            <button type="submit"
+                                                                                   class="btn btn-primary btn-block btn-form"
+                                                                                   value="{{$transfer->id}}"
+                                                                                    name="upload">Upload</button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                @php($filesNames= \App\Http\Controllers\DetailsLoadingController::actualDocuments($transfer->id))
+                                                                <!-- documents -->
+                                                                    <div class="form-group">
+                                                                        <div class="col-lg-10 col-lg-offset-1 text-left">
+                                                                            @if(!empty($filesNames))
+                                                                                <ul>
+                                                                                    @php($list=[])
+                                                                                    @foreach($filesNames as $nameF)
+                                                                                        @if(!in_array($nameF, $list))
+                                                                                            <div>
+                                                                                                <button type="submit"
+                                                                                                        name="deleteDocument{{$transfer->id}}"
+                                                                                                        class="btn-add glyphicon glyphicon-remove"
+                                                                                                        value="{{$nameF}}"></button>
+                                                                                                <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transfer->id}}/{{$nameF}}"
+                                                                                                   class="link">{{$nameF}}</a>
+                                                                                            </div>
+                                                                                            @php(array_push($list,$nameF))
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </ul>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--validation-->
+                                                                    <div class="form-group">
+
+                                                                        @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&isset($transfer->creditAccount)&&isset($transfer->debitAccount))
+                                                                            <div class="col-lg-2">
+                                                                                <label for="validate{{$transfer->id}}"
+                                                                                       class="control-label">Validated ?
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="col-lg-2 text-left">
+                                                                                @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                                    <label class="radio-inline"><input
+                                                                                                type="radio"
+                                                                                                name="validate{{$transfer->id}}"
+                                                                                                value="true"
+                                                                                                checked
+                                                                                                id="validateYes">Yes</label>
+                                                                                    <label class="radio-inline"><input
+                                                                                                type="radio"
+                                                                                                name="validate{{$transfer->id}}"
+                                                                                                value="false"
+                                                                                                id="validateNo">No</label>
+                                                                                @elseif(isset($transfer->validate) && $transfer->validate==0)
+                                                                                    <label class="radio-inline"><input
+                                                                                                type="radio"
+                                                                                                name="validate{{$transfer->id}}"
+                                                                                                value="true"
+                                                                                                id="validateYes">Yes</label>
+                                                                                    <label class="radio-inline"><input
+                                                                                                type="radio"
+                                                                                                name="validate{{$transfer->id}}"
+                                                                                                value="false"
+                                                                                                checked id="validateNo">No</label>
+                                                                                @endif
+                                                                            </div>
+                                                                            <!--submit-->
+                                                                            <div class="col-lg-4 col-lg-offset-1">
+                                                                                <button type="submit"
+                                                                                        class="btn btn-primary btn-block btn-form"
+                                                                                        value="{{$transfer->id}}"
+                                                                                        name="updatePallets"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#submit{{$transfer->id}}Pallets_modal">
+                                                                                    Update
+                                                                                </button>
+                                                                            </div>
+                                                                        @else
+                                                                        <!--submit-->
+                                                                            <div class="col-lg-4 col-lg-offset-5">
+                                                                                <button type="submit"
+                                                                                        class="btn btn-primary btn-block btn-form"
+                                                                                        value="{{$transfer->id}}"
+                                                                                        name="updatePallets"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#submit{{$transfer->id}}Pallets_modal">
+                                                                                    Update
+                                                                                </button>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </form>
                                             </div>
-                                            @if(isset($addTransferForm)||isset($addPalletstransfer))
+                                            @if(Session::has('openPanelPallets'))
                                         </div>
                                         @else
                                 </div>

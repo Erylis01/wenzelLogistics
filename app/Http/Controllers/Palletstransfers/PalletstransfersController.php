@@ -444,7 +444,7 @@ class PalletstransfersController extends Controller
                 $extension = $doc->getClientOriginalExtension();
                 $size = $doc->getSize();
                 //if file is an image, a pdf or an email
-                if (($extension == 'png' || $extension == 'jpg' || $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
+                if (($extension == 'png' || $extension == 'jpg'|| $extension == 'JPG' || $extension == 'msg' || $extension == 'htm' || $extension == 'rtf' || $extension == 'pdf') && $size < 2000000) {
                     Storage::putFileAs('/proofsPallets/documentsTransfer/'.$id, $doc, $filename);
                     Document::firstOrCreate([
                         'name' => $filename,

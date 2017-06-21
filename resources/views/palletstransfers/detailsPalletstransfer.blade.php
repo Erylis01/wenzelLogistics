@@ -73,19 +73,19 @@
                             <div class="form-group">
                                 <!--type-->
                                 <div class="col-lg-1 col-lg-offset-1">
-                                    <label for="type" class="control-label">Type
+                                    <label for="type" class="control-label"><span>*</span> Type
                                         :</label>
                                 </div>
                                 <div class="col-lg-2">
                                     @if(isset($transfer->validate) && $transfer->validate==1)
-                                        <input type="text" name="type" class="form-control" value="{{$transfer->type}}"
+                                        <input type="text" name="type" class="form-control" value="{{$transfer->type}}" required
                                                readonly>
                                     @else
                                         <select id="type" class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
-                                                title="Type" name="type">
+                                                title="Type" name="type" required>
                                             @foreach($listTypes as $t )
-                                                @if(isset($transfer->type)&&$transfer->type=$t)
+                                                @if(isset($transfer->type)&&$transfer->type==$t)
                                                     <option selected>{{$t}}</option>
                                                 @elseif(Illuminate\Support\Facades\Input::old('type') && $t==old('type'))
                                                     <option selected>{{$t}}</option>
@@ -202,8 +202,8 @@
                                         @else
                                             <div id="loading_atrnrLink">
                                                 @endif
-                                <div class="col-lg-2 col-lg-offset-1 text-left">
-                                    <label for="state"
+                                <div class="col-lg-2">
+                                    <label for="multiTransfer"
                                            class="control-label">Multi-Transfers ?
                                     </label>
                                 </div>
@@ -275,9 +275,9 @@
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Credit Account" name="creditAccount" id="creditAccount" required>
                                             @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
+                                                @if(isset($transfer->creditAccount)&& $palletsAccount==$transfer->creditAccount)
                                                     <option selected>{{$palletsAccount}}</option>
-                                                @elseif(isset($transfer->creditAccount)&& $palletsAccount==$transfer->creditAccount)
+                                                @elseif(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
                                                     <option selected>{{$palletsAccount}}</option>
                                                 @else
                                                     <option>{{$palletsAccount}}</option>
@@ -302,9 +302,9 @@
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Debit Account" name="debitAccount" id="debitAccount" required>
                                             @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
+                                                @if(isset($transfer->debitAccount)&& $palletsAccount==$transfer->debitAccount)
                                                     <option selected>{{$palletsAccount}}</option>
-                                                @elseif(isset($transfer->debitAccount)&& $palletsAccount==$transfer->debitAccount)
+                                                @elseif(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
                                                     <option selected>{{$palletsAccount}}</option>
                                                 @else
                                                     <option>{{$palletsAccount}}</option>
@@ -346,7 +346,7 @@
                             <!-- documents -->
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-1 text-left">
-                                    @if(isset($filesNames))
+                                    @if(!empty($filesNames))
                                         <ul>
                                             @php($list=[])
                                             @foreach($filesNames as $nameF)
@@ -416,10 +416,6 @@
                                                data-target="#submitUpdate_modal">
                                     </div>
                                 @endif
-                            </div>
-
-                            <div class="form-group">
-
                             </div>
                         </div>
                     </div>
