@@ -291,16 +291,18 @@
                                 </thead>
                                 <tbody>
                                 @foreach($listLoadings as $loading)
-                                    {{--@if($loading->state=="OK")--}}
-                                    {{--@php($class="success")--}}
-                                    {{--@elseif ($loading->state=="almost OK")--}}
-                                    {{--@php($class="warning")--}}
-                                    {{--@elseif ($loading->state=="not OK")--}}
-                                    {{--@php($class="danger")--}}
-                                    {{--@else--}}
-                                    {{--@php ($class="default")--}}
-                                    {{--@endif--}}
-                                    <tr>
+                                    @if($loading->state=="In progress")
+                                    @php($class="inprogress")
+                                    @elseif ($loading->state=="Waiting documents")
+                                    @php($class="waitingdocuments")
+                                    @elseif ($loading->state=="Complete")
+                                        @php($class="complete")
+                                    @elseif ($loading->state=="Complete Validated")
+                                        @php($class="completevalidated")
+                                    @else
+                                    @php ($class="untreated")
+                                    @endif
+                                    <tr class="{{$class}}">
                                         <td class="text-center col1 colHeight"><a
                                                     href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a>
                                         </td>

@@ -131,7 +131,7 @@
 }
 
 
-.panel-general, .panel-default,.panel-warning, .panel-danger  {
+.panel-general, .panel-default,.panelInprogress, .panelUntreated, .panelWaitingdocuments, .panelComplete  {
     border-color: rgb(0, 160, 0);
 }
 
@@ -139,28 +139,43 @@
     font-size: 18px;
 }
 
-.panel-general>.panel-heading{
-    background-color: rgba(0, 210, 0, 0.1);
-}
-
-.panel-general > .panel-heading,.panel-warning > .panel-heading, .panel-danger > .panel-heading, .panel-default > .panel-heading  {
+.panel-general > .panel-heading  {
     font-size: 25px;
     border-color: rgb(0, 160, 0);
     color: rgb(0, 160, 0);
+    background-color: rgba(0, 208, 0, 0.1);
 }
-
-/*overwritting*/
-.panel-warning > .panel-heading {
-    background-color: rgba(255, 255, 102, 0.5);
-}
-/*overwritting*/
-.panel-danger > .panel-heading {
+.panelUntreated > .panel-heading{
+    color:red;
+    font-size: 25px;
+    border-color: rgb(0, 160, 0);
     background-color: rgba(255, 0, 0, 0.1);
 }
-/*overwritting*/
-.panel-default > .panel-heading {
-    background-color: rgba(255, 193, 197, 0.1);
+.panelInprogress > .panel-heading{
+    color:rgba(255, 112, 0, 1);
+    font-size: 25px;
+    border-color: rgb(0, 160, 0);
+    background-color: rgba(255, 112, 0, 0.3);
 }
+
+.panelWaitingdocuments > .panel-heading {
+    background-color: rgba(255, 208, 0, 0.3);
+    color:rgba(255, 208, 0, 1);
+    font-size: 25px;
+    border-color: rgb(0, 160, 0);
+}
+
+.panelComplete > .panel-heading {
+    background-color: rgba(192, 255, 0, 0.3);
+    color:rgba(160, 208, 0, 1);
+    font-size: 25px;
+    border-color: rgb(0, 160, 0);
+}
+
+/*!*overwritting*!*/
+/*.panel-default > .panel-heading {*/
+    /*background-color: rgba(255, 193, 197, 0.1);*/
+/*}*/
 
 
 .text-alert {
@@ -206,10 +221,11 @@
 }
 
 
-
 .noPadding{
     padding:0px;
 }
+
+/*SEARCH BAR*/
 
 .searchBar{
     font-size: 16px;
@@ -237,4 +253,26 @@ border-style: solid;
     width:150px;
     min-width:150px;
     max-width:150px;
+}
+
+/*TABLE HOVER*/
+
+.untreated{
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.waitingdocuments{
+    background-color: rgba(255, 208, 0, 0.3);
+}
+
+.inprogress{
+    background-color: rgba(255, 112, 0, 0.3);
+}
+
+.complete{
+    background-color: rgba(192, 255, 0, 0.3);
+}
+
+.completevalidated{
+    background-color: rgba(0, 255, 0, 0.2);
 }

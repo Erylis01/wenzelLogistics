@@ -50,26 +50,26 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 @if($totalpallets<0)
-                                    @php($class="text-alert")
+                                    @php($class="text-inf0")
                                 @elseif($totalpallets>0)
-                                    @php($class="text-warning")
+                                    @php($class="text-sup0")
                                 @else
-                                    @php($class="text-success")
+                                    @php($class="text-egal0")
                                 @endif
                                 <tr>
-                                    <th class="text-center colTot"><a href="{{route('showAllPalletstransfers')}}"
+                                    <th class="text-center colTot1"><a href="{{route('showAllPalletstransfers')}}"
                                                                       class="link">TOTAL</a></th>
-                                    <th class="text-center colTotal"><span class={{$class}}>{{$totalpallets}}</span>
+                                    <th class="text-center colTotal1"><span class={{$class}}>{{$totalpallets}}</span>
                                     </th>
                                 </tr>
                                 </thead>
                             </table>
                         </div>
-<br>
-                            <div>
-                                <form role="form" method="GET" action="{{route('showAllPalletsaccounts')}}">
-                                    {{ csrf_field() }}
-                                    <div class="col-lg-5 input-group searchBar">
+                        <br>
+                        <div>
+                            <form role="form" method="GET" action="{{route('showAllPalletsaccounts')}}">
+                                {{ csrf_field() }}
+                                <div class="col-lg-5 input-group searchBar">
                             <span class="input-group-btn searchInput">
                                 @if(isset($searchQuery))
                                     <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
@@ -79,7 +79,7 @@
                                            placeholder="search">
                                 @endif
                             </span>
-                                        <span class="input-group-btn">
+                                    <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
@@ -116,14 +116,14 @@
                                         @endforeach
                                         </select>
                                      </span>
-                                        <span class="input-group-btn">
+                                    <span class="input-group-btn">
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
-                                    </div>
-                                </form>
-                                <br>
-                            </div>
+                                </div>
+                            </form>
+                            <br>
+                        </div>
 
                         <!-- Table -->
                         <div class="table-responsive table-palletsaccounts">
@@ -131,51 +131,62 @@
                                 <thead>
                                 <tr>
                                     @if(isset($searchQuery))
-                                        <th class="text-center colName">Name<br><a
+                                        <th class="text-center colName1">Name<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=desc')}}"></a></th>
-                                        <th class="text-center colType">Type<br><a
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center colType1">Type<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a></th>
-                                        <th class="text-center colTotal">Total<br><a
+                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center colTotal1">Total<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=desc')}}"></a>
                                         </th>
-                                        @else
-                                    <th class="text-center colName">Name<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a></th>
-                                    <th class="text-center colType">Type<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=type&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=type&order=desc')}}"></a></th>
-                                    <th class="text-center colTotal">Total<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=desc')}}"></a>
-                                    </th>
-                                        @endif
+                                    @else
+                                        <th class="text-center colName1">Name<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center colType1">Type<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletsaccounts?sortby=type&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletsaccounts?sortby=type&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center colTotal1">Total<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=desc')}}"></a>
+                                        </th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletsaccounts as $palletsaccount)
+                                    @if($palletsaccount->realNumberPallets<0)
+                                        @php($class="text-inf0")
+                                    @elseif($palletsaccount->realNumberPallets>0)
+                                        @php($class="text-sup0")
+                                    @else
+                                        @php($class="text-egal0")
+                                    @endif
                                     <tr>
-                                        <td class="text-center colName"><a
+                                        <td class="text-center colName1"><a
                                                     href="#{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
                                                     data-toggle="collapse"
                                                     class="link">{{$palletsaccount->name}}</a></td>
-                                        <td class="text-center colType">{{$palletsaccount->type}}</td>
-                                        <td class="text-center colTotal">{{$palletsaccount->realNumberPallets}}</td>
+                                        <td class="text-center colType1">{{$palletsaccount->type}}</td>
+                                        <td class="text-center colTotal1"><span class={{$class}}>{{$palletsaccount->realNumberPallets}}</span></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -185,75 +196,97 @@
                 </div>
 
                 @foreach($listPalletsaccounts as $palletsaccount)
-                    <div id="{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
-                         class="panel panel-general col-lg-8 panel-palletsaccounts-details collapse">
-                        <div class="panel-heading">Account n° {{$palletsaccount->id}} : {{$palletsaccount->name}}</div>
-                        <div class="panel-body">
-                            <form class="form-horizontal" role="form" method="POST" action="">
-                                <div class="form-group">
-                                    <div class="table-responsive table-palletsNumber">
-                                        <table class="table table-hover table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center">Confirmed<br> pallets nbr</th>
-                                                <th class="text-center">Planned<br> pallets nbr</th>
-                                                <th class="text-center">Rest<br> to confirm</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="text-center">{{$palletsaccount->realNumberPallets}}</td>
-                                                <td class="text-center">{{$palletsaccount->theoricalNumberPallets}}</td>
-                                                <td class="text-center "><strong>{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</strong></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                    @if($palletsaccount->realNumberPallets==0||$palletsaccount->realNumberPallets==null)
+                        <div id="{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
+                             class="panel panelInprogress col-lg-8 panel-palletsaccounts-details collapse">
+                            @elseif($palletsaccount->realNumberPallets>0)
+                                <div id="{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
+                                     class="panel panel-general col-lg-8 panel-palletsaccounts-details collapse">
+                                    @else
+                                        <div id="{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
+                                             class="panel panelUntreated col-lg-8 panel-palletsaccounts-details collapse">
+                                            @endif
+                                            <div class="panel-heading">Account n° {{$palletsaccount->id}}
+                                                : {{$palletsaccount->name}}</div>
+                                            <div class="panel-body">
+                                                <form class="form-horizontal" role="form" method="POST" action="">
+                                                    <div class="form-group">
+                                                        <div class="table-responsive table-palletsNumber">
+                                                            <table class="table table-hover table-bordered">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="text-center">Confirmed<br> pallets nbr
+                                                                    </th>
+                                                                    <th class="text-center">Planned<br> pallets nbr</th>
+                                                                    <th class="text-center">Rest<br> to confirm</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td class="text-center">{{$palletsaccount->realNumberPallets}}</td>
+                                                                    <td class="text-center">{{$palletsaccount->theoricalNumberPallets}}</td>
+                                                                    <td class="text-center ">
+                                                                        <strong>{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</strong>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    @if($palletsaccount->type=='Network')
+                                                        <div class="form-group">
+                                                            <div class="col-lg-5">
+                                                                <label for="warehousesAssociated"
+                                                                       class="control-label legend-palletsaccounts">Warehouses
+                                                                    associated :</label>
+                                                            </div>
+                                                            <div class="col-lg-6 info-palletsaccounts">
+                                                                @php($listWarehouses=App\Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get())
+                                                                <ul>
+                                                                    @foreach($listWarehouses as $warehouse)
+                                                                        <li>
+                                                                            <a href="{{route('showDetailsWarehouse', $warehouse->id)}}"
+                                                                               class="link">{{$warehouse->name}}</a>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    @elseif($palletsaccount->type=='Carrier')
+                                                        <div class="form-group">
+                                                            <div class="col-lg-5">
+                                                                <label for="trucksAssociated"
+                                                                       class="control-label legend-palletsaccounts">Trucks
+                                                                    associated :</label>
+                                                            </div>
+                                                            <div class="col-lg-6 info-palletsaccounts">
+                                                                @php($listTrucks=\App\Truck::where('palletsaccount_name',$palletsaccount->name)->get())
+                                                                <ul>
+                                                                    @foreach($listTrucks as $truck)
+                                                                        <li>
+                                                                            <a href="{{route('showDetailsTruck', $truck->id)}}"
+                                                                               class="link">{{$truck->name}}
+                                                                                - {{$truck->licensePlate}}</a></li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    <div class="form-group">
+                                                        <div class="col-lg-6">
+                                                            <a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}"
+                                                               class="btn btn-form btn-block">Details</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            @if($palletsaccount->realNumberPallets==0||$palletsaccount->realNumberPallets==null)
+                                        </div>
+                                        @elseif($palletsaccount->realNumberPallets>0)
                                 </div>
-                                @if($palletsaccount->type=='Network')
-                                    <div class="form-group">
-                                        <div class="col-lg-5">
-                                            <label for="warehousesAssociated"
-                                                   class="control-label legend-palletsaccounts">Warehouses
-                                                associated :</label>
-                                        </div>
-                                        <div class="col-lg-6 info-palletsaccounts">
-                                            @php($listWarehouses=App\Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get())
-                                            <ul>
-                                                @foreach($listWarehouses as $warehouse)
-                                                    <li><a href="{{route('showDetailsWarehouse', $warehouse->id)}}"
-                                                           class="link">{{$warehouse->name}}</a></li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    @elseif($palletsaccount->type=='Carrier')
-                                    <div class="form-group">
-                                        <div class="col-lg-5">
-                                            <label for="trucksAssociated"
-                                                   class="control-label legend-palletsaccounts">Trucks
-                                                associated :</label>
-                                        </div>
-                                        <div class="col-lg-6 info-palletsaccounts">
-                                            @php($listTrucks=\App\Truck::where('palletsaccount_name',$palletsaccount->name)->get())
-                                            <ul>
-                                                @foreach($listTrucks as $truck)
-                                                    <li><a href="{{route('showDetailsTruck', $truck->id)}}"
-                                                           class="link">{{$truck->name}} - {{$truck->licensePlate}}</a></li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                @endif
-                                <div class="form-group">
-                                    <div class="col-lg-6">
-                                        <a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}"
-                                           class="btn btn-form btn-block">Details</a>
-                                    </div>
-                                </div>
-                            </form>
+                            @else
                         </div>
-                    </div>
+                    @endif
 
                 @endforeach
             </div>

@@ -191,7 +191,7 @@ function showDetails($id, Request $request)
     if (Auth::check()) {
         //general data
         $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
-        $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
+//        $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
         $listWarehouses = DB::table('warehouses')->get();
 //        $listTrucks = DB::table('trucks')->where('palletsaccount_name', null)->get();
         $name = $palletsaccount->name;
@@ -273,7 +273,7 @@ function showDetails($id, Request $request)
             $listTransfers = $query->get();
         }
 
-        return view('palletsaccounts.detailsPalletsaccount', compact( 'searchQuery', 'listColumns','searchColumnsString','searchColumns','listTransfers', 'totalpallets', 'listWarehouses',  'id', 'name', 'nickname', 'realNumberPallets', 'theoricalNumberPallets', 'type', 'namewarehouses', 'trucksAssociated', 'adress', 'email', 'phone', 'namecontact'));
+        return view('palletsaccounts.detailsPalletsaccount', compact( 'searchQuery', 'listColumns','searchColumnsString','searchColumns','listTransfers', 'listWarehouses',  'id', 'name', 'nickname', 'realNumberPallets', 'theoricalNumberPallets', 'type', 'namewarehouses', 'trucksAssociated', 'adress', 'email', 'phone', 'namecontact'));
     } else {
         return view('auth.login');
     }
@@ -288,7 +288,7 @@ function showDetails($id, Request $request)
 public
 function update(Request $request, $id)
 {
-    $account=Palletsaccount::where('id',$id)->first();
+//    $account=Palletsaccount::where('id',$id)->first();
         $nickname = Input::get('nickname');
         Palletsaccount::where('id', $id)->update(['nickname' => $nickname]);
         $type = Input::get('type');
@@ -303,7 +303,7 @@ function update(Request $request, $id)
                 Palletsaccount::where('id', $id)->first()->warehouses()->sync($idwarehouses);
             }
         }elseif(isset($type) && $type=='Carrier'){
-            $trucksAssociatedName=Input::get('trucksAssociated');
+//            $trucksAssociatedName=Input::get('trucksAssociated');
             $adress=Input::get('adress');
             $phone=Input::get('phone');
             $email=Input::get('email');

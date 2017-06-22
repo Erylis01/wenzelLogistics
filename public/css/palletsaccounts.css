@@ -46,22 +46,32 @@
     display: inline-block;
  }
 
-.colName{
+.colName1{
     min-width:312px;
     max-width: 312px;
 }
-.colType{
+.colType1{
     min-width:96px;
     max-width:96px;
 }
-.colTot{
+.colTot1{
     min-width:408px;
     max-width:408px;
 }
 
-.colTotal{
+.colTotal1{
     min-width:60px;
     max-width:60px;
+}
+
+.text-inf0{
+    color:rgba(255,0,0,0.8);
+}
+.text-egal0{
+    color:rgba(255, 112, 0, 0.8);
+}
+.text-sup0{
+    color: rgba(0, 160, 0, 0.8);
 }
 
 .table-palletsNumber tr>th{
@@ -123,4 +133,6 @@
 #warehousesAssociated, #trucksAssociated{
     display: none;
 }
+
+
 

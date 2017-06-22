@@ -203,16 +203,16 @@
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletstransfers as $transfer)
-                                    {{--@php(dd(\App\Palletstransfer::find($transfer->id)->with('loading')->first()->loading))--}}
-
-                                    {{--@if($transfer->state==true && $transfer->documents==true && $transfer->realPalletsNumber==$transfer->palletsNumber)--}}
-                                        {{--@php($class="success")--}}
-                                    {{--@elseif ($transfer->state==false && $transfer->documents==false && $transfer->realPalletsNumber<>$transfer->palletsNumber)--}}
-                                        {{--@php($class="danger")--}}
-                                    {{--@else--}}
-                                        {{--@php ($class="warning")--}}
-                                    {{--@endif--}}
-                                    <tr>
+                                    @if($transfer->state=="In progress")
+                                        @php($class="inprogress")
+                                    @elseif($transfer->state=="Waiting documents")
+                                        @php($class="waitingdocuments")
+                                    @elseif($transfer->state=="Complete")
+                                        @php($class="complete")
+                                    @else
+                                        @php($class="completevalidated")
+                                    @endif
+                                    <tr class="{{$class}}">
                                         <td class="text-center"><a class="link" href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
                                         <td class="text-center">{{date('d-m-Y', strtotime($transfer->date))}}</td>

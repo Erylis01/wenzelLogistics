@@ -33,13 +33,14 @@
             <h4>You need to login to see the content</h4>
         @else
             <div class="col-lg-14">
-                @if($totalpallets>0)
-                    <div class="panel panel-warning">
-                        @elseif($totalpallets=0)
+                @if($realNumberPallets==0||$realNumberPallets==null)
+                    <div class="panel panelInprogress">
+                        @elseif($realNumberPallets>0)
                             <div class="panel panel-general">
                                 @else
-                                    <div class="panel panel-danger">
+                                    <div class="panel panelUntreated">
                                         @endif
+
                                         <div class="panel-heading">Details of the account n° {{$id}} : {{$name}}</div>
                                         <div class="panel-body panel-body-general">
                                             <form class="form-horizontal text-right" role="form" method="POST"
@@ -245,12 +246,14 @@
                                                                     </div>
                                                                     <div class="col-lg-7">
                                                                         <ul>
+                                                                            @if(isset($trucksAssociated))
                                                                             @foreach($trucksAssociated as $truck)
                                                                                 <li class="text-left">{{$truck->name}}
                                                                                     - {{$truck->licensePlate}}</li>
                                                                             @endforeach
+                                                                                @endif
                                                                         </ul>
-                                                                       </div>
+                                                                    </div>
                                                                     <div class="col-lg-2 text-left">
                                                                         <a href="{{route('showAddTruck')}}"
                                                                            class="link"><span
@@ -592,7 +595,16 @@
                                                     @foreach($listTransfers as $transfer)
                                                         @php($idDebitAccount=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
                                                         @php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
-                                                        <tr>
+                                                        @if($transfer->state=="In progress")
+                                                        @php($class="inprogress")
+                                                        @elseif ($transfer->state=="Waiting documents")
+                                                        @php($class="waitingdocuments")
+                                                        @elseif ($transfer->state=="Complete")
+                                                            @php($class="complete")
+                                                        @else
+                                                            @php($class="completevalidated")
+                                                        @endif
+                                                        <tr class="{{$class}}">
                                                             <td class="text-center colID"><a class="link"
                                                                                              href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                                             </td>
@@ -638,9 +650,13 @@
                                             {{--@endif--}}
                                             {{--</div>--}}
                                         </div>
+                                        @if($realNumberPallets==0||$realNumberPallets==null)
                                     </div>
+                                    @elseif($realNumberPallets>0)
                             </div>
+                        @else
                     </div>
+                @endif
             </div>
         @endif
     </div>
