@@ -27,6 +27,9 @@
     nonActive
 @endsection
 
+<script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}">
+</script>
+
 @section('content')
     <div class="row">
         @if(Auth::guest())
@@ -51,15 +54,15 @@
                                 <div class="col-lg-2">
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Type" name="type" required
+                                            title="Type" name="type" required onchange="accountOrder(this);"
                                     >
                                         @foreach($listTypes as $t )
                                             @if(Illuminate\Support\Facades\Input::old('type') && $t==old('type'))
-                                                <option selected>{{$t}}</option>
+                                                <option selected id="{{$t}}" value="{{$t}}">{{$t}}</option>
                                             @elseif(isset($type)&&$t==$type)
-                                                <option selected>{{$t}}</option>
+                                                <option selected id="{{$t}}" value="{{$t}}">{{$t}}</option>
                                                 @else
-                                                <option>{{$t}}</option>
+                                                <option id="{{$t}}" value="{{$t}}">{{$t}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -106,17 +109,17 @@
                                         @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
                                             <input id="palletsNumber" type="number" class="form-control"
                                                    name="palletsNumber"
-                                                   value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
+                                                   value="{{ old('palletsNumber') }}" placeholder="Nbr" min="0"
                                                    required autofocus>
                                         @elseif(isset($palletsNumber))
                                             <input id="palletsNumber" type="number" class="form-control"
                                                    name="palletsNumber"
-                                                   value="{{$palletsNumber}}" placeholder="Nbr"
+                                                   value="{{$palletsNumber}}" placeholder="Nbr" min="0"
                                                    required autofocus>
                                         @else
                                             <input id="palletsNumber" type="number" class="form-control"
                                                    name="palletsNumber"
-                                                   value="0" placeholder="Nbr"
+                                                   value="0" placeholder="Nbr" min="0"
                                                    required autofocus>
                                         @endif
                                     </div>
@@ -184,7 +187,7 @@
                                 <div class="col-lg-4">
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Credit Account" name="creditAccount" required>
+                                            title="Credit Account" name="creditAccount" required >
                                         @foreach($listNamesPalletsaccounts as $palletsAccount )
                                             @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
                                                 <option selected>{{$palletsAccount}}</option>
@@ -316,5 +319,3 @@
             </div>
     </div>
 @endsection
-<script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}">
-</script>

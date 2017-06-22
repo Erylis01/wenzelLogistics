@@ -672,11 +672,11 @@
                                                                             >
                                                                                 @foreach($listTypes as $t )
                                                                                     @if(Illuminate\Support\Facades\Input::old('type') && $t==old('type'))
-                                                                                        <option selected>{{$t}}</option>
+                                                                                        <option selected id="{{$t}}" value="{{$t}}">{{$t}}</option>
                                                                                     @elseif(isset($type)&&$t==$type)
-                                                                                        <option selected>{{$t}}</option>
+                                                                                        <option selected id="{{$t}}" value="{{$t}}">{{$t}}</option>
                                                                                     @else
-                                                                                        <option>{{$t}}</option>
+                                                                                        <option id="{{$t}}" value="{{$t}}">{{$t}}</option>
                                                                                     @endif
                                                                                 @endforeach
                                                                             </select>
@@ -715,20 +715,20 @@
                                                                                        class="form-control"
                                                                                        name="palletsNumber"
                                                                                        value="{{ old('palletsNumber') }}"
-                                                                                       placeholder="Pallets Number"
+                                                                                       placeholder="Nbr" min="0"
                                                                                        required autofocus>
                                                                             @elseif(isset($palletsNumber))
                                                                                 <input id="palletsNumber" type="number"
                                                                                        class="form-control"
                                                                                        name="palletsNumber"
                                                                                        value="{{$palletsNumber}}"
-                                                                                       placeholder="Nbr"
+                                                                                       placeholder="Nbr" min="0"
                                                                                        required autofocus>
                                                                             @else
                                                                                 <input id="palletsNumber" type="number"
                                                                                        class="form-control"
                                                                                        name="palletsNumber"
-                                                                                       value="0" placeholder="Nbr"
+                                                                                       value="0" placeholder="Nbr" min="0"
                                                                                        required autofocus>
                                                                             @endif
                                                                         </div>
@@ -802,9 +802,9 @@
                                                                                     required>
                                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                                     @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount->name==old('creditAccount'))
-                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                        <option selected id="creditAccount">{{$palletsAccount->name}}</option>
                                                                                     @elseif(isset($creditAccount)&& $palletsAccount->name==$creditAccount)
-                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                        <option selected id="creditAccount">{{$palletsAccount->name}}</option>
                                                                                     @else
                                                                                         <option>{{$palletsAccount->name}}</option>
                                                                                     @endif
@@ -828,9 +828,9 @@
                                                                                     required>
                                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                                     @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount->name==old('debitAccount'))
-                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                        <option selected id="debitAccount">{{$palletsAccount->name}}</option>
                                                                                     @elseif(isset($debitAccount)&& $palletsAccount->name==$debitAccount)
-                                                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                                                        <option selected id="debitAccount">{{$palletsAccount->name}}</option>
                                                                                     @else
                                                                                         <option>{{$palletsAccount->name}}</option>
                                                                                     @endif
@@ -1104,7 +1104,7 @@
                                                                                        class="form-control"
                                                                                        name="palletsNumber{{$transfer->id}}"
                                                                                        value="{{ old('palletsNumber'.$transfer->id) }}"
-                                                                                       placeholder="Pallets Number"
+                                                                                       placeholder="Nbr" min="0"
                                                                                        required autofocus>
                                                                             @elseif(isset($transfer->validate) && $transfer->validate==1)
                                                                                 <input id="palletsNumber{{$transfer->id}}"
@@ -1112,7 +1112,7 @@
                                                                                        class="form-control"
                                                                                        name="palletsNumber{{$transfer->id}}"
                                                                                        value="{{$transfer->palletsNumber}}"
-                                                                                       placeholder="Nbr"
+                                                                                       placeholder="Nbr" min="0"
                                                                                        autofocus readonly>
                                                                             @else
                                                                                 <input id="palletsNumber{{$transfer->id}}"
@@ -1120,7 +1120,7 @@
                                                                                        class="form-control"
                                                                                        name="palletsNumber{{$transfer->id}}"
                                                                                        value="{{$transfer->palletsNumber}}"
-                                                                                       placeholder="Nbr"
+                                                                                       placeholder="Nbr" min="0"
                                                                                        autofocus>
                                                                             @endif
                                                                         </div>
@@ -1154,7 +1154,7 @@
                                                                                        value="{{ old('date'.$transfer->id) }}"
                                                                                        placeholder="Date" autofocus
                                                                                        readonly>
-                                                                            @else(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                                                            @else(Illuminate\Support\Facades\Input::old('date'))
                                                                                 <input id="date{{$transfer->id}}"
                                                                                        type="date"
                                                                                        class="form-control"
@@ -1708,5 +1708,10 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
+    </script>
+    <script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}">
+        function accountOrder(typeSelected) {
+            document.write('ooooo');
+        }
     </script>
 @endsection

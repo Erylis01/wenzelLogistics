@@ -213,8 +213,6 @@ function showDetails($id, Request $request)
         }
 
         //table data
-        $currentDate = Carbon::now();
-        $limitDate = $currentDate->subDays(60)->format('Y-m-d');
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
@@ -222,7 +220,7 @@ function showDetails($id, Request $request)
 
         $listType=['CreditLoadingPlace', 'DebitLoadingPlace', 'CreditOffloadingPlace', 'DebitOffloadingPlace'];
         $query = Loading::where('pt', 'ja')
-            ->where('ladedatum', '>=', $limitDate)->where(function ($q) use ($listType, $name) {
+            ->where(function ($q) use ($listType, $name) {
                 for ($k=1;$k<=5;$k++) {
                     foreach($listType as $type){
                         $q->orWhere('account'.$type.$k, $name);

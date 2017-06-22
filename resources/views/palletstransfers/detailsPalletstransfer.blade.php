@@ -162,17 +162,17 @@
                                     @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
                                         <input id="palletsNumber" type="number" class="form-control"
                                                name="palletsNumber"
-                                               value="{{ old('palletsNumber') }}" placeholder="Pallets Number"
+                                               value="{{ old('palletsNumber') }}" placeholder="Nbr" min="0"
                                                required autofocus>
                                     @elseif(isset($transfer->validate) && $transfer->validate==1)
                                         <input id="palletsNumber" type="number" class="form-control"
                                                name="palletsNumber"
-                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr"
+                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr" min="0"
                                                required autofocus readonly>
                                     @else
                                         <input id="palletsNumber" type="number" class="form-control"
                                                name="palletsNumber"
-                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr"
+                                               value="{{$transfer->palletsNumber}}" placeholder="Nbr" min="0"
                                                required autofocus>
                                     @endif
                                 </div>
@@ -192,7 +192,7 @@
                                     @elseif(isset($transfer->validate) && $transfer->validate==1)
                                         <input id="date" type="date" class="form-control" name="date"
                                                value="{{ old('date') }}" placeholder="Date" required autofocus readonly>
-                                    @else(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                    @else(Illuminate\Support\Facades\Input::old('date'))
                                         <input id="date" type="date" class="form-control" name="date"
                                                value="{{ old('date') }}" placeholder="Date" required autofocus>
                                     @endif

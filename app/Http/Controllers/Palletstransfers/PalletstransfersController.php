@@ -29,12 +29,7 @@ class PalletstransfersController extends Controller
         $listColumns=['id','date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'state'];
 
         if (Auth::check()) {
-            $currentDate = Carbon::now();
-            $limitDate = $currentDate->subDays(60)->format('Y-m-d');
-
-            $query=Palletstransfer::where([
-                ['date', '>=', $limitDate],
-            ]);
+            $query=Palletstransfer::get();
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?

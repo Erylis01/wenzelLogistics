@@ -28,17 +28,15 @@ class ListLoadingsController extends Controller
 
         if (Auth::check()) {
             $this->importData();
-            $currentDate = Carbon::now();
-            $limitDate = $currentDate->subDays(60)->format('Y-m-d');
+
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
             $searchColumns = $request->get('searchColumns');
 
-            $listColumns = ['atrnr', 'ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb', 'lande', 'plze', 'orte', 'anz', 'art', 'subfrachter', 'kennzeichen', 'zusladestellen'];
+            $listColumns = ['atrnr', 'ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb', 'lande', 'plze', 'orte', 'anz', 'art', 'subfrachter', 'kennzeichen', 'zusladestellen', 'state'];
 
             $query = DB::table('loadings')
-                ->where('pt', 'ja')
-                ->where('ladedatum', '>=', $limitDate);
+                ->where('pt', 'ja');
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
