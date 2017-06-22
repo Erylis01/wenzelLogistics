@@ -82,7 +82,7 @@
                                         <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="columns" name="searchColumns[]" multiple>
+                                            title="columns" name="searchColumns[]" multiple required>
                                       @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
@@ -197,14 +197,14 @@
                                             <tr>
                                                 <th class="text-center">Confirmed<br> pallets nbr</th>
                                                 <th class="text-center">Planned<br> pallets nbr</th>
-                                                <th class="text-center">Last<br> pallets transfer</th>
+                                                <th class="text-center">Rest<br> to confirm</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                                 <td class="text-center">{{$palletsaccount->realNumberPallets}}</td>
                                                 <td class="text-center">{{$palletsaccount->theoricalNumberPallets}}</td>
-                                                <td class="text-center">{{$palletsaccount->lastNumberPalletsTransfered}}</td>
+                                                <td class="text-center "><strong>{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</strong></td>
                                             </tr>
                                             </tbody>
                                         </table>

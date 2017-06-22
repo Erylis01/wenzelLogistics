@@ -53,14 +53,16 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         @if(isset($nickname))
-                                                        <input id="nickname" type="text" class="form-control" name="nickname"
-                                                               value="{{ $nickname }}" placeholder="Nickname"
-                                                               autofocus>
+                                                            <input id="nickname" type="text" class="form-control"
+                                                                   name="nickname"
+                                                                   value="{{ $nickname }}" placeholder="Nickname"
+                                                                   autofocus>
                                                         @else
-                                                            <input id="nickname" type="text" class="form-control" name="nickname"
+                                                            <input id="nickname" type="text" class="form-control"
+                                                                   name="nickname"
                                                                    value="" placeholder="Nickname"
                                                                    autofocus>
-                                                            @endif
+                                                        @endif
                                                         @if ($errors->has('nickname'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('nickname') }}</strong>
@@ -78,30 +80,39 @@
                                                                 data-size="5"
                                                                 data-live-search="true"
                                                                 data-live-search-style="startsWith"
-                                                                title="Type" name="type" id="type" onchange="displayFields(this);"
+                                                                title="Type" name="type" id="type"
+                                                                onchange="displayFields(this);"
                                                                 required>
                                                             @if(Illuminate\Support\Facades\Input::old('type'))
-                                                                <option @if(old('type') == 'Carrier') selected @endif value="Carrier" id="carrierOption">
+                                                                <option @if(old('type') == 'Carrier') selected
+                                                                        @endif value="Carrier" id="carrierOption">
                                                                     Carrier
                                                                 </option>
-                                                                <option @if(old('type') == 'Network') selected @endif value="Network" id="networkOption">
+                                                                <option @if(old('type') == 'Network') selected
+                                                                        @endif value="Network" id="networkOption">
                                                                     Network
                                                                 </option>
-                                                                <option @if(old('type') == 'Other') selected @endif value="Other">
+                                                                <option @if(old('type') == 'Other') selected
+                                                                        @endif value="Other">
                                                                     Other
                                                                 </option>
                                                             @elseif(isset($type))
-                                                                <option @if($type == 'Carrier') selected @endif value="Carrier" id="carrierOption">
+                                                                <option @if($type == 'Carrier') selected
+                                                                        @endif value="Carrier" id="carrierOption">
                                                                     Carrier
                                                                 </option>
-                                                                <option @if($type == 'Network') selected @endif value="Network" id="networkOption">
+                                                                <option @if($type == 'Network') selected
+                                                                        @endif value="Network" id="networkOption">
                                                                     Network
                                                                 </option>
-                                                                <option @if($type == 'Other') selected @endif value="Other">Other
+                                                                <option @if($type == 'Other') selected
+                                                                        @endif value="Other">Other
                                                                 </option>
                                                             @else
-                                                                <option value="Carrier" id="carrierOption">Carrier</option>
-                                                                <option value="Network" id="networkOption">Network</option>
+                                                                <option value="Carrier" id="carrierOption">Carrier
+                                                                </option>
+                                                                <option value="Network" id="networkOption">Network
+                                                                </option>
                                                                 <option value="Other">Other</option>
                                                             @endif
                                                         </select>
@@ -116,13 +127,15 @@
                                                     </div>
                                                     <div class="col-lg-2">
                                                         @if(isset($realNumberPallets))
-                                                        <input id="realNumberPallets" type="number" class="form-control"
-                                                               name="realNumberPallets"
-                                                               value="{{ $realNumberPallets }}"
-                                                               placeholder="Confirmed pal. nbr"
-                                                               required readonly autofocus>
-                                                            @else
-                                                            <input id="realNumberPallets" type="number" class="form-control"
+                                                            <input id="realNumberPallets" type="number"
+                                                                   class="form-control"
+                                                                   name="realNumberPallets"
+                                                                   value="{{ $realNumberPallets }}"
+                                                                   placeholder="Confirmed pal. nbr"
+                                                                   required readonly autofocus>
+                                                        @else
+                                                            <input id="realNumberPallets" type="number"
+                                                                   class="form-control"
                                                                    name="realNumberPallets"
                                                                    value=""
                                                                    placeholder="Confirmed pal. nbr"
@@ -138,13 +151,13 @@
                                                     </div>
                                                     <div class="col-lg-2">
                                                         @if(isset($theoricalNumberPallets))
-                                                        <input id="theoricalNumberPallets" type="number"
-                                                               class="form-control"
-                                                               name="theoricalNumberPallets"
-                                                               value="{{ $theoricalNumberPallets }}"
-                                                               placeholder="Planned pal. nbr"
-                                                               readonly required autofocus>
-                                                            @else
+                                                            <input id="theoricalNumberPallets" type="number"
+                                                                   class="form-control"
+                                                                   name="theoricalNumberPallets"
+                                                                   value="{{ $theoricalNumberPallets }}"
+                                                                   placeholder="Planned pal. nbr"
+                                                                   readonly required autofocus>
+                                                        @else
                                                             <input id="theoricalNumberPallets" type="number"
                                                                    class="form-control"
                                                                    name="theoricalNumberPallets"
@@ -156,64 +169,66 @@
                                                 </div>
                                                 @if($type=='Network')
                                                     <div id="warehousesAssociated" style="display: block">
-                                                    @else
-                                                <div id="warehousesAssociated">
-                                                    @endif
-                                                    <div class="form-group">
-                                                        <!--warehouses associated-->
-                                                        <div class="col-lg-3">
-                                                            <label for="namewarehouses" class="control-label">Warehouses
-                                                                associated
-                                                                :</label>
-                                                        </div>
-                                                        <div class="col-lg-7">
-                                                            <select class="selectpicker show-tick form-control"
-                                                                    data-size="5"
-                                                                    data-live-search="true"
-                                                                    data-live-search-style="startsWith"
-                                                                    title="Warehouses Associated"
-                                                                    name="namewarehouses[]"
-                                                                    multiple>
-                                                                @foreach($listWarehouses as $warehouse )
-                                                                    @php($list[]=null)
-                                                                    @if(Illuminate\Support\Facades\Input::old('namewarehouses'))
-                                                                        @foreach(old('namewarehouses') as $warehouseA)
-                                                                            @if($warehouseA == $warehouse->name)
-                                                                                <option selected>{{$warehouse->name}}</option>
-                                                                                @php($list[]=$warehouse)
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @if(!in_array($warehouse, $list))
-                                                                            <option>{{$warehouse->name}}</option>
-                                                                        @endif
-                                                                    @elseif(isset($namewarehouses))
-                                                                        @foreach($namewarehouses as $warehouseA)
-                                                                            @if($warehouseA == $warehouse->name)
-                                                                                <option selected>{{$warehouse->name}}</option>
-                                                                                @php($list[]=$warehouse)
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @if(!in_array($warehouse, $list))
-                                                                            <option>{{$warehouse->name}}</option>
-                                                                        @endif
-                                                                    @else
-                                                                        <option>{{$warehouse->name}}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
+                                                        @else
+                                                            <div id="warehousesAssociated">
+                                                                @endif
+                                                                <div class="form-group">
+                                                                    <!--warehouses associated-->
+                                                                    <div class="col-lg-3">
+                                                                        <label for="namewarehouses"
+                                                                               class="control-label">Warehouses
+                                                                            associated
+                                                                            :</label>
+                                                                    </div>
+                                                                    <div class="col-lg-7">
+                                                                        <select class="selectpicker show-tick form-control"
+                                                                                data-size="5"
+                                                                                data-live-search="true"
+                                                                                data-live-search-style="startsWith"
+                                                                                title="Warehouses Associated"
+                                                                                name="namewarehouses[]"
+                                                                                multiple>
+                                                                            @foreach($listWarehouses as $warehouse )
+                                                                                @php($list[]=null)
+                                                                                @if(Illuminate\Support\Facades\Input::old('namewarehouses'))
+                                                                                    @foreach(old('namewarehouses') as $warehouseA)
+                                                                                        @if($warehouseA == $warehouse->name)
+                                                                                            <option selected>{{$warehouse->name}}</option>
+                                                                                            @php($list[]=$warehouse)
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                    @if(!in_array($warehouse, $list))
+                                                                                        <option>{{$warehouse->name}}</option>
+                                                                                    @endif
+                                                                                @elseif(isset($namewarehouses))
+                                                                                    @foreach($namewarehouses as $warehouseA)
+                                                                                        @if($warehouseA == $warehouse->name)
+                                                                                            <option selected>{{$warehouse->name}}</option>
+                                                                                            @php($list[]=$warehouse)
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                    @if(!in_array($warehouse, $list))
+                                                                                        <option>{{$warehouse->name}}</option>
+                                                                                    @endif
+                                                                                @else
+                                                                                    <option>{{$warehouse->name}}</option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </select>
 
-                                                        </div>
-                                                        <div class="col-lg-2 text-left">
-                                                            <a href="{{route('showAddWarehouse')}}" class="link"><span
-                                                                        class="glyphicon glyphicon-plus-sign"></span>
-                                                                Add warehouse</a>
-                                                        </div>
-                                                    </div>
-                                                    @if($type=='Network')
-                                                        </div>
-                                                            @else
+                                                                    </div>
+                                                                    <div class="col-lg-2 text-left">
+                                                                        <a href="{{route('showAddWarehouse')}}"
+                                                                           class="link"><span
+                                                                                    class="glyphicon glyphicon-plus-sign"></span>
+                                                                            Add warehouse</a>
+                                                                    </div>
                                                                 </div>
-                                                                    @endif
+                                                                @if($type=='Network')
+                                                            </div>
+                                                            @else
+                                                    </div>
+                                                @endif
 
                                                 @if($type=='Carrier')
                                                     <div id="trucksAssociated" style="display: block">
@@ -223,36 +238,22 @@
                                                                 <div class="form-group">
                                                                     <!--trucks associated-->
                                                                     <div class="col-lg-3">
-                                                                        <label for="trucksAssociated" class="control-label">Trucks
+                                                                        <label for="trucksAssociated"
+                                                                               class="control-label">Trucks
                                                                             associated
                                                                             :</label>
                                                                     </div>
                                                                     <div class="col-lg-7">
-                                                                        <select class="selectpicker show-tick form-control"
-                                                                                data-size="5"
-                                                                                data-live-search="true"
-                                                                                data-live-search-style="startsWith"
-                                                                                title="Trucks Associated"
-                                                                                name="trucksAssociated[]"
-                                                                                multiple>
-                                                                            @foreach($listTrucks as $truck )
-                                                                                <option>{{$truck->name}} - {{$truck->licensePlate}}</option>
+                                                                        <ul>
+                                                                            @foreach($trucksAssociated as $truck)
+                                                                                <li class="text-left">{{$truck->name}}
+                                                                                    - {{$truck->licensePlate}}</li>
                                                                             @endforeach
-                                                                                @if(Illuminate\Support\Facades\Input::old('trucksAssociated'))
-                                                                                    @foreach(old('trucksAssociated') as $truckA)
-                                                                                            <option selected>{{$truckA->name}}
-                                                                                                - {{$truckA->licensePlate}}</option>
-                                                                                    @endforeach
-                                                                                @elseif(isset($trucksAssociated))
-                                                                                    @foreach($trucksAssociated as $truckA)
-                                                                                            <option selected>{{$truckA->name}} - {{$truckA->licensePlate}}</option>
-                                                                                    @endforeach
-                                                                                @endif
-                                                                        </select>
-
-                                                                    </div>
+                                                                        </ul>
+                                                                       </div>
                                                                     <div class="col-lg-2 text-left">
-                                                                        <a href="{{route('showAddTruck')}}" class="link"><span
+                                                                        <a href="{{route('showAddTruck')}}"
+                                                                           class="link"><span
                                                                                     class="glyphicon glyphicon-plus-sign"></span>
                                                                             Add truck</a>
                                                                     </div>
@@ -260,15 +261,20 @@
                                                                 <div class="form-group">
                                                                     <!--adress-->
                                                                     <div class="col-lg-3">
-                                                                        <label for="adress" class="control-label">Adress :</label>
+                                                                        <label for="adress" class="control-label">Adress
+                                                                            :</label>
                                                                     </div>
                                                                     <div class="col-lg-7">
                                                                         @if(isset($adress))
-                                                                            <input id="adress" type="text" class="form-control" name="adress"
-                                                                                   value="{{ $adress }}" placeholder="Adress" autofocus>
-                                                                            @else
-                                                                        <input id="adress" type="text" class="form-control" name="adress"
-                                                                               value="" placeholder="Adress" autofocus>
+                                                                            <input id="adress" type="text"
+                                                                                   class="form-control" name="adress"
+                                                                                   value="{{ $adress }}"
+                                                                                   placeholder="Adress" autofocus>
+                                                                        @else
+                                                                            <input id="adress" type="text"
+                                                                                   class="form-control" name="adress"
+                                                                                   value="" placeholder="Adress"
+                                                                                   autofocus>
                                                                         @endif
                                                                         @if ($errors->has('adress'))
                                                                             <span class="help-block">
@@ -280,16 +286,21 @@
                                                                 <div class="form-group">
                                                                     <!--phone-->
                                                                     <div class="col-lg-3">
-                                                                        <label for="phone" class="control-label">Phone :</label>
+                                                                        <label for="phone" class="control-label">Phone
+                                                                            :</label>
                                                                     </div>
                                                                     <div class="col-lg-2">
                                                                         @if(isset($phone))
-                                                                        <input id="phone" type="text" class="form-control" name="phone"
-                                                                               value="{{$phone}}" placeholder="Phone" autofocus>
+                                                                            <input id="phone" type="text"
+                                                                                   class="form-control" name="phone"
+                                                                                   value="{{$phone}}"
+                                                                                   placeholder="Phone" autofocus>
                                                                         @else
-                                                                            <input id="phone" type="text" class="form-control" name="phone"
-                                                                                   value="" placeholder="Phone" autofocus>
-                                                                            @endif
+                                                                            <input id="phone" type="text"
+                                                                                   class="form-control" name="phone"
+                                                                                   value="" placeholder="Phone"
+                                                                                   autofocus>
+                                                                        @endif
                                                                         @if ($errors->has('phone'))
                                                                             <span class="help-block">
                                     <strong>{{ $errors->first('phone') }}</strong>
@@ -298,16 +309,23 @@
                                                                     </div>
                                                                     <!--name contact-->
                                                                     <div class="col-lg-2">
-                                                                        <label for="namecontact" class="control-label">Contact :</label>
+                                                                        <label for="namecontact" class="control-label">Contact
+                                                                            :</label>
                                                                     </div>
                                                                     <div class="col-lg-3">
                                                                         @if(isset($namecontact))
-                                                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                                                               value="{{$namecontact}}" placeholder="Contact name" autofocus>
+                                                                            <input id="namecontact" type="text"
+                                                                                   class="form-control"
+                                                                                   name="namecontact"
+                                                                                   value="{{$namecontact}}"
+                                                                                   placeholder="Contact name" autofocus>
                                                                         @else
-                                                                            <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                                                                   value="" placeholder="Contact name" autofocus>
-                                                                            @endif
+                                                                            <input id="namecontact" type="text"
+                                                                                   class="form-control"
+                                                                                   name="namecontact"
+                                                                                   value="" placeholder="Contact name"
+                                                                                   autofocus>
+                                                                        @endif
                                                                         @if ($errors->has('namecontact'))
                                                                             <span class="help-block">
                                     <strong>{{ $errors->first('namecontact') }}</strong>
@@ -318,16 +336,21 @@
                                                                 <div class="form-group">
                                                                     <!--email-->
                                                                     <div class="col-lg-3">
-                                                                        <label for="email" class="control-label">Email :</label>
+                                                                        <label for="email" class="control-label">Email
+                                                                            :</label>
                                                                     </div>
                                                                     <div class="col-lg-7">
                                                                         @if(isset($email))
-                                                                        <input id="email" type="text" class="form-control" name="email"
-                                                                               value="{{$email}}" placeholder="Email" autofocus>
+                                                                            <input id="email" type="text"
+                                                                                   class="form-control" name="email"
+                                                                                   value="{{$email}}"
+                                                                                   placeholder="Email" autofocus>
                                                                         @else
-                                                                            <input id="email" type="text" class="form-control" name="email"
-                                                                                   value="" placeholder="Email" autofocus>
-                                                                            @endif
+                                                                            <input id="email" type="text"
+                                                                                   class="form-control" name="email"
+                                                                                   value="" placeholder="Email"
+                                                                                   autofocus>
+                                                                        @endif
                                                                         @if ($errors->has('email'))
                                                                             <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -404,20 +427,19 @@
 
                                             <!--search bar-->
                                             <br>
-                                            <div >
+                                            <div>
                                                 <div class="col-lg-2">
-                                                    <a href="{{route('showAddPalletstransferAccount', $name)}}" class="btn btn-add">Add transfer</a>
+                                                    <a href="{{route('showAddPalletstransferAccount', $name)}}"
+                                                       class="btn btn-add">Add transfer</a>
                                                 </div>
-                                                <form role="form" method="GET" action="{{route('showDetailsPalletsaccount', $id)}}">
+                                                <form role="form" method="GET"
+                                                      action="{{route('showDetailsPalletsaccount', $id)}}">
                                                     {{ csrf_field() }}
                                                     <div class="input-group col-lg-offset-3 col-lg-7">
-                                                        {{--<span class="input-group-btn searchCheckbox col-lg-offset-4">--}}
-                                                        {{--<label class="checkbox-inline searchBar"><input type="checkbox" value="loading">Loading Place</label>--}}
-                                                        {{--<label class="checkbox-inline searchBar"><input type="checkbox" value="offloading">Offloading Place</label>--}}
-                                                        {{--</span>--}}
                             <span class="input-group-btn searchInput">
                                 @if(isset($searchQuery))
-                                    <input type="text" class="form-control searchBar" name="search" value="{{$searchQuery}}"
+                                    <input type="text" class="form-control searchBar" name="search"
+                                           value="{{$searchQuery}}"
                                            placeholder="search">
                                 @else
                                     <input type="text" class="form-control searchBar" name="search" value=""
@@ -425,9 +447,10 @@
                                 @endif
                             </span>
                                                         <span class="input-group-btn">
-                                    <select class="selectpicker show-tick form-control searchSelect searchBar" data-size="5"
+                                    <select class="selectpicker show-tick form-control searchSelect searchBar"
+                                            data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="columns" name="searchColumns[]" multiple>
+                                            title="columns" name="searchColumns[]" multiple required>
                                       @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
@@ -466,114 +489,130 @@
                                         name="searchSubmit"></button>
                             </span>
                                                     </div>
-                                                    {{--</div>--}}
-
-
                                                 </form>
                                                 <br>
                                             </div>
 
 
-                                            <!--table list loadings associated-->
+                                            <!--table list transfers associated-->
                                             <div class="table-responsive table-loading-account">
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
                                                         @if(isset($searchQuery))
-                                                        <th class="text-center col1">Atrnr
-                                                            <a
-                                                            class="glyphicon glyphicon-chevron-up general-sorting"
-                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=atrnr&order=asc')}}"></a><a
-                                                            class="glyphicon glyphicon-chevron-down general-sorting"
-                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=atrnr&order=desc')}}"></a>
-                                                        </th>
-                                                        <th class="text-center col3">Date transfer
-                                                            <a
-                                                            class="glyphicon glyphicon-chevron-up general-sorting"
-                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=ladedatum&order=asc')}}"></a><a
-                                                            class="glyphicon glyphicon-chevron-down general-sorting"
-                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=ladedatum&order=desc')}}"></a>
-                                                        </th>
-                                                        <th class="text-center col4">Subfrachter
-                                                            <a
-                                                            class="glyphicon glyphicon-chevron-up general-sorting"
-                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=asc')}}"></a><a
-                                                            class="glyphicon glyphicon-chevron-down general-sorting"
-                                                            href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=desc')}}"></a>
-                                                        </th>
-                                                        <th class="text-center col2">Planned pallets nbr
-                                                            {{--<a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a--}}
-                                                            {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                            {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>--}}
-                                                        </th>
-                                                            @else
-                                                            <th class="text-center col1">Atrnr
+                                                            <th class="text-center colID">ID<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=atrnr&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=atrnr&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"></a>
                                                             </th>
-                                                            <th class="text-center col3">Date transfer
+                                                            <th class="text-center colType">Type<br>
                                                                 <a
-                                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=ladedatum&order=asc')}}"></a><a
-                                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=ladedatum&order=desc')}}"></a>
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
                                                             </th>
-                                                            <th class="text-center col4">Subfrachter
+                                                            <th class="text-center colPNumb">Pallets nbr<br>
                                                                 <a
-                                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=subfrachter&order=asc')}}"></a><a
-                                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$id.'?sortby=subfrachter&order=desc')}}"></a>
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
                                                             </th>
-                                                            <th class="text-center col2">Planned pallets nbr
+                                                            <th class="text-center col4">Truck<br>
                                                                 {{--<a--}}
                                                                 {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=asc')}}"></a><a--}}
+                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=asc')}}"></a><a--}}
                                                                 {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=desc')}}"></a>--}}
+                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=desc')}}"></a>--}}
+                                                            </th>
+                                                            <th class="text-center colType">Atrnr<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center colDate">Date<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"></a>
+                                                            </th>
+                                                        @else
+                                                            <th class="text-center colID">ID<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=id&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=id&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center colType">Type<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=type&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=type&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center colPNumb">Pallets nbr<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center col4">Truck<br>
+                                                                {{--<a--}}
+                                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=asc')}}"></a><a--}}
+                                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=desc')}}"></a>--}}
+                                                            </th>
+                                                            <th class="text-center colType">Atrnr<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=loading_atrnr&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=loading_atrnr&order=desc')}}"></a>
+                                                            </th>
+                                                            <th class="text-center colDate">Date<br>
+                                                                <a
+                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=date&order=asc')}}"></a><a
+                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=date&order=desc')}}"></a>
                                                             </th>
                                                         @endif
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach($listLoadings as $loading)
-                                                        @php($idPalletsaccount=\App\Palletsaccount::where('name', trim(explode(',', $loading->subfrachter)[0]))->first()->id)
-                                                        @for($k=1;$k<=$loading->numberLoadingPlace; $k++)
-                                                    <tr>
-                                                        <td class="text-center col1"><a class="link" href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a></td>
-                                                        <td class="text-center col3">{{$loading->ladedatum}}</td>
-                                                        <td class="text-center col4"><a class="link" href="{{route('showDetailsPalletsaccount',$idPalletsaccount)}}">{{$loading->subfrachter}}</a></td>
-                                                            @php($accountDebitLoadingPlaceK='accountDebitLoadingPlace'.$k)
-                                                            @php($accountCreditLoadingPlaceK='accountCreditLoadingPlace'.$k)
-                                                            @php($numberPalletsLoadingPlaceK='numberPalletsLoadingPlace'.$k)
-                                                            @if($name==$loading->$accountCreditLoadingPlaceK)
-                                                                <td class="text-center col2">{{$loading->$numberPalletsLoadingPlaceK}}</td>
-                                                                @elseif($name==$loading->$accountDebitLoadingPlaceK)
-                                                                <td class="text-center col2">{{- $loading->$numberPalletsLoadingPlaceK}}</td>
-                                                                @endif
-                                                    </tr>
-                                                            @endfor
+                                                    @foreach($listTransfers as $transfer)
+                                                        @php($idDebitAccount=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
+                                                        @php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
                                                         <tr>
-                                                        @for($k=1;$k<=$loading->numberOffloadingPlace; $k++)
-                                                                <td class="text-center col1"><a class="link" href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a></td>
-                                                                <td class="text-center col3">{{$loading->ladedatum}}</td>
-                                                                <td class="text-center col4"><a class="link" href="{{route('showDetailsPalletsaccount',$idPalletsaccount)}}">{{$loading->subfrachter}}</a></td>
-                                                            @php($accountDebitOffloadingPlaceK='accountDebitOffloadingPlace'.$k)
-                                                            @php($accountCreditOffloadingPlaceK='accountCreditOffloadingPlace'.$k)
-                                                            @php($numberPalletsOffloadingPlaceK='numberPalletsOffloadingPlace'.$k)
-                                                            @if($name==$loading->$accountCreditOffloadingPlaceK)
-                                                                <td class="text-center col2">{{$loading->$numberPalletsOffloadingPlaceK}}</td>
-                                                            @elseif($name==$loading->$accountDebitOffloadingPlaceK)
-                                                                <td class="text-center col2">{{- $loading->$numberPalletsOffloadingPlaceK}}</td>
+                                                            <td class="text-center colID"><a class="link"
+                                                                                             href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
+                                                            </td>
+                                                            <td class="text-center colType">{{$transfer->type}}</td>
+                                                            <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
+                                                            @if($transfer->type=='Deposit')
+                                                                <td class="text-center col4"><a class="link"
+                                                                                                href="{{route('showDetailsPalletsaccount',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>
+                                                                </td>
+                                                            @elseif($transfer->type=='Withdrawal')
+                                                                <td class="text-center col4"><a class="link"
+                                                                                                href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>
+                                                                </td>
                                                             @endif
-                                                    </tr>
-                                                        @endfor
-                                                        @endforeach
+                                                            <td class="text-center colType"><a class="link"
+                                                                                               href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
+                                                            </td>
+                                                            <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
+                                                        </tr>
+                                                    @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>

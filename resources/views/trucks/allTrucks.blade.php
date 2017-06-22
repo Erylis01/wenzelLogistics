@@ -52,7 +52,7 @@
                                 <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="columns" name="searchColumns[]" multiple>
+                                            title="columns" name="searchColumns[]" multiple required>
                                       @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else

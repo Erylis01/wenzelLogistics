@@ -29,7 +29,7 @@ class PalletstransfersController extends Controller
         $listColumns=['id','date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'state'];
 
         if (Auth::check()) {
-            $query=Palletstransfer::get();
+            $query=DB::table('Palletstransfers');
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?

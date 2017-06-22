@@ -54,7 +54,7 @@
                                 <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="columns" name="searchColumns[]" multiple>
+                                            title="columns" name="searchColumns[]" multiple required>
                                         @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
@@ -95,9 +95,7 @@
                             </div>
                         </form>
                     </div>
-                    {{--@if(isset($searchQuery)||isset($searchColumns))--}}
-                        {{--@php(dd($searchQuery, $searchColumns))--}}
-                    {{--@endif--}}
+
                     <div class="panel-body panel-body-general">
                         <!-- Table -->
                         <div class="table-responsive loadings-wrapper">
@@ -289,86 +287,6 @@
                                                     href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
                                         </th>
                                     @endif
-
-                                    {{--<th class="text-center colHeight">Disp. <a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=disp&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight">Referenz<br><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=referenz&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-
-                                    {{--<th class="text-center colHeight">Belad.<br><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=beladestelle&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-
-                                    {{--<th class="text-center colHeight">Entlad.<br><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladestelle&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-
-                                    {{--<th class="text-center colHeight colMedium">Ware<br><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ware&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight">Gewicht<a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=gewicht&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight colXSmall">Vol<a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=vol&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=vol&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight">LDM<a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ldm&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ldm&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight">Umsatz<a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=umsatz&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight">Aufwand<a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=aufwand&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight colXSmall">DB<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=db&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight colXSmall">Trp<a--}}
-                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=trp&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
-                                    {{--<th class="text-center colHeight colXSmall">PT<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=asc')}}"></a><a--}}
-                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                    {{--href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=pt&order=desc')}}"></a>--}}
-                                    {{--</th>--}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -389,28 +307,15 @@
                                         <td class="col1b colHeight"></td>
                                         <td class="text-center colHeight colDate">{{date('d-m-y', strtotime($loading->ladedatum))}}</td>
                                         <td class="text-center colHeight colDate">{{date('d-m-y', strtotime($loading->entladedatum))}}</td>
-                                        {{--<td class="text-center colHeight">{{$loading->disp}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->referenz}}</td>--}}
                                         <td class="text-center colHeight colAufr">{{$loading->auftraggeber}}</td>
-                                        {{--<td class="text-center colHeight colDestelle">{{$loading->beladestelle}}</td>--}}
                                         <td class="text-center colHeight">{{$loading->landb}}</td>
                                         <td class="text-center colHeight">{{$loading->plzb}}</td>
                                         <td class="text-center colHeight colOrt">{{$loading->ortb}}</td>
-                                        {{--<td class="text-center colHeight colDestelle">{{$loading->entladestelle}}</td>--}}
                                         <td class="text-center colHeight">{{$loading->lande}}</td>
                                         <td class="text-center colHeight">{{$loading->plze}}</td>
                                         <td class="text-center colHeight colOrt">{{$loading->orte}}</td>
                                         <td class="text-center colHeight">{{$loading->anz}}</td>
                                         <td class="text-center colHeight colArt">{{$loading->art}}</td>
-                                        {{--<td class="text-center colHeight">{{$loading->ware}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->gewicht}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->vol}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->ldm}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->umsatz}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->aufwand}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->db}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->trp}}</td>--}}
-                                        {{--<td class="text-center colHeight">{{$loading->pt}}</td>--}}
                                         <td class="text-center colHeight colSubfra">{{$loading->subfrachter}}</td>
                                         <td class="text-center colHeight colKenn">{{$loading->kennzeichen}}</td>
                                         <td class="text-center colHeight colZus">{{$loading->zusladestellen}}</td>
