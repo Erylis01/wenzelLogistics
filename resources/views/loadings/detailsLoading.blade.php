@@ -46,8 +46,17 @@
                                                 @else
                                                     <div class="panel panelUntreated">
                                                         @endif
-                                                        <div class="panel-heading">Details of the loading
-                                                            n°{{ $loading->atrnr }}
+                                                        <div class="panel-heading">
+                                                            @if(substr_count($loading->atrnr, '-')==0)
+                                                            Details of the loading
+                                                                n°{{ $loading->atrnr }}
+                                                            @else
+                                                                Details of the loading
+                                                                n°<a href="{{route('showDetailsLoading', $atrnr1)}}">{{$atrnr1}}</a>-{{$atrnr2}}
+                                                                @endif
+                                                            <span class="col-lg-offset-6"><a
+                                                                        href="{{route('showAddSubloading', $loading->atrnr)}}" class=" btn btn-add"><span
+                                                                            class="glyphicon glyphicon-plus-sign"></span> Add subloading</a></span>
                                                         </div>
                                                         <div class="panel-body panel-body-general">
 
@@ -105,6 +114,7 @@
                                                                                                                                    required>
                                                                                                                         </div>
                                                                                                                     </div>
+                                                                                                                    @if(substr_count($loading->atrnr, '-')==0)
                                                                                                                     <!--disp-->
                                                                                                                     <div class="col-lg-2">
                                                                                                                         <div class="input-group details-loading">
@@ -142,6 +152,7 @@
                                                                                                                                        value="{{ $loading->pt }}">
                                                                                                                             </div>
                                                                                                                         </div>
+                                                                                                                    @endif
                                                                                                                     @endif
                                                                                                                 </div>
                                                                                                                 <div class="form-group">
@@ -605,7 +616,7 @@
                                                                                  class="panel-collapse collapse">
                                                                                 @endif
                                                                                 <div class="panel-body">
-                                                                                         <form class="form-horizontal"
+                                                                                    <form class="form-horizontal"
                                                                                           role="form"
                                                                                           method="POST"
                                                                                           action="{{route('submitUpdateUpload', $loading->atrnr)}}"

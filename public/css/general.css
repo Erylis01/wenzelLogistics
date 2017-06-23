@@ -145,33 +145,49 @@
     color: rgb(0, 160, 0);
     background-color: rgba(0, 208, 0, 0.1);
 }
+.panel-general > .panel-heading >a{
+    color: rgb(0, 160, 0);
+ }
 .panelUntreated > .panel-heading{
     color:red;
     font-size: 25px;
     border-color: rgb(0, 160, 0);
     background-color: rgba(255, 0, 0, 0.1);
 }
+.panelUntreated > .panel-heading>a{
+    color:red;
+    text-decoration: underline;
+ }
 .panelInprogress > .panel-heading{
     color:rgba(255, 112, 0, 1);
     font-size: 25px;
     border-color: rgb(0, 160, 0);
     background-color: rgba(255, 112, 0, 0.3);
 }
-
+.panelInprogress > .panel-heading>a{
+    color:rgba(255, 112, 0, 1);
+    text-decoration: underline;
+ }
 .panelWaitingdocuments > .panel-heading {
     background-color: rgba(255, 208, 0, 0.3);
     color:rgba(255, 208, 0, 1);
     font-size: 25px;
     border-color: rgb(0, 160, 0);
 }
-
+.panelWaitingdocuments > .panel-heading>a{
+    color:rgba(255, 208, 0, 1);
+    text-decoration: underline;
+}
 .panelComplete > .panel-heading {
     background-color: rgba(192, 255, 0, 0.3);
     color:rgba(160, 208, 0, 1);
     font-size: 25px;
     border-color: rgb(0, 160, 0);
 }
-
+ .panelComplete > .panel-heading>a{
+     color:rgba(160, 208, 0, 1);
+     text-decoration: underline;
+ }
 /*!*overwritting*!*/
 /*.panel-default > .panel-heading {*/
     /*background-color: rgba(255, 193, 197, 0.1);*/

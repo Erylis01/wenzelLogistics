@@ -124,8 +124,9 @@ class ListLoadingsController extends Controller
                                 $datee = new DateTime();
                                 $datee->setDate($datee_parse['year'], $datee_parse['month'], $datee_parse['day']);
 
+                                $k=count(Loading::get())+1;
                                 Loading::firstOrCreate([
-                                    'ladedatum' => $datel,
+                                    'id'=>$k,
                                     'entladedatum' => $datee,
                                     'disp' => trim($sheet[$r][2]),
                                     'atrnr' => trim($sheet[$r][3]),

@@ -26,7 +26,8 @@ Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
 Route::get('/detailsLoading/{atrnr}', 'DetailsLoadingController@show')->name('showDetailsLoading');
 Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@submitUpdateUpload')->name('submitUpdateUpload');
-//Route::delete('/detailsLoading/{atrnr}/{transferId}', 'DetailsLoadingController@delete')->name('deleteTransferLoading');
+Route::get('/addSubloading/{atrnr}', 'DetailsLoadingController@showAdd')->name('showAddSubloading');
+Route::post('/addSubloading/{atrnr}', 'DetailsLoadingController@add')->name('addSubloading');
 
 //WAREHOUSES
 Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWarehouses');

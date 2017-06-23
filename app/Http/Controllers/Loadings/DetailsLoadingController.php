@@ -51,7 +51,14 @@ class DetailsLoadingController extends Controller
                     $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
                 }
             }
-            return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listPalletstransfers',
+
+            if(substr_count($loading->atrnr, '-')<>0){
+           $atrnr1=explode('-', $loading->atrnr)[0];
+                $atrnr2=array_slice(explode('-', $loading->atrnr), 1);
+                $atrnr2=implode('-',$atrnr2);
+            }
+
+            return view('loadings.detailsLoading', compact('loading','atrnr1', 'atrnr2', 'listPalletsAccounts', 'listPalletstransfers',
                 'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier', 'listTypes'
             ));
         } else {
@@ -93,15 +100,16 @@ class DetailsLoadingController extends Controller
         } else {
             if (isset($reasonUpdatePT) && isset($request->updateValidatePT)) {
                 Loading::where('atrnr', $atrnr)->update(['reasonUpdatePT' => $reasonUpdatePT, 'pt' => 'NEIN']);
+                Loading::where('atrnr','like', $atrnr.'%' )->update(['reasonUpdatePT' => $reasonUpdatePT, 'pt' => 'NEIN']);
                 session()->flash('messageUpdatePTLoading', 'Be careful : your loading is now WITHOUT exchange pallets');
             } elseif (isset($request->update)) {
                 Loading::where('atrnr', $atrnr)->update(['ladedatum' => $ladedatum, 'entladedatum' => $entladedatum, 'disp' => $disp, 'referenz' => $referenz, 'auftraggeber' => $auftraggeber, 'beladestelle' => $beladestelle,
                     'ortb' => $ortb, 'plzb' => $plzb, 'landb' => $landb, 'entladestelle' => $entladestelle, 'orte' => $orte, 'plze' => $plze, 'lande' => $lande, 'anz' => $anz, 'art' => $art, 'ware' => $ware,
                     'subfrachter' => $subfrachter, 'kennzeichen' => $kennzeichen, 'zusladestellen' => $zusladestellen]);
+                Loading::where('atrnr','like', $atrnr.'%' )->update(['disp'=> $disp]);
                 session()->flash('messageUpdateLoading', 'Successfully updated loading');
             }
             session()->flash('openPanelInformation', 'openPanelInformation');
-            return redirect()->back();
         }
     }
 
@@ -135,6 +143,7 @@ $submitPallets=Input::get('submitPallets');
 
         if (isset($update)) {
             $this->updatePanel1($request, $loading->atrnr);
+            return redirect()->back();
         } elseif (isset($addTransferForm)) {
             if (isset($truckAccount)) {
                 Loading::where('atrnr', $atrnr)->update(['truckAccount' => $truckAccount]);
@@ -497,5 +506,73 @@ $submitPallets=Input::get('submitPallets');
             }
         }
         Loading::where('atrnr', $loading->atrnr)->update(['state' => $state]);
+    }
+
+    public function showAdd($atrnr){
+        $loading=Loading::where('atrnr', $atrnr)->first();
+return view('loadings.addSubloading', compact('loading'));
+    }
+
+    public function add($atrnr){
+
+        $loadingInitial=Loading::where('atrnr', $atrnr)->first();
+        $referenz=Input::get('referenz');
+        $auftraggeber=Input::get('auftraggeber');
+        $subfrachter=Input::get('subfrachter');
+        $kennzeichen=Input::get('kennzeichen');
+        $art=Input::get('art');
+        $anz=Input::get('anz');
+        $ware=Input::get('ware');
+        $ladedatum=Input::get('ladedatum');
+        $beladestelle=Input::get('beladestelle');
+        $ortb=Input::get('ortb');
+        $plzb=Input::get('plzb');
+        $landb=Input::get('landb');
+        $zusladestellen=Input::get('zusladestellen');
+        $entladedatum=Input::get('entladedatum');
+        $entladestelle=Input::get('entladestelle');
+        $orte=Input::get('orte');
+        $plze=Input::get('plze');
+        $lande=Input::get('lande');
+        $disp=$loadingInitial->disp;
+        $pt=$loadingInitial->pt;
+
+        if(substr_count($loadingInitial->atrnr, '-')==0){
+            $atrnr=$loadingInitial->atrnr.'-1';
+        }elseif(substr_count($loadingInitial->atrnr, '-')>0){
+            $atrnrSplit=explode('-', $loadingInitial->atrnr);
+            $atrnrSplit[count($atrnrSplit-1)]=$atrnrSplit[count($atrnrSplit-1)]+1;
+            $atrnr=implode('-',$atrnrSplit);
+        }
+        $loadingsTest = Loading::where('atrnr', '=', $atrnr)->first();
+        if ($loadingsTest==null) {
+            $k=count(Loading::get())+1;
+            Loading::firstOrCreate([
+                'id'=>$k,
+                'ladedatum' =>$ladedatum ,
+                'entladedatum' => $entladedatum,
+                'disp' => $disp,
+                'atrnr' => $atrnr,
+                'referenz' => $referenz,
+                'auftraggeber' => $auftraggeber,
+                'beladestelle' => $beladestelle,
+                'landb' => $landb,
+                'plzb' => $plzb,
+                'ortb' => $ortb,
+                'entladestelle' => $entladestelle,
+                'lande' => $lande,
+                'plze' => $plze,
+                'orte' => $orte,
+                'anz' => $anz,
+                'art' => $art,
+                'ware' => $ware,
+                'pt' =>$pt,
+                'subfrachter' => $subfrachter,
+                'kennzeichen' => $kennzeichen,
+                'zusladestellen' => $zusladestellen,
+            ]);
+        }
+
+        return redirect('/loadings');
     }
 }

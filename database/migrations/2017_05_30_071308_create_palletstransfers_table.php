@@ -16,7 +16,7 @@ class CreatePalletstransfersTable extends Migration
     {
         Schema::create('palletstransfers', function (Blueprint $table) {
             $table->increments('id')->unique();
-            $table->integer('loading_atrnr')->unsigned()->index()->nullable();
+            $table->string('loading_atrnr')->nullable();
             $table->string('creditAccount');
             $table->string('debitAccount');
             $table->integer('palletsNumber');

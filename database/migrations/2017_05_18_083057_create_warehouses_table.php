@@ -15,7 +15,6 @@ class CreateWarehousesTable extends Migration
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->increments('id')->unique();
-//            $table->string('palletsaccount_name');
             $table->string('name')->unique();
             $table->string('adress');
             $table->integer('zipcode')->unsigned();
@@ -28,7 +27,6 @@ class CreateWarehousesTable extends Migration
 
             $table->timestamps();
 
-//            $table->foreign('palletsaccount_name')->references('name')->on('palletsaccount');
         });
 
         Schema::create('palletsaccount_warehouse',function (Blueprint $table) {

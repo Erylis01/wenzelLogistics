@@ -50,8 +50,9 @@ class LoadingTableSeeder extends Seeder
                                $datee_parse=date_parse_from_format('m-d-y', trim($sheet[$r][1]));
                                $datee=new DateTime();
                                $datee->setDate($datee_parse['year'], $datee_parse['month'],$datee_parse['day']);
-
+$k=count(Loading::get())+1;
                                Loading::firstOrCreate([
+                                   'id'=>$k,
                                    'ladedatum' =>$datel ,
                                    'entladedatum' => $datee,
                                    'disp' => trim($sheet[$r][2]),

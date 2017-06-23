@@ -14,7 +14,8 @@ class CreateLoadingsTable extends Migration
     public function up()
     {
         Schema::create('loadings', function (Blueprint $table) {
-            $table->integer('atrnr')->unsigned()->unique();
+            $table->integer('id')->unsigned()->index()->unique();
+            $table->string('atrnr')->unique();
             $table->date('ladedatum');
             $table->date('entladedatum');
             $table->string('disp');
@@ -31,13 +32,13 @@ class CreateLoadingsTable extends Migration
             $table->string('anz');
             $table->string('art');
             $table->string('ware');
-            $table->double('gewicht')->unsigned();
+            $table->double('gewicht')->unsigned()->nullable();
             $table->double('vol')->unsigned()->nullable();
-            $table->double('ldm')->unsigned();
-            $table->double('umsatz')->unsigned();
-            $table->double('aufwand')->unsigned();
-            $table->double('db');
-            $table->integer('trp');
+            $table->double('ldm')->unsigned()->nullable();
+            $table->double('umsatz')->unsigned()->nullable();
+            $table->double('aufwand')->unsigned()->nullable();
+            $table->double('db')->nullable();
+            $table->integer('trp')->nullable();
             $table->string('pt');
             $table->string('subfrachter');
             $table->string('kennzeichen')->nullable();

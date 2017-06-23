@@ -40,12 +40,15 @@
     overflow: hidden;
     z-index: 99;
     background-color: white;
-    width: 70px;
+    width: 90px;
+    min-width: 90px;
+    max-width: 90px;
     top: auto;
 }
 .col1b{
-    min-width: 70px;
-    width:70px;
+    width: 90px;
+    min-width: 90px;
+    max-width: 90px;
 }
 
 .colHeight{

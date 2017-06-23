@@ -213,7 +213,7 @@ function showDetails($id, Request $request)
             $trucksAssociated = Truck::where('palletsaccount_name', $name)->get();
         }
 
-        //table data
+        //table data transfers
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
