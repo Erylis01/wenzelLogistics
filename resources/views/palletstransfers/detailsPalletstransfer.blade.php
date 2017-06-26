@@ -68,6 +68,8 @@
                                                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletstransfer') }}</div>
                                                         @elseif(Session::has('messageErrorUpload'))
                                                             <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>
+                                                        @elseif(Session::has('errorAccounts'))
+                                                            <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccounts') }}</div>
                                                         @elseif(Session::has('messageUpdateValidatePalletstransfer'))
                                                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateValidatePalletstransfer') }}</div>
                                                         @endif
@@ -86,26 +88,116 @@
                                                                            required
                                                                            readonly>
                                                                 @else
-                                                                    <select id="type"
-                                                                            class="selectpicker show-tick form-control"
-                                                                            data-size="5"
+                                                                    <select class="selectpicker show-tick form-control"
+                                                                            data-size="10"
                                                                             data-live-search="true"
                                                                             data-live-search-style="startsWith"
-                                                                            title="Type" name="type" required>
-                                                                        @foreach($listTypes as $t )
-                                                                            @if(isset($transfer->type)&&$transfer->type==$t)
-                                                                                <option selected>{{$t}}</option>
-                                                                            @elseif(Illuminate\Support\Facades\Input::old('type') && $t==old('type'))
-                                                                                <option selected>{{$t}}</option>
-                                                                            @else
-                                                                                <option>{{$t}}</option>
-                                                                            @endif
-                                                                        @endforeach
+                                                                            title="Type" name="type" id="type" required
+                                                                            onchange="displayFieldsType(this);"
+                                                                    >
+                                                                        @if(Illuminate\Support\Facades\Input::old('type'))
+                                                                            <option @if(old('type') == 'Purchase_Ext') selected
+                                                                                    @endif value="Purchase_Ext"
+                                                                                    id="Purchase_ExtOption">Purchase_Ext
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Purchase_Int') selected
+                                                                                    @endif value="Purchase_Int"
+                                                                                    id="Purchase_IntOption">Purchase_Int
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Sale_Ext') selected
+                                                                                    @endif value="Sale_Ext"
+                                                                                    id="Sale_ExtOption">Sale_Ext
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Sale_Int') selected
+                                                                                    @endif value="Sale_Int"
+                                                                                    id="Sale_IntOption">Sale_Int
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Deposit-Withdrawal') selected
+                                                                                    @endif value="Deposit-Withdrawal"
+                                                                                    id="Deposit-WithdrawalOption">
+                                                                                Deposit-Withdrawal
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Deposit_Only') selected
+                                                                                    @endif value="Deposit_Only"
+                                                                                    id="Deposit_OnlyOption">Deposit_Only
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Withdrawal_Only') selected
+                                                                                    @endif value="Withdrawal_Only"
+                                                                                    id="Withdrawal_OnlyOption">
+                                                                                Withdrawal_Only
+                                                                            </option>
+                                                                            <option @if(old('type') == 'Other') selected
+                                                                                    @endif value="Other"
+                                                                                    id="OtherOption">Other
+                                                                            </option>
+                                                                        @elseif(isset($transfer->type))
+                                                                            <option @if($transfer->type == 'Purchase_Ext') selected
+                                                                                    @endif value="Purchase_Ext"
+                                                                                    id="Purchase_ExtOption">Purchase_Ext
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Purchase_Int') selected
+                                                                                    @endif value="Purchase_Int"
+                                                                                    id="Purchase_IntOption">Purchase_Int
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Sale_Ext') selected
+                                                                                    @endif value="Sale_Ext"
+                                                                                    id="Sale_ExtOption">Sale_Ext
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Sale_Int') selected
+                                                                                    @endif value="Sale_Int"
+                                                                                    id="Sale_IntOption">Sale_Int
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Deposit-Withdrawal') selected
+                                                                                    @endif value="Deposit-Withdrawal"
+                                                                                    id="Deposit-WithdrawalOption">
+                                                                                Deposit-Withdrawal
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Deposit_Only') selected
+                                                                                    @endif value="Deposit_Only"
+                                                                                    id="Deposit_OnlyOption">Deposit_Only
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Withdrawal_Only') selected
+                                                                                    @endif value="Withdrawal_Only"
+                                                                                    id="Withdrawal_OnlyOption">
+                                                                                Withdrawal_Only
+                                                                            </option>
+                                                                            <option @if($transfer->type == 'Other') selected
+                                                                                    @endif value="Other"
+                                                                                    id="OtherOption">Other
+                                                                            </option>
+                                                                        @else
+                                                                            <option value="Purchase_Ext"
+                                                                                    id="Purchase_ExtOption">Purchase_Ext
+                                                                            </option>
+                                                                            <option value="Purchase_Int"
+                                                                                    id="Purchase_IntOption">Purchase_Int
+                                                                            </option>
+                                                                            <option value="Sale_Ext"
+                                                                                    id="Sale_ExtOption">Sale_Ext
+                                                                            </option>
+                                                                            <option value="Sale_Int"
+                                                                                    id="Sale_IntOption">Sale_Int
+                                                                            </option>
+                                                                            <option value="Deposit-Withdrawal"
+                                                                                    id="Deposit-WithdrawalOption">
+                                                                                Deposit-Withdrawal
+                                                                            </option>
+                                                                            <option value="Deposit_Only"
+                                                                                    id="Deposit_OnlyOption">Deposit_Only
+                                                                            </option>
+                                                                            <option value="Withdrawal_Only"
+                                                                                    id="Withdrawal_OnlyOption">
+                                                                                Withdrawal_Only
+                                                                            </option>
+                                                                            <option value="Other" id="otherOption">
+                                                                                Other
+                                                                            </option>
+                                                                        @endif
                                                                     </select>
                                                                 @endif
                                                             </div>
                                                             <!--details-->
-                                                            <div class="col-lg-3">
+                                                            <div class="col-lg-4">
                                                                 @if(isset($transfer->details)&&(isset($transfer->validate) && $transfer->validate==1))
                                                                     <textarea class="form-control" rows="1"
                                                                               id="details" placeholder="Details"
@@ -237,157 +329,190 @@
                                                                            placeholder="Date" required autofocus>
                                                                 @endif
                                                             </div>
-                                                            <!--multitransfer-->
-                                                            @if(isset($transfer->loading_atrnr))
-                                                                <div>
-                                                                    @else
-                                                                        <div id="loading_atrnrLink">
-                                                                            @endif
-                                                                            <div class="col-lg-2">
-                                                                                <label for="multiTransfer"
-                                                                                       class="control-label">Multi-Transfers
-                                                                                    ?
-                                                                                </label>
-                                                                            </div>
-                                                                            <div class="col-lg-2 text-left">
-                                                                                @if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))
-                                                                                    <input type="text"
-                                                                                           name="multiTransfer"
-                                                                                           class="form-control"
-                                                                                           value="Yes" readonly>
-                                                                                @elseif(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))
-                                                                                    <label class="radio-inline"><input
-                                                                                                type="radio"
-                                                                                                name="multiTransfer"
-                                                                                                value="true"
-                                                                                                checked>Yes</label>
-                                                                                    <label class="radio-inline"><input
-                                                                                                type="radio"
-                                                                                                name="multiTransfer"
-                                                                                                value="false">No</label>
-                                                                                @elseif((isset($transfer->validate) && $transfer->validate==1))
-                                                                                    <input type="text"
-                                                                                           name="multiTransfer"
-                                                                                           class="form-control"
-                                                                                           value="No" readonly>
-                                                                                @else
-                                                                                    <label class="radio-inline"><input
-                                                                                                type="radio"
-                                                                                                name="multiTransfer"
-                                                                                                value="true">Yes</label>
-                                                                                    <label class="radio-inline"><input
-                                                                                                type="radio"
-                                                                                                name="multiTransfer"
-                                                                                                value="false"
-                                                                                                checked>No</label>
-                                                                                @endif
-                                                                            </div>
-                                                                            @if(isset($transfer->loading_atrnr))
-                                                                        </div>
-                                                                        @else
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                        {{--<!--Link other transfer-->--}}
-                                                        {{--@if(($transfer->multitransfer==1 && $transfer->type=='Withdrawal'))--}}
-                                                        {{--<div class="col-lg-2 text-left">--}}
-                                                        {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->debitAccount)}}"--}}
-                                                        {{--class="link"><span--}}
-                                                        {{--class="glyphicon glyphicon-info-sign"></span>--}}
-                                                        {{--See transfers associated</a>--}}
-                                                        {{--</div>--}}
-                                                        {{--@elseif(($transfer->multitransfer==1 && $transfer->type=='Deposit'))--}}
-                                                        {{--<div class="col-lg-2 text-left">--}}
-                                                        {{--<a href="{{route('showDetailsPalletstransferOther', $transfer->creditAccount)}}"--}}
-                                                        {{--class="link"><span--}}
-                                                        {{--class="glyphicon glyphicon-info-sign"></span>--}}
-                                                        {{--See transfers associated</a>--}}
-                                                        {{--</div>--}}
-                                                        {{--@endif--}}
-
-                                                        <div class="form-group">
-                                                            <!--credit account-->
-                                                            <div class="col-lg-2">
-                                                                <label for="creditAccount"
-                                                                       class="control-label"><span>*</span> Credit
-                                                                    account
-                                                                    :</label>
-                                                            </div>
-                                                            <div class="col-lg-4">
-                                                                @if(isset($transfer->validate) && $transfer->validate==1)
-                                                                    <input type="text" name="creditAccount"
-                                                                           class="form-control"
-                                                                           value="{{$transfer->creditAccount}}"
-                                                                           readonly>
-                                                                @else
-                                                                    <select class="selectpicker show-tick form-control"
-                                                                            data-size="5"
-                                                                            data-live-search="true"
-                                                                            data-live-search-style="startsWith"
-                                                                            title="Credit Account"
-                                                                            name="creditAccount" id="creditAccount"
-                                                                            required>
-                                                                        @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                                            @if(isset($transfer->creditAccount)&& $palletsAccount==$transfer->creditAccount)
-                                                                                <option selected>{{$palletsAccount}}</option>
-                                                                            @elseif(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
-                                                                                <option selected>{{$palletsAccount}}</option>
-                                                                            @else
-                                                                                <option>{{$palletsAccount}}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                @endif
-
-                                                            </div>
-                                                            <!--debit account-->
-                                                            <div class="col-lg-2">
-                                                                <label for="debitAccount"
-                                                                       class="control-label"><span>*</span> Debit
-                                                                    account
-                                                                    :</label>
-                                                            </div>
-                                                            <div class="col-lg-4">
-                                                                @if(isset($transfer->validate) && $transfer->validate==1)
-                                                                    <input type="text" name="debitAccount"
-                                                                           class="form-control"
-                                                                           value="{{$transfer->debitAccount}}"
-                                                                           readonly>
-                                                                @else
-                                                                    <select class="selectpicker show-tick form-control"
-                                                                            data-size="5"
-                                                                            data-live-search="true"
-                                                                            data-live-search-style="startsWith"
-                                                                            title="Debit Account"
-                                                                            name="debitAccount" id="debitAccount"
-                                                                            required>
-                                                                        @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                                            @if(isset($transfer->debitAccount)&& $palletsAccount==$transfer->debitAccount)
-                                                                                <option selected>{{$palletsAccount}}</option>
-                                                                            @elseif(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
-                                                                                <option selected>{{$palletsAccount}}</option>
-                                                                            @else
-                                                                                <option>{{$palletsAccount}}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <!--Link add pallets account-->
-                                                        <div class="form-group">
-                                                            <div class="col-lg-2 col-lg-offset-8 text-left">
+                                                            <div class="col-lg-2 col-lg-offset-3 text-left">
                                                                 <a href="{{route('showAddPalletsaccount')}}"
                                                                    class="link"><span
                                                                             class="glyphicon glyphicon-plus-sign"></span>
                                                                     Add account</a>
                                                             </div>
+                                                            {{--<!--multitransfer-->--}}
+                                                            {{--@if(isset($transfer->loading_atrnr))--}}
+                                                            {{--<div>--}}
+                                                            {{--@else--}}
+                                                            {{--<div id="loading_atrnrLink">--}}
+                                                            {{--@endif--}}
+                                                            {{--<div class="col-lg-2">--}}
+                                                            {{--<label for="multiTransfer"--}}
+                                                            {{--class="control-label">Multi-Transfers--}}
+                                                            {{--?--}}
+                                                            {{--</label>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="col-lg-2 text-left">--}}
+                                                            {{--@if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))--}}
+                                                            {{--<input type="text"--}}
+                                                            {{--name="multiTransfer"--}}
+                                                            {{--class="form-control"--}}
+                                                            {{--value="Yes" readonly>--}}
+                                                            {{--@elseif(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))--}}
+                                                            {{--<label class="radio-inline"><input--}}
+                                                            {{--type="radio"--}}
+                                                            {{--name="multiTransfer"--}}
+                                                            {{--value="true"--}}
+                                                            {{--checked>Yes</label>--}}
+                                                            {{--<label class="radio-inline"><input--}}
+                                                            {{--type="radio"--}}
+                                                            {{--name="multiTransfer"--}}
+                                                            {{--value="false">No</label>--}}
+                                                            {{--@elseif((isset($transfer->validate) && $transfer->validate==1))--}}
+                                                            {{--<input type="text"--}}
+                                                            {{--name="multiTransfer"--}}
+                                                            {{--class="form-control"--}}
+                                                            {{--value="No" readonly>--}}
+                                                            {{--@else--}}
+                                                            {{--<label class="radio-inline"><input--}}
+                                                            {{--type="radio"--}}
+                                                            {{--name="multiTransfer"--}}
+                                                            {{--value="true">Yes</label>--}}
+                                                            {{--<label class="radio-inline"><input--}}
+                                                            {{--type="radio"--}}
+                                                            {{--name="multiTransfer"--}}
+                                                            {{--value="false"--}}
+                                                            {{--checked>No</label>--}}
+                                                            {{--@endif--}}
+                                                            {{--</div>--}}
+                                                            {{--@if(isset($transfer->loading_atrnr))--}}
+                                                            {{--</div>--}}
+                                                            {{--@else--}}
+                                                            {{--</div>--}}
+                                                            {{--@endif--}}
                                                         </div>
+
+                                                        <div class="form-group">
+                                                            <!--debit account-->
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                                <div class="col-lg-2" id="debitAccount1"
+                                                                     style="display: block">
+                                                                    @else
+                                                                        <div class="col-lg-2" id="debitAccount1">
+                                                                            @endif
+                                                                            <label for="debitAccount"
+                                                                                   class="control-label"><span>*</span>
+                                                                                Debit
+                                                                                account
+                                                                                :</label>
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                                        </div>
+                                                                        @else
+                                                                </div>
+                                                            @endif
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                                <div class="col-lg-4" id="debitAccount2"
+                                                                     style="display: block">
+                                                                    @else
+                                                                        <div class="col-lg-4" id="debitAccount2">
+                                                                            @endif
+                                                                            @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input type="text" name="debitAccount"
+                                                                                       class="form-control"
+                                                                                       value="{{$transfer->debitAccount}}"
+                                                                                       readonly>
+                                                                            @else
+                                                                                <select class="selectpicker show-tick form-control"
+                                                                                        data-size="10"
+                                                                                        data-live-search="true"
+                                                                                        data-live-search-style="startsWith"
+                                                                                        title="Debit Account"
+                                                                                        name="debitAccount"
+                                                                                        id="debitAccount"
+                                                                                >
+                                                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
+                                                                                        @if(isset($transfer->debitAccount)&& $palletsAccount==$transfer->debitAccount)
+                                                                                            <option selected>{{$palletsAccount}}</option>
+                                                                                        @elseif(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
+                                                                                            <option selected>{{$palletsAccount}}</option>
+                                                                                        @else
+                                                                                            <option>{{$palletsAccount}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            @endif
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                                        </div>
+                                                                        @else
+                                                                </div>
+                                                            @endif
+                                                            @if ($errors->has('debitAccount'))
+                                                                <span class="help-block">
+                                        <strong>{{ $errors->first('debitAccount') }}</strong>
+                                    </span>
+                                                            @endif
+
+                                                        <!--credit account-->
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                                <div class="col-lg-2" id="creditAccount1"
+                                                                     style="display: block">
+                                                                    @else
+                                                                        <div class="col-lg-2" id="creditAccount1">
+                                                                            @endif
+                                                                            <label for="creditAccount"
+                                                                                   class="control-label"><span>*</span>
+                                                                                Credit
+                                                                                account
+                                                                                :</label>
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                                        </div>
+                                                                        @else
+                                                                </div>
+                                                            @endif
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                                <div class="col-lg-4" id="creditAccount2"
+                                                                     style="display: block">
+                                                                    @else
+                                                                        <div class="col-lg-4" id="creditAccount2">
+                                                                            @endif
+                                                                            @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                                <input type="text" name="creditAccount"
+                                                                                       class="form-control"
+                                                                                       value="{{$transfer->creditAccount}}"
+                                                                                       readonly>
+                                                                            @else
+                                                                                <select class="selectpicker show-tick form-control"
+                                                                                        data-size="10"
+                                                                                        data-live-search="true"
+                                                                                        data-live-search-style="startsWith"
+                                                                                        title="Credit Account"
+                                                                                        name="creditAccount"
+                                                                                        id="creditAccount"
+                                                                                >
+                                                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
+                                                                                        @if(isset($transfer->creditAccount)&& $palletsAccount==$transfer->creditAccount)
+                                                                                            <option selected>{{$palletsAccount}}</option>
+                                                                                        @elseif(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
+                                                                                            <option selected>{{$palletsAccount}}</option>
+                                                                                        @else
+                                                                                            <option>{{$palletsAccount}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            @endif
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                                        </div>
+                                                                        @else
+                                                                </div>
+                                                            @endif
+                                                            @if ($errors->has('creditAccount'))
+                                                                <span class="help-block">
+                                        <strong>{{ $errors->first('creditAccount') }}</strong>
+                                    </span>
+                                                            @endif
+
+                                                        </div>
+
                                                         <!--documents proof upload-->
-                                                        <div class="form-group text-left">
+                                                        <div class="form-group">
                                                             <div class="col-lg-2">
-                                                                <label for="documentsTransfer">Proof
-                                                                    documents
+                                                                <label for="documentsTransfer"><span>*</span> Proof
+                                                                    docs
                                                                     ?</label>
                                                             </div>
                                                             <div class="col-lg-4">
@@ -416,7 +541,7 @@
                                                                                             name="deleteDocument"
                                                                                             class="btn-add glyphicon glyphicon-remove"
                                                                                             value="{{$nameF}}"></button>
-                                                                                    <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transfer->id}}/{{$nameF}}"
+                                                                                    <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transfer->id}}/{{$transfer->type}}/{{$nameF}}"
                                                                                        class="link">{{$nameF}}</a>
                                                                                 </div>
                                                                                 @php(array_push($list,$nameF))
@@ -429,57 +554,57 @@
                                                         <!--validation-->
                                                         <div class="form-group">
 
-                                                            @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&isset($transfer->creditAccount)&&isset($transfer->debitAccount))
-                                                                <div class="col-lg-2">
-                                                                    <label for="state"
-                                                                           class="control-label">Validated ?
-                                                                    </label>
-                                                                </div>
-                                                                <div class="col-lg-2 text-left">
-                                                                    @if(isset($transfer->validate) && $transfer->validate==1)
-                                                                        <label class="radio-inline"><input
-                                                                                    type="radio"
-                                                                                    name="validate"
-                                                                                    value="true"
-                                                                                    checked
-                                                                                    id="validateYes">Yes</label>
-                                                                        <label class="radio-inline"><input
-                                                                                    type="radio"
-                                                                                    name="validate"
-                                                                                    value="false"
-                                                                                    id="validateNo">No</label>
-                                                                    @elseif(isset($transfer->validate) && $transfer->validate==0)
-                                                                        <label class="radio-inline"><input
-                                                                                    type="radio"
-                                                                                    name="validate"
-                                                                                    value="true"
-                                                                                    id="validateYes">Yes</label>
-                                                                        <label class="radio-inline"><input
-                                                                                    type="radio"
-                                                                                    name="validate"
-                                                                                    value="false"
-                                                                                    checked
-                                                                                    id="validateNo">No</label>
-                                                                    @endif
-                                                                </div>
+                                                            @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&(($transfer->type=='Purchase_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')&& isset($transfer->creditAccount))||(($transfer->type=='Sale_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')&&isset($transfer->debitAccount)))
+                                                                    <div class="col-lg-2">
+                                                                        <label for="state"
+                                                                               class="control-label"><span>*</span> Validated ?
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col-lg-2 text-left">
+                                                                        @if(isset($transfer->validate) && $transfer->validate==1)
+                                                                            <label class="radio-inline"><input
+                                                                                        type="radio"
+                                                                                        name="validate"
+                                                                                        value="true"
+                                                                                        checked
+                                                                                        id="validateYes">Yes</label>
+                                                                            <label class="radio-inline"><input
+                                                                                        type="radio"
+                                                                                        name="validate"
+                                                                                        value="false"
+                                                                                        id="validateNo">No</label>
+                                                                        @elseif(isset($transfer->validate) && $transfer->validate==0)
+                                                                            <label class="radio-inline"><input
+                                                                                        type="radio"
+                                                                                        name="validate"
+                                                                                        value="true"
+                                                                                        id="validateYes">Yes</label>
+                                                                            <label class="radio-inline"><input
+                                                                                        type="radio"
+                                                                                        name="validate"
+                                                                                        value="false"
+                                                                                        checked
+                                                                                        id="validateNo">No</label>
+                                                                        @endif
+                                                                    </div>
+                                                                    <!--submit-->
+                                                                    <div class="col-lg-4 col-lg-offset-1">
+                                                                        <input type="submit"
+                                                                               class="btn btn-primary btn-block btn-form"
+                                                                               value="Update"
+                                                                               name="update" data-toggle="modal"
+                                                                               data-target="#submitUpdate_modal">
+                                                                    </div>
+                                                                @else
                                                                 <!--submit-->
-                                                                <div class="col-lg-4 col-lg-offset-1">
-                                                                    <input type="submit"
-                                                                           class="btn btn-primary btn-block btn-form"
-                                                                           value="Update"
-                                                                           name="update" data-toggle="modal"
-                                                                           data-target="#submitUpdate_modal">
-                                                                </div>
-                                                            @else
-                                                            <!--submit-->
-                                                                <div class="col-lg-4 col-lg-offset-5">
-                                                                    <input type="submit"
-                                                                           class="btn btn-primary btn-block btn-form"
-                                                                           value="Update"
-                                                                           name="update" data-toggle="modal"
-                                                                           data-target="#submitUpdate_modal">
-                                                                </div>
-                                                            @endif
+                                                                    <div class="col-lg-4 col-lg-offset-5">
+                                                                        <input type="submit"
+                                                                               class="btn btn-primary btn-block btn-form"
+                                                                               value="Update"
+                                                                               name="update" data-toggle="modal"
+                                                                               data-target="#submitUpdate_modal">
+                                                                    </div>
+                                                                @endif
                                                         </div>
                                                     </div>
 
@@ -512,24 +637,36 @@
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th></th>
-                                                                                    <th class="text-center">
-                                                                                        CREDIT
-                                                                                    </th>
-                                                                                    <th class="text-center">
-                                                                                        DEBIT
-                                                                                    </th>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <th class="text-center">
+                                                                                            DEBIT
+                                                                                        </th>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <th class="text-center">
+                                                                                            CREDIT
+                                                                                        </th>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                 <tr>
                                                                                     <td></td>
-                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 {{--<tr>--}}
                                                                                 {{--<td class="text-center">Last transfer</td>--}}
@@ -542,18 +679,26 @@
                                                                                     <td class="text-center">Update
                                                                                         number
                                                                                     </td>
-                                                                                    <td class="text-center">
-                                                                                        +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                        @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Total</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
-                                                                                </tr>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    </tr>
                                                                                 </tbody>
                                                                             </table>
                                                                         @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
@@ -561,40 +706,58 @@
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th></th>
-                                                                                    <th class="text-center">
-                                                                                        CREDIT
-                                                                                    </th>
-                                                                                    <th class="text-center">
-                                                                                        DEBIT
-                                                                                    </th>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <th class="text-center">
+                                                                                            DEBIT
+                                                                                        </th>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <th class="text-center">
+                                                                                            CREDIT
+                                                                                        </th>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                 <tr>
                                                                                     <td></td>
-                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="text-center">New
-                                                                                        transfer
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                    <td class="text-center">New transfer</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            + {{request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Total</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('palletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('palletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -603,24 +766,36 @@
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th></th>
-                                                                                    <th class="text-center">
-                                                                                        CREDIT
-                                                                                    </th>
-                                                                                    <th class="text-center">
-                                                                                        DEBIT
-                                                                                    </th>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <th class="text-center">
+                                                                                            DEBIT
+                                                                                        </th>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <th class="text-center">
+                                                                                            CREDIT
+                                                                                        </th>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                 <tr>
                                                                                     <td></td>
-                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 {{--<tr>--}}
                                                                                 {{--<td class="text-center">Last transfer</td>--}}
@@ -633,17 +808,25 @@
                                                                                     <td class="text-center">Update
                                                                                         number
                                                                                     </td>
-                                                                                    <td class="text-center">
-                                                                                        + {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Total</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')   -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -652,24 +835,36 @@
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th></th>
-                                                                                    <th class="text-center">
-                                                                                        CREDIT
-                                                                                    </th>
-                                                                                    <th class="text-center">
-                                                                                        DEBIT
-                                                                                    </th>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <th class="text-center">
+                                                                                            DEBIT
+                                                                                        </th>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <th class="text-center">
+                                                                                            CREDIT
+                                                                                        </th>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                 <tr>
                                                                                     <td></td>
-                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                                    <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 {{--<tr>--}}
                                                                                 {{--<td class="text-center">Last transfer</td>--}}
@@ -682,17 +877,25 @@
                                                                                     <td class="text-center">Update
                                                                                         number
                                                                                     </td>
-                                                                                    <td class="text-center">
-                                                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            +{{request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-center">Total</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @if(Session::has('debitAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
+                                                                                    @if(Session::has('creditAccount'))
+                                                                                        <td class="text-center">
+                                                                                            = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
+                                                                                    @endif
                                                                                 </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -740,39 +943,59 @@
                                                                             <thead>
                                                                             <tr>
                                                                                 <th></th>
-                                                                                <th class="text-center">
-                                                                                    CREDIT
-                                                                                </th>
-                                                                                <th class="text-center">
-                                                                                    DEBIT
-                                                                                </th>
+                                                                                @if(Session::has('debitAccount'))
+                                                                                    <th class="text-center">
+                                                                                        DEBIT
+                                                                                    </th>
+                                                                                @endif
+                                                                                @if(Session::has('creditAccount'))
+                                                                                    <th class="text-center">
+                                                                                        CREDIT
+                                                                                    </th>
+                                                                                @endif
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                             <tr>
                                                                                 <td></td>
-                                                                                <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                                                <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                @if(Session::has('debitAccount'))
+                                                                                    <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                                @endif
+                                                                                @if(Session::has('creditAccount'))
+                                                                                    <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                                    @endif
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="text-center">Actual</td>
-                                                                                <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
-                                                                                <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
+                                                                                @if(Session::has('debitAccount'))
+                                                                                    <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
+                                                                                @endif
+                                                                                @if(Session::has('creditAccount'))
+                                                                                    <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
+                                                                                    @endif
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="text-center">New transfer
                                                                                 </td>
+                                                                                @if(Session::has('debitAccount'))
+                                                                                    <td class="text-center">
+                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                @endif
+                                                                                @if(Session::has('creditAccount'))
                                                                                 <td class="text-center">
                                                                                     + {{request()->session()->get('palletsNumber')}}</td>
-                                                                                <td class="text-center">
-                                                                                    - {{request()->session()->get('palletsNumber')}}</td>
+                                                                                @endif
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="text-center">Total</td>
+                                                                                @if(Session::has('debitAccount'))
+                                                                                    <td class="text-center">
+                                                                                        = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                                                @endif
+                                                                                @if(Session::has('creditAccount'))
                                                                                 <td class="text-center">
                                                                                     = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
-                                                                                <td class="text-center">
-                                                                                    = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                                                @endif
                                                                             </tr>
                                                                             </tbody>
                                                                         </table>

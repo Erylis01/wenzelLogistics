@@ -54,13 +54,16 @@
                                 <div class="col-lg-2">
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Type" name="type" id="type" required onchange="displayFieldsType(this);"
+                                            title="Type" name="type" id="type" required
+                                            onchange="displayFieldsType(this);"
                                     >
                                         @if(Illuminate\Support\Facades\Input::old('type'))
-                                            <option @if(old('type') == 'Purchase_Ext') selected @endif value="Purchase_Ext"
+                                            <option @if(old('type') == 'Purchase_Ext') selected
+                                                    @endif value="Purchase_Ext"
                                                     id="Purchase_ExtOption">Purchase_Ext
                                             </option>
-                                            <option @if(old('type') == 'Purchase_Int') selected @endif value="Purchase_Int"
+                                            <option @if(old('type') == 'Purchase_Int') selected
+                                                    @endif value="Purchase_Int"
                                                     id="Purchase_IntOption">Purchase_Int
                                             </option>
                                             <option @if(old('type') == 'Sale_Ext') selected @endif value="Sale_Ext"
@@ -69,24 +72,59 @@
                                             <option @if(old('type') == 'Sale_Int') selected @endif value="Sale_Int"
                                                     id="Sale_IntOption">Sale_Int
                                             </option>
-                                            <option @if(old('type') == 'Deposit-Withdrawal') selected @endif value="Deposit-Withdrawal"
+                                            <option @if(old('type') == 'Deposit-Withdrawal') selected
+                                                    @endif value="Deposit-Withdrawal"
                                                     id="Deposit-WithdrawalOption">Deposit-Withdrawal
                                             </option>
-                                            <option @if(old('type') == 'Deposit_Only') selected @endif value="Deposit_Only"
+                                            <option @if(old('type') == 'Deposit_Only') selected
+                                                    @endif value="Deposit_Only"
                                                     id="Deposit_OnlyOption">Deposit_Only
                                             </option>
-                                            <option @if(old('type') == 'Withdrawal_Only') selected @endif value="Withdrawal_Only"
+                                            <option @if(old('type') == 'Withdrawal_Only') selected
+                                                    @endif value="Withdrawal_Only"
                                                     id="Withdrawal_OnlyOption">Withdrawal_Only
                                             </option>
-                                            <option @if(old('type') == 'Other') selected @endif value="Other" id="OtherOption">Other</option>
+                                            <option @if(old('type') == 'Other') selected @endif value="Other"
+                                                    id="OtherOption">Other
+                                            </option>
+                                        @elseif(isset($type))
+                                            <option @if($type == 'Purchase_Ext') selected @endif value="Purchase_Ext"
+                                                    id="Purchase_ExtOption">Purchase_Ext
+                                            </option>
+                                            <option @if($type == 'Purchase_Int') selected @endif value="Purchase_Int"
+                                                    id="Purchase_IntOption">Purchase_Int
+                                            </option>
+                                            <option @if($type == 'Sale_Ext') selected @endif value="Sale_Ext"
+                                                    id="Sale_ExtOption">Sale_Ext
+                                            </option>
+                                            <option @if($type == 'Sale_Int') selected @endif value="Sale_Int"
+                                                    id="Sale_IntOption">Sale_Int
+                                            </option>
+                                            <option @if($type == 'Deposit-Withdrawal') selected
+                                                    @endif value="Deposit-Withdrawal"
+                                                    id="Deposit-WithdrawalOption">Deposit-Withdrawal
+                                            </option>
+                                            <option @if($type == 'Deposit_Only') selected @endif value="Deposit_Only"
+                                                    id="Deposit_OnlyOption">Deposit_Only
+                                            </option>
+                                            <option @if($type == 'Withdrawal_Only') selected
+                                                    @endif value="Withdrawal_Only"
+                                                    id="Withdrawal_OnlyOption">Withdrawal_Only
+                                            </option>
+                                            <option @if($type == 'Other') selected @endif value="Other"
+                                                    id="OtherOption">Other
+                                            </option>
                                         @else
                                             <option value="Purchase_Ext" id="Purchase_ExtOption">Purchase_Ext</option>
                                             <option value="Purchase_Int" id="Purchase_IntOption">Purchase_Int</option>
                                             <option value="Sale_Ext" id="Sale_ExtOption">Sale_Ext</option>
                                             <option value="Sale_Int" id="Sale_IntOption">Sale_Int</option>
-                                            <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOption">Deposit-Withdrawal</option>
+                                            <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOption">
+                                                Deposit-Withdrawal
+                                            </option>
                                             <option value="Deposit_Only" id="Deposit_OnlyOption">Deposit_Only</option>
-                                            <option value="Withdrawal_Only" id="Withdrawal_OnlyOption">Withdrawal_Only</option>
+                                            <option value="Withdrawal_Only" id="Withdrawal_OnlyOption">Withdrawal_Only
+                                            </option>
                                             <option value="Other" id="otherOption">Other</option>
                                         @endif
                                     </select>
@@ -94,10 +132,12 @@
                                 <!--details-->
                                 <div class="col-lg-4">
                                     @if(isset($details))
-                                        <textarea class="form-control" rows="1" id="details" placeholder="Details (broken pallets, gift, receipt...)">{{$details}}</textarea>
-                                        @else
-                                    <textarea class="form-control" rows="1" id="details" placeholder="Details (broken pallets, gift, receipt...)">{{old('details')}}</textarea>
-                                        @endif
+                                        <textarea class="form-control" rows="1" id="details"
+                                                  placeholder="Details (broken pallets, gift, receipt...)">{{$details}}</textarea>
+                                    @else
+                                        <textarea class="form-control" rows="1" id="details"
+                                                  placeholder="Details (broken pallets, gift, receipt...)">{{old('details')}}</textarea>
+                                    @endif
                                 </div>
                                 <!--atrnr-->
                                 <div class="col-lg-1 text-left">
@@ -123,30 +163,30 @@
                                 </div>
                             </div>
 
-                                <div class="form-group">
-                                    <!--number of pallets-->
-                                    <div class="col-lg-2">
-                                        <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
-                                            :</label>
-                                    </div>
-                                    <div class="col-lg-1">
-                                        @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
-                                            <input id="palletsNumber" type="number" class="form-control"
-                                                   name="palletsNumber"
-                                                   value="{{ old('palletsNumber') }}" placeholder="Nbr" min="0"
-                                                   required autofocus>
-                                        @elseif(isset($palletsNumber))
-                                            <input id="palletsNumber" type="number" class="form-control"
-                                                   name="palletsNumber"
-                                                   value="{{$palletsNumber}}" placeholder="Nbr" min="0"
-                                                   required autofocus>
-                                        @else
-                                            <input id="palletsNumber" type="number" class="form-control"
-                                                   name="palletsNumber"
-                                                   value="0" placeholder="Nbr" min="0"
-                                                   required autofocus>
-                                        @endif
-                                    </div>
+                            <div class="form-group">
+                                <!--number of pallets-->
+                                <div class="col-lg-2">
+                                    <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
+                                        :</label>
+                                </div>
+                                <div class="col-lg-1">
+                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="{{ old('palletsNumber') }}" placeholder="Nbr" min="0"
+                                               required autofocus>
+                                    @elseif(isset($palletsNumber))
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="{{$palletsNumber}}" placeholder="Nbr" min="0"
+                                               required autofocus>
+                                    @else
+                                        <input id="palletsNumber" type="number" class="form-control"
+                                               name="palletsNumber"
+                                               value="0" placeholder="Nbr" min="0"
+                                               required autofocus>
+                                    @endif
+                                </div>
                                 <!--date-->
                                 <div class="col-lg-1">
                                     <label for="date" class="control-label">Date :</label>
@@ -155,99 +195,142 @@
                                     @if(isset($date))
                                         <input id="date" type="date" class="form-control" name="date"
                                                value="{{ $date }}" placeholder="Date" autofocus>
-                                        @else
-                                    <input id="date" type="date" class="form-control" name="date"
-                                           value="{{ old('date') }}" placeholder="Date" autofocus>
+                                    @else
+                                        <input id="date" type="date" class="form-control" name="date"
+                                               value="{{ old('date') }}" placeholder="Date" autofocus>
                                     @endif
                                 </div>
-                                    <div class="col-lg-2 col-lg-offset-3 text-left">
-                                        <a href="{{route('showAddPalletsaccount')}}" class="link"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span> Add account</a>
-                                    </div>
-                                    {{--<!--multitransfer-->--}}
-                                    {{--@if(isset($loading_atrnr))--}}
-                                        {{--<div>--}}
-                                            {{--@else--}}
-                                                {{--<div id="loading_atrnrLink">--}}
-                                                    {{--@endif--}}
-                                    {{--<div class="col-lg-2 col-lg-offset-1 text-left">--}}
-                                        {{--<label for="state"--}}
-                                               {{--class="control-label ">Multi-Transfers ?--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-lg-2 text-left">--}}
-                                        {{--@if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))--}}
-                                            {{--<label class="radio-inline"><input--}}
-                                                        {{--type="radio"--}}
-                                                        {{--name="multiTransfer"--}}
-                                                        {{--value="true"--}}
-                                                        {{--checked>Yes</label>--}}
-                                            {{--<label class="radio-inline"><input--}}
-                                                        {{--type="radio"--}}
-                                                        {{--name="multiTransfer"--}}
-                                                        {{--value="false">No</label>--}}
-                                        {{--@else--}}
-                                            {{--<label class="radio-inline"><input--}}
-                                                        {{--type="radio"--}}
-                                                        {{--name="multiTransfer"--}}
-                                                        {{--value="true">Yes</label>--}}
-                                            {{--<label class="radio-inline"><input--}}
-                                                        {{--type="radio"--}}
-                                                        {{--name="multiTransfer"--}}
-                                                        {{--value="false"--}}
-                                                        {{--checked>No</label>--}}
-                                        {{--@endif--}}
-                                    {{--</div>--}}
-                                                    {{--@if(isset($loading_atrnr))--}}
-                                                        {{--</div>--}}
-                                                            {{--@else--}}
-                                                                {{--</div>--}}
-                                                                    {{--@endif--}}
+                                <div class="col-lg-2 col-lg-offset-3 text-left">
+                                    <a href="{{route('showAddPalletsaccount')}}" class="link"><span
+                                                class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                </div>
+                                {{--<!--multitransfer-->--}}
+                                {{--@if(isset($loading_atrnr))--}}
+                                {{--<div>--}}
+                                {{--@else--}}
+                                {{--<div id="loading_atrnrLink">--}}
+                                {{--@endif--}}
+                                {{--<div class="col-lg-2 col-lg-offset-1 text-left">--}}
+                                {{--<label for="state"--}}
+                                {{--class="control-label ">Multi-Transfers ?--}}
+                                {{--</label>--}}
+                                {{--</div>--}}
+                                {{--<div class="col-lg-2 text-left">--}}
+                                {{--@if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))--}}
+                                {{--<label class="radio-inline"><input--}}
+                                {{--type="radio"--}}
+                                {{--name="multiTransfer"--}}
+                                {{--value="true"--}}
+                                {{--checked>Yes</label>--}}
+                                {{--<label class="radio-inline"><input--}}
+                                {{--type="radio"--}}
+                                {{--name="multiTransfer"--}}
+                                {{--value="false">No</label>--}}
+                                {{--@else--}}
+                                {{--<label class="radio-inline"><input--}}
+                                {{--type="radio"--}}
+                                {{--name="multiTransfer"--}}
+                                {{--value="true">Yes</label>--}}
+                                {{--<label class="radio-inline"><input--}}
+                                {{--type="radio"--}}
+                                {{--name="multiTransfer"--}}
+                                {{--value="false"--}}
+                                {{--checked>No</label>--}}
+                                {{--@endif--}}
+                                {{--</div>--}}
+                                {{--@if(isset($loading_atrnr))--}}
+                                {{--</div>--}}
+                                {{--@else--}}
+                                {{--</div>--}}
+                                {{--@endif--}}
+                            </div>
+                            <div class="form-group">
+                                @if(Session::has('errorAccounts'))
+                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccounts') }}</div>
+                                @endif
                             </div>
 
                             <div class="form-group">
-                                <!--credit account-->
-                                <div class="col-lg-2" id="creditAccount1">
-                                    <label for="creditAccount" class="control-label"><span>*</span> Credit
-                                        account
-                                        :</label>
-                                </div>
-                                <div class="col-lg-4" id="creditAccount2">
-                                    <select class="selectpicker show-tick form-control" data-size="10"
-                                            data-live-search="true" data-live-search-style="startsWith"
-                                            title="Credit Account" name="creditAccount" required >
-                                        @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                            @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
-                                                <option selected>{{$palletsAccount}}</option>
-                                            @elseif(isset($creditAccount)&& $palletsAccount==$creditAccount)
-                                                <option selected>{{$palletsAccount}}</option>
-                                            @else
-                                                <option>{{$palletsAccount}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
                                 <!--debit account-->
-                                <div class="col-lg-2" id="debitAccount1">
-                                    <label for="debitAccount" class="control-label"><span>*</span> Debit
-                                        account
-                                        :</label>
-                                </div>
-                                <div class="col-lg-4" id="debitAccount2">
-                                    <select class="selectpicker show-tick form-control" data-size="10"
-                                            data-live-search="true" data-live-search-style="startsWith"
-                                            title="Debit Account" name="debitAccount" required>
-                                        @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                            @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
-                                                <option selected>{{$palletsAccount}}</option>
-                                            @elseif(isset($debitAccount)&& $palletsAccount==$debitAccount)
-                                                <option selected>{{$palletsAccount}}</option>
+                                @if($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Deposit_Only')
+                                    <div class="col-lg-2" id="debitAccount1"
+                                         style="display: block">
+                                        @else
+                                            <div class="col-lg-2" id="debitAccount1">
+                                                @endif
+                                                <label for="debitAccount" class="control-label"><span>*</span> Debit
+                                                    account
+                                                    :</label>
+                                                @if($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Deposit_Only')
+                                            </div>
                                             @else
-                                                <option>{{$palletsAccount}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    </div>
+                                @endif
+                                @if($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Deposit_Only')
+                                    <div class="col-lg-4" id="debitAccount2"
+                                         style="display: block">
+                                        @else
+                                            <div class="col-lg-4" id="debitAccount2">
+                                                @endif
+                                                <select class="selectpicker show-tick form-control" data-size="10"
+                                                        data-live-search="true" data-live-search-style="startsWith"
+                                                        title="Debit Account" name="debitAccount">
+                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
+                                                        @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
+                                                            <option selected>{{$palletsAccount}}</option>
+                                                        @elseif(isset($debitAccount)&& $palletsAccount==$debitAccount)
+                                                            <option selected>{{$palletsAccount}}</option>
+                                                        @else
+                                                            <option>{{$palletsAccount}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @if($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Deposit_Only')
+                                            </div>
+                                            @else
+                                    </div>
+                                @endif
+
+                            <!--credit account-->
+                                @if($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal_Only')
+                                    <div class="col-lg-2" id="creditAccount1"
+                                         style="display: block">
+                                        @else
+                                            <div class="col-lg-2" id="creditAccount1">
+                                                @endif
+                                                <label for="creditAccount" class="control-label"><span>*</span> Credit
+                                                    account
+                                                    :</label>
+                                                @if($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal_Only')
+                                            </div>
+                                            @else
+                                    </div>
+                                @endif
+                                @if($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal_Only')
+                                    <div class="col-lg-4" id="creditAccount2"
+                                         style="display: block">
+                                        @else
+                                            <div class="col-lg-4" id="creditAccount2">
+                                                @endif
+                                                <select class="selectpicker show-tick form-control" data-size="10"
+                                                        data-live-search="true" data-live-search-style="startsWith"
+                                                        title="Credit Account" name="creditAccount">
+                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
+                                                        @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
+                                                            <option selected>{{$palletsAccount}}</option>
+                                                        @elseif(isset($creditAccount)&& $palletsAccount==$creditAccount)
+                                                            <option selected>{{$palletsAccount}}</option>
+                                                        @else
+                                                            <option>{{$palletsAccount}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @if($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal_Only')
+                                            </div>
+                                            @else
+                                    </div>
+                                @endif
+
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-4 col-lg-offset-4">
@@ -260,23 +343,23 @@
                             </div>
                             <!-- Modal submit -->
                             @if(isset($addPalletstransfer))
-                            <div class="modal show"
-                                 id="submitAdd_modal"
-                                 role="dialog">
-                                <div class="modal-dialog modal-md">
-                                    <div class="modal-content">
-                                        <div class="modal-header modalHeaderTransfer">
-                                            <button type="submit"
-                                                    class="close"
-                                                    value="close"
-                                                    name="closeSubmitAddModal">
-                                                &times;
-                                            </button>
-                                            <h4 class="modal-title text-center">
-                                                INFORMATION
+                                <div class="modal show"
+                                     id="submitAdd_modal"
+                                     role="dialog">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header modalHeaderTransfer">
+                                                <button type="submit"
+                                                        class="close"
+                                                        value="close"
+                                                        name="closeSubmitAddModal">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title text-center">
+                                                    INFORMATION
                                                 </h4>
-                                        </div>
-                                        <div class="modal-body center modalBodyTransfer">
+                                            </div>
+                                            <div class="modal-body center modalBodyTransfer">
                                                 <p class="text-center">
                                                     Here,
                                                     PLANNED
@@ -286,54 +369,74 @@
                                                     <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th class="text-center">
-                                                            CREDIT
-                                                        </th>
-                                                        <th class="text-center">
-                                                            DEBIT
-                                                        </th>
+                                                        @if(Session::has('debitAccount'))
+                                                            <th class="text-center">
+                                                                DEBIT
+                                                            </th>
+                                                        @endif
+                                                        @if(Session::has('creditAccount'))
+                                                            <th class="text-center">
+                                                                CREDIT
+                                                            </th>
+                                                        @endif
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr>
                                                         <td></td>
-                                                        <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
-                                                        <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                        @if(Session::has('debitAccount'))
+                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                        @endif
+                                                        @if(Session::has('creditAccount'))
+                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td class="text-center">Actual</td>
-                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
-                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                        @if(Session::has('debitAccount'))
+                                                            <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                        @endif
+                                                        @if(Session::has('creditAccount'))
+                                                            <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td class="text-center">New transfer</td>
-                                                        <td class="text-center">
-                                                            + {{request()->session()->get('palletsNumber')}}</td>
-                                                        <td class="text-center">
-                                                            - {{request()->session()->get('palletsNumber')}}</td>
+                                                        @if(Session::has('debitAccount'))
+                                                            <td class="text-center">
+                                                                - {{request()->session()->get('palletsNumber')}}</td>
+                                                        @endif
+                                                        @if(Session::has('creditAccount'))
+                                                            <td class="text-center">
+                                                                + {{request()->session()->get('palletsNumber')}}</td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td class="text-center">Total</td>
-                                                        <td class="text-center">
-                                                            = {{request()->session()->get('palletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                        <td class="text-center">
-                                                            = {{request()->session()->get('palletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
+                                                        @if(Session::has('debitAccount'))
+                                                            <td class="text-center">
+                                                                = {{request()->session()->get('palletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                        @endif
+                                                        @if(Session::has('creditAccount'))
+                                                            <td class="text-center">
+                                                                = {{request()->session()->get('palletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                        @endif
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit"
-                                                    class="btn btn-default btn-form btn-modal"
-                                                    value="yes"
-                                                    name="okSubmitAddModal">
-                                                Confirm
-                                            </button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit"
+                                                        class="btn btn-default btn-form btn-modal"
+                                                        value="yes"
+                                                        name="okSubmitAddModal">
+                                                    Confirm
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                                @endif
+                            @endif
                         </form>
 
                     </div>

@@ -217,11 +217,19 @@
                                         </td>
                                         <td class="text-center">{{date('d-m-Y', strtotime($transfer->date))}}</td>
                                         <td class="text-center">{{$transfer->type}}</td>
+                                        @if(isset($transfer->creditAccount))
                                         @php($creditAccountId=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
                                         <td class="text-center"><a class="link" href="{{route('showDetailsPalletsaccount',$creditAccountId)}}">{{$transfer->creditAccount}}</a></td>
-                                        @php($debitAccountId=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
+                                        @else
+                                            <td></td>
+                                        @endif
+                                        @if(isset($transfer->debitAccount))
+                                            @php($debitAccountId=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
                                         <td class="text-center"><a class="link" href="{{route('showDetailsPalletsaccount',$debitAccountId)}}">{{$transfer->debitAccount}}</a></td>
-                                        <td class="text-center">{{$transfer->palletsNumber}}</td>
+                                        @else
+                                            <td></td>
+                                        @endif
+                                            <td class="text-center">{{$transfer->palletsNumber}}</td>
                                         <td class="text-center">{{$transfer->state}}</td>
                                     </tr>
                                 @endforeach
