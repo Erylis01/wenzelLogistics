@@ -92,20 +92,20 @@
                                             <option @if(old('type') == 'Network') selected @endif value="Network"
                                                     id="networkOption">Network
                                             </option>
-                                            <option @if(old('type') == 'Other') selected @endif value="Other">Other</option>
+                                            <option @if(old('type') == 'Other') selected @endif value="Other" id="otherOption">Other</option>
                                         @else
                                             <option value="Carrier" id="carrierOption">Carrier</option>
                                             <option value="Network" id="networkOption">Network</option>
-                                            <option value="Other">Other</option>
+                                            <option value="Other" id="otherOption">Other</option>
                                         @endif
                                     </select>
                                 </div>
                                 <!--number of pallets-->
-                                <div class="col-lg-2">
+                                <div class="col-lg-2" id="realNumberPallets1">
                                     <label for="realNumberPallets" class="control-label">Pallets Number
                                         :</label>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2" id="realNumberPallets2">
                                     <input id="realNumberPallets" type="number" class="form-control"
                                            name="realNumberPallets"
                                            value="{{old('realNumberPallets')}}" placeholder="Pallets number"

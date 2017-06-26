@@ -162,7 +162,7 @@ function add(Request $request)
             )->warehouses()->sync($idwarehouses);
         } elseif ($type == 'Carrier') {
             Palletsaccount::create(
-                ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
+                ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => 0, 'theoricalNumberPallets' => 0, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
             );
             if (isset($trucksAssociated)) {
                 foreach ($trucksAssociated as $truckA) {

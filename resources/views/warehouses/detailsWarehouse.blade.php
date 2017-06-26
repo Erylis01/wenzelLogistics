@@ -35,7 +35,19 @@
             <div class="col-lg-10 col-lg-offset-1">
 
                 <div class="panel panel-general">
-                    <div class="panel-heading">Details of the warehouse : {{$id}} - {{ $name }}</div>
+                    <div class="panel-heading">
+                        <div class="col-lg-11 text-left">Details of the warehouse : {{$id}} - {{ $name }}
+                        </div>
+                        <div>
+                            <button type="button"
+                                    class=" btn btn-primary btn-form glyphicon glyphicon-remove"
+                                    data-toggle="modal"
+                                    data-target="#deleteWarehouse_modal"
+                                    value="{{$id}}"
+                                    name="deleteWarehouse_modal"
+                            ></button>
+                        </div>
+                        </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
                               action="{{route('updateWarehouse', $id)}}">
@@ -227,19 +239,12 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-lg-4 col-lg-offset-3">
+                                <div class="col-lg-4 col-lg-offset-4">
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Update"
                                            name="updateWarehouse" data-toggle="modal"
                                            data-target="#updateWarehouse_modal">
-                                </div>
-
-                                <div class="col-lg-3 col-lg-offset-1">
-                                    <button type="button" class="btn btn-primary btn-block btn-form"
-                                            data-toggle="modal"
-                                            data-target="#deleteWarehouse_modal">Delete
-                                    </button>
                                 </div>
                             </div>
 

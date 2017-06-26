@@ -130,7 +130,7 @@
 }
 
 /*HIDDEN DIV*/
-#warehousesAssociated, #trucksAssociated{
+#warehousesAssociated, #trucksAssociated, #realNumberPallets1, #realNumberPallets2{
     display: none;
 }
 
