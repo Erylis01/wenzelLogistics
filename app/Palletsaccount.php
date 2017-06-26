@@ -14,7 +14,7 @@ class Palletsaccount extends Model
         return $this->belongsToMany('App\Warehouse','palletsaccount_warehouse');
     }
 
-    public function truck(){
+    public function trucks(){
         return $this->hasMany('App\Truck','palletsaccount_name', 'name');
     }
 

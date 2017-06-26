@@ -190,26 +190,18 @@ function showDetails($id, Request $request)
 {
     if (Auth::check()) {
         //general data
-        $palletsaccount = DB::table('palletsaccounts')->where('id', '=', $id)->first();
 //        $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
         $listWarehouses = DB::table('warehouses')->get();
 //        $listTrucks = DB::table('trucks')->where('palletsaccount_name', null)->get();
-        $name = $palletsaccount->name;
-        $nickname = $palletsaccount->nickname;
-        $type = $palletsaccount->type;
-        $realNumberPallets = $palletsaccount->realNumberPallets;
-        $theoricalNumberPallets = $palletsaccount->theoricalNumberPallets;
+       $account=Palletsaccount::where('id', $id)->first();
+$name=$account->name;
 
-        if ($type == 'Network') {
+        if ($account->type == 'Network') {
             $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
             foreach ($warehousesAssociated as $warehouse) {
                 $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('name');
             }
-        } elseif ($type == 'Carrier') {
-            $adress = $palletsaccount->adress;
-            $phone = $palletsaccount->phone;
-            $namecontact = $palletsaccount->namecontact;
-            $email = $palletsaccount->email;
+        } elseif ($account->type == 'Carrier') {
             $trucksAssociated = Truck::where('palletsaccount_name', $name)->get();
         }
 
@@ -217,7 +209,7 @@ function showDetails($id, Request $request)
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
-        $listColumns = ['id', 'type', 'palletsNumber','loading_atrnr', 'date', 'creditAccount', 'debitAccount'];
+        $listColumns = ['id', 'type', 'palletsNumber','loading_atrnr', 'date', 'licensePlate'];
 
         $query = Palletstransfer::where(function ($q) use($name){
             $q->where('creditAccount', $name)->orWhere('debitAccount', $name);
@@ -247,7 +239,14 @@ function showDetails($id, Request $request)
                     });
                 }
             }
-            $listTransfers = $query->orderBy($sortby, $order)->get();
+            if($sortby='licensePlate'){
+                $listTransfers = $query->with(['trucks' => function ($query, $order) {
+                    $query->orderBy('licensePlate', $order);
+                }])->get();
+            }else{
+                    $listTransfers = $query->orderBy($sortby, $order)->get();
+                }
+
         }else {
             if (isset($searchQuery) && $searchQuery <> '') {
                 $searchColumnsString=implode('-',$searchColumns);
@@ -273,7 +272,7 @@ function showDetails($id, Request $request)
             $listTransfers = $query->get();
         }
 
-        return view('palletsaccounts.detailsPalletsaccount', compact( 'searchQuery', 'listColumns','searchColumnsString','searchColumns','listTransfers', 'listWarehouses',  'id', 'name', 'nickname', 'realNumberPallets', 'theoricalNumberPallets', 'type', 'namewarehouses', 'trucksAssociated', 'adress', 'email', 'phone', 'namecontact'));
+        return view('palletsaccounts.detailsPalletsaccount', compact( 'searchQuery', 'listColumns','searchColumnsString','searchColumns','listTransfers', 'listWarehouses',  'account', 'namewarehouses', 'trucksAssociated'));
     } else {
         return view('auth.login');
     }

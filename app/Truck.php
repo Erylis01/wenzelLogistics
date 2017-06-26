@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Truck extends Model
 {
     protected $fillable = [
-        'name', 'adress','licensePlate', 'palletsaccount_name'
+        'name','licensePlate', 'palletsaccount_name', 'realNumberPallets', 'theoricalNumberPallets'
     ];
 
     public function palletsaccount(){

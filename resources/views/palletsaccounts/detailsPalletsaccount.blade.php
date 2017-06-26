@@ -33,18 +33,30 @@
             <h4>You need to login to see the content</h4>
         @else
             <div class="col-lg-14">
-                @if($realNumberPallets==0||$realNumberPallets==null)
+                @if($account->realNumberPallets==0||$account->realNumberPallets==null)
                     <div class="panel panelInprogress">
-                        @elseif($realNumberPallets>0)
+                        @elseif($account->realNumberPallets>0)
                             <div class="panel panel-general">
                                 @else
                                     <div class="panel panelUntreated">
                                         @endif
 
-                                        <div class="panel-heading">Details of the account n° {{$id}} : {{$name}}</div>
+                                        <div class="panel-heading">
+                                            <div class="col-lg-11 text-left">Details of the account n° {{$account->id}} : {{$account->name}}
+                                            </div>
+                                            <div>
+                                                <button type="button"
+                                                        class=" btn btn-primary btn-form glyphicon glyphicon-remove"
+                                                        data-toggle="modal"
+                                                        data-target="#deletePalletsaccount_modal"
+                                                        value="{{$account->id}}"
+                                                        name="deletePalletsaccount_modal"
+                                                ></button>
+                                            </div>
+                                            </div>
                                         <div class="panel-body panel-body-general">
                                             <form class="form-horizontal text-right" role="form" method="POST"
-                                                  action="{{route('updatePalletsaccount', $id)}}">
+                                                  action="{{route('updatePalletsaccount', $account->id)}}">
                                                 {{ csrf_field() }}
 
                                                 <div class="form-group">
@@ -53,10 +65,10 @@
                                                         <label for="nickname" class="control-label">Nickname :</label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        @if(isset($nickname))
+                                                        @if(isset($account->nickname))
                                                             <input id="nickname" type="text" class="form-control"
                                                                    name="nickname"
-                                                                   value="{{ $nickname }}" placeholder="Nickname"
+                                                                   value="{{ $account->nickname }}" placeholder="Nickname"
                                                                    autofocus>
                                                         @else
                                                             <input id="nickname" type="text" class="form-control"
@@ -97,16 +109,16 @@
                                                                         @endif value="Other">
                                                                     Other
                                                                 </option>
-                                                            @elseif(isset($type))
-                                                                <option @if($type == 'Carrier') selected
+                                                            @elseif(isset($account->type))
+                                                                <option @if($account->type == 'Carrier') selected
                                                                         @endif value="Carrier" id="carrierOption">
                                                                     Carrier
                                                                 </option>
-                                                                <option @if($type == 'Network') selected
+                                                                <option @if($account->type == 'Network') selected
                                                                         @endif value="Network" id="networkOption">
                                                                     Network
                                                                 </option>
-                                                                <option @if($type == 'Other') selected
+                                                                <option @if($account->type == 'Other') selected
                                                                         @endif value="Other">Other
                                                                 </option>
                                                             @else
@@ -127,11 +139,11 @@
                                                             :</label>
                                                     </div>
                                                     <div class="col-lg-2">
-                                                        @if(isset($realNumberPallets))
+                                                        @if(isset($account->realNumberPallets))
                                                             <input id="realNumberPallets" type="number"
                                                                    class="form-control"
                                                                    name="realNumberPallets"
-                                                                   value="{{ $realNumberPallets }}"
+                                                                   value="{{ $account->realNumberPallets }}"
                                                                    placeholder="Confirmed pal. nbr"
                                                                    required readonly autofocus>
                                                         @else
@@ -151,11 +163,11 @@
                                                             :</label>
                                                     </div>
                                                     <div class="col-lg-2">
-                                                        @if(isset($theoricalNumberPallets))
+                                                        @if(isset($account->theoricalNumberPallets))
                                                             <input id="theoricalNumberPallets" type="number"
                                                                    class="form-control"
                                                                    name="theoricalNumberPallets"
-                                                                   value="{{ $theoricalNumberPallets }}"
+                                                                   value="{{ $account->theoricalNumberPallets }}"
                                                                    placeholder="Planned pal. nbr"
                                                                    readonly required autofocus>
                                                         @else
@@ -168,7 +180,7 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                                @if($type=='Network')
+                                                @if($account->type=='Network')
                                                     <div id="warehousesAssociated" style="display: block">
                                                         @else
                                                             <div id="warehousesAssociated">
@@ -225,13 +237,13 @@
                                                                             Add warehouse</a>
                                                                     </div>
                                                                 </div>
-                                                                @if($type=='Network')
+                                                                @if($account->type=='Network')
                                                             </div>
                                                             @else
                                                     </div>
                                                 @endif
 
-                                                @if($type=='Carrier')
+                                                @if($account->type=='Carrier')
                                                     <div id="trucksAssociated" style="display: block">
                                                         @else
                                                             <div id="trucksAssociated">
@@ -248,8 +260,8 @@
                                                                         <ul>
                                                                             @if(isset($trucksAssociated))
                                                                             @foreach($trucksAssociated as $truck)
-                                                                                <li class="text-left">{{$truck->name}}
-                                                                                    - {{$truck->licensePlate}}</li>
+                                                                                    <li class="text-left"><a href="{{route('showDetailsTruck', $truck->id)}}" class="link">{{$truck->licensePlate}}</a>
+                                                                                    - {{$truck->realNumberPallets}}</li>
                                                                             @endforeach
                                                                                 @endif
                                                                         </ul>
@@ -268,10 +280,10 @@
                                                                             :</label>
                                                                     </div>
                                                                     <div class="col-lg-7">
-                                                                        @if(isset($adress))
+                                                                        @if(isset($account->adress))
                                                                             <input id="adress" type="text"
                                                                                    class="form-control" name="adress"
-                                                                                   value="{{ $adress }}"
+                                                                                   value="{{ $account->adress }}"
                                                                                    placeholder="Adress" autofocus>
                                                                         @else
                                                                             <input id="adress" type="text"
@@ -293,10 +305,10 @@
                                                                             :</label>
                                                                     </div>
                                                                     <div class="col-lg-2">
-                                                                        @if(isset($phone))
+                                                                        @if(isset($account->phone))
                                                                             <input id="phone" type="text"
                                                                                    class="form-control" name="phone"
-                                                                                   value="{{$phone}}"
+                                                                                   value="{{$account->phone}}"
                                                                                    placeholder="Phone" autofocus>
                                                                         @else
                                                                             <input id="phone" type="text"
@@ -316,11 +328,11 @@
                                                                             :</label>
                                                                     </div>
                                                                     <div class="col-lg-3">
-                                                                        @if(isset($namecontact))
+                                                                        @if(isset($account->namecontact))
                                                                             <input id="namecontact" type="text"
                                                                                    class="form-control"
                                                                                    name="namecontact"
-                                                                                   value="{{$namecontact}}"
+                                                                                   value="{{$account->namecontact}}"
                                                                                    placeholder="Contact name" autofocus>
                                                                         @else
                                                                             <input id="namecontact" type="text"
@@ -343,10 +355,10 @@
                                                                             :</label>
                                                                     </div>
                                                                     <div class="col-lg-7">
-                                                                        @if(isset($email))
+                                                                        @if(isset($account->email))
                                                                             <input id="email" type="text"
                                                                                    class="form-control" name="email"
-                                                                                   value="{{$email}}"
+                                                                                   value="{{$account->email}}"
                                                                                    placeholder="Email" autofocus>
                                                                         @else
                                                                             <input id="email" type="text"
@@ -361,26 +373,20 @@
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                @if($type=='Carrier')
+                                                                @if($account->type=='Carrier')
                                                             </div>
                                                             @else
                                                     </div>
                                                 @endif
 
                                                 <div class="form-group">
-                                                    <div class="col-lg-3 col-lg-offset-3">
+                                                    <div class="col-lg-4 col-lg-offset-4">
                                                         <input type="submit"
                                                                class="btn btn-primary btn-block btn-form"
                                                                value="Update"
                                                                name="updatePalletsaccount">
                                                     </div>
 
-                                                    <div class="col-lg-3 col-lg-offset-1">
-                                                        <button type="button" class="btn btn-primary btn-block btn-form"
-                                                                data-toggle="modal"
-                                                                data-target="#deletePalletsaccount_modal">Delete
-                                                        </button>
-                                                    </div>
                                                 </div>
                                                 @if (Session::has('messageUpdatePalletsaccount'))
                                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
@@ -401,7 +407,7 @@
                                                         </div>
                                                         <div class="modal-body center">
                                                             <form method="post"
-                                                                  action="{{route('deletePalletsaccount', $id)}}">
+                                                                  action="{{route('deletePalletsaccount', $account->id)}}">
                                                                 <input type="hidden" name="_method" value="delete">
                                                                 {{ csrf_field() }}
                                                                 <div class="text-center">
@@ -432,11 +438,12 @@
                                             <br>
                                             <div>
                                                 <div class="col-lg-2">
-                                                    <a href="{{route('showAddPalletstransferAccount', $name)}}"
-                                                       class="btn btn-add">Add transfer</a>
+                                                    <a href="{{route('showAddPalletstransferAccount', $account->name)}}"
+                                                       class="link"><span
+                                                                class="glyphicon glyphicon-plus-sign"></span>Add transfer</a>
                                                 </div>
                                                 <form role="form" method="GET"
-                                                      action="{{route('showDetailsPalletsaccount', $id)}}">
+                                                      action="{{route('showDetailsPalletsaccount', $account->id)}}">
                                                     {{ csrf_field() }}
                                                     <div class="input-group col-lg-offset-3 col-lg-7">
                             <span class="input-group-btn searchInput">
@@ -506,95 +513,95 @@
                                                             <th class="text-center colID">ID<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colType">Type<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colPNumb">Pallets nbr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center col4">Truck<br>
-                                                                {{--<a--}}
-                                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=asc')}}"></a><a--}}
-                                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=desc')}}"></a>--}}
+                                                                <a
+                                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=asc')}}"></a><a
+                                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colType">Atrnr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colDate">Date<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"></a>
                                                             </th>
                                                         @else
                                                             <th class="text-center colID">ID<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=id&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=id&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=id&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=id&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colType">Type<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=type&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=type&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colPNumb">Pallets nbr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=palletsNumber&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center col4">Truck<br>
-                                                                {{--<a--}}
-                                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=asc')}}"></a><a--}}
-                                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                                                {{--href="{{url('/detailsPalletsaccount/'.$id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=subfrachter&order=desc')}}"></a>--}}
+                                                                <a
+                                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=asc')}}"></a><a
+                                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colType">Atrnr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=loading_atrnr&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=loading_atrnr&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=loading_atrnr&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=loading_atrnr&order=desc')}}"></a>
                                                             </th>
                                                             <th class="text-center colDate">Date<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=date&order=asc')}}"></a><a
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$id.'?sortby=date&order=desc')}}"></a>
+                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=desc')}}"></a>
                                                             </th>
                                                         @endif
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     @foreach($listTransfers as $transfer)
-                                                        @php($idDebitAccount=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
-                                                        @php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
+                                                        {{--@php($idDebitAccount=\App\Palletsaccount::where('palletsname', $transfer->debitAccount)->first()->id)--}}
+                                                        {{--@php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)--}}
                                                         @if($transfer->state=="In progress")
                                                         @php($class="inprogress")
                                                         @elseif ($transfer->state=="Waiting documents")
@@ -610,15 +617,17 @@
                                                             </td>
                                                             <td class="text-center colType">{{$transfer->type}}</td>
                                                             <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
-                                                            @if($transfer->type=='Deposit')
-                                                                <td class="text-center col4"><a class="link"
-                                                                                                href="{{route('showDetailsPalletsaccount',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>
-                                                                </td>
-                                                            @elseif($transfer->type=='Withdrawal')
-                                                                <td class="text-center col4"><a class="link"
-                                                                                                href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>
-                                                                </td>
-                                                            @endif
+                                                            <td></td>
+                                                                {{--@if($transfer->type=='Deposit')--}}
+                                                                    {{--<td class="text-center col4"><a class="link"--}}
+                                                                                                    {{--href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}
+                                                                    {{--</td>--}}
+                                                                {{--@elseif($transfer->type=='Withdrawal')--}}
+                                                                    {{--<td class="text-center col4"><a class="link"--}}
+                                                                                                    {{--href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>--}}
+                                                                    {{--</td>--}}
+                                                                {{--@endif--}}
+
                                                             <td class="text-center colType"><a class="link"
                                                                                                href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
                                                             </td>
@@ -650,9 +659,9 @@
                                             {{--@endif--}}
                                             {{--</div>--}}
                                         </div>
-                                        @if($realNumberPallets==0||$realNumberPallets==null)
+                                        @if($account->realNumberPallets==0||$account->realNumberPallets==null)
                                     </div>
-                                    @elseif($realNumberPallets>0)
+                                    @elseif($account->realNumberPallets>0)
                             </div>
                         @else
                     </div>
