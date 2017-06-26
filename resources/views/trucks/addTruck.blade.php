@@ -119,17 +119,17 @@
                             </div>
 
                             <div class="form-group">
-                                <!--adress-->
+                                <!--pallets number-->
                                 <div class="col-lg-3">
-                                    <label for="adress" class="control-label">Adress :</label>
+                                    <label for="realNumberPallets" class="control-label">Pallets Number :</label>
                                 </div>
-                                <div class="col-lg-8">
-                                    @if(isset($adress))
-                                        <input id="adress" type="text" class="form-control" name="adress"
-                                               value="{{$adress}}" placeholder="Adress" autofocus>
+                                <div class="col-lg-2">
+                                    @if(isset($realNumberPallets))
+                                        <input id="realNumberPallets" type="number" class="form-control" name="realNumberPallets"
+                                               value="{{$realNumberPallets}}" placeholder="Nbr" autofocus>
                                     @else
-                                        <input id="adress" type="text" class="form-control" name="adress"
-                                               value="{{ old('adress') }}" placeholder="Adress" autofocus>
+                                        <input id="realNumberPallets" type="number" class="form-control" name="realNumberPallets"
+                                               value="{{ old('realNumberPallets') }}" placeholder="Nbr" autofocus>
                                     @endif
                                 </div>
                             </div>

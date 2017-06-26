@@ -130,18 +130,24 @@
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center">Adress<br><a
+                                        <th class="text-center colNumber">Confirmed<br>pal. nbr<a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=adress&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=adress&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center colName">Pallets Account<br><a
+                                        <th class="text-center colNumber">Planned<br>pal. nbr<a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"></a>
                                         </th>
+                                        {{--<th class="text-center colName">Pallets Account<br><a--}}
+                                                    {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                    {{--href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a--}}
+                                                    {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                    {{--href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>--}}
+                                        {{--</th>--}}
                                         @else
                                     <th class="text-center colID">ID<br> <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
@@ -161,31 +167,36 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
                                     </th>
-                                        <th class="text-center">Adress<br><a
+                                        <th class="text-center colNumber">Confirmed<br>pal. nbr <a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=adress&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=adress&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"></a>
                                         </th>
-                                    <th class="text-center colName">Pallets Account<br><a
-                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a
-                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>
-                                    </th>
+                                        <th class="text-center colNumber">Planned<br>pal. nbr <a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"></a>
+                                        </th>
+                                    {{--<th class="text-center colName">Pallets Account<br><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                                {{--href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=asc')}}"></a><a--}}
+                                                {{--class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                                {{--href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=palletsaccount_name&order=desc')}}"></a>--}}
+                                    {{--</th>--}}
                                         @endif
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listTrucks as $trucks)
                                     <tr class="text-center">
-                                        <td><a class="link" href="{{route('showDetailsTruck',$trucks->id)}}">{{$trucks->id}}</a>
+                                        <td class="colID"><a class="link" href="{{route('showDetailsTruck',$trucks->id)}}">{{$trucks->id}}</a>
                                         </td>
-                                        <td>{{$trucks->name}}</td>
-                                        <td>{{$trucks->licensePlate}}</td>
-                                        <td>{{$trucks->adress}}</td>
-                                        <td><a class="link" href="{{route('showDetailsPalletsaccount',\App\Palletsaccount::where('name',$trucks->palletsaccount_name)->first()->id)}}">{{$trucks->palletsaccount_name}}</a>
-                                        </td>
+                                        <td class="colName"><a class="link" href="{{route('showDetailsPalletsaccount',\App\Palletsaccount::where('name',$trucks->palletsaccount_name)->first()->id)}}">{{$trucks->name}}</a></td>
+                                        <td class="colLicense">{{$trucks->licensePlate}}</td>
+                                        <td class="colNumber">{{$trucks->realNumberPallets}}</td>
+                                        <td class="colNumber">{{$trucks->theoricalNumberPallets}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

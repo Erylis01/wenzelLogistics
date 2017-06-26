@@ -16,9 +16,11 @@ class CreateTrucksTable extends Migration
         Schema::create('trucks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('adress')->nullable();
+//            $table->string('adress')->nullable();
             $table->string('licensePlate');
             $table->string('palletsaccount_name');
+            $table->integer('realNumberPallets')->nullable();
+            $table->integer('theoricalNumberPallets')->nullable();
             $table->timestamps();
             $table->foreign('palletsaccount_name')->references('name')->on('palletsaccount');
         });

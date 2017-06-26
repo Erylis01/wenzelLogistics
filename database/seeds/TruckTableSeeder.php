@@ -33,7 +33,7 @@ class TruckTableSeeder extends Seeder
                             if ($testLicense == null) {
                                 //not double
                                 $nameAdress=explode(',',$sheet[$r][25]);
-                                $testTruck = DB::table('palletsaccounts')->where('type', 'Truck')->where('name', trim($nameAdress[0]))->first();
+                                $testTruck = DB::table('palletsaccounts')->where('type', 'Carrier')->where('name', trim($nameAdress[0]))->first();
 
                                 if($testTruck==null) {
                                     Palletsaccount::firstOrCreate([
@@ -46,14 +46,12 @@ class TruckTableSeeder extends Seeder
                                 if(trim($sheet[$r][26])==null){
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress'=>trim($nameAdress[1]),
                                         'licensePlate' => 'OTHER',
                                         'palletsaccount_name'=>trim($nameAdress[0]),
                                     ]);
                                 }else{
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress'=>trim($nameAdress[1]),
                                         'licensePlate' => trim($sheet[$r][26]),
                                         'palletsaccount_name'=>trim($nameAdress[0]),
                                     ]);

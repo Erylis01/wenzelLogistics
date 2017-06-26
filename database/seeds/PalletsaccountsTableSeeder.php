@@ -18,24 +18,18 @@ class PalletsaccountsTableSeeder extends Seeder
             'id' => 1,
             'name' => 'account1',
             'type' => 'Network',
-            'theoricalNumberPallets' => '15',
-            'realNumberPallets' => '10',
         ));
 
         Palletsaccount::create(array(
             'id' => 2,
             'name' => 'account2',
             'type' => 'Network',
-            'theoricalNumberPallets' => '22',
-            'realNumberPallets' => '20',
         ));
 
         Palletsaccount::create(array(
             'id' => 3,
             'name' => 'account3',
             'type' => 'Network',
-            'theoricalNumberPallets' => '15',
-            'realNumberPallets' => '20',
         ));
 
         Palletsaccount::create(array(
@@ -56,7 +50,7 @@ class PalletsaccountsTableSeeder extends Seeder
         ));
         Palletsaccount::create(array(
             'id' => 7,
-            'name' => 'account7',
+            'name' => 'Stock',
             'type' => 'Other',
         ));
         Palletsaccount::create(array(

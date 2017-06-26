@@ -52,6 +52,7 @@ class DetailsLoadingController extends Controller
                 }
             }
 
+            //link to the mother loading of the subloading
             if(substr_count($loading->atrnr, '-')<>0){
            $atrnr1=explode('-', $loading->atrnr)[0];
                 $atrnr2=array_slice(explode('-', $loading->atrnr), 1);
@@ -66,6 +67,12 @@ class DetailsLoadingController extends Controller
         }
     }
 
+    /**
+     * update only the panel information of the loading
+     * @param Request $request
+     * @param $atrnr
+     * @return $this
+     */
     public function updatePanel1(Request $request, $atrnr)
     {
         $ladedatum = Input::get('ladedatum');
@@ -185,6 +192,7 @@ $submitPallets=Input::get('submitPallets');
             session()->flash('openPanelPallets', 'openPanelPallets');
             return view('loadings.DetailsLoading', compact('loading', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'listFilesNames', 'loading_atrnr', 'date', 'type', 'multiTransfer', 'details', 'listTypes', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer'));
         } elseif (isset($okSubmitAddModal)) {
+            //accept to add the transfer
             $date = Input::get('date');
             $type = Input::get('type');
             $multiTransfer = Input::get('multiTransfer');
@@ -217,6 +225,7 @@ $submitPallets=Input::get('submitPallets');
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         } elseif (isset($closeSubmitAddModal)) {
+            //refuse to add the transfer
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         } elseif (isset($uploadDocument)) {
@@ -260,6 +269,7 @@ $submitPallets=Input::get('submitPallets');
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         }elseif(isset($submitPallets)){
+            //to update the transfer
             $transfer = Palletstransfer::where('id', $submitPallets)->first();
             $loading_atrnr = $atrnr;
             $palletsNumber=Input::get('palletsNumber'.$submitPallets);
@@ -307,6 +317,7 @@ $submitPallets=Input::get('submitPallets');
             return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listPalletstransfers',
                  'listPalletsaccountsCarrier', 'listTypes', 'transfer', 'submitPallets', 'filesNames'));
         }elseif(isset($okSubmitPalletsModal)){
+            //valide the transfer update
             $transfer=Palletstransfer::where('id', $okSubmitPalletsModal)->first();
             $filesNames=$this->actualDocuments($transfer->id);
             $actualCreditAccount = session('actualCreditAccount');
@@ -336,6 +347,7 @@ $submitPallets=Input::get('submitPallets');
                 return redirect()->back();
             }
         }elseif(isset($closeSubmitPalletsModal)){
+            //refuse the transfer update
             $actualCreditAccount = session('actualCreditAccount');
             $actualDebitAccount = session('actualDebitAccount');
             $actualPalletsNumber = session('actualPalletsNumber');
@@ -379,6 +391,11 @@ $submitPallets=Input::get('submitPallets');
 
     }
 
+    /**
+     * get all the documents associated to the transfer $id
+     * @param $id
+     * @return array
+     */
     public static function actualDocuments($id)
     {
         $actualDocuments_Palletstransfers = DB::table('document_palletstransfer')->where('palletstransfer_id', $id)->get();
@@ -391,6 +408,12 @@ $submitPallets=Input::get('submitPallets');
         return $filesNames;
     }
 
+    /**
+     * upload a document on the website
+     * @param $documents
+     * @param $id
+     * @return array
+     */
     public function upload($documents, $id)
     {
         if (isset($documents)) {
@@ -438,6 +461,10 @@ $submitPallets=Input::get('submitPallets');
         }
     }
 
+    /**
+     * remove the last transfer on real pallets number
+     * @param $transfer
+     */
     public function inverseRealPalletsNumber($transfer)
     {
         $actualRealPalletsNumberCreditAccount = Palletsaccount::where('name', $transfer->creditAccount)->first()->realNumberPallets;
@@ -446,6 +473,14 @@ $submitPallets=Input::get('submitPallets');
         Palletsaccount::where('name', $transfer->debitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $transfer->palletsNumber]);
     }
 
+    /**
+     * update only the information related to the transfer
+     * @param $transfer
+     * @param $actualPalletsNumber
+     * @param $actualCreditAccount
+     * @param $actualDebitAccount
+     * @param $filesNames
+     */
     public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $filesNames)
     {
         //inverse transfer : we delete the last transfer
@@ -460,6 +495,7 @@ $submitPallets=Input::get('submitPallets');
         $palletsNumberDebitAccount = Palletsaccount::where('name', $transfer->debitAccount)->first()->theoricalNumberPallets;
         Palletsaccount::where('name', $transfer->debitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
 
+        //state
         if (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) && !empty($filesNames) && $transfer->validate == 1) {
             $state = 'Complete Validated';
         } elseif (isset($transfer->creditAccount) && isset($transfer->debitAccount) && isset($transfer->palletsNumber) && isset($transfer->type) &&  !empty($filesNames) && $transfer->validate == 0) {
@@ -473,6 +509,11 @@ $submitPallets=Input::get('submitPallets');
         session()->flash('messageSubmitPalletstransfer', 'Successfully updated and pallets transfer');
     }
 
+    /**
+     * define the general state of the loading according to all transfers state
+     * @param $loading
+     * @param $listPalletstransfers
+     */
     public function state($loading, $listPalletstransfers)
     {
         //////STATE GENERAL////
@@ -508,11 +549,21 @@ $submitPallets=Input::get('submitPallets');
         Loading::where('atrnr', $loading->atrnr)->update(['state' => $state]);
     }
 
+    /**
+     * show the add form to add a subloading
+     * @param $atrnr
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showAdd($atrnr){
         $loading=Loading::where('atrnr', $atrnr)->first();
 return view('loadings.addSubloading', compact('loading'));
     }
 
+    /**
+     * add a subloading
+     * @param $atrnr
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function add($atrnr){
 
         $loadingInitial=Loading::where('atrnr', $atrnr)->first();
