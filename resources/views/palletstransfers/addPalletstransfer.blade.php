@@ -52,27 +52,51 @@
                                         :</label>
                                 </div>
                                 <div class="col-lg-2">
-                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                    <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
-                                            title="Type" name="type" required onchange="accountOrder(this);"
+                                            title="Type" name="type" id="type" required onchange="displayFieldsType(this);"
                                     >
-                                        @foreach($listTypes as $t )
-                                            @if(Illuminate\Support\Facades\Input::old('type') && $t==old('type'))
-                                                <option selected id="{{$t}}" value="{{$t}}">{{$t}}</option>
-                                            @elseif(isset($type)&&$t==$type)
-                                                <option selected id="{{$t}}" value="{{$t}}">{{$t}}</option>
-                                                @else
-                                                <option id="{{$t}}" value="{{$t}}">{{$t}}</option>
-                                            @endif
-                                        @endforeach
+                                        @if(Illuminate\Support\Facades\Input::old('type'))
+                                            <option @if(old('type') == 'Purchase_Ext') selected @endif value="Purchase_Ext"
+                                                    id="Purchase_ExtOption">Purchase_Ext
+                                            </option>
+                                            <option @if(old('type') == 'Purchase_Int') selected @endif value="Purchase_Int"
+                                                    id="Purchase_IntOption">Purchase_Int
+                                            </option>
+                                            <option @if(old('type') == 'Sale_Ext') selected @endif value="Sale_Ext"
+                                                    id="Sale_ExtOption">Sale_Ext
+                                            </option>
+                                            <option @if(old('type') == 'Sale_Int') selected @endif value="Sale_Int"
+                                                    id="Sale_IntOption">Sale_Int
+                                            </option>
+                                            <option @if(old('type') == 'Deposit-Withdrawal') selected @endif value="Deposit-Withdrawal"
+                                                    id="Deposit-WithdrawalOption">Deposit-Withdrawal
+                                            </option>
+                                            <option @if(old('type') == 'Deposit_Only') selected @endif value="Deposit_Only"
+                                                    id="Deposit_OnlyOption">Deposit_Only
+                                            </option>
+                                            <option @if(old('type') == 'Withdrawal_Only') selected @endif value="Withdrawal_Only"
+                                                    id="Withdrawal_OnlyOption">Withdrawal_Only
+                                            </option>
+                                            <option @if(old('type') == 'Other') selected @endif value="Other" id="OtherOption">Other</option>
+                                        @else
+                                            <option value="Purchase_Ext" id="Purchase_ExtOption">Purchase_Ext</option>
+                                            <option value="Purchase_Int" id="Purchase_IntOption">Purchase_Int</option>
+                                            <option value="Sale_Ext" id="Sale_ExtOption">Sale_Ext</option>
+                                            <option value="Sale_Int" id="Sale_IntOption">Sale_Int</option>
+                                            <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOption">Deposit-Withdrawal</option>
+                                            <option value="Deposit_Only" id="Deposit_OnlyOption">Deposit_Only</option>
+                                            <option value="Withdrawal_Only" id="Withdrawal_OnlyOption">Withdrawal_Only</option>
+                                            <option value="Other" id="otherOption">Other</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <!--details-->
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     @if(isset($details))
-                                        <textarea class="form-control" rows="1" id="details" placeholder="Details">{{$details}}</textarea>
+                                        <textarea class="form-control" rows="1" id="details" placeholder="Details (broken pallets, gift, receipt...)">{{$details}}</textarea>
                                         @else
-                                    <textarea class="form-control" rows="1" id="details" placeholder="Details">{{old('details')}}</textarea>
+                                    <textarea class="form-control" rows="1" id="details" placeholder="Details (broken pallets, gift, receipt...)">{{old('details')}}</textarea>
                                         @endif
                                 </div>
                                 <!--atrnr-->
@@ -84,7 +108,7 @@
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Loading_atrnr" name="loading_atrnr" id="loading_atrnrSelect"
-                                            onchange="displayFields(this);">
+                                            onchange="displayFieldsAtrnr(this);">
                                         <option value="">No loading</option>
                                         @foreach($listAtrnr as $atrnr )
                                             @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
@@ -136,55 +160,59 @@
                                            value="{{ old('date') }}" placeholder="Date" autofocus>
                                     @endif
                                 </div>
-                                    <!--multitransfer-->
-                                    @if(isset($loading_atrnr))
-                                        <div>
-                                            @else
-                                                <div id="loading_atrnrLink">
-                                                    @endif
-                                    <div class="col-lg-2 col-lg-offset-1 text-left">
-                                        <label for="state"
-                                               class="control-label ">Multi-Transfers ?
-                                        </label>
+                                    <div class="col-lg-2 col-lg-offset-3 text-left">
+                                        <a href="{{route('showAddPalletsaccount')}}" class="link"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                     </div>
-                                    <div class="col-lg-2 text-left">
-                                        @if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="true"
-                                                        checked>Yes</label>
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="false">No</label>
-                                        @else
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="true">Yes</label>
-                                            <label class="radio-inline"><input
-                                                        type="radio"
-                                                        name="multiTransfer"
-                                                        value="false"
-                                                        checked>No</label>
-                                        @endif
-                                    </div>
-                                                    @if(isset($loading_atrnr))
-                                                        </div>
-                                                            @else
-                                                                </div>
-                                                                    @endif
+                                    {{--<!--multitransfer-->--}}
+                                    {{--@if(isset($loading_atrnr))--}}
+                                        {{--<div>--}}
+                                            {{--@else--}}
+                                                {{--<div id="loading_atrnrLink">--}}
+                                                    {{--@endif--}}
+                                    {{--<div class="col-lg-2 col-lg-offset-1 text-left">--}}
+                                        {{--<label for="state"--}}
+                                               {{--class="control-label ">Multi-Transfers ?--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-lg-2 text-left">--}}
+                                        {{--@if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))--}}
+                                            {{--<label class="radio-inline"><input--}}
+                                                        {{--type="radio"--}}
+                                                        {{--name="multiTransfer"--}}
+                                                        {{--value="true"--}}
+                                                        {{--checked>Yes</label>--}}
+                                            {{--<label class="radio-inline"><input--}}
+                                                        {{--type="radio"--}}
+                                                        {{--name="multiTransfer"--}}
+                                                        {{--value="false">No</label>--}}
+                                        {{--@else--}}
+                                            {{--<label class="radio-inline"><input--}}
+                                                        {{--type="radio"--}}
+                                                        {{--name="multiTransfer"--}}
+                                                        {{--value="true">Yes</label>--}}
+                                            {{--<label class="radio-inline"><input--}}
+                                                        {{--type="radio"--}}
+                                                        {{--name="multiTransfer"--}}
+                                                        {{--value="false"--}}
+                                                        {{--checked>No</label>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                                    {{--@if(isset($loading_atrnr))--}}
+                                                        {{--</div>--}}
+                                                            {{--@else--}}
+                                                                {{--</div>--}}
+                                                                    {{--@endif--}}
                             </div>
 
                             <div class="form-group">
                                 <!--credit account-->
-                                <div class="col-lg-2">
+                                <div class="col-lg-2" id="creditAccount1">
                                     <label for="creditAccount" class="control-label"><span>*</span> Credit
                                         account
                                         :</label>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4" id="creditAccount2">
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Credit Account" name="creditAccount" required >
@@ -200,12 +228,12 @@
                                     </select>
                                 </div>
                                 <!--debit account-->
-                                <div class="col-lg-2">
+                                <div class="col-lg-2" id="debitAccount1">
                                     <label for="debitAccount" class="control-label"><span>*</span> Debit
                                         account
                                         :</label>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4" id="debitAccount2">
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Debit Account" name="debitAccount" required>
@@ -222,16 +250,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-lg-4 col-lg-offset-2">
+                                <div class="col-lg-4 col-lg-offset-4">
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Add"
                                            name="addPalletstransfer" data-toggle="modal"
                                            data-target="#submitAdd_modal">
-                                </div>
-                                <div class="col-lg-2 col-lg-offset-3 text-left">
-                                    <a href="{{route('showAddPalletsaccount')}}" class="link"><span
-                                                class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
                             <!-- Modal submit -->

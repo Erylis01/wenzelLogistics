@@ -98,14 +98,14 @@ class PalletstransfersController extends Controller
             foreach(Palletsaccount::get() as $account){
                 $listNamesPalletsaccounts[]=$account->name;
             }
-            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
+//            $listTypes = ['Purchase_Ext', 'Purchase_Int', 'Sale_Ext', 'Sale_Int','Deposit-Withdrawal','Deposit_Only', 'Withdrawal_Only','Other'];
             $date = Carbon::now()->format('Y-m-d');
             foreach(Loading::get()->where('pt', 'JA') as $loading){
                 $listAtrnr[]=$loading->atrnr;
             }
                 $creditAccount = $nameAccount;
                 $debitAccount = $nameAccount;
-                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'creditAccount', 'debitAccount', 'listTypes', 'listAtrnr'));
+                return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'creditAccount', 'debitAccount',  'listAtrnr'));
 
         } else {
             return view('auth.login');
@@ -123,12 +123,12 @@ class PalletstransfersController extends Controller
             foreach(Palletsaccount::get() as $account){
                 $listNamesPalletsaccounts[]=$account->name;
             }
-            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale','Other'];
-        $date = Carbon::now()->format('Y-m-d');
+//            $listTypes = ['Purchase_Ext', 'Purchase_Int', 'Sale_Ext', 'Sale_Int','Deposit-Withdrawal','Deposit_Only', 'Withdrawal_Only','Other'];
+            $date = Carbon::now()->format('Y-m-d');
             foreach(Loading::get()->where('pt', 'JA') as $loading){
                 $listAtrnr[]=$loading->atrnr;
             }
-            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listTypes', 'listAtrnr'));
+            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date',  'listAtrnr'));
         } else {
             return view('auth.login');
         }

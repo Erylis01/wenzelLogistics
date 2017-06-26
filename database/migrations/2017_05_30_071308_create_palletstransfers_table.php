@@ -17,14 +17,14 @@ class CreatePalletstransfersTable extends Migration
         Schema::create('palletstransfers', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->string('loading_atrnr')->nullable();
-            $table->string('creditAccount');
-            $table->string('debitAccount');
+            $table->string('creditAccount')->nullable();
+            $table->string('debitAccount')->nullable();
             $table->integer('palletsNumber');
             $table->date('date')->default(Carbon::now()->format('Y-m-d'));
             $table->string('state')->default('Waiting documents');
             $table->boolean('validate')->default(false);
             $table->string('type');
-            $table->boolean('multiTransfer')->default(false);
+//            $table->boolean('multiTransfer')->default(false);
             $table->string('details')->nullable();
 //            $table->date('dateLastReminder')->nullable();
 //            $table->integer('remindersNumber')->nullable();

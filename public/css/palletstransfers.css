@@ -42,7 +42,7 @@
     width:180px;
 }
 
-#loading_atrnrLink{
+#loading_atrnrLink, #creditAccount1, #creditAccount2, #debitAccount2, #debitAccount1{
     display:none;
 }
 
