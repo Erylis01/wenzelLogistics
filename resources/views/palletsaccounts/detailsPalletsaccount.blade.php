@@ -438,7 +438,7 @@
                                             <br>
                                             <div>
                                                 <div class="col-lg-2">
-                                                    <a href="{{route('showAddPalletstransferAccount', $account->name)}}"
+                                                    <a href="{{route('showAddPalletstransfer')}}"
                                                        class="link"><span
                                                                 class="glyphicon glyphicon-plus-sign"></span>Add transfer</a>
                                                 </div>
@@ -505,7 +505,11 @@
 
 
                                             <!--table list transfers associated-->
+                                            @if($account->type<>'Carrier')
+                                                <div class="table-responsive table-loading-account notCarrier">
+                                                @else
                                             <div class="table-responsive table-loading-account">
+                                                @endif
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                     <tr>
@@ -524,13 +528,14 @@
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
                                                             </th>
-                                                            <th class="text-center colPNumb">Pallets nbr<br>
+                                                            <th class="text-center colPNumb">Pal. nbr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
                                                             </th>
+                                                        @if($account->type=='Carrier')
                                                             <th class="text-center col4">Truck<br>
                                                                 <a
                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
@@ -538,6 +543,7 @@
                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                                 href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=desc')}}"></a>
                                                             </th>
+                                                            @endif
                                                             <th class="text-center colType">Atrnr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
@@ -567,13 +573,14 @@
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=desc')}}"></a>
                                                             </th>
-                                                            <th class="text-center colPNumb">Pallets nbr<br>
+                                                            <th class="text-center colPNumb">Pal. nbr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=asc')}}"></a><a
                                                                         class="glyphicon glyphicon-chevron-down general-sorting"
                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=desc')}}"></a>
                                                             </th>
+                                                        @if($account->type=='Carrier')
                                                             <th class="text-center col4">Truck<br>
                                                                 <a
                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
@@ -581,6 +588,7 @@
                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                                 href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=desc')}}"></a>
                                                             </th>
+                                                            @endif
                                                             <th class="text-center colType">Atrnr<br>
                                                                 <a
                                                                         class="glyphicon glyphicon-chevron-up general-sorting"
@@ -617,7 +625,9 @@
                                                             </td>
                                                             <td class="text-center colType">{{$transfer->type}}</td>
                                                             <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
+                                                            @if($account->type=='Carrier')
                                                             <td class="text-center col4"></td>
+                                                            @endif
                                                                 {{--@if($transfer->type=='Deposit')--}}
                                                                     {{--<td class="text-center col4"><a class="link"--}}
                                                                                                     {{--href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}

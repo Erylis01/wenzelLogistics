@@ -89,27 +89,27 @@ class PalletstransfersController extends Controller
         }
     }
 
-    /**
-     * show the add form according to one parameter
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showAddAccount($nameAccount)
-    {
-        if (Auth::check()) {
-            foreach (Palletsaccount::get() as $account) {
-                $listNamesPalletsaccounts[] = $account->name;
-            }
-            $date = Carbon::now()->format('Y-m-d');
-            foreach (Loading::get()->where('pt', 'JA') as $loading) {
-                $listAtrnr[] = $loading->atrnr;
-            }
-            $debitAccount = $nameAccount;
-            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'debitAccount', 'listAtrnr'));
-
-        } else {
-            return view('auth.login');
-        }
-    }
+//    /**
+//     * show the add form according to one parameter
+//     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+//     */
+//    public function showAddAccount($nameAccount)
+//    {
+//        if (Auth::check()) {
+//            foreach (Palletsaccount::get() as $account) {
+//                $listNamesPalletsaccounts[] = $account->name;
+//            }
+//            $date = Carbon::now()->format('Y-m-d');
+//            foreach (Loading::get()->where('pt', 'JA') as $loading) {
+//                $listAtrnr[] = $loading->atrnr;
+//            }
+//
+//            return view('palletstransfers.addPalletstransfer', compact('listNamesPalletsaccounts', 'date', 'listAtrnr'));
+//
+//        } else {
+//            return view('auth.login');
+//        }
+//    }
 
 
     /**
@@ -178,11 +178,6 @@ class PalletstransfersController extends Controller
             $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
             $actualTheoricalCreditPalletsNumber2 = Palletsaccount::where('name', $creditAccount2)->value('theoricalNumberPallets');
             $actualTheoricalDebitPalletsNumber2 = Palletsaccount::where('name', $debitAccount2)->value('theoricalNumberPallets');
-//            if (isset($creditAccount2) && isset($debitAccount2)) {
-//               } elseif (!(isset($creditAccount2) && isset($debitAccount2)) && !(!isset($creditAccount2) && !isset($debitAccount2))) {
-//                session()->flash('errorP2', "Please fulfill ALL the fiels of the 2nd transfer or NONE");
-//                return view('palletstransfers.addPalletstransfer', compact('date', 'date2', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2', 'listNamesPalletsaccounts', 'details', 'loading_atrnr', 'listAtrnr'));
-//            }
         } else {
             $rules = array(
                 'creditAccount' => 'required',

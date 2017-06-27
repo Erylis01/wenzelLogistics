@@ -84,9 +84,9 @@
     width:50px;
 }
 .colPNumb{
-    max-width: 100px;
-    min-width:100px;
-    width:100px;
+    max-width: 80px;
+    min-width:80px;
+    width:80px;
 }
 .colDate{
     max-width: 90px;
@@ -95,14 +95,14 @@
 }
 
 .colType{
-    max-width: 120px;
-    min-width:120px;
-    width:120px;
+    max-width: 180px;
+    min-width:180px;
+    width:180px;
 }
 .col4 {
-    max-width: 660px;
-    min-width: 660px;
-    width: 660px;
+    max-width: 575px;
+    min-width: 575px;
+    width: 575px;
 }
 
 /*.colAtrnr{*/
@@ -127,6 +127,11 @@
     max-height: 450px;
     overflow: auto;
     display: inline-block;
+}
+
+.notCarrier{
+    margin-left:25%;
+    width:583px;
 }
 
 /*HIDDEN DIV*/
