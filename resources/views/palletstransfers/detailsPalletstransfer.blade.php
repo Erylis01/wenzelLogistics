@@ -400,7 +400,7 @@
 
                                                         <div class="form-group">
                                                             <!--debit account-->
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-2" id="debitAccount1"
                                                                      style="display: block">
                                                                     @else
@@ -411,12 +411,12 @@
                                                                                 Debit
                                                                                 account
                                                                                 :</label>
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
                                                             @endif
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-4" id="debitAccount2"
                                                                      style="display: block">
                                                                     @else
@@ -447,19 +447,19 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             @endif
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
                                                             @endif
-                                                            @if ($errors->has('debitAccount'))
-                                                                <span class="help-block">
-                                        <strong>{{ $errors->first('debitAccount') }}</strong>
-                                    </span>
-                                                            @endif
+                                                            {{--@if ($errors->has('debitAccount'))--}}
+                                                                {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('debitAccount') }}</strong>--}}
+                                    {{--</span>--}}
+                                                            {{--@endif--}}
 
                                                         <!--credit account-->
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-2" id="creditAccount1"
                                                                      style="display: block">
                                                                     @else
@@ -470,12 +470,12 @@
                                                                                 Credit
                                                                                 account
                                                                                 :</label>
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
                                                             @endif
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-4" id="creditAccount2"
                                                                      style="display: block">
                                                                     @else
@@ -506,16 +506,16 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             @endif
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')
+                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
                                                             @endif
-                                                            @if ($errors->has('creditAccount'))
-                                                                <span class="help-block">
-                                        <strong>{{ $errors->first('creditAccount') }}</strong>
-                                    </span>
-                                                            @endif
+                                                            {{--@if ($errors->has('creditAccount'))--}}
+                                                                {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('creditAccount') }}</strong>--}}
+                                    {{--</span>--}}
+                                                            {{--@endif--}}
 
                                                         </div>
 
@@ -565,7 +565,7 @@
                                                         <!--validation-->
                                                         <div class="form-group">
 
-                                                            @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&(($transfer->type=='Purchase_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal_Only')&& isset($transfer->creditAccount))||(($transfer->type=='Sale_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only')&&isset($transfer->debitAccount)))
+                                                            @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&(($transfer->type=='Purchase_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')&& isset($transfer->creditAccount))||(($transfer->type=='Sale_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')&&isset($transfer->debitAccount)))
                                                                     <div class="col-lg-2">
                                                                         <label for="state"
                                                                                class="control-label"><span>*</span> Validated ?

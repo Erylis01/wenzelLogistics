@@ -174,14 +174,12 @@ class ListLoadingsController extends Controller
                                 if (trim($sheet[$r][26]) == null) {
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress' => trim($nameAdress[1]),
                                         'licensePlate' => 'OTHER',
                                         'palletsaccount_name' => trim($nameAdress[0]),
                                     ]);
                                 } else {
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
-                                        'adress' => trim($nameAdress[1]),
                                         'licensePlate' => trim($sheet[$r][26]),
                                         'palletsaccount_name' => trim($nameAdress[0]),
                                     ]);

@@ -35,22 +35,21 @@ class DetailsLoadingController extends Controller
             //all pallets account
             $listPalletsAccounts = Palletsaccount::get();
             $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
-            $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
 
-            //truck
-            $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
-            //looking for the account that contains the license plate if it's set
-            if ($loading->kennzeichen == "") {
-                $licensePlate = 'OTHER';
-            } else {
-                $licensePlate = $loading->kennzeichen;
-            }
-            if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
-                $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
-                if ($namePalletsAccountTruck <> null) {
-                    $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
-                }
-            }
+//            //truck
+//            $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
+//            //looking for the account that contains the license plate if it's set
+//            if ($loading->kennzeichen == "") {
+//                $licensePlate = 'OTHER';
+//            } else {
+//                $licensePlate = $loading->kennzeichen;
+//            }
+//            if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
+//                $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
+//                if ($namePalletsAccountTruck <> null) {
+//                    $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
+//                }
+//            }
 
             //link to the mother loading of the subloading
             if(substr_count($loading->atrnr, '-')<>0){
@@ -59,8 +58,7 @@ class DetailsLoadingController extends Controller
                 $atrnr2=implode('-',$atrnr2);
             }
 
-            return view('loadings.detailsLoading', compact('loading','atrnr1', 'atrnr2', 'listPalletsAccounts', 'listPalletstransfers',
-                'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier', 'listTypes'
+            return view('loadings.detailsLoading', compact('loading','atrnr1', 'atrnr2', 'listPalletsAccounts', 'listPalletstransfers'
             ));
         } else {
             return view('auth.login');
@@ -144,35 +142,35 @@ $submitPallets=Input::get('submitPallets');
         $listPalletsAccounts = Palletsaccount::get();
         $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
 
-        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
-        //truck
-        $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
+//        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
+//        //truck
+//        $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
 
         if (isset($update)) {
             $this->updatePanel1($request, $loading->atrnr);
             return redirect()->back();
         } elseif (isset($addTransferForm)) {
-            if (isset($truckAccount)) {
-                Loading::where('atrnr', $atrnr)->update(['truckAccount' => $truckAccount]);
-                $creditAccount = $truckAccount;
-                $debitAccount = $truckAccount;
-            } else {
-                //looking for the account that contains the license plate if it's set
-                if ($loading->kennzeichen == "") {
-                    $licensePlate = 'OTHER';
-                } else {
-                    $licensePlate = $loading->kennzeichen;
-                }
-                if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
-                    $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
-                    if ($namePalletsAccountTruck <> null) {
-                        $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
-                    }
-                }
-            }
-            $loading = Loading::where('atrnr', $atrnr)->first();
+//            if (isset($truckAccount)) {
+////                Loading::where('atrnr', $atrnr)->update(['truckAccount' => $truckAccount]);
+////                $creditAccount = $truckAccount;
+////                $debitAccount = $truckAccount;
+//            } else {
+//                //looking for the account that contains the license plate if it's set
+//                if ($loading->kennzeichen == "") {
+//                    $licensePlate = 'OTHER';
+//                } else {
+//                    $licensePlate = $loading->kennzeichen;
+//                }
+//                if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
+//                    $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
+//                    if ($namePalletsAccountTruck <> null) {
+//                        $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
+//                    }
+//                }
+//            }
+//            $loading = Loading::where('atrnr', $atrnr)->first();
             session()->flash('openPanelPallets', 'openPanelPallets');
-            return view('loadings.DetailsLoading', compact('loading', 'palletsAccountFavoriteTruck', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'date', 'listTypes', 'creditAccount', 'debitAccount', 'addTransferForm'));
+            return view('loadings.DetailsLoading', compact('loading', 'listPalletsAccounts', 'listPalletstransfers', 'date',  'addTransferForm'));
         } elseif (isset($addPalletstransfer)) {
             $date = Input::get('date');
             $type = Input::get('type');
