@@ -106,7 +106,7 @@
                     @endif
 
                     <!-- Table -->
-                        <div class="table-responsive">
+                        <div class="table-responsive table-transfers">
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 @if(isset($searchQuery))
@@ -141,7 +141,7 @@
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col2">Pallets Nbr<br><a
+                                        <th class="text-center col5">Pal. Nbr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
@@ -153,6 +153,7 @@
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"></a>
                                         </th>
+                                        <th></th>
                                     </tr>
                                     @else
                                 <tr>
@@ -186,7 +187,7 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"></a>
                                     </th>
-                                    <th class="text-center col2">Pallets Nbr<br><a
+                                    <th class="text-center col5">Pal. Nbr<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
@@ -198,13 +199,14 @@
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                 href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"></a>
                                     </th>
+                                    <th></th>
                                 </tr>
                                     @endif
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletstransfers as $transfer)
-                                    @if($transfer->state=="In progress")
-                                        @php($class="inprogress")
+                                    @if($transfer->state=="Untreated")
+                                        @php($class="untreated")
                                     @elseif($transfer->state=="Waiting documents")
                                         @php($class="waitingdocuments")
                                     @elseif($transfer->state=="Complete")
@@ -215,7 +217,7 @@
                                     <tr class="{{$class}}">
                                         <td class="text-center"><a class="link" href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
-                                        <td class="text-center">{{date('d-m-Y', strtotime($transfer->date))}}</td>
+                                        <td class="text-center">{{date('d-m-y', strtotime($transfer->date))}}</td>
                                         <td class="text-center">{{$transfer->type}}</td>
                                         @if(isset($transfer->creditAccount))
                                         @php($creditAccountId=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
@@ -231,6 +233,7 @@
                                         @endif
                                             <td class="text-center">{{$transfer->palletsNumber}}</td>
                                         <td class="text-center">{{$transfer->state}}</td>
+                                        <td><span class="glyphicon glyphicon-warning-sign text-danger"></span></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

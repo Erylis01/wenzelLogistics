@@ -602,8 +602,8 @@
                                                     @foreach($listTransfers as $transfer)
                                                         {{--@php($idDebitAccount=\App\Palletsaccount::where('palletsname', $transfer->debitAccount)->first()->id)--}}
                                                         {{--@php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)--}}
-                                                        @if($transfer->state=="In progress")
-                                                        @php($class="inprogress")
+                                                        @if($transfer->state=="Untreated")
+                                                        @php($class="untreated")
                                                         @elseif ($transfer->state=="Waiting documents")
                                                         @php($class="waitingdocuments")
                                                         @elseif ($transfer->state=="Complete")
@@ -617,7 +617,7 @@
                                                             </td>
                                                             <td class="text-center colType">{{$transfer->type}}</td>
                                                             <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
-                                                            <td></td>
+                                                            <td class="text-center col4"></td>
                                                                 {{--@if($transfer->type=='Deposit')--}}
                                                                     {{--<td class="text-center col4"><a class="link"--}}
                                                                                                     {{--href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}

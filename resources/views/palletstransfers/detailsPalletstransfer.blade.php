@@ -34,8 +34,8 @@
             <h4>You need to login to see the content</h4>
         @else
             <div class="col-lg-14">
-                @if($transfer->state=="In progress")
-                    <div class="panel panelInprogress">
+                @if($transfer->state=="Untreated")
+                    <div class="panel panelUntreated">
                         @elseif ($transfer->state=="Waiting documents")
                             <div class="panel panelWaitingdocuments">
                                 @elseif ($transfer->state=="Complete")
@@ -117,6 +117,10 @@
                                                                                     id="Deposit-WithdrawalOption">
                                                                                 Deposit-Withdrawal
                                                                             </option>
+                                                                            <option @if(old('type') == 'Withdrawal-Deposit') selected
+                                                                                    @endif value="Withdrawal-Deposit"
+                                                                                    id="Withdrawal-DepositOption">Withdrawal-Deposit
+                                                                            </option>
                                                                             <option @if(old('type') == 'Deposit_Only') selected
                                                                                     @endif value="Deposit_Only"
                                                                                     id="Deposit_OnlyOption">Deposit_Only
@@ -152,6 +156,10 @@
                                                                                     id="Deposit-WithdrawalOption">
                                                                                 Deposit-Withdrawal
                                                                             </option>
+                                                                            <option @if($transfer->type == 'Withdrawal-Deposit') selected
+                                                                                    @endif value="Withdrawal-Deposit"
+                                                                                    id="Withdrawal-DepositOption">Withdrawal-Deposit
+                                                                            </option>
                                                                             <option @if($transfer->type == 'Deposit_Only') selected
                                                                                     @endif value="Deposit_Only"
                                                                                     id="Deposit_OnlyOption">Deposit_Only
@@ -181,6 +189,9 @@
                                                                             <option value="Deposit-Withdrawal"
                                                                                     id="Deposit-WithdrawalOption">
                                                                                 Deposit-Withdrawal
+                                                                            </option>
+                                                                            <option value="Withdrawal-Deposit" id="Withdrawal-DepositOption">
+                                                                                Withdrawal-Deposit
                                                                             </option>
                                                                             <option value="Deposit_Only"
                                                                                     id="Deposit_OnlyOption">Deposit_Only
@@ -300,7 +311,7 @@
                                                             <!--date-->
                                                             <div class="col-lg-1">
                                                                 <label for="date"
-                                                                       class="control-label"><span>*</span> Date
+                                                                       class="control-label">Date
                                                                     :</label>
                                                             </div>
                                                             <div class="col-lg-2">

@@ -19,7 +19,7 @@ class CreatePalletstransfersTable extends Migration
             $table->string('loading_atrnr')->nullable();
             $table->string('creditAccount')->nullable();
             $table->string('debitAccount')->nullable();
-            $table->integer('palletsNumber');
+            $table->integer('palletsNumber')->nullable();
             $table->date('date')->default(Carbon::now()->format('Y-m-d'));
             $table->string('state')->default('Waiting documents');
             $table->boolean('validate')->default(false);
