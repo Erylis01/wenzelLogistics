@@ -101,10 +101,36 @@
     font-size:16px;
 }
 
-/*#test599999{*/
-    /*display:none;*/
-/*}*/
-/*div#creditAccount1L, #creditAccount2L, #debitAccount2L, #debitAccount1L, #deposit-withdrawal1L, #deposit-withdrawal2L, #DWL, #withdrawal-deposit1L, #withdrawal-deposit2L{*/
-    /*display:none;*/
-/*}*/
+.table-transfers>table>tbody>tr>td{
+    font-size:16px;
+}
+.col1ID{
+    max-width:55px;
+    min-width: 55px;
+    width:55px;
+}
+
+.col2 {
+    max-width:90px;
+    min-width: 90px;
+    width:90px;
+}
+
+.col3{
+    max-width:180px;
+    min-width: 180px;
+    width:180px;
+}
+
+.col4{
+    max-width:295px;
+    min-width: 295px;
+    width:295px;
+}
+
+.col5{
+    max-width:180px;
+    min-width: 180px;
+    width:180px;
+}
 

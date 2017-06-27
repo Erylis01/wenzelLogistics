@@ -155,12 +155,12 @@ class PalletstransfersController extends Controller
         $okSubmitAddModal = Input::get('okSubmitAddModal');
         $closeSubmitAddModal = Input::get('closeSubmitAddModal');
 
-        if ($type == 'Purchase_Ext' || $type == 'Withdrawal_Only') {
+        if ($type == 'Purchase_Ext') {
             $rules = array(
                 'creditAccount' => 'required',
             );
             $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
-        } elseif ($type == 'Sale_Ext' || $type == 'Deposit_Only') {
+        } elseif ($type == 'Sale_Ext') {
             $rules = array(
                 'debitAccount' => 'required',
             );

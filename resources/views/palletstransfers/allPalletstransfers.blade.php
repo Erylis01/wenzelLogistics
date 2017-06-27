@@ -233,7 +233,7 @@
                                         @endif
                                             <td class="text-center">{{$transfer->palletsNumber}}</td>
                                         <td class="text-center">{{$transfer->state}}</td>
-                                        <td><span class="glyphicon glyphicon-warning-sign text-danger"></span></td>
+                                        <td class="text-center"><span class="glyphicon glyphicon-warning-sign text-danger"></span></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
