@@ -48,7 +48,7 @@
                                                         transfer n° {{$transfer->id}}
                                                         @if(!empty($errors))
                                                             @foreach($errors as $error)
-                                                            <span class="col-lg-offset-2 glyphicon glyphicon-warning-sign text-danger"></span>
+                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                             @endforeach
                                                             @endif
                                                     </div>

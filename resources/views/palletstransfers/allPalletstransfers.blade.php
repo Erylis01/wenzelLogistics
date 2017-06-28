@@ -240,7 +240,7 @@
                                         <td class="text-center">{{$transfer->palletsNumber}}</td>
                                         <td class="text-center">{{$transfer->state}}</td>
                                         @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                        <td class="text-center">
+                                        <td class="text-left colDanger">
                                             @if(!empty($errorsID))
                                                 @foreach($errorsID as $error)
                                                     <span class="glyphicon glyphicon-warning-sign text-danger"></span>

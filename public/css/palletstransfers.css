@@ -45,6 +45,9 @@
     min-width: 180px;
     width:180px;
 }
+.colDanger{
+    min-width:120px;
+}
 
 #loading_atrnrLink, #creditAccount1, #creditAccount2, #debitAccount2, #debitAccount1, #deposit-withdrawal1, #deposit-withdrawal2, #DW, #withdrawal-deposit1, #withdrawal-deposit2{
     display:none;
