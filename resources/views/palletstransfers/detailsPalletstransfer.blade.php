@@ -46,6 +46,11 @@
                                                 <div class="panel-heading">
                                                     <div class="col-lg-11 text-left">Details of the pallets
                                                         transfer n° {{$transfer->id}}
+                                                        @if(!empty($errors))
+                                                            @foreach($errors as $error)
+                                                            <span class="col-lg-offset-2 glyphicon glyphicon-warning-sign text-danger"></span>
+                                                            @endforeach
+                                                            @endif
                                                     </div>
                                                     <div>
                                                         <button type="button"
@@ -68,8 +73,8 @@
                                                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletstransfer') }}</div>
                                                         @elseif(Session::has('messageErrorUpload'))
                                                             <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>
-                                                        @elseif(Session::has('errorAccounts'))
-                                                            <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccounts') }}</div>
+                                                        @elseif(Session::has('errorFields'))
+                                                            <div class="alert alert-danger text-alert text-center">{{ Session::get('errorFields') }}</div>
                                                         @elseif(Session::has('messageUpdateValidatePalletstransfer'))
                                                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateValidatePalletstransfer') }}</div>
                                                         @endif
@@ -276,7 +281,7 @@
                                                             </div>
                                                             <!--atrnr-->
                                                             <div class="col-lg-1 text-left">
-                                                                <label for="loading_atrnr" class="control-label">Atrnr
+                                                                <label for="loading_atrnr" class="control-label">@if(isset($transfer->type)&&($transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'))<span id="atrnr" style="display:inline-block">*</span>@else<span id="atrnr" style="display:none">*</span>@endif Atrnr
                                                                     :</label>
                                                             </div>
                                                             <div class="col-lg-2">
@@ -299,6 +304,7 @@
                                                                             name="loading_atrnr"
                                                                             id="loading_atrnrSelect"
                                                                             onchange="displayFields(this);">
+                                                                        <option value="">No loading</option>
                                                                         @foreach($listAtrnr as $atrnr )
                                                                             @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
                                                                                 <option value="{{$atrnr}}"

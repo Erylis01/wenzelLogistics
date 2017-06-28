@@ -46,6 +46,11 @@
                             {{ csrf_field() }}
                             <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
+                                @if(Session::has('errorFields'))
+                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('errorFields') }}</div>
+                                @endif
+                            </div>
+                            <div class="form-group">
                                 <!--type-->
                                 <div class="col-lg-1 col-lg-offset-1">
                                     <label for="type" class="control-label"><span>*</span>Type
@@ -227,7 +232,7 @@
                                 </div>
                                 <!--atrnr-->
                                 <div class="col-lg-1 text-left">
-                                    <label for="loading_atrnr" class="control-label">Atrnr
+                                    <label for="loading_atrnr" class="control-label">@if(isset($type)&&($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'))<span id="atrnr" style="display:inline-block">*</span>@else<span id="atrnr" style="display:none">*</span>@endif Atrnr
                                         :</label>
                                 </div>
                                 <div class="col-lg-2">
@@ -357,13 +362,7 @@
                                 {{--</div>--}}
                                 {{--@endif--}}
                             </div>
-                            <div class="form-group">
-                                @if(Session::has('errorAccounts'))
-                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccounts') }}</div>
-                                @endif
-                            </div>
-
-                            <div class="form-group">
+                                                        <div class="form-group">
                                 <!--debit account-->
                                 @if(isset($type)&&($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-2" id="debitAccount1"
@@ -699,11 +698,16 @@
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                                @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))
-                                                <div class="text-center">
-                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="text-danger">Pallets number are different</span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                </div>
-                                                    @endif
+                                                @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span><span class="text-danger"> Pallets numbers are different for both transfers </span>
+                                                    </div>
+                                                @endif
+                                                @if((Session::has('palletsNumber')&&isset($anz)&&request()->session()->get('palletsNumber')<>$anz)||(Session::has('palletsNumber2')&&isset($anz)&&(request()->session()->get('palletsNumber2')<>$anz)))
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$anz}})</span>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="modal-footer">
                                                 @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))

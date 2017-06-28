@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Palletstransfer;
-use App\Truck;
 use App\Loading;
 use App\Palletsaccount;
-use Carbon\Carbon;
+use App\Truck;
 use DateTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 
 ;
-
-use Maatwebsite\Excel\Facades\Excel;
 
 class ListLoadingsController extends Controller
 {

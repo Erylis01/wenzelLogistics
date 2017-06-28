@@ -56,7 +56,13 @@
                                                                 <a href="{{route('showDetailsLoading', $atrnr1)}}">{{$atrnr1}}</a>
                                                                 -{{$atrnr2}}
                                                             @endif
-                                                            <span class="col-lg-offset-6"><a
+                                                            @foreach($listPalletstransfers as $transfer)
+                                                                @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                                    @if(!empty($errorsID))
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                    @endif
+                                                            @endforeach
+                                                            <span class="col-lg-offset-4"><a
                                                                         href="{{route('showAddSubloading', $loading->atrnr)}}"
                                                                         class=" btn btn-add"><span
                                                                             class="glyphicon glyphicon-plus-sign"></span> Add subloading</a></span>
@@ -711,7 +717,8 @@
                                                                                                                         id="typeL"
                                                                                                                         onchange="displayFieldsType(this);">
                                                                                                                     @if(Illuminate\Support\Facades\Input::old('type'))
-                                                                                                                        <optgroup label="Normal">
+                                                                                                                        <optgroup
+                                                                                                                                label="Normal">
                                                                                                                             <option @if(old('type') == 'Deposit-Withdrawal') selected
                                                                                                                                     @endif value="Deposit-Withdrawal"
                                                                                                                                     id="Deposit-WithdrawalOptionL">
@@ -738,7 +745,8 @@
                                                                                                                                 Other
                                                                                                                             </option>
                                                                                                                         </optgroup>
-                                                                                                                        <optgroup label="Correcting">
+                                                                                                                        <optgroup
+                                                                                                                                label="Correcting">
                                                                                                                             <option @if(old('type') == 'Purchase_Ext') selected
                                                                                                                                     @endif value="Purchase_Ext"
                                                                                                                                     id="Purchase_ExtOptionL">
@@ -766,7 +774,8 @@
                                                                                                                             </option>
                                                                                                                         </optgroup>
                                                                                                                     @elseif(isset($type))
-                                                                                                                        <optgroup label="Normal">
+                                                                                                                        <optgroup
+                                                                                                                                label="Normal">
                                                                                                                             <option @if($type == 'Deposit-Withdrawal') selected
                                                                                                                                     @endif value="Deposit-Withdrawal"
                                                                                                                                     id="Deposit-WithdrawalOptionL">
@@ -793,7 +802,8 @@
                                                                                                                                 Other
                                                                                                                             </option>
                                                                                                                         </optgroup>
-                                                                                                                        <optgroup label="Correcting">
+                                                                                                                        <optgroup
+                                                                                                                                label="Correcting">
                                                                                                                             <option @if($type == 'Purchase_Ext') selected
                                                                                                                                     @endif value="Purchase_Ext"
                                                                                                                                     id="Purchase_ExtOptionL">
@@ -821,7 +831,8 @@
                                                                                                                             </option>
                                                                                                                         </optgroup>
                                                                                                                     @else
-                                                                                                                        <optgroup label="Normal">
+                                                                                                                        <optgroup
+                                                                                                                                label="Normal">
                                                                                                                             <option value="Deposit-Withdrawal"
                                                                                                                                     id="Deposit-WithdrawalOptionL">
                                                                                                                                 Deposit-Withdrawal
@@ -843,7 +854,8 @@
                                                                                                                                 Other
                                                                                                                             </option>
                                                                                                                         </optgroup>
-                                                                                                                        <optgroup label="Correcting">
+                                                                                                                        <optgroup
+                                                                                                                                label="Correcting">
                                                                                                                             <option value="Purchase_Ext"
                                                                                                                                     id="Purchase_ExtOptionL">
                                                                                                                                 Purchase_Ext
@@ -897,7 +909,8 @@
                                                                                                                  style="display:block">
                                                                                                                 @else
                                                                                                                     <div class="form-group"
-                                                                                                                         id="deposit-withdrawal1L" style="display:none;">
+                                                                                                                         id="deposit-withdrawal1L"
+                                                                                                                         style="display:none;">
                                                                                                                         @endif
                                                                                                                         <div class="col-lg-12 text-center">
                                                                                                                             <label for="deposit"
@@ -915,7 +928,8 @@
                                                                                                                  style="display:block">
                                                                                                                 @else
                                                                                                                     <div class="form-group"
-                                                                                                                         id="withdrawal-deposit1L" style="display:none;">
+                                                                                                                         id="withdrawal-deposit1L"
+                                                                                                                         style="display:none;">
                                                                                                                         @endif
                                                                                                                         <div class="col-lg-12 text-center">
                                                                                                                             <label for="withdrawal"
@@ -1040,7 +1054,8 @@
                                                                                                                      style="display: block">
                                                                                                                     @else
                                                                                                                         <div class="col-lg-2"
-                                                                                                                             id="debitAccount1L" style="display:none;">
+                                                                                                                             id="debitAccount1L"
+                                                                                                                             style="display:none;">
                                                                                                                             @endif
                                                                                                                             <label for="debitAccount"
                                                                                                                                    class="control-label"><span>*</span>
@@ -1058,7 +1073,8 @@
                                                                                                                      style="display: block">
                                                                                                                     @else
                                                                                                                         <div class="col-lg-4"
-                                                                                                                             id="debitAccount2L" style="display:none;">
+                                                                                                                             id="debitAccount2L"
+                                                                                                                             style="display:none;">
                                                                                                                             @endif
                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                     data-size="10"
@@ -1089,7 +1105,8 @@
                                                                                                                      style="display: block">
                                                                                                                     @else
                                                                                                                         <div class="col-lg-2"
-                                                                                                                             id="creditAccount1L" style="display:none;">
+                                                                                                                             id="creditAccount1L"
+                                                                                                                             style="display:none;">
                                                                                                                             @endif
                                                                                                                             <label for="creditAccount"
                                                                                                                                    class="control-label"><span>*</span>
@@ -1107,7 +1124,8 @@
                                                                                                                      style="display: block">
                                                                                                                     @else
                                                                                                                         <div class="col-lg-4"
-                                                                                                                             id="creditAccount2L" style="display:none;">
+                                                                                                                             id="creditAccount2L"
+                                                                                                                             style="display:none;">
                                                                                                                             @endif
                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                     data-size="10"
@@ -1141,7 +1159,8 @@
                                                                                                             <div id="deposit-withdrawal2L"
                                                                                                                  style="display:block">
                                                                                                                 @else
-                                                                                                                    <div id="deposit-withdrawal2L" style="display:none;">
+                                                                                                                    <div id="deposit-withdrawal2L"
+                                                                                                                         style="display:none;">
                                                                                                                         @endif
                                                                                                                         <div class="form-group">
                                                                                                                             <div class="col-lg-12 text-center">
@@ -1189,7 +1208,8 @@
                                                                                                             <div id="withdrawal-deposit2L"
                                                                                                                  style="display:block">
                                                                                                                 @else
-                                                                                                                    <div id="withdrawal-deposit2L" style="display:none;">
+                                                                                                                    <div id="withdrawal-deposit2L"
+                                                                                                                         style="display:none;">
                                                                                                                         @endif
                                                                                                                         <div class="form-group">
                                                                                                                             <div class="col-lg-12 text-center">
@@ -1237,7 +1257,8 @@
                                                                                                             <div id="DWL"
                                                                                                                  style="display:block">
                                                                                                                 @else
-                                                                                                                    <div id="DWL" style="display:none;">
+                                                                                                                    <div id="DWL"
+                                                                                                                         style="display:none;">
                                                                                                                         @endif
                                                                                                                         <div class="form-group">
                                                                                                                             <!--number of pallets-->
@@ -1333,10 +1354,12 @@
                                                                                                                                     @endif
                                                                                                                                     @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))
                                                                                                                                         <th class="text-center">
-                                                                                                                                            DEBIT 2
+                                                                                                                                            DEBIT
+                                                                                                                                            2
                                                                                                                                         </th>
                                                                                                                                         <th class="text-center">
-                                                                                                                                            CREDIT 2
+                                                                                                                                            CREDIT
+                                                                                                                                            2
                                                                                                                                         </th>
                                                                                                                                     @endif
                                                                                                                                 </tr>
@@ -1356,7 +1379,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Actual</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Actual
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
                                                                                                                                     @endif
@@ -1369,7 +1394,10 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">New transfer</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        New
+                                                                                                                                        transfer
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             - {{request()->session()->get('palletsNumber')}}</td>
@@ -1386,7 +1414,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Total</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Total
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             = {{request()->session()->get('palletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
@@ -1404,14 +1434,19 @@
                                                                                                                                 </tr>
                                                                                                                                 </tbody>
                                                                                                                             </table>
-                                                                                                                            @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))
+                                                                                                                            @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))
                                                                                                                                 <div class="text-center">
-                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span><span class="glyphicon glyphicon-warning-sign text-danger"></span><span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
+                                                                                                                                            class="text-danger"> Pallets numbers are different for both transfers </span>
                                                                                                                                 </div>
                                                                                                                             @endif
                                                                                                                             @if((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz)))
                                                                                                                                 <div class="text-center">
-                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="text-danger">Pallets number doesn't match the number expected in the loading order</span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                    <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}
+                                                                                                                                        )</span>
                                                                                                                                 </div>
                                                                                                                             @endif
                                                                                                                         </div>
@@ -1424,13 +1459,13 @@
                                                                                                                                     Confirm
                                                                                                                                 </button>
                                                                                                                             @else
-                                                                                                                            <button type="submit"
-                                                                                                                                    class="btn btn-default btn-form btn-modal"
-                                                                                                                                    value="yes"
-                                                                                                                                    name="okSubmitAddModal">
-                                                                                                                                Confirm
-                                                                                                                            </button>
-                                                                                                                                @endif
+                                                                                                                                <button type="submit"
+                                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                                        value="yes"
+                                                                                                                                        name="okSubmitAddModal">
+                                                                                                                                    Confirm
+                                                                                                                                </button>
+                                                                                                                            @endif
                                                                                                                         </div>
                                                                                                                     </div>
                                                                                                                 </div>
@@ -1451,48 +1486,48 @@
                                                                                                     <th class="text-center col1ID">
                                                                                                         ID<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=id&order=asc')}}"></a><a
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=id&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=id&order=desc')}}"></a>
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=id&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th class="text-center col3">
                                                                                                         Type<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=type&order=asc')}}"></a><a
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=type&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=type&order=desc')}}"></a>
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=type&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th class="text-center col4">
                                                                                                         Credit
                                                                                                         account<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=creditAccount&order=asc')}}"></a><a
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=creditAccount&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=creditAccount&order=desc')}}"></a>
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=creditAccount&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th class="text-center col4">
                                                                                                         Debit
                                                                                                         account<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=debitAccount&order=asc')}}"></a><a
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=debitAccount&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=debitAccount&order=desc')}}"></a>
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=debitAccount&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th class="text-center col2">
                                                                                                         Pal.
                                                                                                         nbr<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=palletsNumber&order=asc')}}"></a><a
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=palletsNumber&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=palletsNumber&order=desc')}}"></a>
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=palletsNumber&order=desc')}}"></a>
                                                                                                     </th>
 
                                                                                                     <th class="text-center col5">
                                                                                                         State<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=state&order=asc')}}"></a><a
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=state&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/allPalletstransfers?sortby=state&order=desc')}}"></a>
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=state&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th></th>
                                                                                                 </tr>
@@ -1516,19 +1551,33 @@
                                                                                                         <td class="text-center col3">{{$transfer->type}}</td>
                                                                                                         @if(isset($transfer->creditAccount))
                                                                                                             @php($creditAccountId=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
-                                                                                                            <td class="text-center"><a class="link" href="{{route('showDetailsPalletsaccount',$creditAccountId)}}">{{$transfer->creditAccount}}</a></td>
+                                                                                                            <td class="text-center">
+                                                                                                                <a class="link"
+                                                                                                                   href="{{route('showDetailsPalletsaccount',$creditAccountId)}}">{{$transfer->creditAccount}}</a>
+                                                                                                            </td>
                                                                                                         @else
                                                                                                             <td></td>
                                                                                                         @endif
                                                                                                         @if(isset($transfer->debitAccount))
                                                                                                             @php($debitAccountId=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
-                                                                                                            <td class="text-center"><a class="link" href="{{route('showDetailsPalletsaccount',$debitAccountId)}}">{{$transfer->debitAccount}}</a></td>
+                                                                                                            <td class="text-center">
+                                                                                                                <a class="link"
+                                                                                                                   href="{{route('showDetailsPalletsaccount',$debitAccountId)}}">{{$transfer->debitAccount}}</a>
+                                                                                                            </td>
                                                                                                         @else
                                                                                                             <td></td>
                                                                                                         @endif
                                                                                                         <td class="text-center col2">{{$transfer->palletsNumber}}</td>
                                                                                                         <td class="text-center col5">{{$transfer->state}}</td>
-                                                                                                        <td class="text-center"><span class="glyphicon glyphicon-warning-sign text-danger"></span></td>
+                                                                                                        @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                                                                        <td class="text-center">
+                                                                                                            @if(!empty($errorsID))
+                                                                                                                @foreach($errorsID as $error)
+                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                @endforeach
+                                                                                                            @else
+                                                                                                            @endif
+                                                                                                        </td>
                                                                                                     </tr>
                                                                                                 @endforeach
                                                                                                 </tbody>
@@ -1581,7 +1630,8 @@
                                                                                                                         id="type{{$transfer->id}}"
                                                                                                                         onchange="displayFieldsType(this);">
                                                                                                                     @if(Illuminate\Support\Facades\Input::old('type'.$transfer->id))
-                                                                                                                        <optgroup label="Normal">
+                                                                                                                        <optgroup
+                                                                                                                                label="Normal">
                                                                                                                             <option @if(old('type'.$transfer->id) == 'Deposit-Withdrawal') selected
                                                                                                                                     @endif value="Deposit-Withdrawal"
                                                                                                                                     id="Deposit-WithdrawalOptionL">
@@ -1608,7 +1658,8 @@
                                                                                                                                 Other
                                                                                                                             </option>
                                                                                                                         </optgroup>
-                                                                                                                        <optgroup label="Correcting">
+                                                                                                                        <optgroup
+                                                                                                                                label="Correcting">
                                                                                                                             <option @if(old('type'.$transfer->id) == 'Purchase_Ext') selected
                                                                                                                                     @endif value="Purchase_Ext"
                                                                                                                                     id="Purchase_ExtOptionL">
@@ -1636,7 +1687,8 @@
                                                                                                                             </option>
                                                                                                                         </optgroup>
                                                                                                                     @elseif(isset($transfer->type))
-                                                                                                                        <optgroup label="Normal">
+                                                                                                                        <optgroup
+                                                                                                                                label="Normal">
                                                                                                                             <option @if($transfer->type == 'Deposit-Withdrawal') selected
                                                                                                                                     @endif value="Deposit-Withdrawal"
                                                                                                                                     id="Deposit-WithdrawalOptionL">
@@ -1663,7 +1715,8 @@
                                                                                                                                 Other
                                                                                                                             </option>
                                                                                                                         </optgroup>
-                                                                                                                        <optgroup label="Correcting">
+                                                                                                                        <optgroup
+                                                                                                                                label="Correcting">
                                                                                                                             <option @if($transfer->type == 'Purchase_Ext') selected
                                                                                                                                     @endif value="Purchase_Ext"
                                                                                                                                     id="Purchase_ExtOptionL">
@@ -1691,7 +1744,8 @@
                                                                                                                             </option>
                                                                                                                         </optgroup>
                                                                                                                     @else
-                                                                                                                        <optgroup label="Normal">
+                                                                                                                        <optgroup
+                                                                                                                                label="Normal">
                                                                                                                             <option value="Deposit-Withdrawal"
                                                                                                                                     id="Deposit-WithdrawalOptionL">
                                                                                                                                 Deposit-Withdrawal
@@ -1712,8 +1766,9 @@
                                                                                                                                     id="otherOptionL">
                                                                                                                                 Other
                                                                                                                             </option>
-                                                                                                                    </optgroup>
-                                                                                                                        <optgroup label="Correcting">
+                                                                                                                        </optgroup>
+                                                                                                                        <optgroup
+                                                                                                                                label="Correcting">
                                                                                                                             <option value="Purchase_Ext"
                                                                                                                                     id="Purchase_ExtOptionL">
                                                                                                                                 Purchase_Ext
@@ -1784,7 +1839,8 @@
                                                                                                                            class="form-control"
                                                                                                                            name="date{{$transfer->id}}"
                                                                                                                            value="{{ $transfer->date }}"
-                                                                                                                           placeholder="Date" required
+                                                                                                                           placeholder="Date"
+                                                                                                                           required
                                                                                                                            autofocus>
 
                                                                                                                 @elseif(isset($transfer->validate) && $transfer->validate==1)
@@ -1803,14 +1859,16 @@
                                                                                                                            name="date{{$transfer->id}}"
                                                                                                                            value="{{ old('date'.$transfer->id) }}"
                                                                                                                            placeholder="Date"
-                                                                                                                           autofocus required>
+                                                                                                                           autofocus
+                                                                                                                           required>
                                                                                                                 @endif
                                                                                                             </div>
                                                                                                             <div class="col-lg-2 col-lg-offset-1">
                                                                                                                 <a href="{{route('showAddPalletsaccount')}}"
                                                                                                                    class="link"><span
                                                                                                                             class="glyphicon glyphicon-plus-sign"></span>
-                                                                                                                    Add account</a>
+                                                                                                                    Add
+                                                                                                                    account</a>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="form-group">
@@ -1858,56 +1916,59 @@
                                                                                                                 @endif
                                                                                                             </div>
 
-                                                                                                            {{--<!--multitransfer-->--}}
-                                                                                                            {{--<div class="col-lg-2 text-left">--}}
-                                                                                                                {{--<label for="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                       {{--class="control-label">Multi-Transfers--}}
-                                                                                                                    {{--?--}}
-                                                                                                                {{--</label>--}}
-                                                                                                            {{--</div>--}}
-                                                                                                            {{--<div class="col-lg-2 text-left">--}}
-                                                                                                                {{--@if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer'.$transfer->id) && old('multiTransfer'.$transfer->id)=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))--}}
-                                                                                                                    {{--<input type="text"--}}
-                                                                                                                           {{--name="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                           {{--class="form-control"--}}
-                                                                                                                           {{--value="Yes"--}}
-                                                                                                                           {{--readonly>--}}
-                                                                                                                {{--@elseif(Illuminate\Support\Facades\Input::old('multiTransfer'.$transfer->id) && old('multiTransfer'.$transfer->id)=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))--}}
-                                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                                {{--type="radio"--}}
-                                                                                                                                {{--name="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                                {{--value="true"--}}
-                                                                                                                                {{--checked>Yes</label>--}}
-                                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                                {{--type="radio"--}}
-                                                                                                                                {{--name="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                                {{--value="false">No</label>--}}
-                                                                                                                {{--@elseif((isset($transfer->validate) && $transfer->validate==1))--}}
-                                                                                                                    {{--<input type="text"--}}
-                                                                                                                           {{--name="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                           {{--class="form-control"--}}
-                                                                                                                           {{--value="No"--}}
-                                                                                                                           {{--readonly>--}}
-                                                                                                                {{--@else--}}
-                                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                                {{--type="radio"--}}
-                                                                                                                                {{--name="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                                {{--value="true">Yes</label>--}}
-                                                                                                                    {{--<label class="radio-inline"><input--}}
-                                                                                                                                {{--type="radio"--}}
-                                                                                                                                {{--name="multiTransfer{{$transfer->id}}"--}}
-                                                                                                                                {{--value="false"--}}
-                                                                                                                                {{--checked>No</label>--}}
-                                                                                                                {{--@endif--}}
-                                                                                                            {{--</div>--}}
+                                                                                                        {{--<!--multitransfer-->--}}
+                                                                                                        {{--<div class="col-lg-2 text-left">--}}
+                                                                                                        {{--<label for="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--class="control-label">Multi-Transfers--}}
+                                                                                                        {{--?--}}
+                                                                                                        {{--</label>--}}
+                                                                                                        {{--</div>--}}
+                                                                                                        {{--<div class="col-lg-2 text-left">--}}
+                                                                                                        {{--@if((isset($transfer->validate) && $transfer->validate==1 && (Illuminate\Support\Facades\Input::old('multiTransfer'.$transfer->id) && old('multiTransfer'.$transfer->id)=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer=='true'))))--}}
+                                                                                                        {{--<input type="text"--}}
+                                                                                                        {{--name="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--class="form-control"--}}
+                                                                                                        {{--value="Yes"--}}
+                                                                                                        {{--readonly>--}}
+                                                                                                        {{--@elseif(Illuminate\Support\Facades\Input::old('multiTransfer'.$transfer->id) && old('multiTransfer'.$transfer->id)=='true'||(isset($transfer->multiTransfer)&&$transfer->multiTransfer==1))--}}
+                                                                                                        {{--<label class="radio-inline"><input--}}
+                                                                                                        {{--type="radio"--}}
+                                                                                                        {{--name="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--value="true"--}}
+                                                                                                        {{--checked>Yes</label>--}}
+                                                                                                        {{--<label class="radio-inline"><input--}}
+                                                                                                        {{--type="radio"--}}
+                                                                                                        {{--name="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--value="false">No</label>--}}
+                                                                                                        {{--@elseif((isset($transfer->validate) && $transfer->validate==1))--}}
+                                                                                                        {{--<input type="text"--}}
+                                                                                                        {{--name="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--class="form-control"--}}
+                                                                                                        {{--value="No"--}}
+                                                                                                        {{--readonly>--}}
+                                                                                                        {{--@else--}}
+                                                                                                        {{--<label class="radio-inline"><input--}}
+                                                                                                        {{--type="radio"--}}
+                                                                                                        {{--name="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--value="true">Yes</label>--}}
+                                                                                                        {{--<label class="radio-inline"><input--}}
+                                                                                                        {{--type="radio"--}}
+                                                                                                        {{--name="multiTransfer{{$transfer->id}}"--}}
+                                                                                                        {{--value="false"--}}
+                                                                                                        {{--checked>No</label>--}}
+                                                                                                        {{--@endif--}}
+                                                                                                        {{--</div>--}}
 
 
-                                                                                                            <!--debit account-->
+                                                                                                        <!--debit account-->
                                                                                                             @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
-                                                                                                                <div class="col-lg-2" id="debitAccount1L"
+                                                                                                                <div class="col-lg-2"
+                                                                                                                     id="debitAccount1L"
                                                                                                                      style="display: block">
                                                                                                                     @else
-                                                                                                                        <div class="col-lg-2" id="debitAccount1L" style="display: none">
+                                                                                                                        <div class="col-lg-2"
+                                                                                                                             id="debitAccount1L"
+                                                                                                                             style="display: none">
                                                                                                                             @endif
                                                                                                                             <label for="debitAccount{{$transfer->id}}"
                                                                                                                                    class="control-label"><span>*</span>
@@ -1920,13 +1981,17 @@
                                                                                                                 </div>
                                                                                                             @endif
                                                                                                             @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
-                                                                                                                <div class="col-lg-3" id="debitAccount2L"
+                                                                                                                <div class="col-lg-3"
+                                                                                                                     id="debitAccount2L"
                                                                                                                      style="display: block">
                                                                                                                     @else
-                                                                                                                        <div class="col-lg-3" id="debitAccount2L" style="display: none">
+                                                                                                                        <div class="col-lg-3"
+                                                                                                                             id="debitAccount2L"
+                                                                                                                             style="display: none">
                                                                                                                             @endif
                                                                                                                             @if(isset($transfer->validate) && $transfer->validate==1)
-                                                                                                                                <input type="text" name="debitAccount{{$transfer->id}}"
+                                                                                                                                <input type="text"
+                                                                                                                                       name="debitAccount{{$transfer->id}}"
                                                                                                                                        class="form-control"
                                                                                                                                        value="{{$transfer->debitAccount}}"
                                                                                                                                        readonly>
@@ -1954,13 +2019,16 @@
                                                                                                                         </div>
                                                                                                                         @else
                                                                                                                 </div>
-                                                                                                        @endif
-                                                                                                            <!--credit account-->
+                                                                                                            @endif
+                                                                                                        <!--credit account-->
                                                                                                             @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
-                                                                                                                <div class="col-lg-2" id="creditAccount1L"
+                                                                                                                <div class="col-lg-2"
+                                                                                                                     id="creditAccount1L"
                                                                                                                      style="display: block">
                                                                                                                     @else
-                                                                                                                        <div class="col-lg-2" id="creditAccount1L" style="display: none">
+                                                                                                                        <div class="col-lg-2"
+                                                                                                                             id="creditAccount1L"
+                                                                                                                             style="display: none">
                                                                                                                             @endif
                                                                                                                             <label for="creditAccount{{$transfer->id}}"
                                                                                                                                    class="control-label"><span>*</span>
@@ -1973,13 +2041,17 @@
                                                                                                                 </div>
                                                                                                             @endif
                                                                                                             @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
-                                                                                                                <div class="col-lg-3" id="creditAccount2L"
+                                                                                                                <div class="col-lg-3"
+                                                                                                                     id="creditAccount2L"
                                                                                                                      style="display: block">
                                                                                                                     @else
-                                                                                                                        <div class="col-lg-3" id="creditAccount2L" style="display: none">
+                                                                                                                        <div class="col-lg-3"
+                                                                                                                             id="creditAccount2L"
+                                                                                                                             style="display: none">
                                                                                                                             @endif
                                                                                                                             @if(isset($transfer->validate) && $transfer->validate==1)
-                                                                                                                                <input type="text" name="creditAccount{{$transfer->id}}"
+                                                                                                                                <input type="text"
+                                                                                                                                       name="creditAccount{{$transfer->id}}"
                                                                                                                                        class="form-control"
                                                                                                                                        value="{{$transfer->creditAccount}}"
                                                                                                                                        readonly>
@@ -2172,7 +2244,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Actual</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Actual
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                                     @endif
@@ -2188,7 +2262,8 @@
                                                                                                                                 {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
                                                                                                                                 {{--</tr>--}}
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Update
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Update
                                                                                                                                         number
                                                                                                                                     </td>
                                                                                                                                     @if(Session::has('debitAccount'))
@@ -2201,7 +2276,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Total</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Total
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
@@ -2241,7 +2318,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Actual</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Actual
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                                     @endif
@@ -2250,7 +2329,10 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">New transfer</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        New
+                                                                                                                                        transfer
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             - {{request()->session()->get('palletsNumber')}}</td>
@@ -2261,7 +2343,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Total</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Total
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             = {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
@@ -2301,7 +2385,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Actual</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Actual
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                                     @endif
@@ -2317,7 +2403,8 @@
                                                                                                                                 {{--</td>--}}
                                                                                                                                 {{--</tr>--}}
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Update
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Update
                                                                                                                                         number
                                                                                                                                     </td>
                                                                                                                                     @if(Session::has('debitAccount'))
@@ -2330,7 +2417,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Total</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Total
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             = {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
@@ -2370,7 +2459,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Actual</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Actual
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                                                                     @endif
@@ -2386,7 +2477,8 @@
                                                                                                                                 {{--+ {{request()->session()->get('actualPalletsNumber')}}</td>--}}
                                                                                                                                 {{--</tr>--}}
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Update
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Update
                                                                                                                                         number
                                                                                                                                     </td>
                                                                                                                                     @if(Session::has('debitAccount'))
@@ -2399,7 +2491,9 @@
                                                                                                                                     @endif
                                                                                                                                 </tr>
                                                                                                                                 <tr>
-                                                                                                                                    <td class="text-center">Total</td>
+                                                                                                                                    <td class="text-center">
+                                                                                                                                        Total
+                                                                                                                                    </td>
                                                                                                                                     @if(Session::has('debitAccount'))
                                                                                                                                         <td class="text-center">
                                                                                                                                             = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
@@ -2479,7 +2573,9 @@
                                                                                                                                 @endif
                                                                                                                             </tr>
                                                                                                                             <tr>
-                                                                                                                                <td class="text-center">Actual</td>
+                                                                                                                                <td class="text-center">
+                                                                                                                                    Actual
+                                                                                                                                </td>
                                                                                                                                 @if(Session::has('debitAccount'))
                                                                                                                                     <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
                                                                                                                                 @endif
@@ -2488,7 +2584,9 @@
                                                                                                                                 @endif
                                                                                                                             </tr>
                                                                                                                             <tr>
-                                                                                                                                <td class="text-center">New transfer
+                                                                                                                                <td class="text-center">
+                                                                                                                                    New
+                                                                                                                                    transfer
                                                                                                                                 </td>
                                                                                                                                 @if(Session::has('debitAccount'))
                                                                                                                                     <td class="text-center">
@@ -2500,7 +2598,9 @@
                                                                                                                                 @endif
                                                                                                                             </tr>
                                                                                                                             <tr>
-                                                                                                                                <td class="text-center">Total</td>
+                                                                                                                                <td class="text-center">
+                                                                                                                                    Total
+                                                                                                                                </td>
                                                                                                                                 @if(Session::has('debitAccount'))
                                                                                                                                     <td class="text-center">
                                                                                                                                         = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>

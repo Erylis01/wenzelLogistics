@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use App\Error;
 
 class ErrorTableSeeder extends Seeder
 {
@@ -11,7 +13,7 @@ class ErrorTableSeeder extends Seeder
      */
     public function run()
     {
-        Error::delete();
+        DB::table('errors')->delete();
         Error::create([
             'id'=>1,
             'name'=>'DW-WD_notSameNumber',

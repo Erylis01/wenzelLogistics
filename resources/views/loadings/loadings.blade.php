@@ -307,7 +307,15 @@
                                     @php ($class="untreated")
                                     @endif
                                     <tr class="{{$class}}">
-                                        <td class="text-center text-danger col0 colHeight"><span class="glyphicon glyphicon-warning-sign"></span></td>
+                                        <td class="text-center text-danger col0 colHeight">
+                                        @php($listPalletstransfers=\App\Palletstransfer::where('loading_atrnr',$loading->atrnr)->get())
+                                        @foreach($listPalletstransfers as $transfer)
+                                            @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                            @if(!empty($errorsID))
+                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                            @endif
+                                        @endforeach
+                                        </td>
                                         <td class="col0b colHeight"></td>
                                         <td class="text-center col1 colHeight"><a
                                                     href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a>

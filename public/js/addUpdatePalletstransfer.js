@@ -18,6 +18,7 @@ function displayFieldsType(typeSelected) {
             document.getElementById("withdrawal-deposit1").style.display = "none";
             document.getElementById("withdrawal-deposit2").style.display = "none";
             document.getElementById("DW").style.display = "none";
+            document.getElementById("atrnr").style.display = "none";
         }else{
             if(document.getElementById("Sale_ExtOption").value==typeSelected.value){
                 document.getElementById("creditAccount1").style.display = "none";
@@ -29,6 +30,7 @@ function displayFieldsType(typeSelected) {
                 document.getElementById("withdrawal-deposit1").style.display = "none";
                 document.getElementById("withdrawal-deposit2").style.display = "none";
                 document.getElementById("DW").style.display = "none";
+                document.getElementById("atrnr").style.display = "none";
             }else{
                 if(document.getElementById("Deposit-WithdrawalOption").value == typeSelected.value){
                     document.getElementById("creditAccount1").style.display = "block";
@@ -40,6 +42,7 @@ function displayFieldsType(typeSelected) {
                     document.getElementById("withdrawal-deposit1").style.display = "none";
                     document.getElementById("withdrawal-deposit2").style.display = "none";
                     document.getElementById("DW").style.display = "block";
+                    document.getElementById("atrnr").style.display = "inline-block";
                 }
                 else{
                     if(document.getElementById("Withdrawal-DepositOption").value == typeSelected.value){
@@ -52,6 +55,7 @@ function displayFieldsType(typeSelected) {
                         document.getElementById("withdrawal-deposit1").style.display = "block";
                         document.getElementById("withdrawal-deposit2").style.display = "block";
                         document.getElementById("DW").style.display = "block";
+                        document.getElementById("atrnr").style.display = "inline-block";
                     }
                     else{
                         // if(document.getElementById("Deposit_OnlyOption").value == typeSelected.value){
@@ -86,6 +90,7 @@ function displayFieldsType(typeSelected) {
                                 document.getElementById("withdrawal-deposit1").style.display = "none";
                                 document.getElementById("withdrawal-deposit2").style.display = "none";
                                 document.getElementById("DW").style.display = "none";
+                        document.getElementById("atrnr").style.display = "none";
                         //     }
                         // }
                     }
@@ -103,6 +108,7 @@ function displayFieldsType(typeSelected) {
         document.getElementById("withdrawal-deposit1").style.display = "none";
         document.getElementById("withdrawal-deposit2").style.display = "none";
         document.getElementById("DW").style.display = "none";
+        document.getElementById("atrnr").style.display = "none";
     }
 }
 
