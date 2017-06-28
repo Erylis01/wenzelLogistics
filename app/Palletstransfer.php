@@ -17,4 +17,7 @@ class Palletstransfer extends Model
     public function documents(){
         return $this->belongsToMany('App\Document', 'document_palletstransfer');
     }
+    public function errors(){
+        return $this->belongsToMany('App\Error', 'error_palletstransfer');
+    }
 }

@@ -233,7 +233,11 @@
                                         @endif
                                             <td class="text-center">{{$transfer->palletsNumber}}</td>
                                         <td class="text-center">{{$transfer->state}}</td>
+                                        @if(Session::has('error'.$transfer->id))
                                         <td class="text-center"><span class="glyphicon glyphicon-warning-sign text-danger"></span></td>
+                                            @else
+                                        <td></td>
+                                            @endif
                                     </tr>
                                 @endforeach
                                 </tbody>

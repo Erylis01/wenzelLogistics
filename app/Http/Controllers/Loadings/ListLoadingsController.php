@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Palletstransfer;
 use App\Truck;
 use App\Loading;
 use App\Palletsaccount;
@@ -25,7 +26,6 @@ class ListLoadingsController extends Controller
      */
     public function show(Request $request)
     {
-
         if (Auth::check()) {
             $this->importData();
 
