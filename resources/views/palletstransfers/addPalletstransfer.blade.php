@@ -699,9 +699,9 @@
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                                @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))
+                                                @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))
                                                 <div class="text-center">
-                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span><span class="glyphicon glyphicon-warning-sign text-danger"></span><span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="text-danger">Pallets number are different</span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                 </div>
                                                     @endif
                                             </div>
@@ -713,7 +713,7 @@
                                                             name="okSubmitAddModal">
                                                         Confirm
                                                     </button>
-                                                    @else
+                                                @else
                                                 <button type="submit"
                                                         class="btn btn-default btn-form btn-modal"
                                                         value="yes"

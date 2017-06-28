@@ -50,9 +50,24 @@
     min-width: 90px;
     max-width: 90px;
 }
+.col0 {
+    position: absolute;
+    overflow: hidden;
+    z-index: 99;
+    background-color: white;
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    top: auto;
+}
+.col0b{
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
 
 .colHeight{
-    min-height:48px;
+    min-height:51px;
 }
 
 .colOrt, .colKenn{

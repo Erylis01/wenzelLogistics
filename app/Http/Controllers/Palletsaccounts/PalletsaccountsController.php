@@ -276,7 +276,7 @@ $name=$account->name;
             }
             $listTransfers = $query->get();
         }
-
+//dd($listTransfers);
         return view('palletsaccounts.detailsPalletsaccount', compact( 'searchQuery', 'listColumns','searchColumnsString','searchColumns','listTransfers', 'listWarehouses',  'account', 'namewarehouses', 'trucksAssociated'));
     } else {
         return view('auth.login');

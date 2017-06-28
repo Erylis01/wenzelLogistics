@@ -103,6 +103,8 @@
                                 <thead>
                                 <tr>
                                     @if(isset($searchQuery))
+                                        <th class="col0 colHeight"></th>
+                                        <th class="col0b colHeight"></th>
                                         <th class="text-center col1 colHeight">AtrNr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
@@ -195,6 +197,8 @@
                                                     href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
                                         </th>
                                     @else
+                                        <th class="col0 colHeight"> <br> </th>
+                                        <th class="col0b colHeight"> <br> </th>
                                         <th class="text-center col1 colHeight">AtrNr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
@@ -303,6 +307,8 @@
                                     @php ($class="untreated")
                                     @endif
                                     <tr class="{{$class}}">
+                                        <td class="text-center text-danger col0 colHeight"><span class="glyphicon glyphicon-warning-sign"></span></td>
+                                        <td class="col0b colHeight"></td>
                                         <td class="text-center col1 colHeight"><a
                                                     href="{{route('showDetailsLoading',$loading->atrnr)}}">{{$loading->atrnr}}</a>
                                         </td>
