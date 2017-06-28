@@ -264,7 +264,6 @@ class PalletstransfersController extends Controller
                 $listAtrnr[] = $loading->atrnr;
             }
             $filesNames = $this->actualDocuments($id);
-
             return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listNamesPalletsaccounts', 'listAtrnr', 'filesNames'));
         } else {
             return view('auth.login');
@@ -308,12 +307,12 @@ class PalletstransfersController extends Controller
             $listAtrnr[] = $loading->atrnr;
         }
 
-        if ($transfer->type == 'Purchase_Ext' || $transfer->type == 'Withdrawal_Only') {
+        if ($type == 'Purchase_Ext') {
             $rules = array(
                 'creditAccount' => 'required',
             );
             $debitAccount = null;
-        } elseif ($transfer->type == 'Sale_Ext' || $transfer->type == 'Deposit_Only') {
+        } elseif ($type == 'Sale_Ext') {
             $rules = array(
                 'debitAccount' => 'required',
             );
@@ -328,8 +327,8 @@ class PalletstransfersController extends Controller
 
         if ($validator->fails()) {
             session()->flash('errorAccounts', "The account(s) has(ve) not been filled as expected. REFILL !");
-            return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listNamesPalletsaccounts', 'listAtrnr', 'filesNames'));
-        } else {
+            return redirect()->back();
+} else {
             if (isset($upload)) {
                 $filesNames = $this->upload($documents, $transfer);
                 if (!empty($filesNames) && $validate == 'true') {

@@ -96,119 +96,166 @@
                                                                             onchange="displayFieldsType(this);"
                                                                     >
                                                                         @if(Illuminate\Support\Facades\Input::old('type'))
-                                                                            <option @if(old('type') == 'Purchase_Ext') selected
-                                                                                    @endif value="Purchase_Ext"
-                                                                                    id="Purchase_ExtOption">Purchase_Ext
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Purchase_Int') selected
-                                                                                    @endif value="Purchase_Int"
-                                                                                    id="Purchase_IntOption">Purchase_Int
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Sale_Ext') selected
-                                                                                    @endif value="Sale_Ext"
-                                                                                    id="Sale_ExtOption">Sale_Ext
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Sale_Int') selected
-                                                                                    @endif value="Sale_Int"
-                                                                                    id="Sale_IntOption">Sale_Int
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Deposit-Withdrawal') selected
-                                                                                    @endif value="Deposit-Withdrawal"
-                                                                                    id="Deposit-WithdrawalOption">
-                                                                                Deposit-Withdrawal
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Withdrawal-Deposit') selected
-                                                                                    @endif value="Withdrawal-Deposit"
-                                                                                    id="Withdrawal-DepositOption">Withdrawal-Deposit
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Deposit_Only') selected
-                                                                                    @endif value="Deposit_Only"
-                                                                                    id="Deposit_OnlyOption">Deposit_Only
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Withdrawal_Only') selected
-                                                                                    @endif value="Withdrawal_Only"
-                                                                                    id="Withdrawal_OnlyOption">
-                                                                                Withdrawal_Only
-                                                                            </option>
-                                                                            <option @if(old('type') == 'Other') selected
-                                                                                    @endif value="Other"
-                                                                                    id="OtherOption">Other
-                                                                            </option>
+                                                                            <optgroup label="Normal">
+                                                                                <option @if(old('type') == 'Deposit-Withdrawal') selected
+                                                                                        @endif value="Deposit-Withdrawal"
+                                                                                        id="Deposit-WithdrawalOption">
+                                                                                    Deposit-Withdrawal
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Withdrawal-Deposit') selected
+                                                                                        @endif value="Withdrawal-Deposit"
+                                                                                        id="Withdrawal-DepositOption">
+                                                                                    Withdrawal-Deposit
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Deposit_Only') selected
+                                                                                        @endif value="Deposit_Only"
+                                                                                        id="Deposit_OnlyOption">
+                                                                                    Deposit_Only
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Withdrawal_Only') selected
+                                                                                        @endif value="Withdrawal_Only"
+                                                                                        id="Withdrawal_OnlyOption">
+                                                                                    Withdrawal_Only
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Other') selected
+                                                                                        @endif value="Other"
+                                                                                        id="OtherOption">
+                                                                                    Other
+                                                                                </option>
+                                                                            </optgroup>
+                                                                            <optgroup label="Correcting">
+                                                                                <option @if(old('type') == 'Purchase_Ext') selected
+                                                                                        @endif value="Purchase_Ext"
+                                                                                        id="Purchase_ExtOption">
+                                                                                    Purchase_Ext
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Purchase_Int') selected
+                                                                                        @endif value="Purchase_Int"
+                                                                                        id="Purchase_IntOption">
+                                                                                    Purchase_Int
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Sale_Ext') selected
+                                                                                        @endif value="Sale_Ext"
+                                                                                        id="Sale_ExtOption">
+                                                                                    Sale_Ext
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Sale_Int') selected
+                                                                                        @endif value="Sale_Int"
+                                                                                        id="Sale_IntOption">
+                                                                                    Sale_Int
+                                                                                </option>
+                                                                                <option @if(old('type') == 'Other') selected
+                                                                                        @endif value="Other"
+                                                                                        id="OtherOption">
+                                                                                    Other
+                                                                                </option>
+                                                                            </optgroup>
                                                                         @elseif(isset($transfer->type))
-                                                                            <option @if($transfer->type == 'Purchase_Ext') selected
-                                                                                    @endif value="Purchase_Ext"
-                                                                                    id="Purchase_ExtOption">Purchase_Ext
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Purchase_Int') selected
-                                                                                    @endif value="Purchase_Int"
-                                                                                    id="Purchase_IntOption">Purchase_Int
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Sale_Ext') selected
-                                                                                    @endif value="Sale_Ext"
-                                                                                    id="Sale_ExtOption">Sale_Ext
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Sale_Int') selected
-                                                                                    @endif value="Sale_Int"
-                                                                                    id="Sale_IntOption">Sale_Int
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Deposit-Withdrawal') selected
-                                                                                    @endif value="Deposit-Withdrawal"
-                                                                                    id="Deposit-WithdrawalOption">
-                                                                                Deposit-Withdrawal
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Withdrawal-Deposit') selected
-                                                                                    @endif value="Withdrawal-Deposit"
-                                                                                    id="Withdrawal-DepositOption">Withdrawal-Deposit
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Deposit_Only') selected
-                                                                                    @endif value="Deposit_Only"
-                                                                                    id="Deposit_OnlyOption">Deposit_Only
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Withdrawal_Only') selected
-                                                                                    @endif value="Withdrawal_Only"
-                                                                                    id="Withdrawal_OnlyOption">
-                                                                                Withdrawal_Only
-                                                                            </option>
-                                                                            <option @if($transfer->type == 'Other') selected
-                                                                                    @endif value="Other"
-                                                                                    id="OtherOption">Other
-                                                                            </option>
+                                                                            <optgroup label="Normal">
+                                                                                <option @if($transfer->type == 'Deposit-Withdrawal') selected
+                                                                                        @endif value="Deposit-Withdrawal"
+                                                                                        id="Deposit-WithdrawalOption">
+                                                                                    Deposit-Withdrawal
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Withdrawal-Deposit') selected
+                                                                                        @endif value="Withdrawal-Deposit"
+                                                                                        id="Withdrawal-DepositOption">
+                                                                                    Withdrawal-Deposit
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Deposit_Only') selected
+                                                                                        @endif value="Deposit_Only"
+                                                                                        id="Deposit_OnlyOption">
+                                                                                    Deposit_Only
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Withdrawal_Only') selected
+                                                                                        @endif value="Withdrawal_Only"
+                                                                                        id="Withdrawal_OnlyOption">
+                                                                                    Withdrawal_Only
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Other') selected
+                                                                                        @endif value="Other"
+                                                                                        id="OtherOption">
+                                                                                    Other
+                                                                                </option>
+                                                                            </optgroup>
+                                                                            <optgroup label="Correcting">
+                                                                                <option @if($transfer->type == 'Purchase_Ext') selected
+                                                                                        @endif value="Purchase_Ext"
+                                                                                        id="Purchase_ExtOption">
+                                                                                    Purchase_Ext
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Purchase_Int') selected
+                                                                                        @endif value="Purchase_Int"
+                                                                                        id="Purchase_IntOption">
+                                                                                    Purchase_Int
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Sale_Ext') selected
+                                                                                        @endif value="Sale_Ext"
+                                                                                        id="Sale_ExtOption">
+                                                                                    Sale_Ext
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Sale_Int') selected
+                                                                                        @endif value="Sale_Int"
+                                                                                        id="Sale_IntOption">
+                                                                                    Sale_Int
+                                                                                </option>
+                                                                                <option @if($transfer->type == 'Other') selected
+                                                                                        @endif value="Other"
+                                                                                        id="OtherOption">
+                                                                                    Other
+                                                                                </option>
+                                                                            </optgroup>
                                                                         @else
-                                                                            <option value="Purchase_Ext"
-                                                                                    id="Purchase_ExtOption">Purchase_Ext
-                                                                            </option>
-                                                                            <option value="Purchase_Int"
-                                                                                    id="Purchase_IntOption">Purchase_Int
-                                                                            </option>
-                                                                            <option value="Sale_Ext"
-                                                                                    id="Sale_ExtOption">Sale_Ext
-                                                                            </option>
-                                                                            <option value="Sale_Int"
-                                                                                    id="Sale_IntOption">Sale_Int
-                                                                            </option>
-                                                                            <option value="Deposit-Withdrawal"
-                                                                                    id="Deposit-WithdrawalOption">
-                                                                                Deposit-Withdrawal
-                                                                            </option>
-                                                                            <option value="Withdrawal-Deposit" id="Withdrawal-DepositOption">
-                                                                                Withdrawal-Deposit
-                                                                            </option>
-                                                                            <option value="Deposit_Only"
-                                                                                    id="Deposit_OnlyOption">Deposit_Only
-                                                                            </option>
-                                                                            <option value="Withdrawal_Only"
-                                                                                    id="Withdrawal_OnlyOption">
-                                                                                Withdrawal_Only
-                                                                            </option>
-                                                                            <option value="Other" id="otherOption">
-                                                                                Other
-                                                                            </option>
+                                                                            <optgroup label="Normal">
+                                                                                <option value="Deposit-Withdrawal"
+                                                                                        id="Deposit-WithdrawalOption">
+                                                                                    Deposit-Withdrawal
+                                                                                </option>
+                                                                                <option value="Withdrawal-Deposit"
+                                                                                        id="Withdrawal-DepositOption">
+                                                                                    Withdrawal-Deposit
+                                                                                </option>
+                                                                                <option value="Deposit_Only"
+                                                                                        id="Deposit_OnlyOption">
+                                                                                    Deposit_Only
+                                                                                </option>
+                                                                                <option value="Withdrawal_Only"
+                                                                                        id="Withdrawal_OnlyOption">
+                                                                                    Withdrawal_Only
+                                                                                </option>
+                                                                                <option value="Other"
+                                                                                        id="otherOption">
+                                                                                    Other
+                                                                                </option>
+                                                                            </optgroup>
+                                                                            <optgroup label="Correcting">
+                                                                                <option value="Purchase_Ext"
+                                                                                        id="Purchase_ExtOption">
+                                                                                    Purchase_Ext
+                                                                                </option>
+                                                                                <option value="Purchase_Int"
+                                                                                        id="Purchase_IntOption">
+                                                                                    Purchase_Int
+                                                                                </option>
+                                                                                <option value="Sale_Ext"
+                                                                                        id="Sale_ExtOption">
+                                                                                    Sale_Ext
+                                                                                </option>
+                                                                                <option value="Sale_Int"
+                                                                                        id="Sale_IntOption">
+                                                                                    Sale_Int
+                                                                                </option>
+                                                                                <option value="Other"
+                                                                                        id="otherOption">
+                                                                                    Other
+                                                                                </option>
+                                                                            </optgroup>
                                                                         @endif
                                                                     </select>
                                                                 @endif
                                                             </div>
                                                             <!--details-->
-                                                            <div class="col-lg-4">
+                                                            <div class="col-lg-3">
                                                                 @if(isset($transfer->details)&&(isset($transfer->validate) && $transfer->validate==1))
                                                                     <textarea class="form-control" rows="1"
                                                                               id="details" placeholder="Details"
@@ -340,7 +387,7 @@
                                                                            placeholder="Date" required autofocus>
                                                                 @endif
                                                             </div>
-                                                            <div class="col-lg-2 col-lg-offset-3 text-left">
+                                                            <div class="col-lg-2 col-lg-offset-2 text-left">
                                                                 <a href="{{route('showAddPalletsaccount')}}"
                                                                    class="link"><span
                                                                             class="glyphicon glyphicon-plus-sign"></span>
@@ -565,7 +612,7 @@
                                                         <!--validation-->
                                                         <div class="form-group">
 
-                                                            @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&(($transfer->type=='Purchase_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')&& isset($transfer->creditAccount))||(($transfer->type=='Sale_Ext'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')&&isset($transfer->debitAccount)))
+                                                            @if(!empty($filesNames)&&isset($transfer->palletsNumber))
                                                                     <div class="col-lg-2">
                                                                         <label for="state"
                                                                                class="control-label"><span>*</span> Validated ?
@@ -673,10 +720,10 @@
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
                                                                                     @if(Session::has('debitAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                     @endif
                                                                                     @if(Session::has('creditAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                     @endif
                                                                                 </tr>
                                                                                 {{--<tr>--}}
@@ -742,10 +789,10 @@
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
                                                                                     @if(Session::has('debitAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                     @endif
                                                                                     @if(Session::has('creditAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                     @endif
                                                                                 </tr>
                                                                                 <tr>
@@ -763,11 +810,11 @@
                                                                                     <td class="text-center">Total</td>
                                                                                     @if(Session::has('debitAccount'))
                                                                                         <td class="text-center">
-                                                                                            = {{request()->session()->get('palletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
+                                                                                            = {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
                                                                                     @endif
                                                                                     @if(Session::has('creditAccount'))
                                                                                         <td class="text-center">
-                                                                                            = {{request()->session()->get('palletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
+                                                                                            = {{request()->session()->get('thPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
                                                                                     @endif
                                                                                 </tr>
                                                                                 </tbody>
@@ -802,10 +849,10 @@
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
                                                                                     @if(Session::has('debitAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                     @endif
                                                                                     @if(Session::has('creditAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                     @endif
                                                                                 </tr>
                                                                                 {{--<tr>--}}
@@ -871,10 +918,10 @@
                                                                                 <tr>
                                                                                     <td class="text-center">Actual</td>
                                                                                     @if(Session::has('debitAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberDebitAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
                                                                                     @endif
                                                                                     @if(Session::has('creditAccount'))
-                                                                                        <td class="text-center">{{request()->session()->get('palletsNumberCreditAccount')}}</td>
+                                                                                        <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
                                                                                     @endif
                                                                                 </tr>
                                                                                 {{--<tr>--}}

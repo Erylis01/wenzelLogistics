@@ -209,7 +209,12 @@ $name=$account->name;
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
-        $listColumns = ['id', 'type', 'palletsNumber','loading_atrnr', 'date', 'licensePlate'];
+        if($account->type=='Carrier'){
+            $listColumns = ['id', 'type', 'palletsNumber','loading_atrnr', 'date', 'licensePlate', 'state'];
+        }else{
+            $listColumns = ['id', 'type', 'palletsNumber','loading_atrnr', 'date', 'state'];
+        }
+
 
         $query = Palletstransfer::where(function ($q) use($name){
             $q->where('creditAccount', $name)->orWhere('debitAccount', $name);

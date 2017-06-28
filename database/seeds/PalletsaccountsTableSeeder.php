@@ -43,15 +43,20 @@ class PalletsaccountsTableSeeder extends Seeder
             'name' => 'Unloading',
             'type' => 'Other',
         ));
+//        Palletsaccount::create(array(
+//            'id' => 6,
+//            'name' => 'Wenzel',
+//            'type' => 'Other',
+//        ));
         Palletsaccount::create(array(
             'id' => 6,
-            'name' => 'Wenzel',
+            'name' => 'STOCK',
             'type' => 'Other',
         ));
         Palletsaccount::create(array(
             'id' => 7,
-            'name' => 'Stock',
-            'type' => 'Other',
+            'name' => 'account7',
+            'type' => 'Network',
         ));
         Palletsaccount::create(array(
             'id' => 8,
@@ -64,18 +69,13 @@ class PalletsaccountsTableSeeder extends Seeder
             'type' => 'Network',
         ));
         Palletsaccount::create(array(
-            'id' => 10,
-            'name' => 'account10',
-            'type' => 'Network',
-        ));
-        Palletsaccount::create(array(
             'id' => 11,
             'name' => 'account11',
             'type' => 'Network',
         ));
         Palletsaccount::create(array(
-            'id' => 12,
-            'name' => 'account12',
+            'id' => 10,
+            'name' => 'account10',
             'type' => 'Network',
         ));
     }
