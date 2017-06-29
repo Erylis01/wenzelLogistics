@@ -1580,6 +1580,11 @@
                                                                                         <input type="hidden"
                                                                                                name="_token"
                                                                                                value="{{ csrf_token() }}">
+                                                                                        <div class="form-group">
+                                                                                            @if(Session::has('errorAccountsPanel'))
+                                                                                                <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccountsPanel') }}</div>
+                                                                                            @endif
+                                                                                        </div>
                                                                                         <div class="form-group text-center">
                                                                                             <label for="normal"
                                                                                                    class="control-label text-center">NORMAL</label>
@@ -1613,7 +1618,6 @@
                                                                                                                                                 name="delete"
                                                                                                                                         ></button>
                                                                                                                                     </div>
-
                                                                                                                                 </div>
                                                                                                                                 <div id="PanSubcollapse{{$transferNormal->id}}"
                                                                                                                                      class="panel-collapse collapse panel-body">
@@ -1860,11 +1864,6 @@
                                                                                                                                                 Add
                                                                                                                                                 account</a>
                                                                                                                                         </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        @if(Session::has('errorAccountsPanel'))
-                                                                                                                                            <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccountsPanel') }}</div>
-                                                                                                                                        @endif
                                                                                                                                     </div>
                                                                                                                                     <div class="form-group">
                                                                                                                                         <!--number of pallets-->
@@ -2945,11 +2944,6 @@
                                                                                                                                                 Add
                                                                                                                                                 account</a>
                                                                                                                                         </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        @if(Session::has('errorAccountsPanel'))
-                                                                                                                                            <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccountsPanel') }}</div>
-                                                                                                                                        @endif
                                                                                                                                     </div>
                                                                                                                                     <div class="form-group">
                                                                                                                                         <!--number of pallets-->

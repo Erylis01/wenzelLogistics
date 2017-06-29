@@ -420,7 +420,8 @@ $listPalletstransfersNormal=Palletstransfer::where('loading_atrnr', $atrnr)->whe
             $validator = Validator::make(Input::all(), $rules);
 
             if ($validator->fails()) {
-                session()->flash('errorAccountsPanel', "The account(s) has(ve) not been filled as expected. REFILL !");
+                session()->flash('openPanelPallets', 'openPanelPallets');
+                session()->flash('errorAccountsPanel', "The account(s) has(ve) not been filled as expected. REFILL ! (transfer ".$transfer->id.")");
                 return redirect()->back();
             } else {
                 if ($transfer->state == 'Complete Validated') {
