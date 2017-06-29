@@ -149,3 +149,14 @@
     width:180px;
 }
 
+.colDanger{
+    min-width:120px;
+}
+
+.headerSubpanelDetailsLoading{
+    font-size:16px;
+}
+.headerSubpanelDetailsLoading>a{
+    color:black;
+    font-style: italic;
+}

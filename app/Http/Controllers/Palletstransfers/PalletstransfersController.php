@@ -81,7 +81,7 @@ class PalletstransfersController extends Controller
                     }
                 }
                 $count = count($query->get());
-                $listPalletstransfers = $query->paginate(10);
+                $listPalletstransfers = $query->orderBy('id', 'asc')->paginate(10);
                 $links = '';
             }
 //
@@ -452,7 +452,8 @@ class PalletstransfersController extends Controller
                 if (isset($loading_atrnr)) {
                     $this->state(Loading::where('atrnr', $loading_atrnr)->where('pt', 'JA')->first(), Palletstransfer::where('loading_atrnr', $loading_atrnr)->get());
                 }
-                return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listNamesPalletsaccounts', 'listAtrnr', 'update', 'filesNames'));
+                $anz=Loading::where('atrnr', $loading_atrnr)->first()->anz;
+                return view('palletstransfers.detailsPalletstransfer', compact('anz','transfer', 'listNamesPalletsaccounts', 'listAtrnr', 'update', 'filesNames'));
             } elseif (isset($deleteDocument)) {
                 $this->deleteDocument($transfer, $deleteDocument);
                 if (isset($loading_atrnr)) {
@@ -542,7 +543,6 @@ class PalletstransfersController extends Controller
                     }
                 }
 
-
                 if ($transfer->state == 'Complete Validated') {
                     session()->flash('palletsNumber', $transfer->palletsNumber);
                     if (isset($transfer->creditAccount)) {
@@ -553,7 +553,8 @@ class PalletstransfersController extends Controller
                         session()->flash('debitAccount', $transfer->debitAccount);
                         session()->flash('realPalletsNumberDebitAccount', Palletsaccount::where('name', $transfer->debitAccount)->first()->realNumberPallets);
                     }
-                    return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listNamesPalletsaccounts', 'listAtrnr', 'okSubmitUpdateModal', 'filesNames'));
+                    $anz=Loading::where('atrnr', $loading_atrnr)->first()->anz;
+                    return view('palletstransfers.detailsPalletstransfer', compact('anz','transfer', 'listNamesPalletsaccounts', 'listAtrnr', 'okSubmitUpdateModal', 'filesNames'));
                 } else {
                     session()->pull('actualCreditAccount');
                     session()->pull('actualDebitAccount');

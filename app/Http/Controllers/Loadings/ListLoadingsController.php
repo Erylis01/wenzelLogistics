@@ -84,7 +84,7 @@ class ListLoadingsController extends Controller
                     }
                 }
                 $count = count($query->get());
-                $listLoadings = $query->paginate(10);
+                $listLoadings = $query->orderBy('atrnr', 'asc')->paginate(10);
                 $links = '';
             }
             return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));

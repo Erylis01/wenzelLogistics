@@ -84,11 +84,6 @@
                                                         id="Withdrawal_OnlyOption">
                                                     Withdrawal_Only
                                                 </option>
-                                                <option @if(old('type') == 'Other') selected
-                                                        @endif value="Other"
-                                                        id="OtherOption">
-                                                    Other
-                                                </option>
                                             </optgroup>
                                             <optgroup label="Correcting">
                                                 <option @if(old('type') == 'Purchase_Ext') selected
@@ -139,11 +134,6 @@
                                                         id="Withdrawal_OnlyOption">
                                                     Withdrawal_Only
                                                 </option>
-                                                <option @if($type == 'Other') selected
-                                                        @endif value="Other"
-                                                        id="OtherOption">
-                                                    Other
-                                                </option>
                                             </optgroup>
                                             <optgroup label="Correcting">
                                                 <option @if($type == 'Purchase_Ext') selected
@@ -189,10 +179,6 @@
                                                 <option value="Withdrawal_Only"
                                                         id="Withdrawal_OnlyOption">
                                                     Withdrawal_Only
-                                                </option>
-                                                <option value="Other"
-                                                        id="otherOption">
-                                                    Other
                                                 </option>
                                             </optgroup>
                                             <optgroup label="Correcting">
@@ -364,7 +350,7 @@
                             </div>
                                                         <div class="form-group">
                                 <!--debit account-->
-                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-2" id="debitAccount1"
                                          style="display: block">
                                         @else
@@ -373,12 +359,12 @@
                                                 <label for="debitAccount" class="control-label"><span>*</span> Debit
                                                     account
                                                     :</label>
-                                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
                                 @endif
-                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-4" id="debitAccount2"
                                          style="display: block">
                                         @else
@@ -397,14 +383,14 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
                                 @endif
 
                             <!--credit account-->
-                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-2" id="creditAccount1"
                                          style="display: block">
                                         @else
@@ -413,12 +399,12 @@
                                                 <label for="creditAccount" class="control-label"><span>*</span> Credit
                                                     account
                                                     :</label>
-                                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
                                 @endif
-                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-4" id="creditAccount2"
                                          style="display: block">
                                         @else
@@ -437,7 +423,7 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                @if(isset($type)&&($type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
@@ -703,14 +689,14 @@
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span><span class="text-danger"> Pallets numbers are different for both transfers </span>
                                                     </div>
                                                 @endif
-                                                @if((Session::has('palletsNumber')&&isset($anz)&&request()->session()->get('palletsNumber')<>$anz)||(Session::has('palletsNumber2')&&isset($anz)&&(request()->session()->get('palletsNumber2')<>$anz)))
+                                                @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&isset($anz)&&request()->session()->get('palletsNumber')<>$anz)||(Session::has('palletsNumber2')&&isset($anz)&&(request()->session()->get('palletsNumber2')<>$anz))))
                                                     <div class="text-center">
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="glyphicon glyphicon-warning-sign text-danger"></span> <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$anz}})</span>
                                                     </div>
                                                 @endif
                                             </div>
                                             <div class="modal-footer">
-                                                @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))
+                                                @if((Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))||(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&isset($anz)&&request()->session()->get('palletsNumber')<>$anz)||(Session::has('palletsNumber2')&&isset($anz)&&(request()->session()->get('palletsNumber2')<>$anz)))))
                                                     <button type="submit"
                                                             class="btn btn-danger btn-modal"
                                                             value="yes"

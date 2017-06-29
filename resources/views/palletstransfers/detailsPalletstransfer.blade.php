@@ -122,11 +122,6 @@
                                                                                         id="Withdrawal_OnlyOption">
                                                                                     Withdrawal_Only
                                                                                 </option>
-                                                                                <option @if(old('type') == 'Other') selected
-                                                                                        @endif value="Other"
-                                                                                        id="OtherOption">
-                                                                                    Other
-                                                                                </option>
                                                                             </optgroup>
                                                                             <optgroup label="Correcting">
                                                                                 <option @if(old('type') == 'Purchase_Ext') selected
@@ -177,11 +172,6 @@
                                                                                         id="Withdrawal_OnlyOption">
                                                                                     Withdrawal_Only
                                                                                 </option>
-                                                                                <option @if($transfer->type == 'Other') selected
-                                                                                        @endif value="Other"
-                                                                                        id="OtherOption">
-                                                                                    Other
-                                                                                </option>
                                                                             </optgroup>
                                                                             <optgroup label="Correcting">
                                                                                 <option @if($transfer->type == 'Purchase_Ext') selected
@@ -227,10 +217,6 @@
                                                                                 <option value="Withdrawal_Only"
                                                                                         id="Withdrawal_OnlyOption">
                                                                                     Withdrawal_Only
-                                                                                </option>
-                                                                                <option value="Other"
-                                                                                        id="otherOption">
-                                                                                    Other
                                                                                 </option>
                                                                             </optgroup>
                                                                             <optgroup label="Correcting">
@@ -453,7 +439,7 @@
 
                                                         <div class="form-group">
                                                             <!--debit account-->
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-2" id="debitAccount1"
                                                                      style="display: block">
                                                                     @else
@@ -464,12 +450,12 @@
                                                                                 Debit
                                                                                 account
                                                                                 :</label>
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
                                                             @endif
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-4" id="debitAccount2"
                                                                      style="display: block">
                                                                     @else
@@ -500,7 +486,7 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             @endif
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
@@ -512,7 +498,7 @@
                                                             {{--@endif--}}
 
                                                         <!--credit account-->
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-2" id="creditAccount1"
                                                                      style="display: block">
                                                                     @else
@@ -523,12 +509,12 @@
                                                                                 Credit
                                                                                 account
                                                                                 :</label>
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
                                                             @endif
-                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                 <div class="col-lg-4" id="creditAccount2"
                                                                      style="display: block">
                                                                     @else
@@ -559,7 +545,7 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             @endif
-                                                                            @if($transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
+                                                                            @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Purchase_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
                                                                         </div>
                                                                         @else
                                                                 </div>
@@ -964,8 +950,26 @@
                                                                                 </tbody>
                                                                             </table>
                                                                         @endif
-                                                                    </div>
-                                                                    <div class="modal-footer">
+                                                                    @if(($transfer->type=='Deposit-Withdrawal' || $transfer->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$anz))))
+                                                                        <div class="text-center">
+                                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                            <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$anz}}
+                                                                                )</span>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    @if(($transfer->type=='Deposit-Withdrawal' || $transfer->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$anz))
+                                                                        <button type="submit"
+                                                                                class="btn btn-danger btn-modal"
+                                                                                value="yes"
+                                                                                name="okSubmitUpdateModal"
+                                                                                data-toggle="modal"
+                                                                                data-target="#submitUpdateValidate_modal">
+                                                                            Confirm
+                                                                        </button>
+                                                                    @else
                                                                         <button type="submit"
                                                                                 class="btn btn-default btn-form btn-modal"
                                                                                 value="yes"
@@ -974,7 +978,8 @@
                                                                                 data-target="#submitUpdateValidate_modal">
                                                                             Confirm
                                                                         </button>
-                                                                    </div>
+                                                                    @endif
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1063,14 +1068,31 @@
                                                                             </tr>
                                                                             </tbody>
                                                                         </table>
+                                                                        @if(($transfer->type=='Deposit-Withdrawal' || $transfer->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$anz))))
+                                                                            <div class="text-center">
+                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$anz}}
+                                                                                    )</span>
+                                                                            </div>
+                                                                        @endif
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="submit"
-                                                                                class="btn btn-default btn-form btn-modal"
-                                                                                value="yes"
-                                                                                name="okSubmitUpdateValidateModal">
-                                                                            Confirm
-                                                                        </button>
+                                                                        @if(($transfer->type=='Deposit-Withdrawal' || $transfer->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$anz))
+                                                                            <button type="submit"
+                                                                                    class="btn btn-danger btn-modal"
+                                                                                    value="yes"
+                                                                                    name="okSubmitUpdateValidateModal">
+                                                                                Confirm
+                                                                            </button>
+                                                                        @else
+                                                                            <button type="submit"
+                                                                                    class="btn btn-default btn-form btn-modal"
+                                                                                    value="yes"
+                                                                                    name="okSubmitUpdateValidateModal">
+                                                                                Confirm
+                                                                            </button>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
