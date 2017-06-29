@@ -79,14 +79,14 @@
 }
 
 .colID{
-    max-width: 50px;
-    min-width:50px;
-    width:50px;
+    max-width: 55px;
+    min-width:55px;
+    width:55px;
 }
 .colPNumb{
-    max-width: 80px;
-    min-width:80px;
-    width:80px;
+    max-width: 90px;
+    min-width:90px;
+    width:90px;
 }
 .colDate{
     max-width: 90px;
@@ -100,9 +100,9 @@
     width:180px;
 }
 .col4 {
-    max-width: 575px;
-    min-width: 575px;
-    width: 575px;
+    max-width: 560px;
+    min-width: 560px;
+    width: 560px;
 }
 
 /*.colAtrnr{*/
@@ -113,12 +113,12 @@
 
 .table-loading-account{
     margin:-10px;
-    font-size:18px;
 }
 
 .table-loading-account>table>thead{
     display: inline-block;
     width: 100%;
+    font-size:18px;
 }
 
 .table-loading-account>table>tbody{

@@ -236,7 +236,7 @@
 
 
                             <!--table list transfers associated-->
-                            <div class="table-responsive table-loading-account">
+                            <div class="table-responsive table-transfers">
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                     <tr>
@@ -333,7 +333,7 @@
                                                                              href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                             </td>
                                             <td class="text-center colType">{{$transfer->type}}</td>
-                                            <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
+                                            <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
                                             {{--@if($transfer->type=='Deposit')--}}
                                             {{--<td class="text-center col4"><a class="link"--}}
                                             {{--href="{{route('showDetailsPalletsaccount',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}
@@ -343,7 +343,7 @@
                                             {{--href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>--}}
                                             {{--</td>--}}
                                             {{--@endif--}}
-                                            <td class="text-center colType"><a class="link"
+                                            <td class="text-center colAtrnr"><a class="link"
                                                                                href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
                                             </td>
                                             <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>

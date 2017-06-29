@@ -33,7 +33,7 @@ class DetailsLoadingController extends Controller
             $loading = Loading::where('atrnr', '=', $atrnr)->first();
 
             //////PALLETS PANEL//////
-            //all pallets account
+            //pallets account network, truck and other
             $listPalletsAccounts = Palletsaccount::get();
 
             if (request()->has('sortby') && request()->has('order')) {
