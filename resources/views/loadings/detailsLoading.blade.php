@@ -1641,22 +1641,22 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Deposit-Withdrawal') selected
-                                                                                                                                                                @endif value="Deposit-Withdrawal{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Deposit-Withdrawal"
                                                                                                                                                                 id="Deposit-WithdrawalOption{{$transferNormal->id}}">
                                                                                                                                                             Deposit-Withdrawal
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Withdrawal-Deposit') selected
-                                                                                                                                                                @endif value="Withdrawal-Deposit{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Withdrawal-Deposit"
                                                                                                                                                                 id="Withdrawal-DepositOption{{$transferNormal->id}}">
                                                                                                                                                             Withdrawal-Deposit
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Deposit_Only') selected
-                                                                                                                                                                @endif value="Deposit_Only{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Deposit_Only"
                                                                                                                                                                 id="Deposit_OnlyOption{{$transferNormal->id}}">
                                                                                                                                                             Deposit_Only
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Withdrawal_Only') selected
-                                                                                                                                                                @endif value="Withdrawal_Only{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Withdrawal_Only"
                                                                                                                                                                 id="Withdrawal_OnlyOption{{$transferNormal->id}}">
                                                                                                                                                             Withdrawal_Only
                                                                                                                                                         </option>
@@ -1664,27 +1664,27 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Correcting">
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Purchase_Ext') selected
-                                                                                                                                                                @endif value="Purchase_Ext{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Purchase_Ext"
                                                                                                                                                                 id="Purchase_ExtOption{{$transferNormal->id}}">
                                                                                                                                                             Purchase_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Purchase_Int') selected
-                                                                                                                                                                @endif value="Purchase_Int{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Purchase_Int"
                                                                                                                                                                 id="Purchase_IntOption{{$transferNormal->id}}">
                                                                                                                                                             Purchase_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Sale_Ext') selected
-                                                                                                                                                                @endif value="Sale_Ext{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Sale_Ext"
                                                                                                                                                                 id="Sale_ExtOption{{$transferNormal->id}}">
                                                                                                                                                             Sale_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Sale_Int') selected
-                                                                                                                                                                @endif value="Sale_Int{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Sale_Int"
                                                                                                                                                                 id="Sale_IntOption{{$transferNormal->id}}">
                                                                                                                                                             Sale_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferNormal->id) == 'Other') selected
-                                                                                                                                                                @endif value="Other{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Other"
                                                                                                                                                                 id="OtherOption{{$transferNormal->id}}">
                                                                                                                                                             Other
                                                                                                                                                         </option>
@@ -1693,22 +1693,22 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
                                                                                                                                                         <option @if($transferNormal->type == 'Deposit-Withdrawal') selected
-                                                                                                                                                                @endif value="Deposit-Withdrawal{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Deposit-Withdrawal"
                                                                                                                                                                 id="Deposit-WithdrawalOption{{$transferNormal->id}}">
                                                                                                                                                             Deposit-Withdrawal
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Withdrawal-Deposit') selected
-                                                                                                                                                                @endif value="Withdrawal-Deposit{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Withdrawal-Deposit"
                                                                                                                                                                 id="Withdrawal-DepositOption{{$transferNormal->id}}">
                                                                                                                                                             Withdrawal-Deposit
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Deposit_Only') selected
-                                                                                                                                                                @endif value="Deposit_Only{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Deposit_Only"
                                                                                                                                                                 id="Deposit_OnlyOption{{$transferNormal->id}}">
                                                                                                                                                             Deposit_Only
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Withdrawal_Only') selected
-                                                                                                                                                                @endif value="Withdrawal_Only{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Withdrawal_Only"
                                                                                                                                                                 id="Withdrawal_OnlyOption{{$transferNormal->id}}">
                                                                                                                                                             Withdrawal_Only
                                                                                                                                                         </option>
@@ -1716,27 +1716,27 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Correcting">
                                                                                                                                                         <option @if($transferNormal->type == 'Purchase_Ext') selected
-                                                                                                                                                                @endif value="Purchase_Ext{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Purchase_Ext"
                                                                                                                                                                 id="Purchase_ExtOption{{$transferNormal->id}}">
                                                                                                                                                             Purchase_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Purchase_Int') selected
-                                                                                                                                                                @endif value="Purchase_Int{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Purchase_Int"
                                                                                                                                                                 id="Purchase_IntOption{{$transferNormal->id}}">
                                                                                                                                                             Purchase_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Sale_Ext') selected
-                                                                                                                                                                @endif value="Sale_Ext{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Sale_Ext"
                                                                                                                                                                 id="Sale_ExtOption{{$transferNormal->id}}">
                                                                                                                                                             Sale_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Sale_Int') selected
-                                                                                                                                                                @endif value="Sale_Int{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Sale_Int"
                                                                                                                                                                 id="Sale_IntOption{{$transferNormal->id}}">
                                                                                                                                                             Sale_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferNormal->type == 'Other') selected
-                                                                                                                                                                @endif value="Other{{$transferNormal->id}}"
+                                                                                                                                                                @endif value="Other"
                                                                                                                                                                 id="OtherOption{{$transferNormal->id}}">
                                                                                                                                                             Other
                                                                                                                                                         </option>
@@ -1744,42 +1744,42 @@
                                                                                                                                                 @else
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
-                                                                                                                                                        <option value="Deposit-Withdrawal{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Deposit-Withdrawal"
                                                                                                                                                                 id="Deposit-WithdrawalOption{{$transferNormal->id}}">
                                                                                                                                                             Deposit-Withdrawal
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Withdrawal-Deposit{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Withdrawal-Deposit"
                                                                                                                                                                 id="Withdrawal-DepositOption{{$transferNormal->id}}">
                                                                                                                                                             Withdrawal-Deposit
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Deposit_Only{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Deposit_Only"
                                                                                                                                                                 id="Deposit_OnlyOption{{$transferNormal->id}}">
                                                                                                                                                             Deposit_Only
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Withdrawal_Only{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Withdrawal_Only"
                                                                                                                                                                 id="Withdrawal_OnlyOption{{$transferNormal->id}}">
                                                                                                                                                             Withdrawal_Only
                                                                                                                                                         </option>
                                                                                                                                                     </optgroup>
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Correcting">
-                                                                                                                                                        <option value="Purchase_Ext{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Purchase_Ext"
                                                                                                                                                                 id="Purchase_ExtOption{{$transferNormal->id}}">
                                                                                                                                                             Purchase_Ext
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Purchase_Int{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Purchase_Int"
                                                                                                                                                                 id="Purchase_IntOption{{$transferNormal->id}}">
                                                                                                                                                             Purchase_Int
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Sale_Ext{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Sale_Ext"
                                                                                                                                                                 id="Sale_ExtOption{{$transferNormal->id}}">
                                                                                                                                                             Sale_Ext
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Sale_Int{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Sale_Int"
                                                                                                                                                                 id="Sale_IntOption{{$transferNormal->id}}">
                                                                                                                                                             Sale_Int
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Other{{$transferNormal->id}}"
+                                                                                                                                                        <option value="Other"
                                                                                                                                                                 id="otherOption{{$transferNormal->id}}">
                                                                                                                                                             Other
                                                                                                                                                         </option>
@@ -2182,7 +2182,7 @@
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                                 <!-- Modal update -->
-                                                                                                                                @if(isset($submitPallets))
+                                                                                                                                @if(isset($submitPalletsNormal))
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPallets_modal"
                                                                                                                                          role="dialog">
@@ -2496,7 +2496,7 @@
                                                                                                                                                         </table>
                                                                                                                                                     @endif
 
-                                                                                                                                                    @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))
+                                                                                                                                                    @if(($transferNormal->type=='Deposit-Withdrawal' || $transferNormal->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))
                                                                                                                                                         <div class="text-center">
                                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -2506,7 +2506,7 @@
                                                                                                                                                     @endif
                                                                                                                                                 </div>
                                                                                                                                                 <div class="modal-footer">
-                                                                                                                                                    @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
+                                                                                                                                                    @if(($transferNormal->type=='Deposit-Withdrawal' || $transferNormal->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
                                                                                                                                                         <button type="submit"
                                                                                                                                                                 class="btn btn-danger btn-modal"
                                                                                                                                                                 value="{{$transferNormal->id}}"
@@ -2532,7 +2532,7 @@
                                                                                                                                 @endif
 
                                                                                                                             <!-- Modal update -->
-                                                                                                                                @if(isset($okSubmitPalletsModal) && $transferNormal->state=='Complete Validated')
+                                                                                                                                @if(isset($okSubmitPalletsModalNormal) && $transferNormal->state=='Complete Validated')
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPalletsValidate_modal"
                                                                                                                                          role="dialog">
@@ -2622,7 +2622,7 @@
                                                                                                                                                         </tbody>
                                                                                                                                                     </table>
 
-                                                                                                                                                    @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))
+                                                                                                                                                    @if(($transferNormal->type=='Deposit-Withdrawal' || $transferNormal->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))
                                                                                                                                                         <div class="text-center">
                                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -2632,7 +2632,7 @@
                                                                                                                                                     @endif
                                                                                                                                                 </div>
                                                                                                                                                 <div class="modal-footer">
-                                                                                                                                                    @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
+                                                                                                                                                    @if(($transferNormal->type=='Deposit-Withdrawal' || $transferNormal->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
                                                                                                                                                         <button type="submit"
                                                                                                                                                                 class="btn btn-danger btn-modal"
                                                                                                                                                                 value="{{$transferNormal->id}}"
@@ -2721,22 +2721,22 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Deposit-Withdrawal') selected
-                                                                                                                                                                @endif value="Deposit-Withdrawal{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Deposit-Withdrawal"
                                                                                                                                                                 id="Deposit-WithdrawalOption{{$transferCorrecting->id}}">
                                                                                                                                                             Deposit-Withdrawal
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Withdrawal-Deposit') selected
-                                                                                                                                                                @endif value="Withdrawal-Deposit{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Withdrawal-Deposit"
                                                                                                                                                                 id="Withdrawal-DepositOption{{$transferCorrecting->id}}">
                                                                                                                                                             Withdrawal-Deposit
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Deposit_Only') selected
-                                                                                                                                                                @endif value="Deposit_Only{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Deposit_Only"
                                                                                                                                                                 id="Deposit_OnlyOption{{$transferCorrecting->id}}">
                                                                                                                                                             Deposit_Only
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Withdrawal_Only') selected
-                                                                                                                                                                @endif value="Withdrawal_Only{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Withdrawal_Only"
                                                                                                                                                                 id="Withdrawal_OnlyOption{{$transferCorrecting->id}}">
                                                                                                                                                             Withdrawal_Only
                                                                                                                                                         </option>
@@ -2744,27 +2744,27 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Correcting">
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Purchase_Ext') selected
-                                                                                                                                                                @endif value="Purchase_Ext{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Purchase_Ext"
                                                                                                                                                                 id="Purchase_ExtOption{{$transferCorrecting->id}}">
                                                                                                                                                             Purchase_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Purchase_Int') selected
-                                                                                                                                                                @endif value="Purchase_Int{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Purchase_Int"
                                                                                                                                                                 id="Purchase_IntOption{{$transferCorrecting->id}}">
                                                                                                                                                             Purchase_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Sale_Ext') selected
-                                                                                                                                                                @endif value="Sale_Ext{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Sale_Ext"
                                                                                                                                                                 id="Sale_ExtOption{{$transferCorrecting->id}}">
                                                                                                                                                             Sale_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Sale_Int') selected
-                                                                                                                                                                @endif value="Sale_Int{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Sale_Int"
                                                                                                                                                                 id="Sale_IntOption{{$transferCorrecting->id}}">
                                                                                                                                                             Sale_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if(old('type'.$transferCorrecting->id) == 'Other') selected
-                                                                                                                                                                @endif value="Other{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Other"
                                                                                                                                                                 id="OtherOption{{$transferCorrecting->id}}">
                                                                                                                                                             Other
                                                                                                                                                         </option>
@@ -2773,22 +2773,22 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
                                                                                                                                                         <option @if($transferCorrecting->type == 'Deposit-Withdrawal') selected
-                                                                                                                                                                @endif value="Deposit-Withdrawal{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Deposit-Withdrawal"
                                                                                                                                                                 id="Deposit-WithdrawalOption{{$transferCorrecting->id}}">
                                                                                                                                                             Deposit-Withdrawal
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Withdrawal-Deposit') selected
-                                                                                                                                                                @endif value="Withdrawal-Deposit{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Withdrawal-Deposit"
                                                                                                                                                                 id="Withdrawal-DepositOption{{$transferCorrecting->id}}">
                                                                                                                                                             Withdrawal-Deposit
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Deposit_Only') selected
-                                                                                                                                                                @endif value="Deposit_Only{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Deposit_Only"
                                                                                                                                                                 id="Deposit_OnlyOption{{$transferCorrecting->id}}">
                                                                                                                                                             Deposit_Only
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Withdrawal_Only') selected
-                                                                                                                                                                @endif value="Withdrawal_Only{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Withdrawal_Only"
                                                                                                                                                                 id="Withdrawal_OnlyOption{{$transferCorrecting->id}}">
                                                                                                                                                             Withdrawal_Only
                                                                                                                                                         </option>
@@ -2796,27 +2796,27 @@
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Correcting">
                                                                                                                                                         <option @if($transferCorrecting->type == 'Purchase_Ext') selected
-                                                                                                                                                                @endif value="Purchase_Ext{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Purchase_Ext"
                                                                                                                                                                 id="Purchase_ExtOption{{$transferCorrecting->id}}">
                                                                                                                                                             Purchase_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Purchase_Int') selected
-                                                                                                                                                                @endif value="Purchase_Int{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Purchase_Int"
                                                                                                                                                                 id="Purchase_IntOption{{$transferCorrecting->id}}">
                                                                                                                                                             Purchase_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Sale_Ext') selected
-                                                                                                                                                                @endif value="Sale_Ext{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Sale_Ext"
                                                                                                                                                                 id="Sale_ExtOption{{$transferCorrecting->id}}">
                                                                                                                                                             Sale_Ext
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Sale_Int') selected
-                                                                                                                                                                @endif value="Sale_Int{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Sale_Int"
                                                                                                                                                                 id="Sale_IntOption{{$transferCorrecting->id}}">
                                                                                                                                                             Sale_Int
                                                                                                                                                         </option>
                                                                                                                                                         <option @if($transferCorrecting->type == 'Other') selected
-                                                                                                                                                                @endif value="Other{{$transferCorrecting->id}}"
+                                                                                                                                                                @endif value="Other"
                                                                                                                                                                 id="OtherOption{{$transferCorrecting->id}}">
                                                                                                                                                             Other
                                                                                                                                                         </option>
@@ -2824,42 +2824,42 @@
                                                                                                                                                 @else
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
-                                                                                                                                                        <option value="Deposit-Withdrawal{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Deposit-Withdrawal"
                                                                                                                                                                 id="Deposit-WithdrawalOption{{$transferCorrecting->id}}">
                                                                                                                                                             Deposit-Withdrawal
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Withdrawal-Deposit{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Withdrawal-Deposit"
                                                                                                                                                                 id="Withdrawal-DepositOption{{$transferCorrecting->id}}">
                                                                                                                                                             Withdrawal-Deposit
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Deposit_Only{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Deposit_Only"
                                                                                                                                                                 id="Deposit_OnlyOption{{$transferCorrecting->id}}">
                                                                                                                                                             Deposit_Only
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Withdrawal_Only{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Withdrawal_Only"
                                                                                                                                                                 id="Withdrawal_OnlyOption{{$transferCorrecting->id}}">
                                                                                                                                                             Withdrawal_Only
                                                                                                                                                         </option>
                                                                                                                                                     </optgroup>
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Correcting">
-                                                                                                                                                        <option value="Purchase_Ext{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Purchase_Ext"
                                                                                                                                                                 id="Purchase_ExtOption{{$transferCorrecting->id}}">
                                                                                                                                                             Purchase_Ext
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Purchase_Int{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Purchase_Int"
                                                                                                                                                                 id="Purchase_IntOption{{$transferCorrecting->id}}">
                                                                                                                                                             Purchase_Int
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Sale_Ext{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Sale_Ext"
                                                                                                                                                                 id="Sale_ExtOption{{$transferCorrecting->id}}">
                                                                                                                                                             Sale_Ext
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Sale_Int{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Sale_Int"
                                                                                                                                                                 id="Sale_IntOption{{$transferCorrecting->id}}">
                                                                                                                                                             Sale_Int
                                                                                                                                                         </option>
-                                                                                                                                                        <option value="Other{{$transferCorrecting->id}}"
+                                                                                                                                                        <option value="Other"
                                                                                                                                                                 id="otherOption{{$transferCorrecting->id}}">
                                                                                                                                                             Other
                                                                                                                                                         </option>
@@ -3200,7 +3200,6 @@
                                                                                                                                     </div>
                                                                                                                                     <!--validation-->
                                                                                                                                     <div class="form-group">
-
                                                                                                                                         @if(!empty($filesNames)&&isset($transferCorrecting->palletsNumber)&&isset($transferCorrecting->creditAccount)&&isset($transferCorrecting->debitAccount))
                                                                                                                                             <div class="col-lg-2">
                                                                                                                                                 <label for="validate{{$transferCorrecting->id}}"
@@ -3262,7 +3261,7 @@
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                                 <!-- Modal update -->
-                                                                                                                                @if(isset($submitPallets))
+                                                                                                                                @if(isset($submitPalletsCorrecting))
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPallets_modal"
                                                                                                                                          role="dialog">
@@ -3576,15 +3575,34 @@
                                                                                                                                                         </table>
                                                                                                                                                     @endif
                                                                                                                                                 </div>
+                                                                                                                                                @if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))
+                                                                                                                                                    <div class="text-center">
+                                                                                                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                                        <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}
+                                                                                                                                                            )</span>
+                                                                                                                                                    </div>
+                                                                                                                                                @endif
                                                                                                                                                 <div class="modal-footer">
-                                                                                                                                                    <button type="submit"
-                                                                                                                                                            class="btn btn-default btn-form btn-modal"
-                                                                                                                                                            value="{{$transferCorrecting->id}}"
-                                                                                                                                                            name="okSubmitPalletsModal"
-                                                                                                                                                            data-toggle="modal"
-                                                                                                                                                            data-target="#submitPalletsValidate_modal">
-                                                                                                                                                        Confirm
-                                                                                                                                                    </button>
+                                                                                                                                                    @if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
+                                                                                                                                                        <button type="submit"
+                                                                                                                                                                class="btn btn-danger btn-modal"
+                                                                                                                                                                value="{{$transferCorrecting->id}}"
+                                                                                                                                                                name="okSubmitPalletsModal"
+                                                                                                                                                                data-toggle="modal"
+                                                                                                                                                                data-target="#submitPalletsValidate_modal">
+                                                                                                                                                            Confirm
+                                                                                                                                                        </button>
+                                                                                                                                                    @else
+                                                                                                                                                        <button type="submit"
+                                                                                                                                                                class="btn btn-default btn-form btn-modal"
+                                                                                                                                                                value="{{$transferCorrecting->id}}"
+                                                                                                                                                                name="okSubmitPalletsModal"
+                                                                                                                                                                data-toggle="modal"
+                                                                                                                                                                data-target="#submitPalletsValidate_modal">
+                                                                                                                                                            Confirm
+                                                                                                                                                        </button>
+                                                                                                                                                    @endif
                                                                                                                                                 </div>
                                                                                                                                             </div>
                                                                                                                                         </div>
@@ -3592,7 +3610,7 @@
                                                                                                                                 @endif
 
                                                                                                                             <!-- Modal update -->
-                                                                                                                                @if(isset($okSubmitPalletsModal) && $transferCorrecting->state=='Complete Validated')
+                                                                                                                                @if(isset($okSubmitPalletsModalCorrecting) && $transferCorrecting->state=='Complete Validated')
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPalletsValidate_modal"
                                                                                                                                          role="dialog">
@@ -3682,13 +3700,30 @@
                                                                                                                                                         </tbody>
                                                                                                                                                     </table>
                                                                                                                                                 </div>
+                                                                                                                                                @if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))
+                                                                                                                                                    <div class="text-center">
+                                                                                                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                                        <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}
+                                                                                                                                                            )</span>
+                                                                                                                                                    </div>
+                                                                                                                                                @endif
                                                                                                                                                 <div class="modal-footer">
-                                                                                                                                                    <button type="submit"
-                                                                                                                                                            class="btn btn-default btn-form btn-modal"
-                                                                                                                                                            value="{{$transferCorrecting->id}}"
-                                                                                                                                                            name="okSubmitPalletsValidateModal">
-                                                                                                                                                        Confirm
-                                                                                                                                                    </button>
+                                                                                                                                                    @if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
+                                                                                                                                                        <button type="submit"
+                                                                                                                                                                class="btn btn-danger btn-modal"
+                                                                                                                                                                value="{{$transferCorrecting->id}}"
+                                                                                                                                                                name="okSubmitPalletsValidateModal">
+                                                                                                                                                            Confirm
+                                                                                                                                                        </button>
+                                                                                                                                                    @else
+                                                                                                                                                        <button type="submit"
+                                                                                                                                                                class="btn btn-default btn-form btn-modal"
+                                                                                                                                                                value="{{$transferCorrecting->id}}"
+                                                                                                                                                                name="okSubmitPalletsValidateModal">
+                                                                                                                                                            Confirm
+                                                                                                                                                        </button>
+                                                                                                                                                    @endif
                                                                                                                                                 </div>
                                                                                                                                             </div>
                                                                                                                                         </div>

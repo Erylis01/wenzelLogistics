@@ -169,7 +169,7 @@
 
                             <div class="form-group">
                                 <div class="col-lg-2 addTransfer">
-                                    <a href="{{route('showAddPalletstransferAccount', $truck->name)}}"
+                                    <a href="{{route('showAddPalletstransfer')}}"
                                        class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span>Add transfer</a>
                                 </div>
