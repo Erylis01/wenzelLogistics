@@ -32,7 +32,7 @@
         @if(Auth::guest())
             <h4>You need to login to see the content</h4>
         @else
-            <div class="col-lg-10 col-lg-offset-1">
+            <div class="col-lg-12">
 
                 <div class="panel panel-general">
                     <div class="panel-heading">

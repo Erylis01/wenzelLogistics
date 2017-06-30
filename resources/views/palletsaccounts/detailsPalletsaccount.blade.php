@@ -42,7 +42,8 @@
                                         @endif
 
                                         <div class="panel-heading">
-                                            <div class="col-lg-11 text-left">Details of the account n° {{$account->id}} : {{$account->name}}
+                                            <div class="col-lg-11 text-left">Details of the account n° {{$account->id}}
+                                                : {{$account->name}}
                                             </div>
                                             <div>
                                                 <button type="button"
@@ -53,7 +54,7 @@
                                                         name="deletePalletsaccount_modal"
                                                 ></button>
                                             </div>
-                                            </div>
+                                        </div>
                                         <div class="panel-body panel-body-general">
                                             <form class="form-horizontal text-right" role="form" method="POST"
                                                   action="{{route('updatePalletsaccount', $account->id)}}">
@@ -68,7 +69,8 @@
                                                         @if(isset($account->nickname))
                                                             <input id="nickname" type="text" class="form-control"
                                                                    name="nickname"
-                                                                   value="{{ $account->nickname }}" placeholder="Nickname"
+                                                                   value="{{ $account->nickname }}"
+                                                                   placeholder="Nickname"
                                                                    autofocus>
                                                         @else
                                                             <input id="nickname" type="text" class="form-control"
@@ -259,11 +261,14 @@
                                                                     <div class="col-lg-7">
                                                                         <ul>
                                                                             @if(isset($trucksAssociated))
-                                                                            @foreach($trucksAssociated as $truck)
-                                                                                    <li class="text-left"><a href="{{route('showDetailsTruck', $truck->id)}}" class="link">{{$truck->licensePlate}}</a>
-                                                                                    - {{$truck->realNumberPallets}}</li>
-                                                                            @endforeach
-                                                                                @endif
+                                                                                @foreach($trucksAssociated as $truck)
+                                                                                    <li class="text-left"><a
+                                                                                                href="{{route('showDetailsTruck', $truck->id)}}"
+                                                                                                class="link">{{$truck->licensePlate}}</a>
+                                                                                        - {{$truck->realNumberPallets}}
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            @endif
                                                                         </ul>
                                                                     </div>
                                                                     <div class="col-lg-2 text-left">
@@ -390,6 +395,8 @@
                                                 </div>
                                                 @if (Session::has('messageUpdatePalletsaccount'))
                                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
+                                                @elseif (Session::has('messageClearTrucks'))
+                                                    <div class="alert alert-success text-alert text-center">{{ Session::get('messageClearTrucks') }}</div>
                                                 @endif
                                             </form>
                                             <!-- Modal Delete -->
@@ -436,12 +443,7 @@
 
                                             <!--search bar-->
                                             <br>
-                                            <div>
-                                                <div class="col-lg-2">
-                                                    <a href="{{route('showAddPalletstransfer')}}"
-                                                       class="link"><span
-                                                                class="glyphicon glyphicon-plus-sign"></span>Add transfer</a>
-                                                </div>
+                                            <div class="row">
                                                 <form role="form" method="GET"
                                                       action="{{route('showDetailsPalletsaccount', $account->id)}}">
                                                     {{ csrf_field() }}
@@ -500,153 +502,183 @@
                             </span>
                                                     </div>
                                                 </form>
-                                                <br>
                                             </div>
-
-
+                                            <br>
+                                            <div class=" row">
+                                                <form class="form-horizontal text-right" role="form" method="POST"
+                                                      action="{{route('updatePalletsaccount', $account->id)}}">
+                                                    {{ csrf_field() }}
+                                                    <div class="form-group">
+                                                <div class="col-lg-2 col-lg-offset-3">
+                                                    <a href="{{route('showAddPalletstransfer')}}"
+                                                       class="link"><span
+                                                                class="glyphicon glyphicon-plus-sign"></span>Add
+                                                        transfer</a>
+                                                </div>
+                                                        <div class="col-lg-2 col-lg-offset-2">
+                                                            <input type="submit"
+                                                                   class="btn btn-primary btn-block btn-form"
+                                                                   value="Clear trucks"
+                                                                   name="clearTrucks">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <br>
                                             <!--table list transfers associated-->
-                                            @if($account->type<>'Carrier')
-                                                <div class="table-responsive table-loading-account notCarrier">
-                                                @else
-                                            <div class="table-responsive table-loading-account">
-                                                @endif
-                                                <table class="table table-hover table-bordered">
-                                                    <thead>
-                                                    <tr>
-                                                        @if(isset($searchQuery))
-                                                            <th class="text-center colID">ID<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"></a>
-                                                            </th>
-                                                            <th class="text-center colType">Type<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
-                                                            </th>
-                                                            <th class="text-center colPNumb">Pal. nbr<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
-                                                            </th>
-                                                        @if($account->type=='Carrier')
-                                                            <th class="text-center col4">Truck<br>
-                                                                <a
-                                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=asc')}}"></a><a
-                                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=desc')}}"></a>
-                                                            </th>
-                                                            @endif
-                                                            <th class="text-center colType">Atrnr<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"></a>
-                                                            </th>
-                                                            <th class="text-center colDate">Date<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"></a>
-                                                            </th>
+                                            <div class="row">
+                                                @if($account->type<>'Carrier')
+                                                    <div class="table-responsive table-loading-account notCarrier">
                                                         @else
-                                                            <th class="text-center colID">ID<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=id&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=id&order=desc')}}"></a>
-                                                            </th>
-                                                            <th class="text-center colType">Type<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=desc')}}"></a>
-                                                            </th>
-                                                            <th class="text-center colPNumb">Pal. nbr<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=desc')}}"></a>
-                                                            </th>
-                                                        @if($account->type=='Carrier')
-                                                            <th class="text-center col4">Truck<br>
-                                                                <a
-                                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=asc')}}"></a><a
-                                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=desc')}}"></a>
-                                                            </th>
-                                                            @endif
-                                                            <th class="text-center colType">Atrnr<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=loading_atrnr&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=loading_atrnr&order=desc')}}"></a>
-                                                            </th>
-                                                            <th class="text-center colDate">Date<br>
-                                                                <a
-                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=asc')}}"></a><a
-                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=desc')}}"></a>
-                                                            </th>
-                                                        @endif
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($listTransfers as $transfer)
-                                                        {{--@php($idDebitAccount=\App\Palletsaccount::where('palletsname', $transfer->debitAccount)->first()->id)--}}
-                                                        {{--@php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)--}}
-                                                        @if($transfer->state=="Untreated")
-                                                        @php($class="untreated")
-                                                        @elseif ($transfer->state=="Waiting documents")
-                                                        @php($class="waitingdocuments")
-                                                        @elseif ($transfer->state=="Complete")
-                                                            @php($class="complete")
-                                                        @else
-                                                            @php($class="completevalidated")
-                                                        @endif
-                                                        <tr class="{{$class}}">
-                                                            <td class="text-center colID"><a class="link"
-                                                                                             href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
-                                                            </td>
-                                                            <td class="text-center colType">{{$transfer->type}}</td>
-                                                            <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
-                                                            @if($account->type=='Carrier')
-                                                            <td class="text-center col4"></td>
-                                                            @endif
-                                                                {{--@if($transfer->type=='Deposit')--}}
-                                                                    {{--<td class="text-center col4"><a class="link"--}}
-                                                                                                    {{--href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}
-                                                                    {{--</td>--}}
-                                                                {{--@elseif($transfer->type=='Withdrawal')--}}
-                                                                    {{--<td class="text-center col4"><a class="link"--}}
-                                                                                                    {{--href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>--}}
-                                                                    {{--</td>--}}
-                                                                {{--@endif--}}
+                                                            <div class="table-responsive table-loading-account">
+                                                                @endif
+                                                                <table class="table table-hover table-bordered">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        @if(isset($searchQuery))
+                                                                            <th class="text-center colID">ID<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"></a>
+                                                                            </th>
+                                                                            <th class="text-center colType">Type<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
+                                                                            </th>
+                                                                            <th class="text-center colPNumb">Pal.
+                                                                                nbr<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
+                                                                            </th>
+                                                                            @if($account->type=='Carrier')
+                                                                                <th class="text-center col4">Truck<br>
+                                                                                    <a
+                                                                                            class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                            href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=asc')}}"></a><a
+                                                                                            class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                            href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=desc')}}"></a>
+                                                                                </th>
+                                                                            @endif
+                                                                            <th class="text-center colType">Atrnr<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"></a>
+                                                                            </th>
+                                                                            <th class="text-center colDate">Date<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"></a>
+                                                                            </th>
+                                                                        @else
+                                                                            <th class="text-center colID">ID<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=id&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=id&order=desc')}}"></a>
+                                                                            </th>
+                                                                            <th class="text-center colType">Type<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=desc')}}"></a>
+                                                                            </th>
+                                                                            <th class="text-center colPNumb">Pal.
+                                                                                nbr<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=desc')}}"></a>
+                                                                            </th>
+                                                                            @if($account->type=='Carrier')
+                                                                                <th class="text-center col4">Truck<br>
+                                                                                    <a
+                                                                                            class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                            href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=asc')}}"></a><a
+                                                                                            class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                            href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=desc')}}"></a>
+                                                                                </th>
+                                                                            @endif
+                                                                            <th class="text-center colType">Atrnr<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=loading_atrnr&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=loading_atrnr&order=desc')}}"></a>
+                                                                            </th>
+                                                                            <th class="text-center colDate">Date<br>
+                                                                                <a
+                                                                                        class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=asc')}}"></a><a
+                                                                                        class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                        href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=desc')}}"></a>
+                                                                            </th>
+                                                                        @endif
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach($listTransfers as $transfer)
+                                                                        {{--@php($idDebitAccount=\App\Palletsaccount::where('palletsname', $transfer->debitAccount)->first()->id)--}}
+                                                                        {{--@php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)--}}
+                                                                        @if($transfer->state=="Untreated")
+                                                                            @php($class="untreated")
+                                                                        @elseif ($transfer->state=="Waiting documents")
+                                                                            @php($class="waitingdocuments")
+                                                                        @elseif ($transfer->state=="Complete")
+                                                                            @php($class="complete")
+                                                                        @else
+                                                                            @php($class="completevalidated")
+                                                                        @endif
+                                                                        <tr class="{{$class}}">
+                                                                            <td class="text-center colID"><a
+                                                                                        class="link"
+                                                                                        href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
+                                                                            </td>
+                                                                            <td class="text-center colType">{{$transfer->type}}</td>
+                                                                            <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
+                                                                            @if($account->type=='Carrier')
+                                                                                <td class="text-center col4"></td>
+                                                                            @endif
+                                                                            {{--@if($transfer->type=='Deposit')--}}
+                                                                            {{--<td class="text-center col4"><a class="link"--}}
+                                                                            {{--href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}
+                                                                            {{--</td>--}}
+                                                                            {{--@elseif($transfer->type=='Withdrawal')--}}
+                                                                            {{--<td class="text-center col4"><a class="link"--}}
+                                                                            {{--href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>--}}
+                                                                            {{--</td>--}}
+                                                                            {{--@endif--}}
 
-                                                            <td class="text-center colType"><a class="link"
-                                                                                               href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
-                                                            </td>
-                                                            <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                                                                            <td class="text-center colType"><a
+                                                                                        class="link"
+                                                                                        href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
+                                                                            </td>
+                                                                            <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                                @if($account->type<>'Carrier')
+                                                            </div>
+                                                            @else
+                                                    </div>
+                                                @endif
                                             </div>
+
                                             {{--<div class="row">--}}
                                             {{--<div class="general-pagination text-left">{!! $listLoadingsAssociated->render() !!}</div>--}}
 
@@ -668,6 +700,7 @@
                                             {{--</div>--}}
                                             {{--@endif--}}
                                             {{--</div>--}}
+
                                         </div>
                                         @if($account->realNumberPallets==0||$account->realNumberPallets==null)
                                     </div>
@@ -679,5 +712,5 @@
             </div>
         @endif
     </div>
+    <script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
 @endsection
-<script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>

@@ -80,7 +80,7 @@ class TrucksController extends Controller
                     }
                 }
                 $count = count($query->get());
-                $listTrucks = $query->paginate(10);
+                $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
                 $links = '';
             }
             return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns'));
@@ -89,6 +89,9 @@ class TrucksController extends Controller
         }
     }
 
+    /**
+     * create pallets and trucks if they are not already in the database. The creation is based on the trucks used for each loading
+     */
     public function importData()
     {
         $path = '../resources/assets/excel/';
@@ -114,6 +117,11 @@ class TrucksController extends Controller
                                         'name' => trim($nameAdress[0]),
                                         'adress' => trim($nameAdress[1]),
                                         'type' => 'Carrier',
+                                    ]);
+                                    Truck::firstOrCreate([
+                                        'name' => trim($nameAdress[0]),
+                                        'licensePlate' => 'STOCK',
+                                        'palletsaccount_name' => trim($nameAdress[0]),
                                     ]);
                                 }
 
@@ -148,30 +156,33 @@ class TrucksController extends Controller
         $realNumberPallets = Input::get('realNumberPallets');
 
         $licensePlate = Input::get('licensePlate');
-        if (!$licensePlate) {
+        if (!isset($licensePlate)) {
             $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
         $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
 
-        //validation
-        $rules = array(
-            'name' => 'required|string|max:255|unique:warehouses',
-        );
-
-        $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        } elseif ($truckTest <> null) {
+//        //validation
+//        $rules = array(
+//            'name' => 'required|string|max:255|unique:warehouses',
+//        );
+//
+//        $validator = Validator::make(Input::all(), $rules);
+//        if ($validator->fails()) {
+//            return redirect()->back()
+//                ->withErrors($validator)
+//                ->withInput();
+//        } else
+        if ($truckTest <> null) {
             session()->flash('messageErrorAddTruck', 'Error ! This truck already exists');
             $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
             return view('trucks.addTruck', compact('name', 'realNumberPallets', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
         } else {
             Truck::create(
-                ['name' => $name, 'realNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
+                ['name' => $name, 'realNumberPallets' => $realNumberPallets,'theorcialNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
             );
+            //update the pallets account confirmed pallets number with the sum of all trucks of this account
+            Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
             session()->flash('messageAddTruck', 'Successfully added new truck');
             return redirect('/allTrucks');
         }
@@ -211,9 +222,10 @@ class TrucksController extends Controller
             $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
             $palletsaccount = Palletsaccount::where('name', $truck->palletsaccount_name)->first();
             $name = $truck->name;
+            $licensePlate = $truck->licensePlate;
 
-            $query = Palletstransfer::where(function ($q) use ($name) {
-                $q->where('creditAccount', $name)->orWhere('debitAccount', $name);
+            $query = Palletstransfer::where(function ($q) use ($name, $licensePlate) {
+                $q->where('creditAccount', $name . '-' . $licensePlate)->orWhere('debitAccount', $name . '-' . $licensePlate);
             });
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
@@ -262,7 +274,7 @@ class TrucksController extends Controller
                         });
                     }
                 }
-                $listTransfers = $query->get();
+                $listTransfers = $query->orderBy('id', 'asc')->get();
             }
             return view('trucks.detailsTruck', compact('listPalletsAccounts', 'truck', 'palletsaccount', 'searchQuery', 'listColumns', 'searchColumnsString', 'searchColumns', 'listTransfers'));
         } else {
@@ -282,24 +294,25 @@ class TrucksController extends Controller
         //get data
         $name = Input::get('name');
         $licensePlate = Input::get('licensePlate');
-        if (!$licensePlate) {
+        if (!isset($licensePlate)) {
             $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
         $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->get();
 
-        //validation
-        $rules = array(
-            'name' => 'required|string|max:255|unique:warehouses,name,' . $id,
-        );
-
-        $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-
-        } elseif (count($truckTest) > 1) {
+//        //validation
+//        $rules = array(
+//            'name' => 'required|string|max:255|unique:trucks,name,' . $id,
+//        );
+//
+//        $validator = Validator::make(Input::all(), $rules);
+//        if ($validator->fails()) {
+//            return redirect()->back()
+//                ->withErrors($validator)
+//                ->withInput();
+//
+//        }
+        if (count($truckTest) > 1) {
             session()->flash('messageErrorUpdateTruck', 'Error ! This truck already exists');
             return redirect()->back();
         } else {
@@ -318,7 +331,11 @@ class TrucksController extends Controller
      */
     public function delete($id)
     {
+        $palletsaccount_name=Truck::where('id', $id)->first()->palletsaccount_name;
         DB::table('trucks')->where('id', $id)->delete();
+        //update the pallets account confirmed pallets number with the sum of all trucks of this account
+        Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+
         // redirect
         session()->flash('messageDeleteTruck', 'Successfully deleted the truck!');
         return redirect('/allTrucks');

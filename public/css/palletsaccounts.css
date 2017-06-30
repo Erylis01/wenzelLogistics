@@ -111,10 +111,6 @@
     /*width:50px;*/
 /*}*/
 
-.table-loading-account{
-    margin:-10px;
-}
-
 .table-loading-account>table>thead{
     display: inline-block;
     width: 100%;
@@ -131,7 +127,7 @@
 
 .notCarrier{
     margin-left:25%;
-    width:583px;
+    width:600px;
 }
 
 /*HIDDEN DIV*/

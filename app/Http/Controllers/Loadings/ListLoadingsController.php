@@ -166,6 +166,11 @@ class ListLoadingsController extends Controller
                                         'adress' => trim($nameAdress[1]),
                                         'type' => 'Carrier',
                                     ]);
+                                    Truck::firstOrCreate([
+                                        'name' => trim($nameAdress[0]),
+                                        'licensePlate' => 'STOCK',
+                                        'palletsaccount_name'=>trim($nameAdress[0]),
+                                    ]);
                                 }
 
                                 if (trim($sheet[$r][26]) == null) {
