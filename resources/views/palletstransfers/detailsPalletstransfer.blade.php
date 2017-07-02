@@ -475,15 +475,40 @@
                                                                                         name="debitAccount"
                                                                                         id="debitAccount"
                                                                                 >
-                                                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                                                        @if(isset($transfer->debitAccount)&& $palletsAccount==$transfer->debitAccount)
-                                                                                            <option selected>{{$palletsAccount}}</option>
-                                                                                        @elseif(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
-                                                                                            <option selected>{{$palletsAccount}}</option>
-                                                                                        @else
-                                                                                            <option>{{$palletsAccount}}</option>
-                                                                                        @endif
-                                                                                    @endforeach
+                                                                                    @if(isset($transfer->debitAccount))
+                                                                                        @php($partsDebitAccount=explode('-', $transfer->debitAccount))
+                                                                                        @php($typeDebitAccount=$partsDebitAccount[count($partsDebitAccount)-2])
+                                                                                        @php($idDebitAccount=$partsDebitAccount[count($partsDebitAccount)-1])
+                                                                                    @elseif(Illuminate\Support\Facades\Input::old('debitAccount'))
+                                                                                        @php($partsDebitAccountOld=explode('-', old('debitAccount')))
+                                                                                        @php($typeDebitAccountOld=$partsDebitAccountOld[count($partsDebitAccountOld)-2])
+                                                                                        @php($idDebitAccountOld=$partsDebitAccountOld[count($partsDebitAccountOld)-1])
+                                                                                    @endif
+                                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                            @if(isset($transfer->debitAccount)&& ($typeDebitAccount == 'account') && ($palletsAccount->id==$idDebitAccount))
+                                                                                                <option value="account-{{$palletsAccount->id}}"
+                                                                                                        selected>{{$palletsAccount->name}}</option>
+                                                                                            @elseif(Illuminate\Support\Facades\Input::old('debitAccount') && ($typeDebitAccountOld == 'account') && ($palletsAccount->id==$idDebitAccountOld))
+                                                                                                <option value="account-{{$palletsAccount->id}}"
+                                                                                                        selected>{{$palletsAccount->name}}</option>
+                                                                                            @else
+                                                                                                <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                        @foreach($listTrucksAccounts as $trucksAccount )
+                                                                                            @if(Illuminate\Support\Facades\Input::old('debitAccount') && ($typeDebitAccountOld == 'truck') && ($trucksAccount->id==$idDebitAccountOld))
+                                                                                                <option value="truck-{{$trucksAccount->id}}"
+                                                                                                        selected>{{$trucksAccount->name}}
+                                                                                                    - {{$trucksAccount->licensePlate}}</option>
+                                                                                            @elseif(isset($transfer->debitAccount)&& ($typeDebitAccount== 'truck') && ($trucksAccount->id==$idDebitAccount))
+                                                                                                <option value="truck-{{$trucksAccount->id}}"
+                                                                                                        selected>{{$trucksAccount->name}}
+                                                                                                    - {{$trucksAccount->licensePlate}}</option>
+                                                                                            @else
+                                                                                                <option value="truck-{{$trucksAccount->id}}">{{$trucksAccount->name}}
+                                                                                                    - {{$trucksAccount->licensePlate}}</option>
+                                                                                            @endif
+                                                                                        @endforeach
                                                                                 </select>
                                                                             @endif
                                                                             @if($transfer->type=='Other'||$transfer->type=='Purchase_Int'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale_Int'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only')
@@ -534,13 +559,38 @@
                                                                                         name="creditAccount"
                                                                                         id="creditAccount"
                                                                                 >
-                                                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                                                        @if(isset($transfer->creditAccount)&& $palletsAccount==$transfer->creditAccount)
-                                                                                            <option selected>{{$palletsAccount}}</option>
-                                                                                        @elseif(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
-                                                                                            <option selected>{{$palletsAccount}}</option>
+                                                                                    @if(isset($transfer->creditAccount))
+                                                                                        @php($partsCreditAccount=explode('-', $transfer->creditAccount))
+                                                                                        @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
+                                                                                        @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
+                                                                                    @elseif(Illuminate\Support\Facades\Input::old('creditAccount'))
+                                                                                        @php($partsCreditAccountOld=explode('-', old('creditAccount')))
+                                                                                        @php($typeCreditAccountOld=$partsCreditAccountOld[count($partsCreditAccountOld)-2])
+                                                                                        @php($idCreditAccountOld=$partsCreditAccountOld[count($partsCreditAccountOld)-1])
+                                                                                    @endif
+                                                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                                                        @if(isset($transfer->creditAccount)&& ($typeCreditAccount == 'account') && ($palletsAccount->id==$idCreditAccount))
+                                                                                            <option value="account-{{$palletsAccount->id}}"
+                                                                                                    selected>{{$palletsAccount->name}}</option>
+                                                                                        @elseif(Illuminate\Support\Facades\Input::old('creditAccount') && ($typeCreditAccountOld == 'account') && ($palletsAccount->id==$idCreditAccountOld))
+                                                                                            <option value="account-{{$palletsAccount->id}}"
+                                                                                                    selected>{{$palletsAccount->name}}</option>
                                                                                         @else
-                                                                                            <option>{{$palletsAccount}}</option>
+                                                                                            <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                    @foreach($listTrucksAccounts as $trucksAccount )
+                                                                                        @if(Illuminate\Support\Facades\Input::old('creditAccount') && ($typeCreditAccountOld == 'truck') && ($trucksAccount->id==$idCreditAccountOld))
+                                                                                            <option value="truck-{{$trucksAccount->id}}"
+                                                                                                    selected>{{$trucksAccount->name}}
+                                                                                                - {{$trucksAccount->licensePlate}}</option>
+                                                                                        @elseif(isset($transfer->creditAccount)&& ($typeCreditAccount == 'truck') && ($trucksAccount->id==$idCreditAccount))
+                                                                                            <option value="truck-{{$trucksAccount->id}}"
+                                                                                                    selected>{{$trucksAccount->name}}
+                                                                                                - {{$trucksAccount->licensePlate}}</option>
+                                                                                        @else
+                                                                                            <option value="truck-{{$trucksAccount->id}}">{{$trucksAccount->name}}
+                                                                                                - {{$trucksAccount->licensePlate}}</option>
                                                                                         @endif
                                                                                     @endforeach
                                                                                 </select>

@@ -47,6 +47,7 @@
                                                     <div class="panel panelUntreated">
                                                         @endif
                                                         <div class="panel-heading">
+                                                            <span class="col-lg-5">
                                                             @if(substr_count($loading->atrnr, '-')==0)
                                                                 Details of the loading
                                                                 n°{{ $loading->atrnr }}
@@ -56,13 +57,21 @@
                                                                 <a href="{{route('showDetailsLoading', $atrnr1)}}">{{$atrnr1}}</a>
                                                                 -{{$atrnr2}}
                                                             @endif
+                                                                </span>
+                                                            <span class="col-lg-5 text-left">
+                                                                @php($k=0)
                                                             @foreach($listPalletstransfers as $transfer)
                                                                 @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                                                @if(!empty($errorsID))
+                                                                    @if(!empty($errorsID)&&$k<10)
                                                                     <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                        @php($k=$k+1)
+                                                                    @elseif($k==10)
+                                                                    <span class="text-danger">...</span>
+                                                                        @php($k=$k+1)
                                                                 @endif
                                                             @endforeach
-                                                            <span class="col-lg-offset-4"><a
+                                                                </span>
+                                                            <span><a
                                                                         href="{{route('showAddSubloading', $loading->atrnr)}}"
                                                                         class=" btn btn-add"><span
                                                                             class="glyphicon glyphicon-plus-sign"></span> Add subloading</a></span>
@@ -1030,6 +1039,8 @@
                                                                                                         <div class="form-group">
                                                                                                             @if(Session::has('errorAccounts'))
                                                                                                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccounts') }}</div>
+                                                                                                                @elseif(Session::has('errorType'))
+                                                                                                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('errorType') }}</div>
                                                                                                             @endif
                                                                                                         </div>
                                                                                                         <div class="form-group">
@@ -1647,8 +1658,8 @@
                                                                                             <label for="normal"
                                                                                                    class="control-label text-center">NORMAL</label>
                                                                                         </div>
+
                                                                                         @foreach($listPalletstransfersNormal as $transferNormal)
-                                                                                            <div class="row">
                                                                                                 @if($transferNormal->state=="Untreated")
                                                                                                     <div class="panel panelUntreated">
                                                                                                         @elseif ($transferNormal->state=="Waiting documents")
@@ -1662,7 +1673,8 @@
                                                                                                                                     <div class="col-lg-11 text-left headerSubpanelDetailsLoading">
                                                                                                                                         <a data-toggle="collapse"
                                                                                                                                            href="#PanSubcollapse{{$transferNormal->id}}">Transfer {{$transferNormal->id}}
-                                                                                                                                        </a>@php($errors=\App\Http\Controllers\PalletstransfersController::actualErrors($transferNormal))
+                                                                                                                                        </a>
+                                                                                                                                        @php($errors=\App\Http\Controllers\PalletstransfersController::actualErrors($transferNormal))
                                                                                                                                         @if(!empty($errors))
                                                                                                                                             @foreach($errors as $error)
                                                                                                                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -2292,7 +2304,7 @@
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                                 <!-- Modal update -->
-                                                                                                                                @if(isset($submitPalletsNormal))
+                                                                                                                                @if(isset($submitPalletsNormal)&& $submitPalletsNormal==$transferNormal->id)
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPallets_modal"
                                                                                                                                          role="dialog">
@@ -2315,7 +2327,25 @@
                                                                                                                                                         PLANNED
                                                                                                                                                         pallets
                                                                                                                                                         number</p>
-                                                                                                                                                    @if(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                                                                                    @php($partsActualCreditAccount=explode('-',request()->session()->get('actualCreditAccount')))
+                                                                                                                                                    @php($a=$partsActualCreditAccount[count($partsActualCreditAccount)-1])
+                                                                                                                                                    @php($b=$partsActualCreditAccount[count($partsActualCreditAccount)-2])
+                                                                                                                                                    @if(count(array_diff ($partsActualCreditAccount, [$a, $b]))==1)
+                                                                                                                                                        @php($actualCreditAccount=array_diff ($partsActualCreditAccount, [$a, $b])[0])
+                                                                                                                                                        @else
+                                                                                                                                                        @php($actualCreditAccount=implode(' - ', array_diff ($partsActualCreditAccount, [$a, $b])))
+                                                                                                                                                        @endif
+
+                                                                                                                                                    @php($partsActualDebitAccount=explode('-',request()->session()->get('actualDebitAccount')))
+                                                                                                                                                    @php($aprim=$partsActualDebitAccount[count($partsActualDebitAccount)-1])
+                                                                                                                                                    @php($bprim=$partsActualDebitAccount[count($partsActualDebitAccount)-2])
+                                                                                                                                                    @if(count(array_diff ($partsActualDebitAccount, [$aprim, $bprim]))==1)
+                                                                                                                                                        @php($actualDebitAccount=array_diff ($partsActualDebitAccount, [$aprim, $bprim])[0])
+                                                                                                                                                    @else
+                                                                                                                                                        @php($actualDebitAccount=implode( '- ', array_diff ($partsActualDebitAccount, [$aprim, $bprim])))
+                                                                                                                                                    @endif
+
+                                                                                                                                                    @if($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))
                                                                                                                                                         <table class="table table-hover table-bordered">
                                                                                                                                                             <thead>
                                                                                                                                                             <tr>
@@ -2389,7 +2419,7 @@
                                                                                                                                                             </tr>
                                                                                                                                                             </tbody>
                                                                                                                                                         </table>
-                                                                                                                                                    @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
+                                                                                                                                                    @elseif($actualCreditAccount<>request()->session()->get('creditAccount') && $actualDebitAccount<>request()->session()->get('debitAccount'))
                                                                                                                                                         <table class="table table-hover table-bordered">
                                                                                                                                                             <thead>
                                                                                                                                                             <tr>
@@ -2456,7 +2486,7 @@
                                                                                                                                                             </tr>
                                                                                                                                                             </tbody>
                                                                                                                                                         </table>
-                                                                                                                                                    @elseif(request()->session()->get('actualCreditAccount')==request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')<>request()->session()->get('debitAccount'))
+                                                                                                                                                    @elseif($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount<>request()->session()->get('debitAccount'))
                                                                                                                                                         <table class="table table-hover table-bordered">
                                                                                                                                                             <thead>
                                                                                                                                                             <tr>
@@ -2530,7 +2560,7 @@
                                                                                                                                                             </tr>
                                                                                                                                                             </tbody>
                                                                                                                                                         </table>
-                                                                                                                                                    @elseif(request()->session()->get('actualCreditAccount')<>request()->session()->get('creditAccount') && request()->session()->get('actualDebitAccount')==request()->session()->get('debitAccount'))
+                                                                                                                                                    @elseif($actualCreditAccount<>request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))
                                                                                                                                                         <table class="table table-hover table-bordered">
                                                                                                                                                             <thead>
                                                                                                                                                             <tr>
@@ -2642,7 +2672,7 @@
                                                                                                                                 @endif
 
                                                                                                                             <!-- Modal update -->
-                                                                                                                                @if(isset($okSubmitPalletsModalNormal) && $transferNormal->state=='Complete Validated')
+                                                                                                                                @if(isset($okSubmitPalletsModalNormal) && $okSubmitPalletsModalNormal==$transferNormal->id&& $transferNormal->state=='Complete Validated')
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPalletsValidate_modal"
                                                                                                                                          role="dialog">
@@ -2763,7 +2793,8 @@
                                                                                                                                         </div>
                                                                                                                                     </div>
                                                                                                                                 @endif
-                                                                                                                                @if($transferNormal->state=="In progress")
+
+                                                                                                                                @if($transferNormal->state=="Untreated")
                                                                                                                             </div>
                                                                                                                         @elseif ($transferNormal->state=="Waiting documents")
                                                                                                                     </div>
@@ -2772,14 +2803,14 @@
                                                                                                         @elseif ($transferNormal->state=="Complete Validated")
                                                                                                     </div>
                                                                                                 @endif
-                                                                                            </div>
                                                                                         @endforeach
+
                                                                                         <div class="form-group text-center">
                                                                                             <label for="correcting"
                                                                                                    class="control-label text-center">CORRECTING</label>
                                                                                         </div>
                                                                                         @foreach($listPalletstransfersCorrecting as $transferCorrecting)
-                                                                                            <div class="row">
+                                                                                            {{--<div class="row">--}}
                                                                                                 @if($transferCorrecting->state=="Untreated")
                                                                                                     <div class="panel panelUntreated">
                                                                                                         @elseif ($transferCorrecting->state=="Waiting documents")
@@ -3421,7 +3452,7 @@
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                                 <!-- Modal update -->
-                                                                                                                                @if(isset($submitPalletsCorrecting))
+                                                                                                                                @if(isset($submitPalletsCorrecting) && $submitPalletsCorrecting==$transferCorrecting->id)
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPallets_modal"
                                                                                                                                          role="dialog">
@@ -3770,7 +3801,7 @@
                                                                                                                                 @endif
 
                                                                                                                             <!-- Modal update -->
-                                                                                                                                @if(isset($okSubmitPalletsModalCorrecting) && $transferCorrecting->state=='Complete Validated')
+                                                                                                                                @if(isset($okSubmitPalletsModalCorrecting) && $okSubmitPalletsModalCorrecting==$transferCorrecting->id && $transferCorrecting->state=='Complete Validated')
                                                                                                                                     <div class="modal show"
                                                                                                                                          id="submitPalletsValidate_modal"
                                                                                                                                          role="dialog">
@@ -3889,7 +3920,7 @@
                                                                                                                                         </div>
                                                                                                                                     </div>
                                                                                                                                 @endif
-                                                                                                                                @if($transferCorrecting->state=="In progress")
+                                                                                                                                @if($transferCorrecting->state=="Untreated")
                                                                                                                             </div>
                                                                                                                         @elseif ($transferCorrecting->state=="Waiting documents")
                                                                                                                     </div>
@@ -3898,7 +3929,7 @@
                                                                                                         @elseif ($transferCorrecting->state=="Complete Validated")
                                                                                                     </div>
                                                                                                 @endif
-                                                                                            </div>
+                                                                                            {{--</div>--}}
                                                                                         @endforeach
                                                                                     </form>
                                                                                 </div>

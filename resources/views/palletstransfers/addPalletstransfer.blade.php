@@ -373,15 +373,31 @@
                                                 <select class="selectpicker show-tick form-control" data-size="10"
                                                         data-live-search="true" data-live-search-style="startsWith"
                                                         title="Debit Account" name="debitAccount">
-                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                        @if(Illuminate\Support\Facades\Input::old('debitAccount') && $palletsAccount==old('debitAccount'))
-                                                            <option selected>{{$palletsAccount}}</option>
-                                                        @elseif(isset($debitAccount)&& $palletsAccount==$debitAccount)
-                                                            <option selected>{{$palletsAccount}}</option>
+                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                        @if(Illuminate\Support\Facades\Input::old('debitAccount') && (strpos(old('debitAccount'), '-') == 7 && explode('-', old('debitAccount'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount'))[1]))
+                                                            <option value="account-{{$palletsAccount->id}}"
+                                                                    selected>{{$palletsAccount->name}}</option>
+                                                        @elseif(isset($debitAccount) && (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount)[1]))
+                                                            <option value="account-{{$palletsAccount->id}}"
+                                                                    selected>{{$palletsAccount->name}}</option>
                                                         @else
-                                                            <option>{{$palletsAccount}}</option>
+                                                            <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
                                                         @endif
                                                     @endforeach
+                                                        @foreach($listTrucksAccounts as $trucksAccount )
+                                                            @if(Illuminate\Support\Facades\Input::old('debitAccount') && (strpos(old('debitAccount'), '-') == 5 && explode('-', old('debitAccount'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('debitAccount'))[1]))
+                                                                <option value="truck-{{$trucksAccount->id}}"
+                                                                        selected>{{$trucksAccount->name}}
+                                                                    - {{$trucksAccount->licensePlate}}</option>
+                                                            @elseif(isset($debitAccount)&& (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') && ($trucksAccount->id==explode('-', $debitAccount)[1]))
+                                                                <option value="truck-{{$trucksAccount->id}}"
+                                                                        selected>{{$trucksAccount->name}}
+                                                                    - {{$trucksAccount->licensePlate}}</option>
+                                                            @else
+                                                                <option value="truck-{{$trucksAccount->id}}">{{$trucksAccount->name}}
+                                                                    - {{$trucksAccount->licensePlate}}</option>
+                                                            @endif
+                                                        @endforeach
                                                 </select>
                                                 @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
@@ -413,13 +429,29 @@
                                                 <select class="selectpicker show-tick form-control" data-size="10"
                                                         data-live-search="true" data-live-search-style="startsWith"
                                                         title="Credit Account" name="creditAccount">
-                                                    @foreach($listNamesPalletsaccounts as $palletsAccount )
-                                                        @if(Illuminate\Support\Facades\Input::old('creditAccount') && $palletsAccount==old('creditAccount'))
-                                                            <option selected>{{$palletsAccount}}</option>
-                                                        @elseif(isset($creditAccount)&& $palletsAccount==$creditAccount)
-                                                            <option selected>{{$palletsAccount}}</option>
+                                                    @foreach($listPalletsAccounts as $palletsAccount )
+                                                        @if(Illuminate\Support\Facades\Input::old('creditAccount') && (strpos(old('creditAccount'), '-') == 7 && explode('-', old('creditAccount'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount'))[1]))
+                                                            <option value="account-{{$palletsAccount->id}}"
+                                                                    selected>{{$palletsAccount->name}}</option>
+                                                        @elseif(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1]))
+                                                            <option value="account-{{$palletsAccount->id}}"
+                                                                    selected>{{$palletsAccount->name}}</option>
                                                         @else
-                                                            <option>{{$palletsAccount}}</option>
+                                                            <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                    @foreach($listTrucksAccounts as $trucksAccount )
+                                                        @if(Illuminate\Support\Facades\Input::old('creditAccount') && (strpos(old('creditAccount'), '-') == 5 && explode('-', old('creditAccount'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('creditAccount'))[1]))
+                                                            <option value="truck-{{$trucksAccount->id}}"
+                                                                    selected>{{$trucksAccount->name}}
+                                                                - {{$trucksAccount->licensePlate}}</option>
+                                                        @elseif(isset($creditAccount)&& (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') && ($trucksAccount->id==explode('-', $creditAccount)[1]))
+                                                            <option value="truck-{{$trucksAccount->id}}"
+                                                                    selected>{{$trucksAccount->name}}
+                                                                - {{$trucksAccount->licensePlate}}</option>
+                                                        @else
+                                                            <option value="truck-{{$trucksAccount->id}}">{{$trucksAccount->name}}
+                                                                - {{$trucksAccount->licensePlate}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>

@@ -222,18 +222,46 @@
                                         <td class="text-center">{{date('d-m-y', strtotime($transfer->date))}}</td>
                                         <td class="text-center">{{$transfer->type}}</td>
                                         @if(isset($transfer->creditAccount))
-                                            @php($creditAccountId=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)
-                                            <td class="text-center"><a class="link"
-                                                                       href="{{route('showDetailsPalletsaccount',$creditAccountId)}}">{{$transfer->creditAccount}}</a>
-                                            </td>
+                                            @php($partsCreditAccount=explode('-', $transfer->creditAccount))
+                                            @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
+                                            @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
+                                            @if($typeCreditAccount=='account')
+                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->name)
+                                                <td class="text-center">
+                                                    <a class="link"
+                                                       href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$nameCreditAccount}}</a>
+                                                </td>
+                                            @elseif($typeCreditAccount=='truck')
+                                                @php($nameCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->name)
+                                                @php($licensePlateCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->licensePlate)
+                                                <td class="text-center">
+                                                    <a class="link"
+                                                       href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$nameCreditAccount}}
+                                                        - {{$licensePlateCreditAccount}}</a>
+                                                </td>
+                                            @endif
                                         @else
                                             <td></td>
                                         @endif
                                         @if(isset($transfer->debitAccount))
-                                            @php($debitAccountId=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)
-                                            <td class="text-center"><a class="link"
-                                                                       href="{{route('showDetailsPalletsaccount',$debitAccountId)}}">{{$transfer->debitAccount}}</a>
-                                            </td>
+                                            @php($partsDebitAccount=explode('-', $transfer->debitAccount))
+                                            @php($typeDebitAccount=$partsDebitAccount[count($partsDebitAccount)-2])
+                                            @php($idDebitAccount=$partsDebitAccount[count($partsDebitAccount)-1])
+                                            @if($typeDebitAccount=='account')
+                                                @php($nameDebitAccount=\App\Palletsaccount::where('id', $idDebitAccount)->first()->name)
+                                                <td class="text-center">
+                                                    <a class="link"
+                                                       href="{{route('showDetailsPalletsaccount',$idDebitAccount)}}">{{$nameDebitAccount}}</a>
+                                                </td>
+                                            @elseif($typeDebitAccount=='truck')
+                                                @php($nameDebitAccount=\App\Truck::where('id', $idDebitAccount)->first()->name)
+                                                @php($licensePlateDebitAccount=\App\Truck::where('id', $idDebitAccount)->first()->licensePlate)
+                                                <td class="text-center">
+                                                    <a class="link"
+                                                       href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$nameDebitAccount}}
+                                                        - {{$licensePlateDebitAccount}}</a>
+                                                </td>
+                                            @endif
                                         @else
                                             <td></td>
                                         @endif
