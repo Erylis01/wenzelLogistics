@@ -1088,8 +1088,10 @@
                                                                                                                                     data-size="10"
                                                                                                                                     data-live-search="true"
                                                                                                                                     data-live-search-style="startsWith"
+                                                                                                                                    id="select-debit"
                                                                                                                                     title="Debit Account"
-                                                                                                                                    name="debitAccount">
+                                                                                                                                    name="debitAccount"
+                                                                                                                                    onchange="selectAccount(this.value);">
                                                                                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                                                                                     @if(Illuminate\Support\Facades\Input::old('debitAccount') && (strpos(old('debitAccount'), '-') == 7 && explode('-', old('debitAccount'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount'))[1]))
                                                                                                                                         <option value="account-{{$palletsAccount->id}}"
@@ -1156,7 +1158,8 @@
                                                                                                                                     data-live-search="true"
                                                                                                                                     data-live-search-style="startsWith"
                                                                                                                                     title="Credit Account"
-                                                                                                                                    name="creditAccount">
+                                                                                                                                    name="creditAccount" id="select-credit"
+                                                                                                                                    onchange="creditaccount(this.value);">
                                                                                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                                                                                     @if(Illuminate\Support\Facades\Input::old('creditAccount') && (strpos(old('creditAccount'), '-') == 7 && explode('-', old('creditAccount'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount'))[1]))
                                                                                                                                         <option value="account-{{$palletsAccount->id}}"
@@ -1501,7 +1504,9 @@
                                                                                                                                         data-live-search="true"
                                                                                                                                         data-live-search-style="startsWith"
                                                                                                                                         title="Debit Account (=saler)"
-                                                                                                                                        name="debitAccount2">
+                                                                                                                                        name="debitAccount2"
+                                                                                                                                id="select-debit2"
+                                                                                                                                        onchange="selectAccount2(this.value);">
                                                                                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                                                                                         @if(Illuminate\Support\Facades\Input::old('debitAccount2') && (strpos(old('debitAccount2'), '-') == 7 && explode('-', old('debitAccount2'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount2'))[1]))
                                                                                                                                             <option value="account-{{$palletsAccount->id}}"
@@ -1541,7 +1546,9 @@
                                                                                                                                         data-live-search="true"
                                                                                                                                         data-live-search-style="startsWith"
                                                                                                                                         title="Credit Account (=purchaser)"
-                                                                                                                                        name="creditAccount2">
+                                                                                                                                        name="creditAccount2"
+                                                                                                                                id="select-credit2"
+                                                                                                                                        onchange="creditaccount2(this.value);">
                                                                                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                                                                                         @if(Illuminate\Support\Facades\Input::old('creditAccount2') && (strpos(old('creditAccount2'), '-') == 7 && explode('-', old('creditAccount2'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount2'))[1]))
                                                                                                                                             <option value="account-{{$palletsAccount->id}}"
@@ -1962,7 +1969,7 @@
                                                                                                                                                     title="Type"
                                                                                                                                                     name="type{{$transferNormal->id}}"
                                                                                                                                                     id="type{{$transferNormal->id}}"
-                                                                                                                                                    onchange="displayFieldsTypeIdNormal(this,id);">
+                                                                                                                                                    >
                                                                                                                                                 @if(Illuminate\Support\Facades\Input::old('type'.$transferNormal->id))
                                                                                                                                                     <optgroup
                                                                                                                                                             label="Normal">
@@ -2189,7 +2196,8 @@
                                                                                                                                                     data-live-search-style="startsWith"
                                                                                                                                                     title="Debit Account"
                                                                                                                                                     name="debitAccount{{$transferNormal->id}}"
-                                                                                                                                                    id="debitAccount{{$transferNormal->id}}"
+                                                                                                                                                    id="select-debit{{$transferNormal->id}}"
+                                                                                                                                                    onchange="selectAccountK(this.value, id);"
                                                                                                                                             >
                                                                                                                                                 @if(isset($transferNormal->debitAccount))
                                                                                                                                                     @php($partsDebitAccount=explode('-', $transferNormal->debitAccount))
@@ -2263,7 +2271,8 @@
                                                                                                                                                     data-live-search-style="startsWith"
                                                                                                                                                     title="Credit Account"
                                                                                                                                                     name="creditAccount{{$transferNormal->id}}"
-                                                                                                                                                    id="creditAccount{{$transferNormal->id}}"
+                                                                                                                                                    id="select-credit{{$transferNormal->id}}"
+                                                                                                                                                    onchange="creditaccountK(this.value, id);"
                                                                                                                                             >
                                                                                                                                                 @if(isset($transferNormal->creditAccount))
                                                                                                                                                     @php($partsCreditAccount=explode('-', $transferNormal->creditAccount))
@@ -3234,7 +3243,8 @@
                                                                                                                                                     data-live-search-style="startsWith"
                                                                                                                                                     title="Debit Account"
                                                                                                                                                     name="debitAccount{{$transferCorrecting->id}}"
-                                                                                                                                                    id="debitAccount{{$transferCorrecting->id}}"
+                                                                                                                                                    id="select-debit{{$transferCorrecting->id}}"
+                                                                                                                                                    onchange="selectAccountK(this.value, id);"
                                                                                                                                             >
                                                                                                                                                 @if(isset($transferCorrecting->debitAccount))
                                                                                                                                                     @php($partsDebitAccount=explode('-', $transferCorrecting->debitAccount))
@@ -3309,7 +3319,8 @@
                                                                                                                                                     data-live-search-style="startsWith"
                                                                                                                                                     title="Credit Account"
                                                                                                                                                     name="creditAccount{{$transferCorrecting->id}}"
-                                                                                                                                                    id="creditAccount{{$transferCorrecting->id}}"
+                                                                                                                                                    id="select-credit{{$transferCorrecting->id}}"
+                                                                                                                                                    onchange="creditaccountK(this.value, id);"
                                                                                                                                             >
                                                                                                                                                 @if(isset($transferCorrecting->creditAccount))
                                                                                                                                                     @php($partsCreditAccount=explode('-', $transferCorrecting->creditAccount))

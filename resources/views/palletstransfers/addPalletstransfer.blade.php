@@ -313,45 +313,6 @@
                                     <a href="{{route('showAddPalletsaccount')}}" class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
-                                {{--<!--multitransfer-->--}}
-                                {{--@if(isset($loading_atrnr))--}}
-                                {{--<div>--}}
-                                {{--@else--}}
-                                {{--<div id="loading_atrnrLink">--}}
-                                {{--@endif--}}
-                                {{--<div class="col-lg-2 col-lg-offset-1 text-left">--}}
-                                {{--<label for="state"--}}
-                                {{--class="control-label ">Multi-Transfers ?--}}
-                                {{--</label>--}}
-                                {{--</div>--}}
-                                {{--<div class="col-lg-2 text-left">--}}
-                                {{--@if(Illuminate\Support\Facades\Input::old('multiTransfer') && old('multiTransfer')=='true'||(isset($multiTransfer)&&$multiTransfer=='true'))--}}
-                                {{--<label class="radio-inline"><input--}}
-                                {{--type="radio"--}}
-                                {{--name="multiTransfer"--}}
-                                {{--value="true"--}}
-                                {{--checked>Yes</label>--}}
-                                {{--<label class="radio-inline"><input--}}
-                                {{--type="radio"--}}
-                                {{--name="multiTransfer"--}}
-                                {{--value="false">No</label>--}}
-                                {{--@else--}}
-                                {{--<label class="radio-inline"><input--}}
-                                {{--type="radio"--}}
-                                {{--name="multiTransfer"--}}
-                                {{--value="true">Yes</label>--}}
-                                {{--<label class="radio-inline"><input--}}
-                                {{--type="radio"--}}
-                                {{--name="multiTransfer"--}}
-                                {{--value="false"--}}
-                                {{--checked>No</label>--}}
-                                {{--@endif--}}
-                                {{--</div>--}}
-                                {{--@if(isset($loading_atrnr))--}}
-                                {{--</div>--}}
-                                {{--@else--}}
-                                {{--</div>--}}
-                                {{--@endif--}}
                             </div>
                             <div class="form-group">
                                 <!--debit account-->
