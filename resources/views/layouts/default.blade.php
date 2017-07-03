@@ -11,18 +11,21 @@
     <title>@yield('title')</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
 
     <!-- Custom styles for this template -->
     @yield('stylesheet')
     <link href="{{asset('css/general.css')}}" rel="stylesheet" type="text/css">
 
+
     <!-- Scripts -->
+    @yield('scriptBegin')
     <script>
         window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
 </head>
 <body>
 <div id="app">
@@ -58,18 +61,21 @@
                     <a @yield('classPalletsAccounts') href="{{ route('showAllPalletsaccounts') }}">Pallets Accounts</a>
                 </div>
                 <div class="col-lg-2 text-center navbar-transfers navbar-title-link">
-                    <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}">Pallets Transfers</a>
+                    <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}">Pallets
+                        Transfers</a>
                 </div>
 
                 <div class="col-lg-2 col-lg-offset-1 text-center dropdown">
-                    <a href="#" class="dropdown-toggle navbar-title-link @yield('classProfile') "  data-toggle="dropdown" role="button"
+                    <a href="#" class="dropdown-toggle navbar-title-link @yield('classProfile') " data-toggle="dropdown"
+                       role="button"
                        aria-expanded="false">
                         {{ Auth::user()->username }} <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="{{ route('showProfile') }}">Profile <span class="glyphicon glyphicon-user "></span> </a>
+                            <a href="{{ route('showProfile') }}">Profile <span class="glyphicon glyphicon-user "></span>
+                            </a>
                         </li>
                         <li>
                             <a href="{{ route('logout') }}"
@@ -88,7 +94,7 @@
             @endif
 
         </div>
-</nav>
+    </nav>
 </div>
 
 <div class="container">
@@ -102,13 +108,9 @@
 <!-- Bootstrap core JavaScript
     ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="../../dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<link rel="stylesheet" href="{{asset('css/bootstrap-select.min.css')}}"/>
+<script src="{{ asset('js/bootstrap-select.js') }}"></script>
+@yield('scriptEnd')
 </body>
 </html>
