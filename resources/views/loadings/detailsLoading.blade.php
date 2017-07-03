@@ -906,7 +906,8 @@
                                                                                                                         @endif
                                                                                                                         <div class="col-lg-12 text-center">
                                                                                                                             <label for="sale"
-                                                                                                                                   class="control-label">SALE - correct transfer: @if(isset($transferToCorrect)){{$transferToCorrect->id}}@endif</label>
+                                                                                                                                   class="control-label">SALE
+                                                                                                                               </label>
                                                                                                                         </div>
                                                                                                                         @if(isset($type) &&$type=='Sale-Purchase')
                                                                                                                     </div>
@@ -925,7 +926,8 @@
                                                                                                                         @endif
                                                                                                                         <div class="col-lg-12 text-center">
                                                                                                                             <label for="purchase"
-                                                                                                                                   class="control-label">PURCHASE - correct transfer : @if(isset($transferToCorrect)){{$transferToCorrect->id}}@endif</label>
+                                                                                                                                   class="control-label">PURCHASE
+                                                                                                                              </label>
                                                                                                                         </div>
                                                                                                                         @if(isset($type) &&$type=='Purchase-Sale')
                                                                                                                     </div>
@@ -996,19 +998,58 @@
                                                                                                                            autofocus>
                                                                                                                 @endif
                                                                                                             </div>
-                                                                                                            <!--add pallet account-->
-                                                                                                            <div class="col-lg-2 col-lg-offset-3 text-left">
-                                                                                                                <a href="{{route('showAddPalletsaccount')}}"
-                                                                                                                   class="link"><span
-                                                                                                                            class="glyphicon glyphicon-plus-sign"></span>
-                                                                                                                    Add
-                                                                                                                    account</a>
+                                                                                                            <!--transfer normal associated-->
+                                                                                                            @if(isset($showAddCorrectingTransfer))
+                                                                                                            <div class="col-lg-2 text-right">
+                                                                                                                <label for="normalTransferAssociated" class="control-label"><span>*</span> Associated
+                                                                                                                    :</label>
                                                                                                             </div>
+                                                                                                            <div class="col-lg-1">
+
+                                                                                                                    <select class="selectpicker show-tick form-control"
+                                                                                                                            data-size="5"
+                                                                                                                            data-live-search="true"
+                                                                                                                            data-live-search-style="startsWith"
+                                                                                                                            title="Normal transfer associated"
+                                                                                                                            name="normalTransferAssociated">
+                                                                                                                        @foreach($listPalletstransfersNormal as $normalTransfer )
+                                                                                                                            @if(Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))
+                                                                                                                                <option value="{{$normalTransfer->id}}"
+                                                                                                                                        selected>{{$normalTransfer->id}}</option>
+                                                                                                                            @elseif(isset($normalTransferAssociated)&&$normalTransfer->id==$normalTransferAssociated)
+                                                                                                                                <option value="{{$normalTransfer->id}}"
+                                                                                                                                        selected>{{$normalTransfer->id}}</option>
+                                                                                                                            @elseif(!isset($normalTransferAssociated)&& $showAddCorrectingTransfer==$normalTransfer->id)
+                                                                                                                                <option value="{{$normalTransfer->id}}" selected>{{$normalTransfer->id}}</option>
+                                                                                                                                @else
+                                                                                                                                <option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>
+                                                                                                                            @endif
+                                                                                                                        @endforeach
+                                                                                                                    </select>
+                                                                                                            </div>
+                                                                                                                <!--add pallet account-->
+                                                                                                                <div class="col-lg-2 col-lg-offset-1 text-left">
+                                                                                                                    <a href="{{route('showAddPalletsaccount')}}"
+                                                                                                                       class="link"><span
+                                                                                                                                class="glyphicon glyphicon-plus-sign"></span>
+                                                                                                                        Add
+                                                                                                                        account</a>
+                                                                                                                </div>
+                                                                                                                @else
+                                                                                                            <!--add pallet account-->
+                                                                                                                <div class="col-lg-2 col-lg-offset-3 text-left">
+                                                                                                                    <a href="{{route('showAddPalletsaccount')}}"
+                                                                                                                       class="link"><span
+                                                                                                                                class="glyphicon glyphicon-plus-sign"></span>
+                                                                                                                        Add
+                                                                                                                        account</a>
+                                                                                                                </div>
+                                                                                                        @endif
                                                                                                         </div>
                                                                                                         <!--errors-->
                                                                                                         <div class="form-group">
-                                                                                                            @if(Session::has('errorAccounts'))
-                                                                                                                <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccounts') }}</div>
+                                                                                                            @if(Session::has('errorFields'))
+                                                                                                                <div class="alert alert-danger text-alert text-center">{{ Session::get('errorFields') }}</div>
                                                                                                             @elseif(Session::has('errorType'))
                                                                                                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('errorType') }}</div>
                                                                                                             @endif
@@ -1262,7 +1303,8 @@
                                                                                                                         <div class="form-group">
                                                                                                                             <div class="col-lg-12 text-center">
                                                                                                                                 <label for="purchase"
-                                                                                                                                       class="control-label">PURCHASE - correct transfer : @if(isset($transferToCorrect)){{$transferToCorrect->id}}@endif</label>
+                                                                                                                                       class="control-label">PURCHASE
+                                                                                                                                   </label>
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                         <div class="form-group">
@@ -1311,7 +1353,8 @@
                                                                                                                         <div class="form-group">
                                                                                                                             <div class="col-lg-12 text-center">
                                                                                                                                 <label for="sale"
-                                                                                                                                       class="control-label">SALE - correct transfer : @if(isset($transferToCorrect)){{$transferToCorrect->id}}@endif</label>
+                                                                                                                                       class="control-label">SALE
+                                                                                                                                   </label>
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                         <div class="form-group">
@@ -1662,7 +1705,7 @@
                                                                                                                                 </tr>
                                                                                                                                 </tbody>
                                                                                                                             </table>
-                                                                                                                            @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))
+                                                                                                                            @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))
                                                                                                                                 <div class="text-center">
                                                                                                                                     <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                                     <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
@@ -1677,9 +1720,16 @@
                                                                                                                                         )</span>
                                                                                                                                 </div>
                                                                                                                             @endif
+                                                                                                                            @if(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly') )
+                                                                                                                                <div class="text-center">
+                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
+                                                                                                                                            class="text-danger"> Sum of deposit only transfers dosen't match the sum of withdrawal only transfers </span>
+                                                                                                                                </div>
+                                                                                                                            @endif
                                                                                                                         </div>
                                                                                                                         <div class="modal-footer">
-                                                                                                                            @if((Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))||(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz)))))
+                                                                                                                            @if((($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))||(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz))))||(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly')))
                                                                                                                                 <button type="submit"
                                                                                                                                         class="btn btn-danger btn-modal"
                                                                                                                                         value="yes"
@@ -2699,9 +2749,16 @@
                                                                                                                                                             )</span>
                                                                                                                                                     </div>
                                                                                                                                                 @endif
+                                                                                                                                                @if(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly') )
+                                                                                                                                                    <div class="text-center">
+                                                                                                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
+                                                                                                                                                                class="text-danger"> Sum of deposit only transfers dosen't match the sum of withdrawal only transfers </span>
+                                                                                                                                                    </div>
+                                                                                                                                                @endif
                                                                                                                                             </div>
                                                                                                                                             <div class="modal-footer">
-                                                                                                                                                @if(($transferNormal->type=='Deposit-Withdrawal' || $transferNormal->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))
+                                                                                                                                                @if((($transferNormal->type=='Deposit-Withdrawal' || $transferNormal->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly')))
                                                                                                                                                     <button type="submit"
                                                                                                                                                             class="btn btn-danger btn-modal"
                                                                                                                                                             value="{{$transferNormal->id}}"
@@ -2928,71 +2985,71 @@
                                                                                                                                                    value="{{$transferCorrecting->type}}"
                                                                                                                                                    readonly>
                                                                                                                                         @else
-                                                                                                                                        <select class="selectpicker show-tick form-control"
-                                                                                                                                                data-size="5"
-                                                                                                                                                data-live-search="true"
-                                                                                                                                                data-live-search-style="startsWith"
-                                                                                                                                                title="Type"
-                                                                                                                                                name="type{{$transferCorrecting->id}}"
-                                                                                                                                                id="type{{$transferCorrecting->id}}"
-                                                                                                                                                onchange="displayFieldsTypeIdCorrecting(this, id);">
-                                                                                                                                            @if(Illuminate\Support\Facades\Input::old('type'))
-                                                                                                                                                <optgroup
-                                                                                                                                                        label="Correcting">
-                                                                                                                                                    <option @if(old('type'.$transferCorrecting->id) == 'Purchase-Sale') selected
-                                                                                                                                                            @endif value="Purchase-Sale"
-                                                                                                                                                            id="Purchase-SaleOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Purchase-Sale
-                                                                                                                                                    </option>
-                                                                                                                                                    <option @if(old('type'.$transferCorrecting->id) == 'Sale-Purchase') selected
-                                                                                                                                                            @endif value="Sale-Purchase"
-                                                                                                                                                            id="Sale-PurchaseOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Sale-Purchase
-                                                                                                                                                    </option>
-                                                                                                                                                    <option @if(old('type'.$transferCorrecting->id) == 'Other') selected
-                                                                                                                                                            @endif value="Other"
-                                                                                                                                                            id="OtherOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Other
-                                                                                                                                                    </option>
-                                                                                                                                                </optgroup>
-                                                                                                                                            @elseif(isset($transferCorrecting->type))
-                                                                                                                                                <optgroup
-                                                                                                                                                        label="Correcting">
-                                                                                                                                                    <option @if($transferCorrecting->type == 'Purchase-Sale') selected
-                                                                                                                                                            @endif value="Purchase-Sale"
-                                                                                                                                                            id="Purchase-SaleOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Purchase-Sale
-                                                                                                                                                    </option>
-                                                                                                                                                    <option @if($transferCorrecting->type == 'Sale-Purchase') selected
-                                                                                                                                                            @endif value="Sale-Purchase"
-                                                                                                                                                            id="Sale-PurchaseOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Sale-Purchase
-                                                                                                                                                    </option>
-                                                                                                                                                    <option @if($transferCorrecting->type == 'Other') selected
-                                                                                                                                                            @endif value="Other"
-                                                                                                                                                            id="OtherOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Other
-                                                                                                                                                    </option>
-                                                                                                                                                </optgroup>
-                                                                                                                                            @else
-                                                                                                                                                <optgroup
-                                                                                                                                                        label="Correcting">
-                                                                                                                                                    <option value="Purchase-Sale"
-                                                                                                                                                            id="Purchase-SaleOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Purchase-Sale
-                                                                                                                                                    </option>
-                                                                                                                                                    <option value="Sale-Purchase"
-                                                                                                                                                            id="Sale-PurchaseOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Sale-Purchase
-                                                                                                                                                    </option>
-                                                                                                                                                    <option value="Other"
-                                                                                                                                                            id="otherOption{{$transferCorrecting->id}}">
-                                                                                                                                                        Other
-                                                                                                                                                    </option>
-                                                                                                                                                </optgroup>
-                                                                                                                                            @endif
-                                                                                                                                        </select>
-                                                                                                                                            @endif
+                                                                                                                                            <select class="selectpicker show-tick form-control"
+                                                                                                                                                    data-size="5"
+                                                                                                                                                    data-live-search="true"
+                                                                                                                                                    data-live-search-style="startsWith"
+                                                                                                                                                    title="Type"
+                                                                                                                                                    name="type{{$transferCorrecting->id}}"
+                                                                                                                                                    id="type{{$transferCorrecting->id}}"
+                                                                                                                                                    onchange="displayFieldsTypeIdCorrecting(this, id);">
+                                                                                                                                                @if(Illuminate\Support\Facades\Input::old('type'))
+                                                                                                                                                    <optgroup
+                                                                                                                                                            label="Correcting">
+                                                                                                                                                        <option @if(old('type'.$transferCorrecting->id) == 'Purchase-Sale') selected
+                                                                                                                                                                @endif value="Purchase-Sale"
+                                                                                                                                                                id="Purchase-SaleOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Purchase-Sale
+                                                                                                                                                        </option>
+                                                                                                                                                        <option @if(old('type'.$transferCorrecting->id) == 'Sale-Purchase') selected
+                                                                                                                                                                @endif value="Sale-Purchase"
+                                                                                                                                                                id="Sale-PurchaseOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Sale-Purchase
+                                                                                                                                                        </option>
+                                                                                                                                                        <option @if(old('type'.$transferCorrecting->id) == 'Other') selected
+                                                                                                                                                                @endif value="Other"
+                                                                                                                                                                id="OtherOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Other
+                                                                                                                                                        </option>
+                                                                                                                                                    </optgroup>
+                                                                                                                                                @elseif(isset($transferCorrecting->type))
+                                                                                                                                                    <optgroup
+                                                                                                                                                            label="Correcting">
+                                                                                                                                                        <option @if($transferCorrecting->type == 'Purchase-Sale') selected
+                                                                                                                                                                @endif value="Purchase-Sale"
+                                                                                                                                                                id="Purchase-SaleOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Purchase-Sale
+                                                                                                                                                        </option>
+                                                                                                                                                        <option @if($transferCorrecting->type == 'Sale-Purchase') selected
+                                                                                                                                                                @endif value="Sale-Purchase"
+                                                                                                                                                                id="Sale-PurchaseOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Sale-Purchase
+                                                                                                                                                        </option>
+                                                                                                                                                        <option @if($transferCorrecting->type == 'Other') selected
+                                                                                                                                                                @endif value="Other"
+                                                                                                                                                                id="OtherOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Other
+                                                                                                                                                        </option>
+                                                                                                                                                    </optgroup>
+                                                                                                                                                @else
+                                                                                                                                                    <optgroup
+                                                                                                                                                            label="Correcting">
+                                                                                                                                                        <option value="Purchase-Sale"
+                                                                                                                                                                id="Purchase-SaleOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Purchase-Sale
+                                                                                                                                                        </option>
+                                                                                                                                                        <option value="Sale-Purchase"
+                                                                                                                                                                id="Sale-PurchaseOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Sale-Purchase
+                                                                                                                                                        </option>
+                                                                                                                                                        <option value="Other"
+                                                                                                                                                                id="otherOption{{$transferCorrecting->id}}">
+                                                                                                                                                            Other
+                                                                                                                                                        </option>
+                                                                                                                                                    </optgroup>
+                                                                                                                                                @endif
+                                                                                                                                            </select>
+                                                                                                                                        @endif
                                                                                                                                     </div>
                                                                                                                                     <!--details-->
                                                                                                                                     <div class="col-lg-4">
@@ -3065,13 +3122,42 @@
                                                                                                                                                    required>
                                                                                                                                         @endif
                                                                                                                                     </div>
-                                                                                                                                    <!--add account-->
-                                                                                                                                    <div class="col-lg-2 col-lg-offset-1">
-                                                                                                                                        <a href="{{route('showAddPalletsaccount')}}"
-                                                                                                                                           class="link"><span
-                                                                                                                                                    class="glyphicon glyphicon-plus-sign"></span>
-                                                                                                                                            Add
-                                                                                                                                            account</a>
+                                                                                                                                    <!--transfer normal associated-->
+                                                                                                                                    <div class="col-lg-2 text-right">
+                                                                                                                                        <label for="normalTransferAssociated{{$transferCorrecting->id}}" class="control-label"><span>*</span> Associated
+                                                                                                                                            :</label>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-lg-1">
+                                                                                                                                        @if(isset($transferCorrecting->normalTransferAssociated)&&(isset($transferCorrecting->validate) && $transferCorrecting->validate==1))
+                                                                                                                                            <input type="text" name="normalTransferAssociated{{$transferCorrecting->id}}"
+                                                                                                                                                   class="form-control"
+                                                                                                                                                   value="{{$transferCorrecting->normalTransferAssociated}}"
+                                                                                                                                                   readonly>
+                                                                                                                                        @elseif(isset($transferCorrecting->validate) && $transferCorrecting->validate==1)
+                                                                                                                                            <input type="text" name="normalTransferAssociated{{$transferCorrecting->id}}"
+                                                                                                                                                   class="form-control"
+                                                                                                                                                   value="{{old('normalTransferAssociated')}}"
+                                                                                                                                                   readonly>
+                                                                                                                                        @else
+                                                                                                                                            <select class="selectpicker show-tick form-control"
+                                                                                                                                                    data-size="5"
+                                                                                                                                                    data-live-search="true"
+                                                                                                                                                    data-live-search-style="startsWith"
+                                                                                                                                                    title="Normal transfer associated"
+                                                                                                                                                    name="normalTransferAssociated{{$transferCorrecting->id}}">
+                                                                                                                                                @foreach($listPalletstransfersNormal as $normalTransfer )
+                                                                                                                                                    @if(Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))
+                                                                                                                                                        <option value="{{$normalTransfer->id}}"
+                                                                                                                                                                selected>{{$normalTransfer->id}}</option>
+                                                                                                                                                    @elseif(isset($transferCorrecting->normalTransferAssociated)&&$normalTransfer->id==$transferCorrecting->normalTransferAssociated)
+                                                                                                                                                        <option value="{{$normalTransfer->id}}"
+                                                                                                                                                                selected>{{$normalTransfer->id}}</option>
+                                                                                                                                                    @else
+                                                                                                                                                        <option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>
+                                                                                                                                                    @endif
+                                                                                                                                                @endforeach
+                                                                                                                                            </select>
+                                                                                                                                        @endif
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                                 <div class="form-group">
@@ -3285,6 +3371,14 @@
                                                                                                                                             Upload
                                                                                                                                         </button>
                                                                                                                                     </div>
+                                                                                                                                    <!--add account-->
+                                                                                                                                    <div class="col-lg-2 col-lg-offset-2">
+                                                                                                                                        <a href="{{route('showAddPalletsaccount')}}"
+                                                                                                                                           class="link"><span
+                                                                                                                                                    class="glyphicon glyphicon-plus-sign"></span>
+                                                                                                                                            Add
+                                                                                                                                            account</a>
+                                                                                                                                    </div>
                                                                                                                                 </div>
 
                                                                                                                             @php($filesNames= \App\Http\Controllers\DetailsLoadingController::actualDocuments($transferCorrecting->id))
@@ -3415,7 +3509,7 @@
                                                                                                                                                     @php($actualDebitAccount=implode( ' - ', array_diff ($partsActualDebitAccount, [$aprim, $bprim])))
                                                                                                                                                 @endif
 
-                                                                                                                                            @if($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))
+                                                                                                                                                @if($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))
                                                                                                                                                     <table class="table table-hover table-bordered">
                                                                                                                                                         <thead>
                                                                                                                                                         <tr>
@@ -3686,32 +3780,32 @@
                                                                                                                                                 @endif
                                                                                                                                             </div>
                                                                                                                                             {{--@if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))--}}
-                                                                                                                                                {{--<div class="text-center">--}}
-                                                                                                                                                    {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                    {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                    {{--<span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}--}}
-                                                                                                                                                        {{--)</span>--}}
-                                                                                                                                                {{--</div>--}}
+                                                                                                                                            {{--<div class="text-center">--}}
+                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                                                                            {{--<span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}--}}
+                                                                                                                                            {{--)</span>--}}
+                                                                                                                                            {{--</div>--}}
                                                                                                                                             {{--@endif--}}
                                                                                                                                             <div class="modal-footer">
                                                                                                                                                 {{--@if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))--}}
-                                                                                                                                                    {{--<button type="submit"--}}
-                                                                                                                                                            {{--class="btn btn-danger btn-modal"--}}
-                                                                                                                                                            {{--value="{{$transferCorrecting->id}}"--}}
-                                                                                                                                                            {{--name="okSubmitPalletsModal"--}}
-                                                                                                                                                            {{--data-toggle="modal"--}}
-                                                                                                                                                            {{--data-target="#submitPalletsValidate_modal">--}}
-                                                                                                                                                        {{--Confirm--}}
-                                                                                                                                                    {{--</button>--}}
+                                                                                                                                                {{--<button type="submit"--}}
+                                                                                                                                                {{--class="btn btn-danger btn-modal"--}}
+                                                                                                                                                {{--value="{{$transferCorrecting->id}}"--}}
+                                                                                                                                                {{--name="okSubmitPalletsModal"--}}
+                                                                                                                                                {{--data-toggle="modal"--}}
+                                                                                                                                                {{--data-target="#submitPalletsValidate_modal">--}}
+                                                                                                                                                {{--Confirm--}}
+                                                                                                                                                {{--</button>--}}
                                                                                                                                                 {{--@else--}}
-                                                                                                                                                    <button type="submit"
-                                                                                                                                                            class="btn btn-default btn-form btn-modal"
-                                                                                                                                                            value="{{$transferCorrecting->id}}"
-                                                                                                                                                            name="okSubmitPalletsModal"
-                                                                                                                                                            data-toggle="modal"
-                                                                                                                                                            data-target="#submitPalletsValidate_modal">
-                                                                                                                                                        Confirm
-                                                                                                                                                    </button>
+                                                                                                                                                <button type="submit"
+                                                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                                                        value="{{$transferCorrecting->id}}"
+                                                                                                                                                        name="okSubmitPalletsModal"
+                                                                                                                                                        data-toggle="modal"
+                                                                                                                                                        data-target="#submitPalletsValidate_modal">
+                                                                                                                                                    Confirm
+                                                                                                                                                </button>
                                                                                                                                                 {{--@endif--}}
                                                                                                                                             </div>
                                                                                                                                         </div>
@@ -3720,7 +3814,7 @@
                                                                                                                             @endif
 
                                                                                                                         <!-- Modal update -->
-                                                                                                                        @if(isset($okSubmitPalletsModalCorrecting) && $okSubmitPalletsModalCorrecting==$transferCorrecting->id && $transferCorrecting->state=='Complete Validated')
+                                                                                                                            @if(isset($okSubmitPalletsModalCorrecting) && $okSubmitPalletsModalCorrecting==$transferCorrecting->id && $transferCorrecting->state=='Complete Validated')
                                                                                                                                 <div class="modal show"
                                                                                                                                      id="submitPalletsValidate_modal"
                                                                                                                                      role="dialog">
@@ -3828,28 +3922,28 @@
                                                                                                                                                 </table>
                                                                                                                                             </div>
                                                                                                                                             {{--@if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&&(((request()->session()->get('palletsNumber')<>$loading->anz))))--}}
-                                                                                                                                                {{--<div class="text-center">--}}
-                                                                                                                                                    {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                    {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                    {{--<span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}--}}
-                                                                                                                                                        {{--)</span>--}}
-                                                                                                                                                {{--</div>--}}
+                                                                                                                                            {{--<div class="text-center">--}}
+                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                                                                            {{--<span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$loading->anz}}--}}
+                                                                                                                                            {{--)</span>--}}
+                                                                                                                                            {{--</div>--}}
                                                                                                                                             {{--@endif--}}
                                                                                                                                             <div class="modal-footer">
                                                                                                                                                 {{--@if(($transferCorrecting->type=='Deposit-Withdrawal' || $transferCorrecting->type=='Withdrawal-Deposit')&& (request()->session()->get('palletsNumber')<>$loading->anz))--}}
-                                                                                                                                                    {{--<button type="submit"--}}
-                                                                                                                                                            {{--class="btn btn-danger btn-modal"--}}
-                                                                                                                                                            {{--value="{{$transferCorrecting->id}}"--}}
-                                                                                                                                                            {{--name="okSubmitPalletsValidateModal">--}}
-                                                                                                                                                        {{--Confirm--}}
-                                                                                                                                                    {{--</button>--}}
+                                                                                                                                                {{--<button type="submit"--}}
+                                                                                                                                                {{--class="btn btn-danger btn-modal"--}}
+                                                                                                                                                {{--value="{{$transferCorrecting->id}}"--}}
+                                                                                                                                                {{--name="okSubmitPalletsValidateModal">--}}
+                                                                                                                                                {{--Confirm--}}
+                                                                                                                                                {{--</button>--}}
                                                                                                                                                 {{--@else--}}
-                                                                                                                                                    <button type="submit"
-                                                                                                                                                            class="btn btn-default btn-form btn-modal"
-                                                                                                                                                            value="{{$transferCorrecting->id}}"
-                                                                                                                                                            name="okSubmitPalletsValidateModal">
-                                                                                                                                                        Confirm
-                                                                                                                                                    </button>
+                                                                                                                                                <button type="submit"
+                                                                                                                                                        class="btn btn-default btn-form btn-modal"
+                                                                                                                                                        value="{{$transferCorrecting->id}}"
+                                                                                                                                                        name="okSubmitPalletsValidateModal">
+                                                                                                                                                    Confirm
+                                                                                                                                                </button>
                                                                                                                                                 {{--@endif--}}
                                                                                                                                             </div>
                                                                                                                                         </div>

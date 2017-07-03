@@ -295,7 +295,7 @@ class PalletsaccountsController extends Controller
 
         if (isset($clearTrucks)) {
             $palletsaccount_name = Palletsaccount::where('id', $id)->first()->name;
-            $listTrucks = Truck::where('palletsaccount_name', $palletsaccount_name)->first();
+            $listTrucks = Truck::where('palletsaccount_name', $palletsaccount_name)->get();
             foreach ($listTrucks as $truck) {
                 if ($truck->licensePlate <> 'STOCK') {
                     $realNumberPallets = $truck->realNumberPallets;
@@ -308,7 +308,6 @@ class PalletsaccountsController extends Controller
             }
             session()->flash('messageClearTrucks', 'Successfully cleared trucks');
         } else {
-            //    $account=Palletsaccount::where('id',$id)->first();
             $nickname = Input::get('nickname');
             Palletsaccount::where('id', $id)->update(['nickname' => $nickname]);
             $type = Input::get('type');
@@ -323,17 +322,11 @@ class PalletsaccountsController extends Controller
                     Palletsaccount::where('id', $id)->first()->warehouses()->sync($idwarehouses);
                 }
             } elseif (isset($type) && $type == 'Carrier') {
-//            $trucksAssociatedName=Input::get('trucksAssociated');
                 $adress = Input::get('adress');
                 $phone = Input::get('phone');
                 $email = Input::get('email');
                 $namecontact = Input::get('namecontact');
-//            if(isset($trucksAssociatedName)){
-//                foreach ($trucksAssociatedName as $truckAName) {
-//                    $idtrucks[] = Warehouse::where('name', $truckAName)->value('id');
-//                }
-//                Truck::where('id', $idtrucks)->update(['palletsaccount_name'=>$account->name]);
-//            }
+
                 if (isset($adress)) {
                     Palletsaccount::where('id', $id)->update(['adress' => $adress]);
                 }
