@@ -24,7 +24,7 @@ class CreatePalletstransfersTable extends Migration
             $table->string('state')->default('Waiting documents');
             $table->boolean('validate')->default(false);
             $table->string('type');
-//            $table->boolean('multiTransfer')->default(false);
+            $table->integer('normalTransferAssociated')->nullable();
             $table->string('details')->nullable();
 //            $table->date('dateLastReminder')->nullable();
 //            $table->integer('remindersNumber')->nullable();

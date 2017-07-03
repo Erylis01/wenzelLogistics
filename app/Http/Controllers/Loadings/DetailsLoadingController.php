@@ -36,13 +36,7 @@ class DetailsLoadingController extends Controller
             //pallets account network, truck and other
             $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
             $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
-//            $listPalletsAccounts = [];
-//            foreach ($listAccounts as $account) {
-//                $listPalletsAccounts[] = $account->name;
-//            }
-//            foreach ($listTrucksAccounts as $truck) {
-//                $listPalletsAccounts[] = $truck->name . ' - ' . $truck->licensePlate;
-//            }
+
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
@@ -55,22 +49,8 @@ class DetailsLoadingController extends Controller
                 $q->where('type', 'Deposit_Only')->orWhere('type', 'Withdrawal_Only')->orWhere('type', 'Withdrawal-Deposit')->orWhere('type', 'Deposit-Withdrawal');
             })->orderBy('id', 'asc')->get();
             $listPalletstransfersCorrecting = Palletstransfer::where('loading_atrnr', $atrnr)->where(function ($q) {
-                $q->where('type', 'Purchase_Int')->orWhere('type', 'Purchase_Ext')->orWhere('type', 'Sale_Int')->orWhere('type', 'Sale_Ext')->orWhere('type', 'Other');
+                $q->where('type', 'Purchase-Sale')->orWhere('type', 'Sale-Purchase')->orWhere('type', 'Other');
             })->orderBy('id', 'asc')->get();
-//            //truck
-//            $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
-//            //looking for the account that contains the license plate if it's set
-//            if ($loading->kennzeichen == "") {
-//                $licensePlate = 'OTHER';
-//            } else {
-//                $licensePlate = $loading->kennzeichen;
-//            }
-//            if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
-//                $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
-//                if ($namePalletsAccountTruck <> null) {
-//                    $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
-//                }
-//            }
 
             //link to the mother loading of the subloading
             if (substr_count($loading->atrnr, '-') <> 0) {
@@ -143,444 +123,157 @@ class DetailsLoadingController extends Controller
     {
         $loading = Loading::where('atrnr', $atrnr)->first();
 
-        //buttons
+        //BUTTONS
+        //update only the panel information
         $update = Input::get('update');
+        //show the form to add a transfer
         $addTransferForm = Input::get('addTransferForm');
+        //add a transfer then redirect with a pop up modal to validate the adding
         $addPalletstransfer = Input::get('addPalletstransfer');
+        //validate the adding
         $okSubmitAddModal = Input::get('okSubmitAddModal');
+        //cancel the adding
         $closeSubmitAddModal = Input::get('closeSubmitAddModal');
+        //upload a document for a transfer
         $uploadDocument = Input::get('upload');
+        //delete a transfer
         $delete = Input::get('delete');
+        //delete a document of a transfer
         $deleteDocument = Input::get('deleteDocument');
+        // update a transfer then redirect with a pop up modal to validate the update
         $submitPallets = Input::get('submitPallets');
+        // cancel the update
         $closeSubmitPalletsModal = Input::get('closeSubmitPalletsModal');
+        //validte the update
         $okSubmitPalletsModal = Input::get('okSubmitPalletsModal');
+        //validate the transfer whenall its complete
         $okSubmitPalletsValidateModal = Input::get('okSubmitPalletsValidateModal');
+        //show the form to add a transfer to correct an other transfer
+        $showAddCorrectingTransfer = Input::get('showAddCorrectingTransfer');
 
-//        $truckAccount = Input::get('truckAccount');
-
+        // get date of the loading. the user can change it if he wants
         $date = $loading->ladedatum;
+        // get all the pallets account except the carriers accounts that will be get after, truck by truck
         $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
         $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
-//        $listPalletsAccounts = [];
-//        foreach ($listAccounts as $account) {
-//            $listPalletsAccounts[] = $account->name;
-//        }
-//        foreach ($listTrucksAccounts as $truck) {
-//            $listPalletsAccounts[] = $truck->name . ' - ' . $truck->licensePlate;
-//        }
+
+        //get all transfers to fulfill the table
         $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
+        //get only the normal transfers (deposit/withdrawal)
         $listPalletstransfersNormal = Palletstransfer::where('loading_atrnr', $atrnr)->where(function ($q) {
             $q->where('type', 'Deposit_Only')->orWhere('type', 'Withdrawal_Only')->orWhere('type', 'Withdrawal-Deposit')->orWhere('type', 'Deposit-Withdrawal');
         })->get();
+        //get only the correcting transfers (sale/purchase)
         $listPalletstransfersCorrecting = Palletstransfer::where('loading_atrnr', $atrnr)->where(function ($q) {
-            $q->where('type', 'Purchase_Int')->orWhere('type', 'Purchase_Ext')->orWhere('type', 'Sale_Int')->orWhere('type', 'Sale_Ext')->orWhere('type', 'Other');
+            $q->where('type', 'Purchase-Sale')->orWhere('type', 'Sale-Purchase')->orWhere('type', 'Other');
         })->get();
-
-
-//        $listTypes = ['Deposit', 'Withdrawal', 'Purchase', 'Sale', 'Other'];
-//        //truck
-//        $listPalletsaccountsCarrier = Palletsaccount::where('type', 'Carrier')->get();
 
         if (isset($update)) {
             $this->updatePanel1($request, $loading->atrnr);
             return redirect()->back();
         } elseif (isset($addTransferForm)) {
-//            if (isset($truckAccount)) {
-////                Loading::where('atrnr', $atrnr)->update(['truckAccount' => $truckAccount]);
-////                $creditAccount = $truckAccount;
-////                $debitAccount = $truckAccount;
-//            } else {
-//                //looking for the account that contains the license plate if it's set
-//                if ($loading->kennzeichen == "") {
-//                    $licensePlate = 'OTHER';
-//                } else {
-//                    $licensePlate = $loading->kennzeichen;
-//                }
-//                if (Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first() <> null) {
-//                    $namePalletsAccountTruck = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first()->palletsaccount_name;
-//                    if ($namePalletsAccountTruck <> null) {
-//                        $palletsAccountFavoriteTruck = Palletsaccount::where('name', $namePalletsAccountTruck)->first()->name;
-//                    }
-//                }
-//            }
-//            $loading = Loading::where('atrnr', $atrnr)->first();
             session()->flash('openPanelPallets', 'openPanelPallets');
             return view('loadings.DetailsLoading', compact('loading', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'addTransferForm'));
         } elseif (isset($addPalletstransfer)) {
+            //get data from the form
             $date = Input::get('date');
             $type = Input::get('type');
+
             $details = Input::get('details');
             $creditAccount = Input::get('creditAccount');
             $debitAccount = Input::get('debitAccount');
             $palletsNumber = Input::get('palletsNumber');
-
-            if(!isset($type)){
-                $addTransferForm=true;
-                session()->flash('errorType', "The type hasn't been filled");
-                return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addTransferForm'));
-            } elseif ($type == 'Purchase_Ext') {
-                $rules = array(
-                    'creditAccount' => 'required',
-                );
-                if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                    //truck account
-                    $actualTheoricalCreditPalletsNumber = Truck::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
-                } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    $actualTheoricalCreditPalletsNumber = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
-                }
-//                $actualTheoricalCreditPalletsNumber = Palletsaccount::where('name', $creditAccount)->value('theoricalNumberPallets');
-            } elseif ($type == 'Sale_Ext') {
-                $rules = array(
-                    'debitAccount' => 'required',
-                );
-                if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                    //truck account
-                    $actualTheoricalDebitPalletsNumber = Truck::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
-                } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    $actualTheoricalDebitPalletsNumber = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
-                }
-//                $actualTheoricalDebitPalletsNumber = Palletsaccount::where('name', $debitAccount)->value('theoricalNumberPallets');
-            } elseif ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
-                $creditAccount2 = $debitAccount;
-                $debitAccount2 = $creditAccount;
+            $creditAccount2 = Input::get('creditAccount2');
+            $debitAccount2 = Input::get('debitAccount2');
+            $normalTransferAssociated = Input::get('normalTransferAssociated');
+            if ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
                 $palletsNumber2 = Input::get('palletsNumber2');
-
-                $rules = array(
-                    'creditAccount' => 'required',
-                    'debitAccount' => 'required',
-                );
-
-                if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                    //truck account
-                    $actualTheoricalCreditPalletsNumber = Truck::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
-                } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    $actualTheoricalCreditPalletsNumber = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
-                }
-                if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                    //truck account
-                    $actualTheoricalDebitPalletsNumber = Truck::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
-                } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    $actualTheoricalDebitPalletsNumber = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
-                }
-
-//                $actualTheoricalCreditPalletsNumber2 = Palletsaccount::where('name', $creditAccount2)->value('theoricalNumberPallets');
-//                $actualTheoricalDebitPalletsNumber2 = Palletsaccount::where('name', $debitAccount2)->value('theoricalNumberPallets');
+            } elseif ($type == 'Sale-Purchase' || $type == 'Purchase-Sale') {
+                $palletsNumber2 = Input::get('palletsNumber2C');
             } else {
-                $rules = array(
-                    'creditAccount' => 'required',
-                    'debitAccount' => 'required',
-                );
-                if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                    //truck account
-                    $actualTheoricalCreditPalletsNumber = Truck::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
-                } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    $actualTheoricalCreditPalletsNumber = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
+                $palletsNumber2 = null;
+            }
+
+            $addTransferForm = $this->addPalletsTransfer($type, $debitAccount, $creditAccount, $debitAccount2, $creditAccount2, $palletsNumber, $palletsNumber2, $normalTransferAssociated);
+            if ($addTransferForm == 'error') {
+                //redirect with error
+                if ($type == 'Withdrawal-Deposit' || $type == 'Deposit-Withdrawal' || $type == 'Deposit_Only' || $type == 'Withdrawal_Only') {
+                    return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addTransferForm'));
+                } elseif ($type == 'Purchase-Sale' || $type == 'Sale-Purchase' || $type == 'Other') {
+                    $showAddCorrectingTransfer = true;
+                    return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'showAddCorrectingTransfer'));
                 }
-                if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                    //truck account
-                    $actualTheoricalDebitPalletsNumber = Truck::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
-                } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    $actualTheoricalDebitPalletsNumber = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
+            } else {
+                //redirect with modal open to validate the transfer adding
+                if ($type == 'Withdrawal-Deposit' || $type == 'Deposit-Withdrawal' || $type == 'Deposit_Only' || $type == 'Withdrawal_Only') {
+                    return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer'));
+                } elseif ($type == 'Purchase-Sale' || $type == 'Sale-Purchase' || $type == 'Other') {
+                    $showAddCorrectingTransfer = true;
+                    $palletsNumber2C = $palletsNumber2;
+                    return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2C', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer', 'showAddCorrectingTransfer'));
                 }
             }
-            $validator = Validator::make(Input::all(), $rules);
-
-            if ($validator->fails()) {
-                $addTransferForm=true;
-                session()->flash('errorAccounts', "The account(s) has(ve) not been filled as expected");
-                return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addTransferForm'));
-            } else {
-                session()->flash('palletsNumber', $palletsNumber);
-                session()->flash('openPanelPallets', 'openPanelPallets');
-                if (isset($creditAccount)) {
-                    if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                        //truck account
-                        $nameTruckAccount = Truck::where('id', explode('-', $creditAccount)[1])->value('name');
-                        $licensePlate = Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate');
-                        session()->flash('creditAccount', $nameTruckAccount . ' - ' . $licensePlate);
-                    } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                        //others accounts (network, other)
-                        $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name');
-                        session()->flash('creditAccount', $namePalletsAccount);
-                    }
-                    session()->put('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
-                }
-                if (isset($debitAccount)) {
-                    if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                        //truck account
-                        $nameTruckAccount = Truck::where('id', explode('-', $debitAccount)[1])->value('name');
-                        $licensePlate = Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate');
-                        session()->flash('debitAccount', $nameTruckAccount . ' - ' . $licensePlate);
-                    } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                        //others accounts (network, other)
-                        $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name');
-                        session()->flash('debitAccount', $namePalletsAccount);
-                    }
-                    session()->put('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
-                }
-
-                if (isset($creditAccount2) && isset($debitAccount2) && isset($palletsNumber2)) {
-                    if (strpos($creditAccount2, '-') == 5 && explode('-', $creditAccount2)[0] == 'truck') {
-                        //truck account
-                        $nameTruckAccount = Truck::where('id', explode('-', $creditAccount2)[1])->value('name');
-                        $licensePlate = Truck::where('id', explode('-', $creditAccount2)[1])->value('licensePlate');
-                        session()->flash('creditAccount2', $nameTruckAccount . ' - ' . $licensePlate);
-                    } elseif (strpos($creditAccount2, '-') == 7 && explode('-', $creditAccount2)[0] == 'account') {
-                        //others accounts (network, other)
-                        $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount2)[1])->value('name');
-                        session()->flash('creditAccount2', $namePalletsAccount);
-                    }
-                    if (strpos($debitAccount2, '-') == 5 && explode('-', $debitAccount2)[0] == 'truck') {
-                        //truck account
-                        $nameTruckAccount = Truck::where('id', explode('-', $debitAccount2)[1])->value('name');
-                        $licensePlate = Truck::where('id', explode('-', $debitAccount2)[1])->value('licensePlate');
-                        session()->flash('debitAccount2', $nameTruckAccount . ' - ' . $licensePlate);
-                    } elseif (strpos($debitAccount2, '-') == 7 && explode('-', $debitAccount2)[0] == 'account') {
-                        //others accounts (network, other)
-                        $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount2)[1])->value('name');
-                        session()->flash('debitAccount2', $namePalletsAccount);
-                    }
-                    session()->flash('palletsNumber2', $palletsNumber2);
-                    session()->put('palletsNumberCreditAccount2', $actualTheoricalDebitPalletsNumber - $palletsNumber);
-                    session()->put('palletsNumberDebitAccount2', $actualTheoricalCreditPalletsNumber + $palletsNumber);
-                }
-
-                return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer'));
-            }
-//            return view('loadings.DetailsLoading', compact('loading', 'listPalletsaccountsCarrier', 'listPalletsAccounts', 'listPalletstransfers', 'listFilesNames', 'loading_atrnr', 'date', 'type', 'multiTransfer', 'details', 'listTypes', 'creditAccount', 'debitAccount', 'palletsNumber', 'addPalletstransfer'));
         } elseif (isset($okSubmitAddModal)) {
-            //accept to add the transfer
+            //get data from the form
             $date = Input::get('date');
             $type = Input::get('type');
             $details = Input::get('details');
-            $loading_atrnr = $atrnr;
             $creditAccount = Input::get('creditAccount');
             $debitAccount = Input::get('debitAccount');
             $palletsNumber = Input::get('palletsNumber');
-            if($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit') {
+            $normalTransferAssociated = Input::get('normalTransferAssociated');
+            if ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
                 $creditAccount2 = $debitAccount;
                 $debitAccount2 = $creditAccount;
                 $palletsNumber2 = Input::get('palletsNumber2');
-            }
-            $actualTheoricalCreditPalletsNumber = session('palletsNumberCreditAccount');
-            $actualTheoricalDebitPalletsNumber = session('palletsNumberDebitAccount');
-//            $actualTheoricalCreditPalletsNumber2 = session('palletsNumberCreditAccount2');
-//            $actualTheoricalDebitPalletsNumber2 = session('palletsNumberDebitAccount2');
-
-            if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                //truck account
-                $nameTruckAccount = Truck::where('id', explode('-', $creditAccount)[1])->value('name');
-                $licensePlate = Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate');
-                $creditAccountTransfer = $nameTruckAccount . '-' . $licensePlate . '-' . $creditAccount;
-            } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                //others accounts (network, other)
-                $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name');
-                $creditAccountTransfer = $namePalletsAccount . '-' . $creditAccount;
-            }
-            if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                //truck account
-                $nameTruckAccount = Truck::where('id', explode('-', $debitAccount)[1])->value('name');
-                $licensePlate = Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate');
-                $debitAccountTransfer = $nameTruckAccount . '-' . $licensePlate . '-' . $debitAccount;
-            } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                //others accounts (network, other)
-                $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name');
-                $debitAccountTransfer = $namePalletsAccount . '-' . $debitAccount;
-            }
-            if (strpos($creditAccount2, '-') == 5 && explode('-', $creditAccount2)[0] == 'truck') {
-                //truck account
-                $nameTruckAccount = Truck::where('id', explode('-', $creditAccount2)[1])->value('name');
-                $licensePlate = Truck::where('id', explode('-', $creditAccount2)[1])->value('licensePlate');
-                $creditAccountTransfer2 = $nameTruckAccount . '-' . $licensePlate . '-' . $creditAccount2;
-            } elseif (strpos($creditAccount2, '-') == 7 && explode('-', $creditAccount2)[0] == 'account') {
-                //others accounts (network, other)
-                $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount2)[1])->value('name');
-                $creditAccountTransfer2 = $namePalletsAccount . '-' . $creditAccount2;
-            }
-            if (strpos($debitAccount2, '-') == 5 && explode('-', $debitAccount2)[0] == 'truck') {
-                //truck account
-                $nameTruckAccount = Truck::where('id', explode('-', $debitAccount)[1])->value('name');
-                $licensePlate = Truck::where('id', explode('-', $debitAccount2)[1])->value('licensePlate');
-                $debitAccountTransfer2 = $nameTruckAccount . '-' . $licensePlate . '-' . $debitAccount2;
-            } elseif (strpos($debitAccount2, '-') == 7 && explode('-', $debitAccount2)[0] == 'account') {
-                //others accounts (network, other)
-                $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount2)[1])->value('name');
-                $debitAccountTransfer2 = $namePalletsAccount . '-' . $debitAccount2;
-            }
-
-            $idErrorNotNumberLoading = Error::where('name', 'DW-WD_notNumberLoadingOrder')->first()->id;
-            $idErrorNotSameNumber = Error::where('name', 'DW-WD_notSameNumber')->first()->id;
-            if ($type == 'Deposit-Withdrawal') {
-                if (!isset($palletsNumber2)) {
-                    if ($palletsNumber <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr, 'state' => 'Untreated'])->errors()->attach($idErrorNotNumberLoading);
-                    } else {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr, 'state' => 'Untreated']);
-                    }
-                } else {
-                    if ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 == $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotSameNumber);
-                    } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                    } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                    } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                    } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 == $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr]);
-                    }
-                }
-            } elseif ($type == 'Withdrawal-Deposit') {
-                if (!isset($palletsNumber2)) {
-                    if ($palletsNumber <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr, 'state' => 'Untreated'])->errors()->attach($idErrorNotNumberLoading);
-                    } else {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr, 'state' => 'Untreated']);
-                    }
-                } else {
-                    if ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 == $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotSameNumber);
-                    } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                    } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
-                    } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr])->errors()->attach($idErrorNotNumberLoading);
-                    } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 == $loading->anz) {
-                        Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr]);
-                        Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading_atrnr]);
-                    }
-                }
+            } elseif ($type == 'Sale-Purchase' || $type == 'Purchase-Sale') {
+                $creditAccount2 = Input::get('creditAccount2');
+                $debitAccount2 = Input::get('debitAccount2');
+                $palletsNumber2 = Input::get('palletsNumber2C');
             } else {
-                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading_atrnr]);
+                $creditAccount2 = null;
+                $debitAccount2 = null;
+                $palletsNumber2 = null;
             }
 
-            if (isset($creditAccount)) {
-                if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                    //truck account
-                    Truck::where('id', explode('-', $creditAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
-                    $palletsaccount_name = Truck::where('id', explode('-', $creditAccount)[1])->value('palletsaccount_name');
-                    Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-                } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    Palletsaccount::where('id', explode('-', $creditAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
-                }
-            }
-            if (isset($debitAccount)) {
-                if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                    //truck account
-                    Truck::where('id', explode('-', $debitAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
-                    $palletsaccount_name = Truck::where('id', explode('-', $debitAccount)[1])->value('palletsaccount_name');
-                    Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-                } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                    //others accounts (network, other)
-                    Palletsaccount::where('id', explode('-', $debitAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
-                }
-            }
-            if (isset($creditAccount2) && isset($debitAccount2) && isset($palletsNumber2)) {
-                if (strpos($creditAccount2, '-') == 5 && explode('-', $creditAccount2)[0] == 'truck') {
-                    //truck account
-                    Truck::where('id', explode('-', $creditAccount2)[1])->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber + $palletsNumber2]);
-                    $palletsaccount_name = Truck::where('id', explode('-', $creditAccount2)[1])->value('palletsaccount_name');
-                    Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-                } elseif (strpos($creditAccount2, '-') == 7 && explode('-', $creditAccount2)[0] == 'account') {
-                    //others accounts (network, other)
-                    Palletsaccount::where('id', explode('-', $creditAccount2)[1])->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber + $palletsNumber2]);
-                }
-                if (strpos($debitAccount2, '-') == 5 && explode('-', $debitAccount2)[0] == 'truck') {
-                    //truck account
-                    Truck::where('id', explode('-', $debitAccount2)[1])->update(['theoricalNumberPallets' =>$actualTheoricalCreditPalletsNumber  + $palletsNumber - $palletsNumber2]);
-                    $palletsaccount_name = Truck::where('id', explode('-', $debitAccount2)[1])->value('palletsaccount_name');
-                    Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-                } elseif (strpos($debitAccount2, '-') == 7 && explode('-', $debitAccount2)[0] == 'account') {
-                    //others accounts (network, other)
-                    Palletsaccount::where('id', explode('-', $debitAccount2)[1])->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber - $palletsNumber2]);
-                }
-            }
-            $this->state($loading, Palletstransfer::where('loading_atrnr', $atrnr)->get());
-            session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
-            session()->flash('openPanelPallets', 'openPanelPallets');
+            //accept to add the transfer
+            $this->validateAddPalletsTransfer($loading, $type, $date, $details, $creditAccount, $debitAccount, $creditAccount2, $debitAccount2, $palletsNumber, $palletsNumber2, $normalTransferAssociated);
+            //get all transfers
+            $listPalletstransfers = Palletstransfer::where('loading_atrnr', $atrnr)->get();
+            $this->state($loading, $listPalletstransfers);
             return redirect()->back();
         } elseif (isset($closeSubmitAddModal)) {
             //refuse to add the transfer
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
+        } elseif (isset($showAddCorrectingTransfer)) {
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            return view('loadings.DetailsLoading', compact('loading', 'transferToCorrect', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'showAddCorrectingTransfer'));
         } elseif (isset($uploadDocument)) {
             $transfer = Palletstransfer::where('id', $uploadDocument)->first();
             $documents = $request->file('documentsTransfer' . $uploadDocument);
-            $state = $transfer->state;
-//            $type = $transfer->type;
-//            $creditAccount = $transfer->creditAccount;
-//            $debitAccount = $transfer->debitAccount;
-//            $palletsNumber = $transfer->palletsNumber;
-
-            $filesNames = $this->upload($documents, $transfer);
-            if (!empty($filesNames) && $transfer->validate == 1) {
-                $state = 'Complete Validated';
-            } elseif (!empty($filesNames) && $transfer->validate == 0) {
-                $state = 'Complete';
-            } elseif (empty($filesNames)) {
-                $state = 'Waiting documents';
-            }
-//            elseif (isset($creditAccount) || isset($debitAccount) || isset($palletsNumber) || isset($type) || !empty($filesNames)) {
-//                $state = 'In progress';
-//            }
-            Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
-            $this->state($loading, Palletstransfer::where('loading_atrnr', $atrnr)->get());
-            session()->flash('openPanelPallets', 'openPanelPallets');
+            $this->upload($documents, $transfer, $loading);
             return redirect()->back();
         } elseif (isset($delete)) {
+            //get all the data necessary to display the transfer details page
             $transfer = Palletstransfer::where('id', $delete)->first();
             $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
             $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
+            $listAtrnr = [];
             foreach (Loading::where('pt', 'JA')->orderBy('atrnr', 'asc')->get() as $loading) {
                 $listAtrnr[] = $loading->atrnr;
             }
             $filesNames = $this->actualDocuments($transfer->id);
-            return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listPalletsAccounts', 'listTrucksAccounts','filesNames', 'delete'));
+            //redirect to the details page of the transfer to delete it
+            return view('palletstransfers.detailsPalletstransfer', compact('transfer', 'listAtrnr', 'listPalletsAccounts', 'listTrucksAccounts', 'filesNames', 'delete'));
         } elseif (isset($deleteDocument)) {
             $this->deleteDocument(Palletstransfer::where('id', trim(explode('-', $deleteDocument)[1]))->first(), trim(explode('-', $deleteDocument)[0]));
             $this->state($loading, Palletstransfer::where('loading_atrnr', $atrnr)->get());
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         } elseif (isset($submitPallets)) {
-            $listIDTransfersNormal = [];
-            foreach ($listPalletstransfersNormal as $transferNormal) {
-                $listIDTransfersNormal[] = $transferNormal->id;
-            }
-            $listIDTransfersCorrecting = [];
-            foreach ($listPalletstransfersCorrecting as $transferCorrecting) {
-                $listIDTransfersCorrecting[] = $transferCorrecting->id;
-            }
-            if (in_array($submitPallets, $listIDTransfersNormal)) {
-                $submitPalletsNormal = $submitPallets;
-            } elseif (in_array($submitPallets, $listIDTransfersCorrecting)) {
-                $submitPalletsCorrecting = $submitPallets;
-            }
-
-            //to update the transfer
+            //to update the transfer, get all data
             $transfer = Palletstransfer::where('id', $submitPallets)->first();
-            $loading_atrnr = $atrnr;
             $palletsNumber = Input::get('palletsNumber' . $submitPallets);
             $type = Input::get('type' . $submitPallets);
             $details = Input::get('details' . $submitPallets);
@@ -588,312 +281,431 @@ class DetailsLoadingController extends Controller
             $creditAccount = Input::get('creditAccount' . $submitPallets);
             $debitAccount = Input::get('debitAccount' . $submitPallets);
             $validate = Input::get('validate' . $submitPallets);
+            $normalTransferAssociated = Input::get('normalTransferAssociated' . $submitPallets);
 
-            if ($type == 'Purchase_Ext') {
-                $rules = array(
-                    'creditAccount' . $submitPallets => 'required',
-                );
-                $debitAccount = null;
-            } elseif ($type == 'Sale_Ext') {
-                $rules = array(
-                    'debitAccount' . $submitPallets => 'required',
-                );
-                $creditAccount = null;
-            } else {
-                $rules = array(
-                    'creditAccount' . $submitPallets => 'required',
-                    'debitAccount' . $submitPallets => 'required',
-                );
-            }
+            //to see if we are updating a normal transfer or a correcting one
+            $submitPalletsNormal = $this->defineSubmitPalletsValue($listPalletstransfersNormal, $listPalletstransfersCorrecting, $submitPallets)[0];
+            $submitPalletsCorrecting = $this->defineSubmitPalletsValue($listPalletstransfersNormal, $listPalletstransfersCorrecting, $submitPallets)[1];
 
-            $validator = Validator::make(Input::all(), $rules);
-
-            if ($validator->fails()) {
-                session()->flash('openPanelPallets', 'openPanelPallets');
-                session()->flash('errorAccountsPanel', "The account(s) has(ve) not been filled as expected. REFILL ! (transfer " . $transfer->id . ")");
+            $filesNames = $this->actualDocuments($transfer->id);
+            $view = $this->updateTransfer($filesNames, $transfer, $loading, $type, $date, $details, $validate, $creditAccount, $debitAccount, $palletsNumber, $submitPallets, $normalTransferAssociated);
+            if ($view == 'error') {
                 return redirect()->back();
-            } else {
-                if ($transfer->state == 'Complete Validated') {
-                    $this->inverseRealPalletsNumber($transfer);
-                }
-                $filesNames = $this->actualDocuments($transfer->id);
+            } elseif ($view == 'ok') {
+                $transfer = Palletstransfer::where('id', $transfer->id)->first();
+                return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
+                    'transfer', 'submitPalletsNormal', 'submitPalletsCorrecting', 'filesNames'));
+            }
+        } elseif (isset($okSubmitPalletsModal)) {
+            $okSubmitPalletsModalNormal = $this->defineSubmitPalletsValue($listPalletstransfersNormal, $listPalletstransfersCorrecting, $okSubmitPalletsModal)[0];
+            $okSubmitPalletsModalCorrecting = $this->defineSubmitPalletsValue($listPalletstransfersNormal, $listPalletstransfersCorrecting, $okSubmitPalletsModal)[1];
 
-                if (isset($transfer->creditAccount)) {
-                    session()->put('actualCreditAccount', $transfer->creditAccount);
+            //valide the transfer update
+            $transfer = Palletstransfer::where('id', $okSubmitPalletsModal)->first();
+            $filesNames = $this->actualDocuments($transfer->id);
+            $view = $this->validateUpdateTransfer($transfer, $filesNames, $loading);
+            $transfer = Palletstransfer::where('id', $okSubmitPalletsModal)->first();
+            if ($view == 'ok') {
+                //get only the normal transfers (deposit/withdrawal)
+                $listPalletstransfersNormal = Palletstransfer::where('loading_atrnr', $atrnr)->where(function ($q) {
+                    $q->where('type', 'Deposit_Only')->orWhere('type', 'Withdrawal_Only')->orWhere('type', 'Withdrawal-Deposit')->orWhere('type', 'Deposit-Withdrawal');
+                })->get();
+                //get only the correcting transfers (sale/purchase)
+                $listPalletstransfersCorrecting = Palletstransfer::where('loading_atrnr', $atrnr)->where(function ($q) {
+                    $q->where('type', 'Purchase-Sale')->orWhere('type', 'Sale-Purchase')->orWhere('type', 'Other');
+                })->get();
+
+                return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
+                    'transfer', 'okSubmitPalletsModalNormal', 'okSubmitPalletsModalCorrecting', 'filesNames'));
+            } elseif ($view == 'error') {
+                return redirect()->back();
+            }
+        } elseif (isset($closeSubmitPalletsModal)) {
+            //refuse the transfer update
+            $this->refuseValidateUpdateTransfer($closeSubmitPalletsModal, $loading);
+            return redirect()->back();
+        } elseif (isset($okSubmitPalletsValidateModal)) {
+            $this->validateCompleteUpdateTransfer($okSubmitPalletsValidateModal, $loading, $listPalletstransfers);
+            return redirect()->back();
+        }
+    }
+
+
+    public function addPalletsTransfer($type, $debitAccount, $creditAccount, $debitAccount2, $creditAccount2, $palletsNumber, $palletsNumber2, $normalTransferAssociated)
+    {
+        if (!isset($type)) {
+            session()->flash('errorType', "The type hasn't been filled");
+            $view = 'error';
+        } elseif ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
+            if (!isset($debitAccount) && !isset($creditAccount) && !(isset($palletsNumber))) {
+                $view = 'error';
+                session()->flash('errorFields', "The fields have not been filled as expected");
+            } else {
+                $view = 'ok';
+                $creditAccount2 = $debitAccount;
+                $debitAccount2 = $creditAccount;
+            }
+        } elseif ($type == 'Sale-Purchase' || $type == 'Purchase-Sale') {
+            if (!isset($normalTransferAssociated) && !isset($debitAccount) && !isset($creditAccount) && !isset($palletsNumber) && !isset($debitAccount2) && !isset($creditAccount2) && !isset($palletsNumber2)) {
+                $view = 'error';
+                session()->flash('errorFields', "The fields have not been filled as expected");
+            } else {
+                $view = 'ok';
+            }
+        } else {
+            if (!isset($normalTransferAssociated) && !isset($debitAccount) && !isset($creditAccount) && !(isset($palletsNumber))) {
+                $view = 'error';
+                session()->flash('errorFields', "The fields have not been filled as expected");
+            } else {
+                $view = 'ok';
+            }
+        }
+
+        if ($view == 'ok') {
+            session()->flash('palletsNumber', $palletsNumber);
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            $actualTheoricalDebitPalletsNumber = $this->actualTheoricalPalletsNumber($creditAccount, $debitAccount)[0];
+            $actualTheoricalCreditPalletsNumber = $this->actualTheoricalPalletsNumber($creditAccount, $debitAccount)[1];
+            $this->displayAccounts($creditAccount, $debitAccount, null);
+            session()->put('palletsNumberCreditAccount', $actualTheoricalCreditPalletsNumber);
+            session()->put('palletsNumberDebitAccount', $actualTheoricalDebitPalletsNumber);
+            if (isset($creditAccount2) && isset($debitAccount2)) {
+                $this->displayAccounts($creditAccount2, $debitAccount2, 2);
+                session()->flash('palletsNumber2', $palletsNumber2);
+                if ($debitAccount2 <> $creditAccount) {
+                    $actualTheoricalDebitPalletsNumber2 = $this->actualTheoricalPalletsNumber($creditAccount2, $debitAccount2)[0];
+                    session()->put('palletsNumberDebitAccount2', $actualTheoricalDebitPalletsNumber2);
+                } else {
+                    session()->put('palletsNumberDebitAccount2', $actualTheoricalCreditPalletsNumber + $palletsNumber);
                 }
-                if (isset($transfer->debitAccount)) {
-                    session()->put('actualDebitAccount', $transfer->debitAccount);
+                if ($creditAccount2 <> $debitAccount) {
+                    $actualTheoricalCreditPalletsNumber2 = $this->actualTheoricalPalletsNumber($creditAccount2, $debitAccount2)[1];
+                    session()->put('palletsNumberCreditAccount2', $actualTheoricalCreditPalletsNumber2);
+                } else {
+                    session()->put('palletsNumberCreditAccount2', $actualTheoricalDebitPalletsNumber - $palletsNumber);
                 }
+            }
+        }
+        return $view;
+    }
+
+    public function actualTheoricalPalletsNumber($creditAccount, $debitAccount)
+    {
+        if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
+            //truck account
+            $actualTheoricalDebitPalletsNumber = Truck::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
+        } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
+            //others accounts (network, other)
+            $actualTheoricalDebitPalletsNumber = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
+        }
+
+        if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
+            //truck account
+            $actualTheoricalCreditPalletsNumber = Truck::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
+        } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
+            //others accounts (network, other)
+            $actualTheoricalCreditPalletsNumber = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('theoricalNumberPallets');
+        }
+
+        return [$actualTheoricalDebitPalletsNumber, $actualTheoricalCreditPalletsNumber];
+    }
+
+    public function displayAccounts($creditAccount, $debitAccount, $index)
+    {
+        if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
+            //truck account
+            $nameTruckAccount = Truck::where('id', explode('-', $creditAccount)[1])->value('name');
+            $licensePlate = Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate');
+            session()->flash('creditAccount' . $index, $nameTruckAccount . ' - ' . $licensePlate);
+        } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
+            //others accounts (network, other)
+            $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name');
+            session()->flash('creditAccount' . $index, $namePalletsAccount);
+        }
+        if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
+            //truck account
+            $nameTruckAccount = Truck::where('id', explode('-', $debitAccount)[1])->value('name');
+            $licensePlate = Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate');
+            session()->flash('debitAccount' . $index, $nameTruckAccount . ' - ' . $licensePlate);
+        } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
+            //others accounts (network, other)
+            $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name');
+            session()->flash('debitAccount' . $index, $namePalletsAccount);
+        }
+    }
+
+    public function namesAccounts($creditAccount, $debitAccount, $index)
+    {
+        if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
+            //truck account
+            $nameTruckAccount = Truck::where('id', explode('-', $creditAccount)[1])->value('name');
+            $licensePlate = Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate');
+            $creditAccountTransfer = $nameTruckAccount . '-' . $licensePlate . '-' . $creditAccount;
+            if ($index <> null) {
+                session()->flash('creditAccount', $nameTruckAccount . ' - ' . $licensePlate);
+                session()->flash('thPalletsNumberCreditAccount', Truck::where('id', explode('-', $creditAccount)[1])->first()->theoricalNumberPallets);
+            }
+        } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
+            //others accounts (network, other)
+            $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name');
+            $creditAccountTransfer = $namePalletsAccount . '-' . $creditAccount;
+            if ($index <> null) {
+                session()->flash('creditAccount', $namePalletsAccount);
+                session()->flash('thPalletsNumberCreditAccount', Palletsaccount::where('id', explode('-', $creditAccount)[1])->first()->theoricalNumberPallets);
+            }
+        }
+        if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
+            //truck account
+            $nameTruckAccount = Truck::where('id', explode('-', $debitAccount)[1])->value('name');
+            $licensePlate = Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate');
+            $debitAccountTransfer = $nameTruckAccount . '-' . $licensePlate . '-' . $debitAccount;
+            if ($index <> null) {
+                session()->flash('debitAccount', $nameTruckAccount . ' - ' . $licensePlate);
+                session()->flash('thPalletsNumberDebitAccount', Truck::where('id', explode('-', $debitAccount)[1])->first()->theoricalNumberPallets);
+            }
+        } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
+            //others accounts (network, other)
+            $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name');
+            $debitAccountTransfer = $namePalletsAccount . '-' . $debitAccount;
+            if ($index <> null) {
+                session()->flash('debitAccount', $namePalletsAccount);
+                session()->flash('thPalletsNumberDebitAccount', Palletsaccount::where('id', explode('-', $debitAccount)[1])->first()->theoricalNumberPallets);
+            }
+        }
+        return [$debitAccountTransfer, $creditAccountTransfer];
+    }
+
+    public function createTransfer($loading, $type, $date, $details, $creditAccountTransfer, $debitAccountTransfer, $palletsNumber, $creditAccountTransfer2, $debitAccountTransfer2, $palletsNumber2, $normalTransferAssociated)
+    {
+//        $idErrorNotNumberLoading = Error::where('name', 'DW-WD_notNumberLoadingOrder')->first()->id;
+//        $idErrorNotSameNumberDW = Error::where('name', 'DW-WD_notSameNumber')->first()->id;
+
+        if ($type == 'Deposit-Withdrawal') {
+            if (!isset($palletsNumber2)) {
+//                if ($palletsNumber <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr, 'state' => 'Untreated'])->errors()->attach($idErrorNotNumberLoading);
+//                } else {
+                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+                Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr, 'state' => 'Untreated']);
+//                }
+            } else {
+//                if ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 == $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotSameNumber);
+//                } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
+//                } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumber, $idErrorNotNumberLoading]);
+//                } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 == $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr]);
+//                }
+                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+                Palletstransfer::create(['date' => $date, 'type' => 'Withdrawal-Deposit', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr]);
+
+            }
+        } elseif ($type == 'Withdrawal-Deposit') {
+            if (!isset($palletsNumber2)) {
+//                if ($palletsNumber <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr, 'state' => 'Untreated'])->errors()->attach($idErrorNotNumberLoading);
+//                } else {
+                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+                Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr, 'state' => 'Untreated']);
+//                }
+            } else {
+//                if ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 == $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumberDW, $idErrorNotNumberLoading]);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotSameNumberDW);
+//                } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumberDW, $idErrorNotNumberLoading]);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumberDW, $idErrorNotNumberLoading]);
+//                } elseif ($palletsNumber <> $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach([$idErrorNotSameNumberDW, $idErrorNotNumberLoading]);
+//                } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber <> $loading->anz && $palletsNumber2 <> $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotNumberLoading);
+//                } elseif ($palletsNumber == $palletsNumber2 && $palletsNumber == $loading->anz && $palletsNumber2 == $loading->anz) {
+//                    Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+//                    Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr]);
+//                }
+                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+                Palletstransfer::create(['date' => $date, 'type' => 'Deposit-Withdrawal', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr]);
+
+            }
+        } elseif ($type == 'Deposit_Only') {
+//            $sumTransferWithdrawalOnly = Palletstransfer::where('type', 'Withdrawal_Only')->sum('palletsNumber');
+//            if ($palletsNumber <> $sumTransferWithdrawalOnly) {
+//                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotSameNumber);
+//            } else {
+            Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+//            }
+        } elseif ($type == 'Withdrawal_Only') {
+//            $sumTransferDepositOnly = Palletstransfer::where('type', 'Deposit_Only')->sum('palletsNumber');
+//            if ($palletsNumber <> $sumTransferDepositOnly) {
+//                Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr])->errors()->attach($idErrorNotSameNumber);
+//            } else {
+            Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr]);
+//            }
+        } elseif ($type == 'Sale-Purchase') {
+            Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr, 'normalTransferAssociated' => $normalTransferAssociated]);
+            Palletstransfer::create(['date' => $date, 'type' => 'Purchase-Sale', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr, 'normalTransferAssociated' => $normalTransferAssociated]);
+        } elseif ($type == 'Purchase-Sale') {
+            Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr, 'normalTransferAssociated' => $normalTransferAssociated]);
+            Palletstransfer::create(['date' => $date, 'type' => 'Sale-Purchase', 'details' => $details, 'creditAccount' => $creditAccountTransfer2, 'debitAccount' => $debitAccountTransfer2, 'palletsNumber' => $palletsNumber2, 'loading_atrnr' => $loading->atrnr, 'normalTransferAssociated' => $normalTransferAssociated]);
+        } else {
+            Palletstransfer::create(['date' => $date, 'type' => $type, 'details' => $details, 'creditAccount' => $creditAccountTransfer, 'debitAccount' => $debitAccountTransfer, 'palletsNumber' => $palletsNumber, 'loading_atrnr' => $loading->atrnr, 'normalTransferAssociated' => $normalTransferAssociated]);
+        }
+
+    }
+
+    public function updatePalletsAccount($creditAccount, $debitAccount, $actualTheoricalCreditPalletsNumber, $actualTheoricalDebitPalletsNumber, $palletsNumber)
+    {
+        if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
+            //truck account
+            Truck::where('id', explode('-', $creditAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
+            $palletsaccount_name = Truck::where('id', explode('-', $creditAccount)[1])->value('palletsaccount_name');
+            Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
+            //others accounts (network, other)
+            Palletsaccount::where('id', explode('-', $creditAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalCreditPalletsNumber + $palletsNumber]);
+        }
+
+        if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
+            //truck account
+            Truck::where('id', explode('-', $debitAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
+            $palletsaccount_name = Truck::where('id', explode('-', $debitAccount)[1])->value('palletsaccount_name');
+            Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
+            //others accounts (network, other)
+            Palletsaccount::where('id', explode('-', $debitAccount)[1])->update(['theoricalNumberPallets' => $actualTheoricalDebitPalletsNumber - $palletsNumber]);
+        }
+    }
+
+    public function validateAddPalletsTransfer($loading, $type, $date, $details, $creditAccount, $debitAccount, $creditAccount2, $debitAccount2, $palletsNumber, $palletsNumber2, $normalTransferAssociated)
+    {
+        $actualTheoricalCreditPalletsNumber = session('palletsNumberCreditAccount');
+        $actualTheoricalDebitPalletsNumber = session('palletsNumberDebitAccount');
+
+        $debitAccountTransfer = $this->namesAccounts($creditAccount, $debitAccount, null)[0];
+        $creditAccountTransfer = $this->namesAccounts($creditAccount, $debitAccount, null)[1];
+        if (isset($creditAccount2) && isset($debitAccount2)) {
+            $debitAccountTransfer2 = $this->namesAccounts($creditAccount2, $debitAccount2, null)[0];
+            $creditAccountTransfer2 = $this->namesAccounts($creditAccount2, $debitAccount2, null)[1];
+        } else {
+            $debitAccountTransfer2 = null;
+            $creditAccountTransfer2 = null;
+        }
+        $this->createTransfer($loading, $type, $date, $details, $creditAccountTransfer, $debitAccountTransfer, $palletsNumber, $creditAccountTransfer2, $debitAccountTransfer2, $palletsNumber2, $normalTransferAssociated);
+        $this->updatePalletsAccount($creditAccount, $debitAccount, $actualTheoricalCreditPalletsNumber, $actualTheoricalDebitPalletsNumber, $palletsNumber);
+        if (isset($creditAccount2) && isset($debitAccount2)) {
+            $actualTheoricalCreditPalletsNumber2 = session('palletsNumberCreditAccount2');
+            $actualTheoricalDebitPalletsNumber2 = session('palletsNumberDebitAccount2');
+            $this->updatePalletsAccount($creditAccount2, $debitAccount2, $actualTheoricalCreditPalletsNumber2, $actualTheoricalDebitPalletsNumber2, $palletsNumber2);
+        }
+        if ($type == 'Deposit_Only') {
+            session()->flash('sumTransfersDepositOnly', Palletstransfer::where('type', 'Deposit_Only')->sum('palletsNumber') + $palletsNumber);
+            session()->flash('sumTransfersWithdrawalOnly', Palletstransfer::where('type', 'Withdrawal_Only')->sum('palletsNumber'));
+        } elseif ($type == 'Withdrawal_Only') {
+            session()->flash('sumTransfersDepositOnly', Palletstransfer::where('type', 'Deposit_Only')->sum('palletsNumber'));
+            session()->flash('sumTransfersWithdrawalOnly', Palletstransfer::where('type', 'Withdrawal_Only')->sum('palletsNumber') + $palletsNumber);
+        }
+        $this->state($loading, Palletstransfer::where('loading_atrnr', $loading->atrnr)->get());
+        session()->flash('messageAddPalletstransfer', 'Successfully added new pallets transfer');
+        session()->flash('openPanelPallets', 'openPanelPallets');
+    }
+
+    public function defineSubmitPalletsValue($listPalletstransfersNormal, $listPalletstransfersCorrecting, $submitPallets)
+    {
+        $listIDTransfersNormal = [];
+        foreach ($listPalletstransfersNormal as $transferNormal) {
+            $listIDTransfersNormal[] = $transferNormal->id;
+        }
+        $listIDTransfersCorrecting = [];
+        foreach ($listPalletstransfersCorrecting as $transferCorrecting) {
+            $listIDTransfersCorrecting[] = $transferCorrecting->id;
+        }
+        if (in_array($submitPallets, $listIDTransfersNormal)) {
+            $submitPalletsNormal = $submitPallets;
+            $submitPalletsCorrecting = null;
+        } elseif (in_array($submitPallets, $listIDTransfersCorrecting)) {
+            $submitPalletsNormal = null;
+            $submitPalletsCorrecting = $submitPallets;
+        }
+        return [$submitPalletsNormal, $submitPalletsCorrecting];
+    }
+
+    public function updateTransfer($filesNames, $transfer, $loading, $type, $date, $details, $validate, $creditAccount, $debitAccount, $palletsNumber, $submitPallets, $normalTransferAssociated)
+    {
+        $rules = array(
+            'creditAccount' . $submitPallets => 'required',
+            'debitAccount' . $submitPallets => 'required',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+            session()->flash('openPanelPallets', 'openPanelPallets');
+            session()->flash('errorAccountsPanel', "The account(s) has(ve) not been filled as expected. REFILL ! (transfer " . $transfer->id . ")");
+            $view = 'error';
+        } else {
+            if ($transfer->state == 'Complete Validated') {
+                $this->inverseRealPalletsNumber($transfer);
+            }
+            session()->put('actualCreditAccount', $transfer->creditAccount);
+            session()->put('actualDebitAccount', $transfer->debitAccount);
+            session()->put('actualPalletsNumber', $transfer->palletsNumber);
+            session()->put('actualType', $transfer->type);
+            session()->put('actualDetails', $transfer->details);
+            session()->put('actualDate', $transfer->date);
+            session()->put('actualNormalTransferAssociated', $transfer->normalTransferAssociated);
+            session()->put('actualValidate', $transfer->validate);
+            session()->flash('palletsNumber', $palletsNumber);
+            if ($transfer->validate == 1 && $validate <> null && $validate == 'false') {
+                Palletstransfer::where('id', $transfer->id)->update(['validate' => false]);
+                //state
+                if (!empty($filesNames) && $validate == 'false') {
+                    Palletstransfer::where('id', $transfer->id)->update(['state' => 'Complete']);
+                } elseif (empty($filesNames)) {
+                    Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
+                }
+                $view = 'error';
+            } elseif ($transfer->validate == 1 && $validate <> null && $validate == 'true') {
+                $view = 'error';
+            } else {
                 if (($transfer->type == 'Deposit-Withdrawal' || $transfer->type == 'Withdrawal-Deposit') && ($type <> 'Deposit-Withdrawal' || $type <> 'Withdrawal-Deposit')) {
                     $transfer->errors()->detach(Error::where('name', 'DW-WD_notSameNumber')->first()->id);
                     $transfer->errors()->detach(Error::where('name', 'DW-WD_notNumberLoadingOrder')->first()->id);
+                } elseif (($transfer->type == 'Deposit_Only' || $transfer->type == 'Withdrawal_Only') && ($type <> 'Deposit_Only' || $type <> 'Withdrawal_Only')) {
+                    $transfer->errors()->detach(Error::where('name', 'Donly-Wonly_notSameNumber')->first()->id);
+                }elseif (($transfer->type == 'Sale-Purchase' || $transfer->type == 'Purchase-Sale') && ($type <> 'Sale-Purchase' || $type <> 'Purchase-Sale')) {
+                    $transfer->errors()->detach(Error::where('name', 'SP-PS_notSameNumber')->first()->id);
+                    $transfer->errors()->detach(Error::where('name', 'Correcting_notCompleteNormal')->first()->id);
                 }
+                $debitAccountTransfer = $this->namesAccounts($creditAccount, $debitAccount, 1)[0];
+                Palletstransfer::where('id', $transfer->id)->update(['debitAccount' => $debitAccountTransfer]);
+                $creditAccountTransfer = $this->namesAccounts($creditAccount, $debitAccount, 1)[1];
+                Palletstransfer::where('id', $transfer->id)->update(['creditAccount' => $creditAccountTransfer]);
 
-                if (isset($creditAccount)) {
-                    if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') {
-                        //truck account
-                        $nameTruckAccount = Truck::where('id', explode('-', $creditAccount)[1])->value('name');
-                        $licensePlate = Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate');
-                        session()->flash('creditAccount', $nameTruckAccount . ' - ' . $licensePlate);
-                        session()->flash('thPalletsNumberCreditAccount', Truck::where('id', explode('-', $creditAccount)[1])->first()->theoricalNumberPallets);
-
-                        $creditAccountTransfer = $nameTruckAccount . '-' . $licensePlate . '-' . $creditAccount;
-                    } elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') {
-                        //others accounts (network, other)
-                        $namePalletsAccount = Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name');
-                        session()->flash('creditAccount', $namePalletsAccount);
-                        session()->flash('thPalletsNumberCreditAccount', Palletsaccount::where('id', explode('-', $creditAccount)[1])->first()->theoricalNumberPallets);
-                        $creditAccountTransfer = $namePalletsAccount . '-' . $creditAccount;
-                    }
-                    Palletstransfer::where('id', $transfer->id)->update(['creditAccount' => $creditAccountTransfer]);
-                }
-                if (isset($debitAccount)) {
-                    if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
-                        //truck account
-                        $nameTruckAccount = Truck::where('id', explode('-', $debitAccount)[1])->value('name');
-                        $licensePlate = Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate');
-                        session()->flash('debitAccount', $nameTruckAccount . ' - ' . $licensePlate);
-                        session()->flash('thPalletsNumberDebitAccount', Truck::where('id', explode('-', $debitAccount)[1])->first()->theoricalNumberPallets);
-                        $debitAccountTransfer = $nameTruckAccount . '-' . $licensePlate . '-' . $debitAccount;
-                    } elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') {
-                        //others accounts (network, other)
-                        $namePalletsAccount = Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name');
-                        session()->flash('debitAccount', $namePalletsAccount);
-                        session()->flash('thPalletsNumberDebitAccount', Palletsaccount::where('id', explode('-', $debitAccount)[1])->first()->theoricalNumberPallets);
-                        $debitAccountTransfer = $namePalletsAccount . '-' . $debitAccount;
-                    }
-                    Palletstransfer::where('id', $transfer->id)->update(['debitAccount' => $debitAccountTransfer]);
-                }
-
-                session()->put('actualPalletsNumber', $transfer->palletsNumber);
-                session()->put('actualType', $transfer->type);
-                session()->put('actualDetails', $transfer->details);
-                session()->put('actualDate', $transfer->date);
-                session()->put('actualValidate', $transfer->validate);
-                session()->flash('palletsNumber', $palletsNumber);
-                Palletstransfer::where('id', $transfer->id)->update(['type' => $type, 'details' => $details, 'loading_atrnr' => $loading_atrnr, 'palletsNumber' => $palletsNumber, 'date' => $date]);
+                Palletstransfer::where('id', $transfer->id)->update(['type' => $type, 'details' => $details, 'loading_atrnr' => $loading->atrnr, 'palletsNumber' => $palletsNumber, 'date' => $date, 'normalTransferAssociated' => $normalTransferAssociated]);
 
                 if ($validate <> null && $validate == 'true') {
                     Palletstransfer::where('id', $transfer->id)->update(['validate' => true]);
                 } elseif ($validate <> null && $validate == 'false') {
                     Palletstransfer::where('id', $transfer->id)->update(['validate' => false]);
                 }
-                $transfer = Palletstransfer::where('id', $transfer->id)->first();
-                $this->state($loading, Palletstransfer::where('loading_atrnr', $atrnr)->get());
-                session()->flash('openPanelPallets', 'openPanelPallets');
-                return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
-                    'transfer', 'submitPalletsNormal', 'submitPalletsCorrecting', 'filesNames'));
+                $view = 'ok';
             }
-
-        } elseif (isset($okSubmitPalletsModal)) {
-            $listIDTransfersNormal = [];
-            foreach ($listPalletstransfersNormal as $transferNormal) {
-                $listIDTransfersNormal[] = $transferNormal->id;
-            }
-            $listIDTransfersCorrecting = [];
-            foreach ($listPalletstransfersCorrecting as $transferCorrecting) {
-                $listIDTransfersCorrecting[] = $transferCorrecting->id;
-            }
-            if (in_array($okSubmitPalletsModal, $listIDTransfersNormal)) {
-                $okSubmitPalletsModalNormal = $okSubmitPalletsModal;
-            } elseif (in_array($okSubmitPalletsModal, $listIDTransfersCorrecting)) {
-                $okSubmitPalletsModalCorrecting = $okSubmitPalletsModal;
-            }
-
-            //valide the transfer update
-            $transfer = Palletstransfer::where('id', $okSubmitPalletsModal)->first();
-            $filesNames = $this->actualDocuments($transfer->id);
-            $actualCreditAccount = session('actualCreditAccount');
-            $actualDebitAccount = session('actualDebitAccount');
-            $actualPalletsNumber = session('actualPalletsNumber');
-            $this->updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $filesNames);
-            $transfer = Palletstransfer::where('id', $okSubmitPalletsModal)->first();
-            $this->state($loading, Palletstransfer::where('loading_atrnr', $atrnr)->get());
+            $this->state($loading, Palletstransfer::where('loading_atrnr', $loading->atrnr)->get());
             session()->flash('openPanelPallets', 'openPanelPallets');
-
-            $queryTransfer = Palletstransfer::where(function ($q) {
-                $q->where('type', 'Deposit-Withdrawal')->orWhere('type', 'Withdrawal-Deposit');
-            });
-
-            if (!$queryTransfer->get()->isEmpty()) {
-                $listLoadings = [];
-                foreach ($queryTransfer->get() as $transfer) {
-                    if (!in_array($transfer->loading_atrnr, $listLoadings)) {
-                        $listLoadings[] = $transfer->loading_atrnr;
-                        $loading = Loading::where('atrnr', $transfer->loading_atrnr)->first();
-                        $listTransfersDWK = Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->get();
-                        $listTransfersWDK = Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->get();
-                        $listAccounts = [];
-                        foreach ($listTransfersDWK as $transferDWK) {
-                            if (!in_array($transferDWK->creditAccount, $listAccounts)) {
-                                $listAccounts[] = $transferDWK->creditAccount;
-                            }
-                        }
-                        foreach ($listTransfersWDK as $transferWDK) {
-                            if (!in_array($transferWDK->debitAccount, $listAccounts)) {
-                                $listAccounts[] = $transferWDK->debitAccount;
-                            }
-                        }
-
-                        for ($k = 0; $k < count($listAccounts); $k++) {
-                            $sumTransferDW = Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->sum('palletsNumber');
-                            $sumTransferWD = Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->sum('palletsNumber');
-                            $idErrorNotSameNumber = Error::where('name', 'DW-WD_notSameNumber')->first()->id;
-                            $idErrorNotNumberLoadingOrder = Error::where('name', 'DW-WD_notNumberLoadingOrder')->first()->id;
-                            if ($sumTransferWD <> $sumTransferDW && $sumTransferWD <> $loading->anz && $sumTransferDW == $loading->anz) {
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync($idErrorNotSameNumber);
-                                }
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync([$idErrorNotSameNumber, $idErrorNotNumberLoadingOrder]);
-                                }
-                            } elseif ($sumTransferWD <> $sumTransferDW && $sumTransferWD <> $loading->anz && $sumTransferDW <> $loading->anz) {
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync([$idErrorNotSameNumber, $idErrorNotNumberLoadingOrder]);
-                                }
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync([$idErrorNotSameNumber, $idErrorNotNumberLoadingOrder]);
-                                }
-                            } elseif ($sumTransferWD <> $sumTransferDW && $sumTransferWD == $loading->anz && $sumTransferDW <> $loading->anz) {
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync([$idErrorNotSameNumber, $idErrorNotNumberLoadingOrder]);
-                                }
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync($idErrorNotSameNumber);
-                                }
-                            } elseif ($sumTransferWD == $sumTransferDW && $sumTransferWD == $loading->anz) {
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->detach($idErrorNotSameNumber);
-                                    $transfer->errors()->detach($idErrorNotNumberLoadingOrder);
-                                }
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->detach($idErrorNotSameNumber);
-                                    $transfer->errors()->detach($idErrorNotNumberLoadingOrder);
-                                }
-                            } elseif ($sumTransferWD == $sumTransferDW && $sumTransferWD <> $loading->anz) {
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync($idErrorNotNumberLoadingOrder);
-                                }
-                                foreach (Palletstransfer::where('loading_atrnr', $transfer->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transfer) {
-                                    $transfer->errors()->sync($idErrorNotNumberLoadingOrder);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ($transfer->state == 'Complete Validated') {
-                session()->flash('palletsNumber', $transfer->palletsNumber);
-                session()->flash('creditAccount', $transfer->creditAccount);
-                session()->flash('debitAccount', $transfer->debitAccount);
-
-                if (isset($transfer->creditAccount)) {
-                    $partsCreditAccount = explode('-', $transfer->creditAccount);
-                    $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
-                    $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
-
-                    if ($typeCreditAccount == 'truck') {
-                        session()->flash('realPalletsNumberCreditAccount', Truck::where('id', $idCreditAccount)->first()->realNumberPallets);
-                    } elseif ($typeCreditAccount == 'account') {
-                        session()->flash('realPalletsNumberCreditAccount', Palletsaccount::where('id', $idCreditAccount)->first()->realNumberPallets);}
-                }
-                if (isset($transfer->debitAccount)) {
-                    $partsDebitAccount = explode('-', $transfer->debitAccount);
-                    $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
-                    $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
-
-                    if ($typeDebitAccount == 'truck') {
-                        session()->flash('realPalletsNumberDebitAccount', Truck::where('id', $idDebitAccount)->first()->realNumberPallets);
-                    } elseif ($typeDebitAccount == 'account') {
-                        session()->flash('realPalletsNumberDebitAccount', Palletsaccount::where('id', $idDebitAccount)->first()->realNumberPallets);
-                    }
-                }
-
-                return view('loadings.detailsLoading', compact('loading', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
-                    'transfer', 'okSubmitPalletsModalNormal', 'okSubmitPalletsModalCorrecting', 'filesNames'));
-            } else {
-                session()->pull('actualCreditAccount');
-                session()->pull('actualDebitAccount');
-                session()->pull('actualPalletsNumber');
-                session()->pull('actualType');
-                session()->pull('actualDetails');
-                session()->pull('actualDate');
-                session()->pull('actualValidate');
-                return redirect()->back();
-            }
-        } elseif (isset($closeSubmitPalletsModal)) {
-            //refuse the transfer update
-            $actualCreditAccount = session('actualCreditAccount');
-            $actualDebitAccount = session('actualDebitAccount');
-            $actualPalletsNumber = session('actualPalletsNumber');
-            $actualType = session('actualType');
-            $actualDetails = session('actualDetails');
-            $actualDate = session('actualDate');
-            $actualValidate = session('actualValidate');
-
-            if (isset($actualDebitAccount)) {
-                Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['debitAccount' => $actualDebitAccount]);
-            }
-            if (isset($actualCreditAccount)) {
-                Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['creditAccount' => $actualCreditAccount]);
-            }
-            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['validate' => $actualValidate, 'type' => $actualType, 'details' => $actualDetails, 'palletsNumber' => $actualPalletsNumber, 'date' => $actualDate]);
-            $this->state($loading, Palletstransfer::where('loading_atrnr', $atrnr)->get());
-            session()->pull('actualCreditAccount');
-            session()->pull('actualDebitAccount');
-            session()->pull('actualPalletsNumber');
-            session()->pull('actualType');
-            session()->pull('actualDetails');
-            session()->pull('actualDate');
-            session()->pull('actualValidate');
-            session()->flash('openPanelPallets', 'openPanelPallets');
-            return redirect()->back();
-        } elseif (isset($okSubmitPalletsValidateModal)) {
-            $transfer = Palletstransfer::where('id', $okSubmitPalletsValidateModal)->first();
-
-            if (isset($transfer->creditAccount)) {
-                $partsCreditAccount = explode('-', $transfer->creditAccount);
-                $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
-                $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
-                if ($typeCreditAccount == 'truck') {
-                    $realPalletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->realNumberPallets;
-                    Truck::where('id', $idCreditAccount)->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $transfer->palletsNumber]);
-                    $palletsaccount_name = Truck::where('id', $idCreditAccount)->value('palletsaccount_name');
-                    Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets')]);
-                } elseif ($typeCreditAccount == 'account') {
-                    $realPalletsNumberCreditAccount = Palletsaccount::where('id', $idCreditAccount)->first()->realNumberPallets;
-                    Palletsaccount::where('id', $idCreditAccount)->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $transfer->palletsNumber]);
-                }
-            }
-            if (isset($transfer->debitAccount)) {
-                $partsDebitAccount = explode('-', $transfer->debitAccount);
-                $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
-                $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
-                if ($typeDebitAccount == 'truck') {
-                    $realPalletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->realNumberPallets;
-                    Truck::where('id', $idDebitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $transfer->palletsNumber]);
-                    $palletsaccount_name = Truck::where('id', $idDebitAccount)->value('palletsaccount_name');
-                    Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets')]);
-                } elseif ($typeDebitAccount == 'account') {
-                    $realPalletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->realNumberPallets;
-                    Palletsaccount::where('id', $idDebitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $transfer->palletsNumber]);
-                }
-            }
-
-            $this->state($loading, $listPalletstransfers);
-            session()->flash('messageUpdateValidatePalletstransfer', 'VALIDATE ! Successfully updated and validated pallets transfer');
-            session()->pull('actualCreditAccount');
-            session()->pull('actualDebitAccount');
-            session()->pull('actualPalletsNumber');
-            session()->pull('actualType');
-            session()->pull('actualDetails');
-            session()->pull('actualDate');
-            session()->pull('actualMultiTransfer');
-            session()->pull('actualValidate');
-            session()->flash('openPanelPallets', 'openPanelPallets');
-            return redirect()->back();
         }
+        return $view;
     }
 
     /**
@@ -916,10 +728,11 @@ class DetailsLoadingController extends Controller
     /**
      * upload a document on the website
      * @param $documents
-     * @param $id
-     * @return array
+     * @param $transfer
+     * @param $loading
+     *
      */
-    public function upload($documents, $transfer)
+    public function upload($documents, $transfer, $loading)
     {
         if (isset($documents)) {
             foreach ($documents as $doc) {
@@ -938,7 +751,16 @@ class DetailsLoadingController extends Controller
             }
         }
         $filesNames = $this->actualDocuments($transfer->id);
-        return $filesNames;
+        if (!empty($filesNames) && $transfer->validate == 1) {
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Complete Validated']);
+        } elseif (!empty($filesNames) && $transfer->validate == 0) {
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Complete']);
+        } elseif (empty($filesNames)) {
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
+        }
+
+        $this->state($loading, Palletstransfer::where('loading_atrnr', $loading->atrnr)->get());
+        session()->flash('openPanelPallets', 'openPanelPallets');
     }
 
     /**
@@ -994,12 +816,12 @@ class DetailsLoadingController extends Controller
 
             if ($typeDebitAccount == 'truck') {
                 $actualRealPalletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->realNumberPallets;
-                Truck::where('id', $idDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount - $transfer->palletsNumber]);
+                Truck::where('id', $idDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $transfer->palletsNumber]);
                 $palletsaccount_name = Truck::where('id', $idDebitAccount)->value('palletsaccount_name');
                 Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets')]);
             } elseif ($typeDebitAccount == 'account') {
                 $actualRealPalletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->realNumberPallets;
-                Palletsaccount::where('id', $idDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount - $transfer->palletsNumber]);
+                Palletsaccount::where('id', $idDebitAccount)->update(['realNumberPallets' => $actualRealPalletsNumberDebitAccount + $transfer->palletsNumber]);
             }
         }
     }
@@ -1007,90 +829,214 @@ class DetailsLoadingController extends Controller
     /**
      * update only the information related to the transfer
      * @param $transfer
-     * @param $actualPalletsNumber
-     * @param $actualCreditAccount
-     * @param $actualDebitAccount
      * @param $filesNames
+     * @param $okSubmitPalletsModal
+     * @param $loading
+     * @return $view
      */
-    public function updateInfo($transfer, $actualPalletsNumber, $actualCreditAccount, $actualDebitAccount, $filesNames)
+    public function validateUpdateTransfer($transfer, $filesNames, $loading)
     {
-        //inverse transfer : we delete the last transfer
-        if (isset($actualCreditAccount)) {
-            $partsCreditAccount = explode('-', $actualCreditAccount);
-            $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
-            $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
+        $actualCreditAccount = session('actualCreditAccount');
+        $actualDebitAccount = session('actualDebitAccount');
+        $actualPalletsNumber = session('actualPalletsNumber');
 
-            if ($typeCreditAccount == 'truck') {
-                $actualPalletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
-                Truck::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
-                $palletsaccount_name = Truck::where('id', $idCreditAccount)->value('palletsaccount_name');
-                Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-            } elseif ($typeCreditAccount == 'account') {
-                $actualPalletsNumberCreditAccount = Palletsaccount::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
-                Palletsaccount::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
-            }
+//inverse transfer : we delete the last transfer
+        $partsCreditAccount = explode('-', $actualCreditAccount);
+        $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
+        $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
+        if ($typeCreditAccount == 'truck') {
+            $actualPalletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
+            Truck::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
+            $palletsaccount_name = Truck::where('id', $idCreditAccount)->value('palletsaccount_name');
+            Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        } elseif ($typeCreditAccount == 'account') {
+            $actualPalletsNumberCreditAccount = Palletsaccount::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
+            Palletsaccount::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $actualPalletsNumber]);
         }
-        if (isset($actualDebitAccount)) {
-            $partsDebitAccount = explode('-', $actualDebitAccount);
-            $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
-            $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
 
-            if ($typeDebitAccount == 'truck') {
-                $actualPalletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
-                Truck::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
-                $palletsaccount_name = Truck::where('id', $idDebitAccount)->value('palletsaccount_name');
-                Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-            } elseif ($typeDebitAccount == 'account') {
-                $actualPalletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
-                Palletsaccount::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
-            }
+        $partsDebitAccount = explode('-', $actualDebitAccount);
+        $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
+        $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
+        if ($typeDebitAccount == 'truck') {
+            $actualPalletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
+            Truck::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
+            $palletsaccount_name = Truck::where('id', $idDebitAccount)->value('palletsaccount_name');
+            Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        } elseif ($typeDebitAccount == 'account') {
+            $actualPalletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
+            Palletsaccount::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $actualPalletsNumber]);
         }
 
         //we do the new transfer
+        $partsCreditAccount = explode('-', $transfer->creditAccount);
+        $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
+        $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
+        if ($typeCreditAccount == 'truck') {
+            $palletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
+            Truck::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $palletsNumberCreditAccount + $transfer->palletsNumber]);
+            $palletsaccount_name = Truck::where('id', $idCreditAccount)->value('palletsaccount_name');
+            Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        } elseif ($typeCreditAccount == 'account') {
+            $palletsNumberCreditAccount = Palletsaccount::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
+            Palletsaccount::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $palletsNumberCreditAccount + $transfer->palletsNumber]);
+        }
+
+        $partsDebitAccount = explode('-', $transfer->debitAccount);
+        $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
+        $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
+        if ($typeDebitAccount == 'truck') {
+            $palletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
+            Truck::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
+            $palletsaccount_name = Truck::where('id', $idDebitAccount)->value('palletsaccount_name');
+            Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        } elseif ($typeDebitAccount == 'account') {
+            $palletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
+            Palletsaccount::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
+        }
+
+        //state
+        if (!empty($filesNames) && $transfer->validate == 1) {
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Complete Validated']);
+        } elseif (!empty($filesNames) && $transfer->validate == 0) {
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Complete']);
+        } elseif (empty($filesNames)) {
+            Palletstransfer::where('id', $transfer->id)->update(['state' => 'Waiting documents']);
+        }
+        $transfer = Palletstransfer::where('id', $transfer->id)->first();
+        $this->state($loading, Palletstransfer::where('loading_atrnr', $loading->atrnr)->get());
+        session()->flash('openPanelPallets', 'openPanelPallets');
+
+        if ($transfer->type == 'Deposit_Only') {
+            session()->flash('sumTransfersDepositOnly', Palletstransfer::where('type', 'Deposit_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber') + $transfer->palletsNumber);
+            session()->flash('sumTransfersWithdrawalOnly', Palletstransfer::where('type', 'Withdrawal_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber'));
+        } elseif ($transfer->type == 'Withdrawal_Only') {
+            session()->flash('sumTransfersDepositOnly', Palletstransfer::where('type', 'Deposit_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber'));
+            session()->flash('sumTransfersWithdrawalOnly', Palletstransfer::where('type', 'Withdrawal_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber') + $transfer->palletsNumber);
+        }
+
+        if ($transfer->state == 'Complete Validated') {
+            session()->flash('palletsNumber', $transfer->palletsNumber);
+            session()->flash('creditAccount', $transfer->creditAccount);
+            session()->flash('debitAccount', $transfer->debitAccount);
+
+            $partsCreditAccount = explode('-', $transfer->creditAccount);
+            $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
+            $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
+            if ($typeCreditAccount == 'truck') {
+                session()->flash('realPalletsNumberCreditAccount', Truck::where('id', $idCreditAccount)->first()->realNumberPallets);
+            } elseif ($typeCreditAccount == 'account') {
+                session()->flash('realPalletsNumberCreditAccount', Palletsaccount::where('id', $idCreditAccount)->first()->realNumberPallets);
+            }
+
+            $partsDebitAccount = explode('-', $transfer->debitAccount);
+            $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
+            $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
+            if ($typeDebitAccount == 'truck') {
+                session()->flash('realPalletsNumberDebitAccount', Truck::where('id', $idDebitAccount)->first()->realNumberPallets);
+            } elseif ($typeDebitAccount == 'account') {
+                session()->flash('realPalletsNumberDebitAccount', Palletsaccount::where('id', $idDebitAccount)->first()->realNumberPallets);
+            }
+            $view = 'ok';
+        } else {
+            session()->pull('actualCreditAccount');
+            session()->pull('actualDebitAccount');
+            session()->pull('actualPalletsNumber');
+            session()->pull('actualType');
+            session()->pull('actualDetails');
+            session()->pull('actualDate');
+            session()->pull('actualNormalTransferAssociated');
+            session()->pull('actualValidate');
+            $view = 'error';
+        }
+
+        session()->flash('messageSubmitPalletstransfer', 'Successfully updated and pallets transfer');
+        return $view;
+    }
+
+    public function refuseValidateUpdateTransfer($closeSubmitPalletsModal, $loading)
+    {
+        $actualCreditAccount = session('actualCreditAccount');
+        $actualDebitAccount = session('actualDebitAccount');
+        $actualPalletsNumber = session('actualPalletsNumber');
+        $actualType = session('actualType');
+        $actualDetails = session('actualDetails');
+        $actualDate = session('actualDate');
+        $actualValidate = session('actualValidate');
+        $actualNormalTransferAssociated = session('actualNormalTransferAssociated');
+
+        if (isset($actualDebitAccount)) {
+            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['debitAccount' => $actualDebitAccount]);
+        }
+        if (isset($actualCreditAccount)) {
+            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['creditAccount' => $actualCreditAccount]);
+        }
+        Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['validate' => $actualValidate, 'type' => $actualType, 'details' => $actualDetails, 'palletsNumber' => $actualPalletsNumber, 'date' => $actualDate, 'normalTransferAssociated' => $actualNormalTransferAssociated]);
+
+        $filesNames = $this->actualDocuments($closeSubmitPalletsModal);
+        if (!empty($filesNames) && $actualValidate == 1) {
+            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['state' => 'Complete Validated']);
+        } elseif (!empty($filesNames) && $actualValidate == 0) {
+            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['state' => 'Complete']);
+        } elseif (empty($filesNames)) {
+            Palletstransfer::where('id', $closeSubmitPalletsModal)->update(['state' => 'Waiting documents']);
+        }
+
+        $this->state($loading, Palletstransfer::where('loading_atrnr', $loading->atrnr)->get());
+        session()->pull('actualCreditAccount');
+        session()->pull('actualDebitAccount');
+        session()->pull('actualPalletsNumber');
+        session()->pull('actualType');
+        session()->pull('actualDetails');
+        session()->pull('actualDate');
+        session()->pull('actualValidate');
+        session()->pull('actualNormalTransferAssociated');
+        session()->flash('openPanelPallets', 'openPanelPallets');
+    }
+
+    public function validateCompleteUpdateTransfer($okSubmitPalletsValidateModal, $loading, $listPalletstransfers)
+    {
+        $transfer = Palletstransfer::where('id', $okSubmitPalletsValidateModal)->first();
+
         if (isset($transfer->creditAccount)) {
             $partsCreditAccount = explode('-', $transfer->creditAccount);
             $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
             $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
-
             if ($typeCreditAccount == 'truck') {
-                $palletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
-                Truck::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $palletsNumberCreditAccount + $transfer->palletsNumber]);
+                $realPalletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->realNumberPallets;
+                Truck::where('id', $idCreditAccount)->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $transfer->palletsNumber]);
                 $palletsaccount_name = Truck::where('id', $idCreditAccount)->value('palletsaccount_name');
-                Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+                Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets')]);
             } elseif ($typeCreditAccount == 'account') {
-                $palletsNumberCreditAccount = Palletsaccount::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
-                Palletsaccount::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $palletsNumberCreditAccount + $transfer->palletsNumber]);
+                $realPalletsNumberCreditAccount = Palletsaccount::where('id', $idCreditAccount)->first()->realNumberPallets;
+                Palletsaccount::where('id', $idCreditAccount)->update(['realNumberPallets' => $realPalletsNumberCreditAccount + $transfer->palletsNumber]);
             }
-            }
+        }
         if (isset($transfer->debitAccount)) {
             $partsDebitAccount = explode('-', $transfer->debitAccount);
             $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
             $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
-
             if ($typeDebitAccount == 'truck') {
-                $palletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
-                Truck::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
+                $realPalletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->realNumberPallets;
+                Truck::where('id', $idDebitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $transfer->palletsNumber]);
                 $palletsaccount_name = Truck::where('id', $idDebitAccount)->value('palletsaccount_name');
-                Palletsaccount::where('name', $palletsaccount_name)->update(['theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+                Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets')]);
             } elseif ($typeDebitAccount == 'account') {
-                $palletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
-                Palletsaccount::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $palletsNumberDebitAccount - $transfer->palletsNumber]);
+                $realPalletsNumberDebitAccount = Palletsaccount::where('id', $idDebitAccount)->first()->realNumberPallets;
+                Palletsaccount::where('id', $idDebitAccount)->update(['realNumberPallets' => $realPalletsNumberDebitAccount - $transfer->palletsNumber]);
             }
-           }
-
-        //state
-        if (!empty($filesNames) && $transfer->validate == 1) {
-            $state = 'Complete Validated';
-        } elseif (!empty($filesNames) && $transfer->validate == 0) {
-            $state = 'Complete';
-        } elseif (empty($filesNames)) {
-            $state = 'Waiting documents';
         }
-//        elseif (isset($transfer->creditAccount) || isset($transfer->debitAccount) || isset($transfer->palletsNumber) || isset($transfer->type) || !empty($filesNames)) {
-//            $state = 'In progress';
-//        }
-        Palletstransfer::where('id', $transfer->id)->update(['state' => $state]);
-        session()->flash('messageSubmitPalletstransfer', 'Successfully updated and pallets transfer');
+
+        $this->state($loading, $listPalletstransfers);
+        session()->flash('messageUpdateValidatePalletstransfer', 'VALIDATE ! Successfully updated and validated pallets transfer');
+        session()->pull('actualCreditAccount');
+        session()->pull('actualDebitAccount');
+        session()->pull('actualPalletsNumber');
+        session()->pull('actualType');
+        session()->pull('actualDetails');
+        session()->pull('actualDate');
+        session()->pull('actualValidate');
+        session()->pull('actualNormalTransferAssociated');
+        session()->flash('openPanelPallets', 'openPanelPallets');
     }
 
     /**
@@ -1100,6 +1046,159 @@ class DetailsLoadingController extends Controller
      */
     public static function state($loading, $listPalletstransfers)
     {
+        //update errors on each transfer DW-WD associated to this loading
+        $queryTransfer = Palletstransfer::where(function ($q) {
+            $q->where('type', 'Deposit-Withdrawal')->orWhere('type', 'Withdrawal-Deposit');
+        })->where('loading_atrnr', $loading->atrnr);
+
+        if (!$queryTransfer->get()->isEmpty()) {
+            foreach ($queryTransfer->get() as $transferQ) {
+                $listTransfersDWK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->get();
+                $listTransfersWDK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->get();
+                $listAccounts = [];
+                foreach ($listTransfersDWK as $transferDWK) {
+                    if (!in_array($transferDWK->creditAccount, $listAccounts)) {
+                        $listAccounts[] = $transferDWK->creditAccount;
+                    }
+                }
+                foreach ($listTransfersWDK as $transferWDK) {
+                    if (!in_array($transferWDK->debitAccount, $listAccounts)) {
+                        $listAccounts[] = $transferWDK->debitAccount;
+                    }
+                }
+
+                for ($k = 0; $k < count($listAccounts); $k++) {
+                    $sumTransferDW = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->sum('palletsNumber');
+                    $sumTransferWD = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->sum('palletsNumber');
+                    $idErrorNotSameNumberDW = Error::where('name', 'DW-WD_notSameNumber')->first()->id;
+                    $idErrorNotNumberLoadingOrder = Error::where('name', 'DW-WD_notNumberLoadingOrder')->first()->id;
+                    if ($sumTransferWD <> $sumTransferDW && $sumTransferWD <> $loading->anz && $sumTransferDW == $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ1) {
+                            $transferQ1->errors()->sync($idErrorNotSameNumberDW);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ2) {
+                            $transferQ2->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+                        }
+                    } elseif ($sumTransferWD <> $sumTransferDW && $sumTransferWD <> $loading->anz && $sumTransferDW <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ3) {
+                            $transferQ3->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ4) {
+                            $transferQ4->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+                        }
+                    } elseif ($sumTransferWD <> $sumTransferDW && $sumTransferWD == $loading->anz && $sumTransferDW <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ5) {
+                            $transferQ5->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ6) {
+                            $transferQ6->errors()->sync($idErrorNotSameNumberDW);
+                        }
+                    } elseif ($sumTransferWD == $sumTransferDW && $sumTransferWD == $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ7) {
+                            $transferQ7->errors()->detach($idErrorNotSameNumberDW);
+                            $transferQ7->errors()->detach($idErrorNotNumberLoadingOrder);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ8) {
+                            $transferQ8->errors()->detach($idErrorNotSameNumberDW);
+                            $transferQ8->errors()->detach($idErrorNotNumberLoadingOrder);
+                        }
+                    } elseif ($sumTransferWD == $sumTransferDW && $sumTransferWD <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ9) {
+                            $transferQ9->errors()->sync($idErrorNotNumberLoadingOrder);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ10) {
+                            $transferQ10->errors()->sync($idErrorNotNumberLoadingOrder);
+                        }
+                    }
+                }
+            }
+        }
+
+        //update errors on each transfer D only or W only associated to this loading
+        $sumTransferDepositOnly = Palletstransfer::where('type', 'Deposit_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber');
+        $sumTransferWithdrawalOnly = Palletstransfer::where('type', 'Withdrawal_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber');
+        $idErrorNotSameNumber = Error::where('name', 'Donly-Wonly_notSameNumber')->first()->id;
+        $listTransferDWonly = Palletstransfer::where(function ($q) {
+            $q->where('type', 'Deposit_Only')->orWhere('type', 'Withdrawal_Only');
+        })->where('loading_atrnr', $loading->atrnr)->get();
+
+        foreach ($listTransferDWonly as $transferDWonly) {
+            if ($sumTransferDepositOnly <> $sumTransferWithdrawalOnly) {
+                $transferDWonly->errors()->sync($idErrorNotSameNumber);
+            } else {
+                $transferDWonly->errors()->detach($idErrorNotSameNumber);
+            }
+        }
+
+        //update errors on each transfer SP-PS associated to this loading
+        $queryTransfer2 = Palletstransfer::where(function ($q) {
+            $q->where('type', 'Sale-Purchase')->orWhere('type', 'Purchase-Sale');
+        })->where('loading_atrnr', $loading->atrnr);
+
+        if (!$queryTransfer2->get()->isEmpty()) {
+            foreach ($queryTransfer2->get() as $transferQ) {
+                $listTransfersSPK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->get();
+                $listTransfersPSK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->get();
+                $listNormalTransfersAssociated = [];
+                foreach ($listTransfersSPK as $transferSPK) {
+                    if (!in_array($transferSPK->normalTransferAssociated, $listNormalTransfersAssociated)) {
+                        $listNormalTransfersAssociated[] =$transferSPK->normalTransferAssociated;
+                    }
+                }
+                foreach ($listTransfersPSK as $transferPSK) {
+                    if (!in_array($transferPSK->normalTransferAssociated, $listNormalTransfersAssociated)) {
+                        $listNormalTransfersAssociated[] = $transferPSK->normalTransferAssociated;
+                    }
+                }
+
+                for ($k = 0; $k < count($listNormalTransfersAssociated); $k++) {
+                    $sumTransferSP = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->sum('palletsNumber');
+                    $sumTransferPS = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->sum('palletsNumber');
+                    $idErrorNotCompleteNormal = Error::where('name', 'Correcting_notCompleteNormal')->first()->id;
+                    $idErrorNotSameNumberSP = Error::where('name', 'SP-PS_notSameNumber')->first()->id;
+                    $palletsNumberNormalTransferAssociated=Palletstransfer::where('id',$listNormalTransfersAssociated[$k])->first()->palletsNumber;
+                    if ($sumTransferSP <> $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) <> $loading->anz && ($sumTransferSP+$palletsNumberNormalTransferAssociated) == $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ1) {
+                            $transferQ1->errors()->sync($idErrorNotSameNumberSP);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ2) {
+                            $transferQ2->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                        }
+                    } elseif ($sumTransferSP <> $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) <> $loading->anz && ($sumTransferSP+$palletsNumberNormalTransferAssociated) <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ3) {
+                            $transferQ3->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ4) {
+                            $transferQ4->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                        }
+                    } elseif ($sumTransferSP <> $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) == $loading->anz && ($sumTransferSP+$palletsNumberNormalTransferAssociated) <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ5) {
+                            $transferQ5->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ6) {
+                            $transferQ6->errors()->sync($idErrorNotSameNumberSP);
+                        }
+                    } elseif ($sumTransferSP == $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) == $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ7) {
+                            $transferQ7->errors()->detach($idErrorNotSameNumberSP);
+                            $transferQ7->errors()->detach($idErrorNotCompleteNormal);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ8) {
+                            $transferQ8->errors()->detach($idErrorNotSameNumberSP);
+                            $transferQ8->errors()->detach($idErrorNotCompleteNormal);
+                        }
+                    } elseif ($sumTransferSP == $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ9) {
+                            $transferQ9->errors()->sync($idErrorNotCompleteNormal);
+                        }
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ10) {
+                            $transferQ10->errors()->sync($idErrorNotCompleteNormal);
+                        }
+                    }
+                }
+            }
+        }
+
         //////STATE GENERAL////
         if ($listPalletstransfers->isEmpty()) {
             $state = 'Untreated';
@@ -1134,12 +1233,14 @@ class DetailsLoadingController extends Controller
     }
 
     ///////////SUBLOADING///////////////////////////////////
+
     /**
      * show the add form to add a subloading
      * @param $atrnr
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAdd($atrnr)
+    public
+    function showAdd($atrnr)
     {
         $loading = Loading::where('atrnr', $atrnr)->first();
         return view('loadings.addSubloading', compact('loading'));
@@ -1150,7 +1251,8 @@ class DetailsLoadingController extends Controller
      * @param $atrnr
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function add($atrnr)
+    public
+    function add($atrnr)
     {
 
         $loadingInitial = Loading::where('atrnr', $atrnr)->first();
