@@ -11,7 +11,7 @@ function selectAccount(accountSelected) {
     lastDebitAccount = accountSelected;
 }
 
-function creditAccount(accountSelected) {
+function creditaccount(accountSelected) {
     if (lastCreditAccount !== accountSelected) {
         $("#select-debit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
         if (lastCreditAccount !== null) {
@@ -97,6 +97,8 @@ function displayFieldsType(typeSelected) {
                         //         document.getElementById("withdrawal-deposit2").style.display = "none";
                         //         document.getElementById("DW").style.display = "none";
                         //     }else{
+                        $('#select-credit').find("option[value='account-6']").attr('selected',true);
+                        $('#select-credit').change();
                         document.getElementById("creditAccount1").style.display = "block";
                         document.getElementById("creditAccount2").style.display = "block";
                         document.getElementById("debitAccount1").style.display = "block";

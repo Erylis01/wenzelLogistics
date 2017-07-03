@@ -29,9 +29,7 @@
 
 @section('scriptBegin')
     <script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}"></script>
-    <style>select option:disabled {
-            display:none;
-        }</style>
+
 @endsection
 
 @section('content')
@@ -437,7 +435,7 @@
                                                 <select class="selectpicker show-tick form-control" data-size="10"
                                                         data-live-search="true" data-live-search-style="startsWith"
                                                         title="Credit Account" name="creditAccount" id="select-credit"
-                                                        onchange="creditAccount(this.value);">
+                                                        onchange="creditaccount(this.value);">
                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                         @if(Illuminate\Support\Facades\Input::old('creditAccount') && (strpos(old('creditAccount'), '-') == 7 && explode('-', old('creditAccount'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount'))[1]))
                                                             <option value="account-{{$palletsAccount->id}}"
