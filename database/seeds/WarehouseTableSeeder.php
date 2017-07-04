@@ -1,8 +1,11 @@
 <?php
 
+use App\Palletsaccount;
 use App\Warehouse;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WarehouseTableSeeder extends Seeder
 {
@@ -13,63 +16,102 @@ class WarehouseTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('warehouses')->delete();
-        Warehouse::create(array(
-            'id' => 1,
-            'name' => 'warehouse1',
-            'adress' => 'adress1',
-            'zipcode' => 88150,
-            'town' => 'town1',
-            'country' => 'country1',
-            'phone'=>'phone1',
-            'fax'=>'fax1',
-            'email'=>'email1',
-            'namecontact'=>'contact1',
-//            'palletsaccount_name'=>'account1',
-        ))->palletsaccounts()->sync(3);
-
-        Warehouse::create(array(
-            'id' => 2,
-            'name' => 'warehouse2',
-            'adress' => 'adress2',
-            'zipcode' => 2,
-            'town' => 'town2',
-            'country' => 'country2',
-            'phone'=>'phone2',
-            'fax'=>'fax2',
-            'email'=>'email2',
-            'namecontact'=>'contact2',
-//            'palletsaccount_name'=>'account1',
-        ));
-
-        Warehouse::create(array(
-            'id' => 3,
-            'name' => 'warehouse3',
-            'adress' => 'adress3',
-            'zipcode' => 3,
-            'town' => 'town3',
-            'country' => 'country3',
-            'phone'=>'phone3',
-            'fax'=>'fax3',
-            'email'=>'email3',
-            'namecontact'=>'contact3',
-//            'palletsaccount_name'=>'account3',
-        ));
-
-        Warehouse::create(array(
-            'id' => 44,
-            'name' => 'warehouse44',
-            'adress' => 'adress44',
-            'zipcode' => 82362,
-            'town' => 'town44',
-            'country' => 'country44',
-            'phone'=>'phone44',
-            'fax'=>'fax44',
-            'email'=>'email44',
-            'namecontact'=>'contact44',
-//            'palletsaccount_name'=>'account44',
-        ))->palletsaccounts()->sync(5);;
-
+        $this->importDataPFM();
+        $this->importDataSystempo();
 
     }
+
+    public function importDataPFM()
+    {
+        $path = 'resources/assets/excel/ListWarehouses/PFM';
+        $files = File::allFiles($path);
+        foreach ($files as $file) {
+            if (strpos((string)$file, '.xls') !== false) {
+                Excel::load($file, function ($reader) {
+                    if (!empty($reader)) {
+                        $reader->noHeading();
+                        $sheet = $reader->getSheet(1)->toArray();
+                        $nbrows = count($sheet);
+
+                        for ($r = 1; $r < $nbrows; $r++) {
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
+                                //not double
+                                $k = count(Warehouse::get()) + 1;
+                                $id = Palletsaccount::where('name', 'PFM - FR')->first()->id;
+
+                                if (intval(trim($sheet[$r][0])) <> 0) {
+                                    $country = 'France';
+                                } else {
+                                    $country = trim($sheet[$r][0]);
+                                }
+
+                                $cell7 = str_replace(' - ', ' ', trim($sheet[$r][7]));
+                                $cell7 = str_replace('-', ' ', $cell7);
+
+                                $zipcode = intval(substr($cell7, 0, 5));
+
+                                $town = trim(str_replace($zipcode, '', $cell7));
+
+                                Warehouse::firstOrCreate([
+                                    'id' => $k,
+                                    'name' => trim($sheet[$r][3]),
+                                    'nickname' => trim($sheet[$r][3]),
+                                    'adress' => trim($sheet[$r][6]),
+                                    'zipcode' => $zipcode,
+                                    'town' => $town,
+                                    'country' => $country,
+                                    'phone' => trim(substr(str_replace(' ', '',$sheet[$r][8] ), 0, 14)),
+                                    'fax' => trim(substr(str_replace(' ', '',$sheet[$r][9]), 0, 14)),
+                                    'email' => trim($sheet[$r][12]),
+                                    'namecontact' => trim($sheet[$r][4]) . ' - ' . trim($sheet[$r][5]),
+                                ])->palletsaccounts()->sync($id);
+                            }
+                        }
+                    }
+                }, 'ASCII');
+            }
+        }
+    }
+
+        public function importDataSystempo()
+    {
+        $path = 'resources/assets/excel/ListWarehouses/Systempo';
+        $files = File::allFiles($path);
+        foreach ($files as $file) {
+            if (strpos((string)$file, '.xls') !== false) {
+                Excel::load($file, function ($reader) {
+                    if (!empty($reader)) {
+                        $reader->noHeading();
+                        $sheet = $reader->getSheet(0)->toArray();
+                        $nbrows = count($sheet);
+
+                        for ($r = 1; $r < $nbrows; $r++) {
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            if ($warehouseTest == null && trim($sheet[$r][0])<>'') {
+                                //not double
+                                $k = count(Warehouse::get()) + 1;
+                                $id = Palletsaccount::where('name', 'Systempo AT')->first()->id;
+
+                                Warehouse::firstOrCreate([
+                                    'id' => $k,
+                                    'name' => trim($sheet[$r][0]),
+                                    'nickname' => trim($sheet[$r][0]),
+                                    'adress' => trim($sheet[$r][1]),
+                                    'zipcode' => intval(trim($sheet[$r][3])),
+                                    'town' => trim($sheet[$r][4]),
+                                    'country' =>trim($sheet[$r][2]),
+                                    'phone' => trim(str_replace(' ','', $sheet[$r][5])),
+                                    'email' => trim($sheet[$r][6]),
+                                    'namecontact' => trim($sheet[$r][7]),
+                                ])->palletsaccounts()->sync($id);
+                            }
+                        }
+                    }
+                }, 'ASCII');
+            }
+        }
+    }
+
+
 }

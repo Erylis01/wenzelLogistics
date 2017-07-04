@@ -13,70 +13,119 @@ class PalletsaccountsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('palletsaccounts')->delete();
-        Palletsaccount::create(array(
+//        DB::table('palletsaccounts')->delete();
+        Palletsaccount::firstOrCreate(array(
             'id' => 1,
-            'name' => 'account1',
-            'type' => 'Network',
+            'name' => 'STOCK',
+            'type' => 'Other',
         ));
-
-        Palletsaccount::create(array(
+        Palletsaccount::firstOrCreate(array(
             'id' => 2,
-            'name' => 'account2',
-            'type' => 'Network',
-        ));
-
-        Palletsaccount::create(array(
-            'id' => 3,
-            'name' => 'account3',
-            'type' => 'Network',
-        ));
-
-        Palletsaccount::create(array(
-            'id' => 4,
             'name' => 'Loading',
             'type' => 'Other',
         ));
 
-        Palletsaccount::create(array(
-            'id' => 5,
+        Palletsaccount::firstOrCreate(array(
+            'id' => 3,
             'name' => 'Unloading',
             'type' => 'Other',
         ));
-//        Palletsaccount::create(array(
-//            'id' => 6,
-//            'name' => 'Wenzel',
-//            'type' => 'Other',
-//        ));
-        Palletsaccount::create(array(
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 4,
+            'name' => 'ALDI DAG',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 5,
+            'name' => 'ALDI DOM',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
             'id' => 6,
-            'name' => 'STOCK',
-            'type' => 'Other',
+            'name' => 'ALDI SWB',
+            'type' => 'Network',
         ));
-        Palletsaccount::create(array(
+
+        Palletsaccount::firstOrCreate(array(
             'id' => 7,
-            'name' => 'account7',
+            'name' => 'Arinthod',
             'type' => 'Network',
         ));
-        Palletsaccount::create(array(
+
+        Palletsaccount::firstOrCreate(array(
             'id' => 8,
-            'name' => 'account8',
+            'name' => 'Benoit & Valerie',
             'type' => 'Network',
         ));
-        Palletsaccount::create(array(
+
+        Palletsaccount::firstOrCreate(array(
             'id' => 9,
-            'name' => 'account9',
+            'name' => 'Bonduelle F80',
             'type' => 'Network',
         ));
-        Palletsaccount::create(array(
-            'id' => 11,
-            'name' => 'account11',
-            'type' => 'Network',
-        ));
-        Palletsaccount::create(array(
+
+        Palletsaccount::firstOrCreate(array(
             'id' => 10,
-            'name' => 'account10',
+            'name' => 'Dachser F51',
             'type' => 'Network',
         ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 11,
+            'name' => 'ECL Wolfurt',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 12,
+            'name' => 'Impex-EUX',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 13,
+            'name' => 'Impex-EUY',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 14,
+            'name' => 'PFM - FR',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 15,
+            'name' => 'Schefknecht',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 16,
+            'name' => 'SPAR Wels',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 17,
+            'name' => 'Systempo AT',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 18,
+            'name' => 'Team Tex',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 19,
+            'name' => 'Wildenhofer Salzburg',
+            'type' => 'Network',
+        ));
+
     }
 }

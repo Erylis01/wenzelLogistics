@@ -15,40 +15,18 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->delete();
-        User::firstOrCreate(array(
-            'id'=>1,
-            'lastname'     => 'test',
-            'firstname'=>'Pierre',
-            'username' => 'Erylis01',
-            'initials'=>'tePi',
-            'email'    => 'coquerelpierre@gmail.com',
-            'password' => Hash::make('testtest'),
-            'activated'=> true,
-            'email_token'=>'1234567890'
 
-        ));
-        User::firstOrCreate(array(
-            'id'=>2,
-            'lastname'     => 'test',
+        User::firstOrCreate([
+            'id'=>1,
+            'lastname' => 'SAMAIN',
             'firstname'=>'Camille',
-            'username' => 'Camille',
+            'username' => 'CamilleS',
             'initials'=>'teCa',
             'email'    => 'camillesamain.56@gmail.com',
-            'password' => Hash::make('testtest'),
+            'password' => Hash::make('wenzel56'),
             'activated'=> true,
             'email_token'=>'1234657089'
+        ]);
 
-        ));
-        User::firstOrCreate(array(
-            'id'=>3,
-            'lastname'     => 'Alala',
-            'firstname'=>'A',
-            'username' => 'A',
-            'initials'=>'AAl',
-            'email'    => 'A@gmail.com',
-            'password' => Hash::make('AAAAAA'),
-            'activated'=> true,
-            'email_token'=>'0258369147'
-        ));
     }
 }

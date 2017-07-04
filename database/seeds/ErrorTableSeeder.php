@@ -14,11 +14,11 @@ class ErrorTableSeeder extends Seeder
     public function run()
     {
         DB::table('errors')->delete();
-        Error::create([
-            'id'=>1,
-            'name'=>'DW-WD_notSameNumber',
-            'description'=>"on Deposit-Withdrawal transfers and Withdrawal-Deposit transfers, the pallets numbers have to match"
-        ]);
+//        Error::create([
+//            'id'=>1,
+//            'name'=>'DW-WD_notSameNumber',
+//            'description'=>"on Deposit-Withdrawal transfers and Withdrawal-Deposit transfers, the pallets numbers have to match"
+//        ]);
         Error::create([
             'id'=>2,
             'name'=>'DW-WD_notNumberLoadingOrder',

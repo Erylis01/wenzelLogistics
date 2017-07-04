@@ -94,7 +94,7 @@ class TrucksController extends Controller
      */
     public function importData()
     {
-        $path = '../resources/assets/excel/';
+        $path = '../resources/assets/excel/Hypertrans';
         $files = File::allFiles($path);
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
