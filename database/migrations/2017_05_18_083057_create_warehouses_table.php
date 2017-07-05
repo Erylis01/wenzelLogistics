@@ -14,11 +14,11 @@ class CreateWarehousesTable extends Migration
     public function up()
     {
         Schema::create('warehouses', function (Blueprint $table) {
-            $table->increments('id')->unique();
+            $table->increments('id')->unique()->index();
             $table->string('name')->unique();
-            $table->string('nickname')->nullable();
+            $table->string('nickname')->unique()->nullable();
             $table->string('adress');
-            $table->integer('zipcode')->unsigned();
+            $table->string('zipcode', 10);
             $table->string('town');
             $table->string('country');
             $table->string('phone', 20)->nullable();
@@ -32,8 +32,8 @@ class CreateWarehousesTable extends Migration
 
         Schema::create('palletsaccount_warehouse',function (Blueprint $table) {
 $table->increments('id');
-$table->integer('palletsaccount_id')->unsigned();
-            $table->integer('warehouse_id')->unsigned();
+$table->integer('palletsaccount_id')->unsigned()->index();
+            $table->integer('warehouse_id')->unsigned()->index();
             $table->foreign('palletsaccount_id')->references('id')->on('palletsaccounts')->onDelete('cascade');
             $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
         });

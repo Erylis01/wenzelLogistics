@@ -68,6 +68,8 @@
 
 .colHeight{
     min-height:51px;
+    height: 51px;
+    max-height: 51px;
 }
 
 .colOrt, .colKenn{

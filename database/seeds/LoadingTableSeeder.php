@@ -30,8 +30,10 @@ class LoadingTableSeeder extends Seeder
     {
         $path = 'resources/assets/excel/Hypertrans';
         $files = File::allFiles($path);
+
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
+                ini_set('memory_limit', '-1');
                 Excel::load($file, function ($reader) {
                     if (!empty($reader)) {
                         $reader->noHeading();
@@ -60,11 +62,11 @@ class LoadingTableSeeder extends Seeder
                                     'auftraggeber' => trim($sheet[$r][5]),
                                     'beladestelle' => trim($sheet[$r][6]),
                                     'landb' => trim($sheet[$r][7]),
-                                    'plzb' => trim($sheet[$r][8]),
+                                    'plzb' => trim(intval(str_replace('-', '',$sheet[$r][8]))),
                                     'ortb' => trim($sheet[$r][9]),
                                     'entladestelle' => trim($sheet[$r][10]),
                                     'lande' => trim($sheet[$r][11]),
-                                    'plze' => trim($sheet[$r][12]),
+                                    'plze' => trim(intval(str_replace('-', '',$sheet[$r][12]))),
                                     'orte' => trim($sheet[$r][13]),
                                     'anz' => trim($sheet[$r][14]),
                                     'art' => trim($sheet[$r][15]),

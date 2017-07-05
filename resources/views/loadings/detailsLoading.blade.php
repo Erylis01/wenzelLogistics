@@ -134,7 +134,7 @@
                                                                                                                     </div>
                                                                                                                 @if(substr_count($loading->atrnr, '-')==0)
                                                                                                                     <!--disp-->
-                                                                                                                        <div class="col-lg-2">
+                                                                                                                        <div class="col-lg-4">
                                                                                                                             <div class="input-group details-loading">
                                                                                                                                 <label for="disp"
                                                                                                                                        class="input-group-addon">Disp
@@ -142,7 +142,7 @@
                                                                                                                                 <input type="text"
                                                                                                                                        name="disp"
                                                                                                                                        class="form-control"
-                                                                                                                                       value="{{ $loading->disp }}"
+                                                                                                                                       value="{{ $disp }}"
                                                                                                                                        placeholder="disp"
                                                                                                                                        required>
                                                                                                                                 @if ($errors->has('disp'))
@@ -155,7 +155,7 @@
 
                                                                                                                         <!--pt change pt-->
                                                                                                                         @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='CamilleS' )
-                                                                                                                            <div class="col-lg-2 col-lg-offset-2">
+                                                                                                                            <div class="col-lg-2">
                                                                                                                                 <div class="input-group details-loading">
                                                                                                                                     <label for="pt"
                                                                                                                                            class="input-group-addon">PT
@@ -622,8 +622,8 @@
                                                                 <div class="panel-heading">
                                                                     <a data-toggle="collapse" href="#Pan2collapse">Pallets
                                                                         location ?</a>
-                                                                    <span>
-
+                                                                    <span class="col-lg-offset-7">
+{{$theoricalPalletsNumberTruck}} pallets on truck ({{$realPalletsNumberTruck}} confirmed)
                                 </span>
                                                                 </div>
                                                                 @if(Session::has('openPanelPallets'))
@@ -677,6 +677,21 @@
                                                                                             @if(isset($addTransferForm)||isset($addPalletstransfer)||isset($showAddCorrectingTransfer))
                                                                                                 <div class="panel subpanel">
                                                                                                     <div class="panel-body">
+                                                                                                        @if(isset($showAddCorrectingTransfer))
+                                                                                                            <div class="form-group">
+                                                                                                                <div class="text-center">
+                                                                                                                    <label for="legend"
+                                                                                                                           class="control-label">CORRECTING TRANSFER</label>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            @else
+                                                                                                            <div class="form-group">
+                                                                                                                <div class="text-center">
+                                                                                                                    <label for="legend"
+                                                                                                                           class="control-label">NORMAL TRANSFER</label>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        @endif
                                                                                                         <div class="form-group">
                                                                                                             <!--type-->
                                                                                                             <div class="col-lg-1 col-lg-offset-1">
@@ -1310,36 +1325,6 @@
                                                                                                                                    </label>
                                                                                                                             </div>
                                                                                                                         </div>
-                                                                                                                        <div class="form-group">
-                                                                                                                            <div class="col-lg-12 text-center">
-                                                                                                                                <p>
-                                                                                                                                    You
-                                                                                                                                    should
-                                                                                                                                    fulfill
-                                                                                                                                    the
-                                                                                                                                    purchase
-                                                                                                                                    associated.
-                                                                                                                                    If
-                                                                                                                                    you
-                                                                                                                                    don't
-                                                                                                                                    want
-                                                                                                                                    to
-                                                                                                                                    do
-                                                                                                                                    it
-                                                                                                                                    now,
-                                                                                                                                    you
-                                                                                                                                    will
-                                                                                                                                    have
-                                                                                                                                    to
-                                                                                                                                    do
-                                                                                                                                    it
-                                                                                                                                    by
-                                                                                                                                    the
-                                                                                                                                    transfer
-                                                                                                                                    details
-                                                                                                                                    page</p>
-                                                                                                                            </div>
-                                                                                                                        </div>
                                                                                                                         @if(isset($type) &&$type=='Sale-Purchase')
                                                                                                                     </div>
                                                                                                                     @else
@@ -1358,36 +1343,6 @@
                                                                                                                                 <label for="sale"
                                                                                                                                        class="control-label">SALE
                                                                                                                                    </label>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                        <div class="form-group">
-                                                                                                                            <div class="col-lg-12 text-center">
-                                                                                                                                <p>
-                                                                                                                                    You
-                                                                                                                                    should
-                                                                                                                                    fulfill
-                                                                                                                                    the
-                                                                                                                                    sale
-                                                                                                                                    associated.
-                                                                                                                                    If
-                                                                                                                                    you
-                                                                                                                                    don't
-                                                                                                                                    want
-                                                                                                                                    to
-                                                                                                                                    do
-                                                                                                                                    it
-                                                                                                                                    now,
-                                                                                                                                    you
-                                                                                                                                    will
-                                                                                                                                    have
-                                                                                                                                    to
-                                                                                                                                    do
-                                                                                                                                    it
-                                                                                                                                    by
-                                                                                                                                    the
-                                                                                                                                    transfer
-                                                                                                                                    details
-                                                                                                                                    page</p>
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                         @if(isset($type) &&$type=='Purchase-Sale')
@@ -1783,20 +1738,20 @@
                                                                                                                 href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=type&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th class="text-center col4">
-                                                                                                        Credit
-                                                                                                        account<br><a
-                                                                                                                class="glyphicon glyphicon-chevron-up general-sorting"
-                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=creditAccount&order=asc')}}"></a><a
-                                                                                                                class="glyphicon glyphicon-chevron-down general-sorting"
-                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=creditAccount&order=desc')}}"></a>
-                                                                                                    </th>
-                                                                                                    <th class="text-center col4">
                                                                                                         Debit
                                                                                                         account<br><a
                                                                                                                 class="glyphicon glyphicon-chevron-up general-sorting"
                                                                                                                 href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=debitAccount&order=asc')}}"></a><a
                                                                                                                 class="glyphicon glyphicon-chevron-down general-sorting"
                                                                                                                 href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=debitAccount&order=desc')}}"></a>
+                                                                                                    </th>
+                                                                                                    <th class="text-center col4">
+                                                                                                        Credit
+                                                                                                        account<br><a
+                                                                                                                class="glyphicon glyphicon-chevron-up general-sorting"
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=creditAccount&order=asc')}}"></a><a
+                                                                                                                class="glyphicon glyphicon-chevron-down general-sorting"
+                                                                                                                href="{{url('/detailsLoading/'.$loading->atrnr.'?sortby=creditAccount&order=desc')}}"></a>
                                                                                                     </th>
                                                                                                     <th class="text-center col2">
                                                                                                         Pal.
@@ -1834,28 +1789,6 @@
                                                                                                                href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                                                                                         </td>
                                                                                                         <td class="text-center col3">{{$transfer->type}}</td>
-                                                                                                        @if(isset($transfer->creditAccount))
-                                                                                                            @php($partsCreditAccount=explode('-', $transfer->creditAccount))
-                                                                                                            @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
-                                                                                                            @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
-                                                                                                            @if($typeCreditAccount=='account')
-                                                                                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->name)
-                                                                                                                <td class="text-center">
-                                                                                                                    <a class="link"
-                                                                                                                       href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$nameCreditAccount}}</a>
-                                                                                                                </td>
-                                                                                                            @elseif($typeCreditAccount=='truck')
-                                                                                                                @php($nameCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->name)
-                                                                                                                @php($licensePlateCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->licensePlate)
-                                                                                                                <td class="text-center">
-                                                                                                                    <a class="link"
-                                                                                                                       href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$nameCreditAccount}}
-                                                                                                                        - {{$licensePlateCreditAccount}}</a>
-                                                                                                                </td>
-                                                                                                            @endif
-                                                                                                        @else
-                                                                                                            <td></td>
-                                                                                                        @endif
                                                                                                         @if(isset($transfer->debitAccount))
                                                                                                             @php($partsDebitAccount=explode('-', $transfer->debitAccount))
                                                                                                             @php($typeDebitAccount=$partsDebitAccount[count($partsDebitAccount)-2])
@@ -1873,6 +1806,28 @@
                                                                                                                     <a class="link"
                                                                                                                        href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$nameDebitAccount}}
                                                                                                                         - {{$licensePlateDebitAccount}}</a>
+                                                                                                                </td>
+                                                                                                            @endif
+                                                                                                        @else
+                                                                                                            <td></td>
+                                                                                                        @endif
+                                                                                                        @if(isset($transfer->creditAccount))
+                                                                                                            @php($partsCreditAccount=explode('-', $transfer->creditAccount))
+                                                                                                            @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
+                                                                                                            @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
+                                                                                                            @if($typeCreditAccount=='account')
+                                                                                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->name)
+                                                                                                                <td class="text-center">
+                                                                                                                    <a class="link"
+                                                                                                                       href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$nameCreditAccount}}</a>
+                                                                                                                </td>
+                                                                                                            @elseif($typeCreditAccount=='truck')
+                                                                                                                @php($nameCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->name)
+                                                                                                                @php($licensePlateCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->licensePlate)
+                                                                                                                <td class="text-center">
+                                                                                                                    <a class="link"
+                                                                                                                       href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$nameCreditAccount}}
+                                                                                                                        - {{$licensePlateCreditAccount}}</a>
                                                                                                                 </td>
                                                                                                             @endif
                                                                                                         @else

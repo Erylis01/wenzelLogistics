@@ -61,16 +61,16 @@
                             @endif
 
                             <div class="form-group">
-                                <!--name-->
+                                <!--nickname-->
                                 <div class="col-lg-3">
-                                    <label for="name" class="control-label"><span>*</span> Name :</label>
+                                    <label for="nickname" class="control-label"><span>*</span> Nickname :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="name" type="text" class="form-control" name="name"
-                                           value="{{ $name }}" placeholder="Name" required autofocus>
-                                    @if ($errors->has('name'))
+                                    <input id="nickname" type="text" class="form-control" name="nickname"
+                                           value="{{ $nickname }}" placeholder="Nickname" required autofocus>
+                                    @if ($errors->has('nickname'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('nickname') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -153,11 +153,11 @@
                                 </div>
                                 <!--fax-->
                                 <div class="col-lg-2">
-                                    <label for="fax" class="control-label">Fax :</label>
+                                    <label for="fax" class="control-label">Fax/Mobile :</label>
                                 </div>
                                 <div class="col-lg-3">
                                     <input id="fax" type="text" class="form-control" name="fax"
-                                           value="{{ $fax }}" placeholder="Fax" autofocus>
+                                           value="{{ $fax }}" placeholder="Fax/Mobile" autofocus>
                                     @if ($errors->has('fax'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('fax') }}</strong>
@@ -188,8 +188,11 @@
                                     <label for="namecontact" class="control-label">Contact Name :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                           value="{{ $namecontact }}" placeholder="Contact Name" autofocus>
+                                        <textarea
+                                                class="form-control" name="namecontact"
+                                                id="namecontact"
+                                                rows="2"
+                                                placeholder="Contact Infos (name, ...)" autofocus>{{$namecontact}}</textarea>
                                 </div>
                             </div>
 

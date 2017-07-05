@@ -23,14 +23,15 @@ Route::post('/profile', 'ProfileController@update')->name('updateProfile');
 Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 
 //LOADINGS
-Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
+Route::get('/loadings/{refresh}','ListLoadingsController@show')->name('showAllLoadings');
 Route::get('/detailsLoading/{atrnr}', 'DetailsLoadingController@show')->name('showDetailsLoading');
 Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@submitUpdateUpload')->name('submitUpdateUpload');
 Route::get('/addSubloading/{atrnr}', 'DetailsLoadingController@showAdd')->name('showAddSubloading');
 Route::post('/addSubloading/{atrnr}', 'DetailsLoadingController@add')->name('addSubloading');
 
 //WAREHOUSES
-Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWarehouses');
+Route::get('/allWarehouses/{refresh}', 'WarehousesController@showAll')->name('showAllWarehouses');
+//Route::get('/allWarehouses', 'WarehousesController@refreshListWarehouses')->name('refreshListWarehouses');
 Route::get('/detailsWarehouse/{id}', 'WarehousesController@showDetails')->name('showDetailsWarehouse');
 Route::post('/detailsWarehouse/{id}', 'WarehousesController@update')->name('updateWarehouse');
 Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
@@ -38,7 +39,7 @@ Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
 Route::get('/addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
 //TRUCKS
-Route::get('/allTrucks', 'TrucksController@showAll')->name('showAllTrucks');
+Route::get('/allTrucks/{refresh}', 'TrucksController@showAll')->name('showAllTrucks');
 Route::get('/detailsTruck/{id}', 'TrucksController@showDetails')->name('showDetailsTruck');
 Route::post('/detailsTruck/{id}', 'TrucksController@update')->name('updateTruck');
 Route::delete('/detailsTruck/{id}', 'TrucksController@delete')->name('deleteTruck');

@@ -20,14 +20,16 @@ class TrucksController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAll(Request $request)
+    public function showAll(Request $request, $refresh)
     {
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
         $listColumns = ['id', 'name', 'licensePlate', 'realNumberPallets', 'theoricalNumberPallets'];
         if (Auth::check()) {
-            $this->importData();
+            if($refresh=='true'){
+                $this->importData();
+            }
 
             $query = DB::table('trucks');
 

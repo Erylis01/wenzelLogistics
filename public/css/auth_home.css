@@ -39,6 +39,10 @@ font-size: 30px;
 }
 
 .img-home{
-    max-width: 225px;
+    max-width: 170px;
     max-height:100px;
+}
+.home{
+    margin-left:17px;
+    margin-right:17px;
 }

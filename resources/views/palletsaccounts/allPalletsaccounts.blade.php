@@ -242,6 +242,17 @@
                                                             </div>
                                                             <div class="col-lg-6 info-palletsaccounts">
                                                                 @php($listWarehouses=App\Palletsaccount::where('name', $palletsaccount->name)->with('warehouses')->first()->warehouses()->get())
+                                                                <select class="selectpicker show-tick form-control"
+                                                                        data-size="10"
+                                                                        data-live-search="true"
+                                                                        data-live-search-style="startsWith"
+                                                                        title="Warehouses Associated"
+                                                                        name="namewarehouses[]" readonly="true"
+                                                                        multiple>
+                                                                @foreach($listWarehouses as $warehouse)
+                                                                        <option selected>{{$warehouse->name}}</option>
+                                                                    @endforeach
+                                                                </select>
                                                                 <ul>
                                                                     @foreach($listWarehouses as $warehouse)
                                                                         <li>

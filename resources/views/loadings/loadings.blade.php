@@ -38,7 +38,7 @@
                     <div class="panel-heading">
                         <div class="col-lg-6">List of all loadings
                         </div>
-                        <form role="form" method="GET" action="{{route('showAllLoadings')}}">
+                        <form role="form" method="GET" action="{{route('showAllLoadings', ['refresh'=>'false'])}}">
                             {{ csrf_field() }}
 
                             <div class="col-lg-5 input-group searchBar">
@@ -92,6 +92,10 @@
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
+                                <span class="col-lg-offset-6">
+                                    <a href="{{route('showAllLoadings', ['refresh'=>'true'])}}" class="btn btn-add"><span
+                                                class="glyphicon glyphicon-refresh"></span></a>
+                            </span>
                             </div>
                         </form>
                     </div>
@@ -107,188 +111,188 @@
                                         <th class="col0b colHeight"></th>
                                         <th class="text-center col1 colHeight">AtrNr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=atrnr&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=atrnr&order=desc')}}"></a>
                                         </th>
                                         <th class="col1b colHeight"></th>
                                         <th class="text-center colHeight">Laded.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ladedatum&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ladedatum&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ladedatum&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ladedatum&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Entladed.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=entladedatum&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=entladedatum&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=entladedatum&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=entladedatum&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Auftraggeber<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">LadL.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=landb&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=landb&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=landb&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=landb&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">LadP<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plzb&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plzb&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plzb&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plzb&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">LadO<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ortb&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ortb&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ortb&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=ortb&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">AblL.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=lande&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=lande&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=lande&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=lande&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">AblP.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plze&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plze&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">AblO.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=orte&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=orte&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Anz.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=anz&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=anz&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=anz&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=anz&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Art.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=art&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=art&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=art&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=art&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Subfrächter<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=subfrachter&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=subfrachter&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=subfrachter&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=subfrachter&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Kennzeichen<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Zus. Ladestellen<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
                                         </th>
                                     @else
                                         <th class="col0 colHeight"> <br> </th>
                                         <th class="col0b colHeight"> <br> </th>
                                         <th class="text-center col1 colHeight">AtrNr<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=atrnr&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=atrnr&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=atrnr&order=desc')}}"></a>
                                         </th>
                                         <th class="col1b colHeight"></th>
                                         <th class="text-center colHeight">Laded.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=ladedatum&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Entladed.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=entladedatum&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Auftraggeber<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=auftraggeber&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">LadL.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=landb&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=landb&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=landb&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=landb&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">LadP<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plzb&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=plzb&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plzb&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=plzb&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">LadO<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ortb&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=ortb&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=ortb&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=ortb&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">AblL.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=lande&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=lande&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=lande&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=lande&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">AblP.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plze&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=plze&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=plze&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">AblO<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=orte&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=orte&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=orte&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Anz.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=anz&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=anz&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=anz&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=anz&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Art.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=art&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=art&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=art&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=art&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Subfrächter<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=subfrachter&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Kennzeichen<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=kennzeichen&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colHeight">Zus. Ladestellen<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=asc')}}"></a><a
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/loadings?page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
+                                                    href="{{url('/loadings/'.$refresh.'?page='.$listLoadings->currentPage().'&sortby=zusladestellen&order=desc')}}"></a>
                                         </th>
                                     @endif
                                 </tr>

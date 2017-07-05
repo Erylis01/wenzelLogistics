@@ -41,7 +41,7 @@ class WarehouseTableSeeder extends Seeder
                                 $id = Palletsaccount::where('name', 'PFM - FR')->first()->id;
 
                                 if (intval(trim($sheet[$r][0])) <> 0) {
-                                    $country = 'France';
+                                    $country = 'FR';
                                 } else {
                                     $country = trim($sheet[$r][0]);
                                 }
@@ -49,20 +49,26 @@ class WarehouseTableSeeder extends Seeder
                                 $cell7 = str_replace(' - ', ' ', trim($sheet[$r][7]));
                                 $cell7 = str_replace('-', ' ', $cell7);
 
-                                $zipcode = intval(substr($cell7, 0, 5));
+                                $name=trim($sheet[$r][3]);
+                                $nickname=$name;
+                                if(substr($cell7, 5, 1)==' '){
+                                    $zipcode=trim(substr($cell7, 0, 5));
+                                }else{
+                                    $zipcode = trim(substr($cell7, 0, 7));
+                                }
 
                                 $town = trim(str_replace($zipcode, '', $cell7));
 
                                 Warehouse::firstOrCreate([
                                     'id' => $k,
-                                    'name' => trim($sheet[$r][3]),
-                                    'nickname' => trim($sheet[$r][3]),
+                                    'name' => $name,
+                                    'nickname' => $nickname,
                                     'adress' => trim($sheet[$r][6]),
                                     'zipcode' => $zipcode,
                                     'town' => $town,
                                     'country' => $country,
-                                    'phone' => trim(substr(str_replace(' ', '',$sheet[$r][8] ), 0, 14)),
-                                    'fax' => trim(substr(str_replace(' ', '',$sheet[$r][9]), 0, 14)),
+                                    'phone' => trim(substr(str_replace(' ', '', $sheet[$r][8]), 0, 14)),
+                                    'fax' => trim(substr(str_replace(' ', '', $sheet[$r][9]), 0, 14)),
                                     'email' => trim($sheet[$r][12]),
                                     'namecontact' => trim($sheet[$r][4]) . ' - ' . trim($sheet[$r][5]),
                                 ])->palletsaccounts()->sync($id);
@@ -74,7 +80,7 @@ class WarehouseTableSeeder extends Seeder
         }
     }
 
-        public function importDataSystempo()
+    public function importDataSystempo()
     {
         $path = 'resources/assets/excel/ListWarehouses/Systempo';
         $files = File::allFiles($path);
@@ -88,7 +94,7 @@ class WarehouseTableSeeder extends Seeder
 
                         for ($r = 1; $r < $nbrows; $r++) {
                             $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][0])<>'') {
+                            if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                 //not double
                                 $k = count(Warehouse::get()) + 1;
                                 $id = Palletsaccount::where('name', 'Systempo AT')->first()->id;
@@ -100,8 +106,8 @@ class WarehouseTableSeeder extends Seeder
                                     'adress' => trim($sheet[$r][1]),
                                     'zipcode' => intval(trim($sheet[$r][3])),
                                     'town' => trim($sheet[$r][4]),
-                                    'country' =>trim($sheet[$r][2]),
-                                    'phone' => trim(str_replace(' ','', $sheet[$r][5])),
+                                    'country' => trim($sheet[$r][2]),
+                                    'phone' => trim(str_replace(' ', '', $sheet[$r][5])),
                                     'email' => trim($sheet[$r][6]),
                                     'namecontact' => trim($sheet[$r][7]),
                                 ])->palletsaccounts()->sync($id);

@@ -37,7 +37,7 @@
                 <div class="panel panel-general panel-trucks">
                     <div class="panel-heading"><div class="col-lg-4">List of all trucks
                         </div>
-                        <form role="form" method="GET" action="{{route('showAllTrucks')}}">
+                        <form role="form" method="GET" action="{{route('showAllTrucks', ['refresh'=>'false'])}}">
                             {{ csrf_field() }}
                             <div class="col-lg-5 input-group searchBar">
                             <span class="input-group-btn searchInput">
@@ -90,7 +90,11 @@
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
-                                <span class="col-lg-offset-8">
+                                <span class="col-lg-offset-6">
+                                    <a href="{{route('showAllTrucks', ['refresh'=>'true'])}}" class="btn btn-add"><span
+                                                class="glyphicon glyphicon-refresh"></span></a>
+                            </span>
+                                <span class="col-lg-offset-1">
                                 <a href="{{route('showAddTruck')}}" class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Add truck</a>
                             </span>
@@ -114,33 +118,33 @@
                                     @if(isset($searchQuery))
                                         <th class="text-center colID">ID<br> <a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colName">Name<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colLicense">License Plate<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colNumber">Confirmed<br>pal. nbr<a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colNumber">Planned<br>pal. nbr<a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"></a>
                                         </th>
                                         {{--<th class="text-center colName">Pallets Account<br><a--}}
                                                     {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
@@ -151,33 +155,33 @@
                                         @else
                                     <th class="text-center colID">ID<br> <a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"></a><a
+                                                href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"></a>
+                                                href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"></a>
                                     </th>
                                     <th class="text-center colName">Name<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"></a><a
+                                                href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"></a>
+                                                href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"></a>
                                     </th>
                                     <th class="text-center colLicense">License Plate<br><a
                                                 class="glyphicon glyphicon-chevron-up general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"></a><a
+                                                href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"></a><a
                                                 class="glyphicon glyphicon-chevron-down general-sorting"
-                                                href="{{url('/allTrucks?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
+                                                href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"></a>
                                     </th>
                                         <th class="text-center colNumber">Confirmed<br>pal. nbr <a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"></a>
                                         </th>
                                         <th class="text-center colNumber">Planned<br>pal. nbr <a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"></a><a
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allTrucks?search='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"></a>
+                                                    href="{{url('/allTrucks/'.$refresh.'?search='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"></a>
                                         </th>
                                     {{--<th class="text-center colName">Pallets Account<br><a--}}
                                                 {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}

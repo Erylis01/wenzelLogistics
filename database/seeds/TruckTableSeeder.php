@@ -15,12 +15,15 @@ class TruckTableSeeder extends Seeder
     {
         $this->importData();
     }
+
     public function importData()
     {
         $path = 'resources/assets/excel/Hypertrans';
         $files = File::allFiles($path);
+
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
+                ini_set('memory_limit', '-1');
                 Excel::load($file, function ($reader) {
                     if (!empty($reader)) {
                         $reader->noHeading();
@@ -28,43 +31,45 @@ class TruckTableSeeder extends Seeder
                         $nbrows = count($sheet);
 
                         for ($r = 4; $r < $nbrows; $r++) {
-                            $testLicense = DB::table('trucks')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
+                            if (trim($sheet[$r][26]) <> '') {
+                                $licensePlate = trim($sheet[$r][26]);
+                            } else {
+                                $licensePlate = 'OTHER';
+                            }
+                            if ($sheet[$r][25] <> null) {
+                                $name = trim(explode(',', $sheet[$r][25])[0]);
+                                $adress = trim(explode(',', $sheet[$r][25])[1]);
 
-                            if ($testLicense == null) {
-                                //not double
-                                $nameAdress=explode(',',$sheet[$r][25]);
-                                $testTruck = DB::table('palletsaccounts')->where('type', 'Carrier')->where('name', trim($nameAdress[0]))->first();
+                                $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
 
-                                if($testTruck==null) {
-                                    Palletsaccount::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'adress'=>trim($nameAdress[1]),
-                                        'type' => 'Carrier',
-                                    ]);
-                                    Truck::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'licensePlate' => 'STOCK',
-                                        'palletsaccount_name'=>trim($nameAdress[0]),
-                                    ]);
-                                }
+                                if ($testTruck == null) {
+                                    //not double
 
-                                if(trim($sheet[$r][26])==null){
+                                    $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
+
+                                    if ($testAccount == null) {
+                                        Palletsaccount::firstOrCreate([
+                                            'name' => $name,
+                                            'adress' => $adress,
+                                            'type' => 'Carrier',
+                                        ]);
+                                        Truck::firstOrCreate([
+                                            'name' => $name,
+                                            'licensePlate' => 'STOCK',
+                                            'palletsaccount_name' => $name,
+                                        ]);
+                                    }
                                     Truck::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'licensePlate' => 'OTHER',
-                                        'palletsaccount_name'=>trim($nameAdress[0]),
-                                    ]);
-                                }else{
-                                    Truck::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'licensePlate' => trim($sheet[$r][26]),
-                                        'palletsaccount_name'=>trim($nameAdress[0]),
+                                        'name' => $name,
+                                        'licensePlate' => $licensePlate,
+                                        'palletsaccount_name' => $name,
                                     ]);
                                 }
                             }
                         }
                     }
                 });
-            }}
+            }
+        }
     }
 }

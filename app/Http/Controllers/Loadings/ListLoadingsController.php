@@ -21,10 +21,12 @@ class ListLoadingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Request $request, $refresh)
     {
         if (Auth::check()) {
-            $this->importData();
+            if($refresh=='true'){
+                $this->importData();
+            }
 
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
@@ -84,10 +86,10 @@ class ListLoadingsController extends Controller
                     }
                 }
                 $count = count($query->get());
-                $listLoadings = $query->orderBy('atrnr', 'asc')->paginate(10);
+                $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
                 $links = '';
             }
-            return view('loadings.loadings', compact('listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
+            return view('loadings.loadings', compact('refresh','listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }

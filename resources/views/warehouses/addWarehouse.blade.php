@@ -98,7 +98,7 @@
                                         <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
                                                value="{{$zipcode}}" placeholder="Zip Code" required autofocus>
                                     @else
-                                        <input id="zipcode" type="number" class="form-control" name="zipcode"
+                                        <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
                                                value="{{old('zipcode')}}" placeholder="Zip Code" required autofocus>
                                     @endif
                                     @if ($errors->has('zipcode'))
@@ -169,15 +169,15 @@
                                 </div>
                                 <!--fax-->
                                 <div class="col-lg-2">
-                                    <label for="fax" class="control-label">Fax :</label>
+                                    <label for="fax" class="control-label">Fax/Mobile :</label>
                                 </div>
                                 <div class="col-lg-3">
                                     @if(isset($fax))
                                         <input id="fax" type="text" class="form-control" name="fax"
-                                               value="{{$fax}}" placeholder="Fax" autofocus>
+                                               value="{{$fax}}" placeholder="Fax/Mobile" autofocus>
                                     @else
                                         <input id="fax" type="text" class="form-control" name="fax"
-                                               value="{{old('fax')}}" placeholder="Fax" autofocus>
+                                               value="{{old('fax')}}" placeholder="Fax/Mobile" autofocus>
                                     @endif
                                     @if ($errors->has('fax'))
                                     <span class="help-block">
@@ -211,21 +211,22 @@
                             <div class="form-group">
                                 <!--contact name-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Contact Name :</label>
+                                    <label for="namecontact" class="control-label">Contact Infos :</label>
                                 </div>
                                 <div class="col-lg-8">
                                     @if(isset($namecontact))
-                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                               value="{{$namecontact}}" placeholder="Contact Name" autofocus>
+                                        <textarea
+                                                class="form-control" name="namecontact"
+                                                id="namecontact"
+                                                rows="2"
+                                                placeholder="Contact Infos (name, ...)" autofocus>{{$namecontact}}</textarea>
                                     @else
-                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                               value="{{old('namecontact')}}" placeholder="Contact Name" autofocus>
+                                        <textarea
+                                                class="form-control" name="namecontact"
+                                                id="namecontact"
+                                                rows="2"
+                                                placeholder="Contact Infos (name, ...)" autofocus>{{old('namecontact')}}</textarea>
                                     @endif
-                                    {{--@if ($errors->has('namecontact'))--}}
-                                    {{--<span class="help-block">--}}
-                                    {{--<strong>{{ $errors->first('namecontact') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
                                 </div>
                             </div>
 
