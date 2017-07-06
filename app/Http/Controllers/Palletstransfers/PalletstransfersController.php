@@ -1093,35 +1093,343 @@ class PalletstransfersController extends Controller
         session()->flash('messageUpdatePalletstransfer', 'Successfully updated pallets transfer');
     }
 
-    public function state($loading, $listPalletstransfers)
+    /**
+     * define the general state of the loading according to all transfers state and update every error
+     * @param $loading
+     * @param $listPalletstransfers
+     */
+    public static function state($loading, $listPalletstransfers)
     {
+        $idErrorNotNumberLoadingOrder = Error::where('name', 'DW-WD_notNumberLoadingOrder')->first()->id;
+        $idErrorNotSameNumber = Error::where('name', 'Donly-Wonly_notSameNumber')->first()->id;
+        $idErrorNotCompleteNormal = Error::where('name', 'Correcting_notCompleteNormal')->first()->id;
+        $idErrorNotSameNumberSP = Error::where('name', 'SP-PS_notSameNumber')->first()->id;
+
+        //update errors on each transfer DW-WD associated to this loading
+        $queryTransfer = Palletstransfer::where(function ($q) {
+            $q->where('type', 'Deposit-Withdrawal')->orWhere('type', 'Withdrawal-Deposit');
+        })->where('loading_atrnr', $loading->atrnr);
+
+        if (!$queryTransfer->get()->isEmpty()) {
+            foreach ($queryTransfer->get() as $transferQ) {
+                $listTransfersDWK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->get();
+                $listTransfersWDK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->get();
+                $listAccounts = [];
+                foreach ($listTransfersDWK as $transferDWK) {
+                    if (!in_array($transferDWK->creditAccount, $listAccounts)) {
+                        $listAccounts[] = $transferDWK->creditAccount;
+                    }
+                }
+                foreach ($listTransfersWDK as $transferWDK) {
+                    if (!in_array($transferWDK->debitAccount, $listAccounts)) {
+                        $listAccounts[] = $transferWDK->debitAccount;
+                    }
+                }
+
+                for ($k = 0; $k < count($listAccounts); $k++) {
+                    $sumTransferDW = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->sum('palletsNumber');
+                    $sumTransferWD = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->sum('palletsNumber');
+//                    $idErrorNotSameNumberDW = Error::where('name', 'DW-WD_notSameNumber')->first()->id;
+
+                    if ($sumTransferWD <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ2) {
+                            $transferQ2->errors()->sync([$idErrorNotNumberLoadingOrder]);
+                        }
+                    } else {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ2) {
+                            $transferQ2->errors()->detach($idErrorNotNumberLoadingOrder);
+                        }
+                    }
+                    if ($sumTransferDW <> $loading->anz) {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ3) {
+                            $transferQ3->errors()->sync([$idErrorNotNumberLoadingOrder]);
+                        }
+                    } else {
+                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ3) {
+                            $transferQ3->errors()->detach($idErrorNotNumberLoadingOrder);
+                        }
+                    }
+
+//                    if ($sumTransferWD <> $sumTransferDW && $sumTransferWD <> $loading->anz && $sumTransferDW == $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ1) {
+//                            $transferQ1->errors()->sync($idErrorNotSameNumberDW);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ2) {
+//                            $transferQ2->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+//                        }
+//                    } elseif ($sumTransferWD <> $sumTransferDW && $sumTransferWD <> $loading->anz && $sumTransferDW <> $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ3) {
+//                            $transferQ3->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ4) {
+//                            $transferQ4->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+//                        }
+//                    } elseif ($sumTransferWD <> $sumTransferDW && $sumTransferWD == $loading->anz && $sumTransferDW <> $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ5) {
+//                            $transferQ5->errors()->sync([$idErrorNotSameNumberDW, $idErrorNotNumberLoadingOrder]);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ6) {
+//                            $transferQ6->errors()->sync($idErrorNotSameNumberDW);
+//                        }
+//                    } elseif ($sumTransferWD == $sumTransferDW && $sumTransferWD == $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ7) {
+//                            $transferQ7->errors()->detach($idErrorNotSameNumberDW);
+//                            $transferQ7->errors()->detach($idErrorNotNumberLoadingOrder);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ8) {
+//                            $transferQ8->errors()->detach($idErrorNotSameNumberDW);
+//                            $transferQ8->errors()->detach($idErrorNotNumberLoadingOrder);
+//                        }
+//                    } elseif ($sumTransferWD == $sumTransferDW && $sumTransferWD <> $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Deposit-Withdrawal')->where('creditAccount', $listAccounts[$k])->get() as $transferQ9) {
+//                            $transferQ9->errors()->sync($idErrorNotNumberLoadingOrder);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Withdrawal-Deposit')->where('debitAccount', $listAccounts[$k])->get() as $transferQ10) {
+//                            $transferQ10->errors()->sync($idErrorNotNumberLoadingOrder);
+//                        }
+//                    }
+                }
+            }
+        }
+
+        //update errors on each transfer D only or W only associated to this loading
+        $sumTransferDepositOnly = Palletstransfer::where('type', 'Deposit_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber');
+        $sumTransferWithdrawalOnly = Palletstransfer::where('type', 'Withdrawal_Only')->where('loading_atrnr', $loading->atrnr)->sum('palletsNumber');
+
+        $listTransferDWonly = Palletstransfer::where(function ($q) {
+            $q->where('type', 'Deposit_Only')->orWhere('type', 'Withdrawal_Only');
+        })->where('loading_atrnr', $loading->atrnr)->get();
+
+        foreach ($listTransferDWonly as $transferDWonly) {
+            if ($sumTransferDepositOnly <> $sumTransferWithdrawalOnly) {
+                $transferDWonly->errors()->sync($idErrorNotSameNumber);
+            } else {
+                $transferDWonly->errors()->detach($idErrorNotSameNumber);
+            }
+        }
+
+        //update errors on each transfer SP-PS associated to this loading
+        $queryTransfer2 = Palletstransfer::where(function ($q) {
+            $q->where('type', 'Sale-Purchase')->orWhere('type', 'Purchase-Sale');
+        })->where('loading_atrnr', $loading->atrnr);
+
+        if (!$queryTransfer2->get()->isEmpty()) {
+            foreach ($queryTransfer2->get() as $transferQ) {
+                $listTransfersSPK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->get();
+                $listTransfersPSK = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->get();
+                $listNormalTransfersAssociated = [];
+                foreach ($listTransfersSPK as $transferSPK) {
+                    if (!in_array($transferSPK->normalTransferAssociated, $listNormalTransfersAssociated)) {
+                        $listNormalTransfersAssociated[] = $transferSPK->normalTransferAssociated;
+                    }
+                }
+                foreach ($listTransfersPSK as $transferPSK) {
+                    if (!in_array($transferPSK->normalTransferAssociated, $listNormalTransfersAssociated)) {
+                        $listNormalTransfersAssociated[] = $transferPSK->normalTransferAssociated;
+                    }
+                }
+
+                for ($k = 0; $k < count($listNormalTransfersAssociated); $k++) {
+                    $sumTransferSP = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->sum('palletsNumber');
+                    $sumTransferPS = Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->sum('palletsNumber');
+//                    $palletsNumberNormalTransferAssociated=Palletstransfer::where('id',$listNormalTransfersAssociated[$k])->first()->palletsNumber;
+                    $transferNormalK = Palletstransfer::where('id', $listNormalTransfersAssociated[$k])->first();
+
+                    if ($transferNormalK->type == 'Withdrawal-Deposit' || $transferNormalK->type == 'Deposit-Withdrawal') {
+                        if ($transferNormalK->palletsNumber >= $loading->anz) {
+                            if ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber - $sumTransferPS) <> $loading->anz && ($transferNormalK->palletsNumber - $sumTransferSP) == $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ1) {
+                                    $transferQ1->errors()->sync($idErrorNotSameNumberSP);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ2) {
+                                    $transferQ2->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                            } elseif ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber - $sumTransferPS) <> $loading->anz && ($transferNormalK->palletsNumber - $sumTransferSP) <> $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ3) {
+                                    $transferQ3->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ4) {
+                                    $transferQ4->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                            } elseif ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber - $sumTransferPS) == $loading->anz && ($transferNormalK->palletsNumber - $sumTransferSP) <> $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ5) {
+                                    $transferQ5->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ6) {
+                                    $transferQ6->errors()->sync($idErrorNotSameNumberSP);
+                                }
+                            } elseif ($sumTransferSP == $sumTransferPS && ($transferNormalK->palletsNumber - $sumTransferPS) == $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ7) {
+                                    $transferQ7->errors()->detach($idErrorNotSameNumberSP);
+                                    $transferQ7->errors()->detach($idErrorNotCompleteNormal);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ8) {
+                                    $transferQ8->errors()->detach($idErrorNotSameNumberSP);
+                                    $transferQ8->errors()->detach($idErrorNotCompleteNormal);
+                                }
+                                $transferNormalK->errors()->detach($idErrorNotNumberLoadingOrder);
+                            } elseif ($sumTransferSP == $sumTransferPS && ($transferNormalK->palletsNumber - $sumTransferPS) <> $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ9) {
+                                    $transferQ9->errors()->sync($idErrorNotCompleteNormal);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ10) {
+                                    $transferQ10->errors()->sync($idErrorNotCompleteNormal);
+                                }
+                            }
+                        } elseif ($transferNormalK->palletsNumber <= $loading->anz) {
+                            if ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber + $sumTransferPS) <> $loading->anz && ($transferNormalK->palletsNumber + $sumTransferSP) == $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ1) {
+                                    $transferQ1->errors()->sync($idErrorNotSameNumberSP);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ2) {
+                                    $transferQ2->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                            } elseif ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber + $sumTransferPS) <> $loading->anz && ($transferNormalK->palletsNumber + $sumTransferSP) <> $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ3) {
+                                    $transferQ3->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ4) {
+                                    $transferQ4->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                            } elseif ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber + $sumTransferPS) == $loading->anz && ($transferNormalK->palletsNumber + $sumTransferSP) <> $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ5) {
+                                    $transferQ5->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ6) {
+                                    $transferQ6->errors()->sync($idErrorNotSameNumberSP);
+                                }
+                            } elseif ($sumTransferSP == $sumTransferPS && ($transferNormalK->palletsNumber + $sumTransferPS) == $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ7) {
+                                    $transferQ7->errors()->detach($idErrorNotSameNumberSP);
+                                    $transferQ7->errors()->detach($idErrorNotCompleteNormal);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ8) {
+                                    $transferQ8->errors()->detach($idErrorNotSameNumberSP);
+                                    $transferQ8->errors()->detach($idErrorNotCompleteNormal);
+                                }
+                                $transferNormalK->errors()->detach($idErrorNotNumberLoadingOrder);
+                            } elseif ($sumTransferSP == $sumTransferPS && ($transferNormalK->palletsNumber + $sumTransferPS) <> $loading->anz) {
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ9) {
+                                    $transferQ9->errors()->sync($idErrorNotCompleteNormal);
+                                }
+                                foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ10) {
+                                    $transferQ10->errors()->sync($idErrorNotCompleteNormal);
+                                }
+                            }
+                        }
+                    } elseif ($transferNormalK->type == 'Withdrawal_Only' || $transferNormalK->type == 'Deposit_Only') {
+                        if ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber <> $sumTransferPS) && ($transferNormalK->palletsNumber == $sumTransferSP)) {
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ1) {
+                                $transferQ1->errors()->sync($idErrorNotSameNumberSP);
+                            }
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ2) {
+                                $transferQ2->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                            }
+                        } elseif ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber <> $sumTransferPS) && ($transferNormalK->palletsNumber <> $sumTransferSP)) {
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ3) {
+                                $transferQ3->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                            }
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ4) {
+                                $transferQ4->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                            }
+                        } elseif ($sumTransferSP <> $sumTransferPS && ($transferNormalK->palletsNumber == $sumTransferPS) && ($transferNormalK->palletsNumber <> $sumTransferSP)) {
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ5) {
+                                $transferQ5->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+                            }
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ6) {
+                                $transferQ6->errors()->sync($idErrorNotSameNumberSP);
+                            }
+                        } elseif ($sumTransferSP == $sumTransferPS && ($transferNormalK->palletsNumber == $sumTransferPS)) {
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ7) {
+                                $transferQ7->errors()->detach($idErrorNotSameNumberSP);
+                                $transferQ7->errors()->detach($idErrorNotCompleteNormal);
+                            }
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ8) {
+                                $transferQ8->errors()->detach($idErrorNotSameNumberSP);
+                                $transferQ8->errors()->detach($idErrorNotCompleteNormal);
+                            }
+                            $transferNormalK->errors()->detach($idErrorNotSameNumber);
+                        } elseif ($sumTransferSP == $sumTransferPS && ($transferNormalK->palletsNumber <> $sumTransferPS)) {
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ9) {
+                                $transferQ9->errors()->sync($idErrorNotCompleteNormal);
+                            }
+                            foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ10) {
+                                $transferQ10->errors()->sync($idErrorNotCompleteNormal);
+                            }
+                        }
+                    }
+                }
+
+
+//                    if ($sumTransferSP <> $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) <> $loading->anz && ($sumTransferSP+$palletsNumberNormalTransferAssociated) == $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ1) {
+//                            $transferQ1->errors()->sync($idErrorNotSameNumberSP);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ2) {
+//                            $transferQ2->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+//                        }
+//                    } elseif ($sumTransferSP <> $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) <> $loading->anz && ($sumTransferSP+$palletsNumberNormalTransferAssociated) <> $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ3) {
+//                            $transferQ3->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ4) {
+//                            $transferQ4->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+//                        }
+//                    } elseif ($sumTransferSP <> $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) == $loading->anz && ($sumTransferSP+$palletsNumberNormalTransferAssociated) <> $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ5) {
+//                            $transferQ5->errors()->sync([$idErrorNotSameNumberSP, $idErrorNotCompleteNormal]);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ6) {
+//                            $transferQ6->errors()->sync($idErrorNotSameNumberSP);
+//                        }
+//                    } elseif ($sumTransferSP == $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) == $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ7) {
+//                            $transferQ7->errors()->detach($idErrorNotSameNumberSP);
+//                            $transferQ7->errors()->detach($idErrorNotCompleteNormal);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ8) {
+//                            $transferQ8->errors()->detach($idErrorNotSameNumberSP);
+//                            $transferQ8->errors()->detach($idErrorNotCompleteNormal);
+//                        }
+//                    } elseif ($sumTransferSP == $sumTransferPS && ($sumTransferPS +$palletsNumberNormalTransferAssociated) <> $loading->anz) {
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Sale-Purchase')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ9) {
+//                            $transferQ9->errors()->sync($idErrorNotCompleteNormal);
+//                        }
+//                        foreach (Palletstransfer::where('loading_atrnr', $transferQ->loading_atrnr)->where('type', 'Purchase-Sale')->where('normalTransferAssociated', $listNormalTransfersAssociated[$k])->get() as $transferQ10) {
+//                            $transferQ10->errors()->sync($idErrorNotCompleteNormal);
+//                        }
+//                    }
+//                }
+            }
+        }
+
+        //////STATE GENERAL////
         if ($listPalletstransfers->isEmpty()) {
             $state = 'Untreated';
         } else {
-            //////STATE GENERAL////
-             $stateCompleteValidated = 0;
+            $stateCompleteValidated = 0;
             $stateComplete = 0;
             $stateWaitingDocuments = 0;
-            $stateInProgress = 0;
+            $stateUntreated = 0;
             foreach ($listPalletstransfers as $transfer) {
                 if ($transfer->state == 'Complete Validated') {
-                    $stateCompleteValidated++;
+                    $stateCompleteValidated = $stateCompleteValidated + 1;
                 } elseif ($transfer->state == 'Complete') {
-                    $stateComplete++;
+                    $stateComplete = $stateComplete + 1;
                 } elseif ($transfer->state == 'Waiting documents') {
-                    $stateWaitingDocuments++;
-                } elseif ($transfer->state == 'In progress') {
-                    $stateInProgress++;
+                    $stateWaitingDocuments = $stateWaitingDocuments + 1;
+                } elseif ($transfer->state == 'Untreated') {
+                    $stateUntreated = $stateUntreated + 1;
                 }
             }
 
             if ($stateCompleteValidated == count($listPalletstransfers)) {
                 $state = 'Complete Validated';
-            } elseif ($stateWaitingDocuments == 0 && $stateInProgress == 0) {
+            } elseif ($stateWaitingDocuments == 0 && $stateUntreated == 0) {
                 $state = 'Complete';
             } elseif ($stateWaitingDocuments > 0) {
                 $state = 'Waiting documents';
-            } elseif ($stateWaitingDocuments = 0 && $stateInProgress > 0) {
+            } elseif ($stateWaitingDocuments = 0 && $stateUntreated > 0) {
                 $state = 'In progress';
             }
         }

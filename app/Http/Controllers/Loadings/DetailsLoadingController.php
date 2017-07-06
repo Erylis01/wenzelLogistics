@@ -34,9 +34,11 @@ class DetailsLoadingController extends Controller
             $loading = Loading::where('atrnr', '=', $atrnr)->first();
 
             //////PALLETS PANEL//////
-            //pallets account network, truck and other
+            // get all the pallets account except the carriers accounts that will be get after, truck by truck
             $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
             $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
+//list trucks possible
+            $listTrucksPossible = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->orderBy('name', 'asc')->get();
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
@@ -61,51 +63,54 @@ class DetailsLoadingController extends Controller
             }
 
             //looking for the truck associated to this loading
-            if($loading->kennzeichen==''){
-                $licensePlate='OTHER';
-            }else{
-                $licensePlate=$loading->kennzeichen;
+            if ($loading->kennzeichen == '') {
+                $licensePlate = 'OTHER';
+            } else {
+                $licensePlate = $loading->kennzeichen;
             }
-            $truckAssociated= Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first();
-            if($truckAssociated<>null){
-                $theoricalPalletsNumberTruck =$truckAssociated->theoricalPalletsNumber;
-                if($theoricalPalletsNumberTruck==''){
-                    $theoricalPalletsNumberTruck=0;
+            $truckAssociated = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first();
+
+            if ($truckAssociated <> null) {
+                if ($truckAssociated->theoricalNumberPallets == null) {
+                    $theoricalNumberPalletsTruck = 0;
+                } else {
+                    $theoricalNumberPalletsTruck = $truckAssociated->theoricalNumberPallets;
                 }
-                $realPalletsNumberTruck = $truckAssociated->realPalletsNumber;
-                if($realPalletsNumberTruck==''){
-                    $realPalletsNumberTruck=0;
+                if ($truckAssociated->realNumberPallets == null) {
+                    $realNumberPalletsTruck = 0;
+                } else {
+                    $realNumberPalletsTruck = $truckAssociated->realNumberPallets;
                 }
             }
 
             //looking for the user who did this loading order
             foreach (User::get() as $user) {
                 if ($user->initials == $loading->disp) {
-                    $disp = $user->lastname .' '. $user->firstname;
+                    $disp = $user->lastname . ' ' . $user->firstname;
                 }
             }
 
             if (!isset($disp)) {
                 foreach (DB::table('llx_user')->get() as $userDolibarr) {
-                    if($userDolibarr->lastname == 'SuperAdmin'){
+                    if ($userDolibarr->lastname == 'SuperAdmin') {
                         $lastnameIni = 'Gu';
                         $firstnameIni = 'Ad';
-                    }else{
+                    } else {
                         $lastnameIni = substr($userDolibarr->lastname, 0, 2);
                         $firstnameIni = substr($userDolibarr->firstname, 0, 2);
 
                     }
                     if ($lastnameIni . $firstnameIni == $loading->disp && $userDolibarr->lastname == 'SuperAdmin') {
-                        $disp='Adrien GUNDOGAN';}
-                        elseif($lastnameIni . $firstnameIni == $loading->disp){
-                        $disp = $userDolibarr->lastname .' '. $userDolibarr->firstname;
-                    }elseif(!isset($disp) && $lastnameIni . $firstnameIni <> $loading->disp){
-                        $disp=$loading->disp;
+                        $disp = 'Adrien GUNDOGAN';
+                    } elseif ($lastnameIni . $firstnameIni == $loading->disp) {
+                        $disp = $userDolibarr->lastname . ' ' . $userDolibarr->firstname;
+                    } elseif (!isset($disp) && $lastnameIni . $firstnameIni <> $loading->disp) {
+                        $disp = $loading->disp;
                     }
                 }
             }
 
-            return view('loadings.detailsLoading', compact('sortby', 'order', 'loading', 'disp', 'atrnr1', 'atrnr2', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'
+            return view('loadings.detailsLoading', compact('sortby', 'order', 'loading', 'disp', 'atrnr1', 'atrnr2', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'
             ));
         } else {
             return view('auth.login');
@@ -202,48 +207,52 @@ class DetailsLoadingController extends Controller
         // get all the pallets account except the carriers accounts that will be get after, truck by truck
         $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
         $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
+//list trucks possible
+        $listTrucksPossible = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->orderBy('name', 'asc')->get();
 
         //looking for the truck associated to this loading
-        if($loading->kennzeichen==''){
-            $licensePlate='OTHER';
-        }else{
-            $licensePlate=$loading->kennzeichen;
+        if ($loading->kennzeichen == '') {
+            $licensePlate = 'OTHER';
+        } else {
+            $licensePlate = $loading->kennzeichen;
         }
-        $truckAssociated= Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first();
-        if($truckAssociated<>null){
-            $theoricalPalletsNumberTruck =$truckAssociated->theoricalPalletsNumber;
-            if($theoricalPalletsNumberTruck==''){
-                $theoricalPalletsNumberTruck=0;
+        $truckAssociated = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $licensePlate)->first();
+        if ($truckAssociated <> null) {
+            if ($truckAssociated->theoricalNumberPallets == null) {
+                $theoricalNumberPalletsTruck = 0;
+            } else {
+                $theoricalNumberPalletsTruck = $truckAssociated->theoricalNumberPallets;
             }
-            $realPalletsNumberTruck = $truckAssociated->realPalletsNumber;
-            if($realPalletsNumberTruck==''){
-                $realPalletsNumberTruck=0;
+            if ($truckAssociated->realNumberPallets == null) {
+                $realNumberPalletsTruck = 0;
+            } else {
+                $realNumberPalletsTruck = $truckAssociated->realNumberPallets;
             }
         }
 
         //looking for the user who did this loading order
         foreach (User::get() as $user) {
             if ($user->initials == $loading->disp) {
-                $disp = $user->lastname .' '. $user->firstname;
+                $disp = $user->lastname . ' ' . $user->firstname;
             }
         }
 
         if (!isset($disp)) {
             foreach (DB::table('llx_user')->get() as $userDolibarr) {
-                if($userDolibarr->lastname == 'SuperAdmin'){
+                if ($userDolibarr->lastname == 'SuperAdmin') {
                     $lastnameIni = 'Gu';
                     $firstnameIni = 'Ad';
-                }else{
+                } else {
                     $lastnameIni = substr($userDolibarr->lastname, 0, 2);
                     $firstnameIni = substr($userDolibarr->firstname, 0, 2);
 
                 }
                 if ($lastnameIni . $firstnameIni == $loading->disp && $userDolibarr->lastname == 'SuperAdmin') {
-                    $disp='Adrien GUNDOGAN';}
-                elseif($lastnameIni . $firstnameIni == $loading->disp){
-                    $disp = $userDolibarr->lastname .' '. $userDolibarr->firstname;
-                }elseif(!isset($disp) && $lastnameIni . $firstnameIni <> $loading->disp){
-                    $disp=$loading->disp;
+                    $disp = 'Adrien GUNDOGAN';
+                } elseif ($lastnameIni . $firstnameIni == $loading->disp) {
+                    $disp = $userDolibarr->lastname . ' ' . $userDolibarr->firstname;
+                } elseif (!isset($disp) && $lastnameIni . $firstnameIni <> $loading->disp) {
+                    $disp = $loading->disp;
                 }
             }
         }
@@ -264,15 +273,36 @@ class DetailsLoadingController extends Controller
             return redirect()->back();
         } elseif (isset($addTransferForm)) {
             session()->flash('openPanelPallets', 'openPanelPallets');
-            return view('loadings.DetailsLoading', compact('loading', 'disp', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'addTransferForm', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'));
+            return view('loadings.DetailsLoading', compact('loading', 'disp', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'addTransferForm', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
         } elseif (isset($addPalletstransfer)) {
             //get data from the form
             $date = Input::get('date');
             $type = Input::get('type');
-
             $details = Input::get('details');
-            $creditAccount = Input::get('creditAccount');
-            $debitAccount = Input::get('debitAccount');
+
+            if (Input::get('creditAccount1b') <> null) {
+                $creditAccount = Input::get('creditAccount1b');
+            } elseif (Input::get('creditAccount2b') <> null) {
+                $creditAccount = Input::get('creditAccount2b');
+            } elseif (Input::get('creditAccount3b') <> null) {
+                $creditAccount = Input::get('creditAccount3b');
+            } elseif (Input::get('creditAccount4b') <> null) {
+                $creditAccount = Input::get('creditAccount4b');
+            } else {
+                $creditAccount = null;
+            }
+            if (Input::get('debitAccount1b') <> null) {
+                $debitAccount = Input::get('debitAccount1b');
+            } elseif (Input::get('debitAccount2b') <> null) {
+                $debitAccount = Input::get('debitAccount2b');
+            } elseif (Input::get('debitAccount3b') <> null) {
+                $debitAccount = Input::get('debitAccount3b');
+            } elseif (Input::get('debitAccount4b') <> null) {
+                $debitAccount = Input::get('debitAccount4b');
+            } else {
+                $debitAccount = null;
+            }
+
             $palletsNumber = Input::get('palletsNumber');
             $creditAccount2 = Input::get('creditAccount2');
             $debitAccount2 = Input::get('debitAccount2');
@@ -289,19 +319,19 @@ class DetailsLoadingController extends Controller
             if ($addTransferForm == 'error') {
                 //redirect with error
                 if ($type == 'Withdrawal-Deposit' || $type == 'Deposit-Withdrawal' || $type == 'Deposit_Only' || $type == 'Withdrawal_Only') {
-                    return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addTransferForm'));
+                    return view('loadings.DetailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addTransferForm', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
                 } elseif ($type == 'Purchase-Sale' || $type == 'Sale-Purchase' || $type == 'Other') {
                     $showAddCorrectingTransfer = true;
-                    return view('loadings.DetailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'showAddCorrectingTransfer', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'));
+                    return view('loadings.DetailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'showAddCorrectingTransfer', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
                 }
             } else {
                 //redirect with modal open to validate the transfer adding
                 if ($type == 'Withdrawal-Deposit' || $type == 'Deposit-Withdrawal' || $type == 'Deposit_Only' || $type == 'Withdrawal_Only') {
-                    return view('loadings.DetailsLoading', compact('loading', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'));
+                    return view('loadings.DetailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
                 } elseif ($type == 'Purchase-Sale' || $type == 'Sale-Purchase' || $type == 'Other') {
                     $showAddCorrectingTransfer = true;
                     $palletsNumber2C = $palletsNumber2;
-                    return view('loadings.DetailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2C', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer', 'showAddCorrectingTransfer', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'));
+                    return view('loadings.DetailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'creditAccount2', 'debitAccount2', 'palletsNumber2C', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addPalletstransfer', 'showAddCorrectingTransfer', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
                 }
             }
         } elseif (isset($okSubmitAddModal)) {
@@ -309,8 +339,30 @@ class DetailsLoadingController extends Controller
             $date = Input::get('date');
             $type = Input::get('type');
             $details = Input::get('details');
-            $creditAccount = Input::get('creditAccount');
-            $debitAccount = Input::get('debitAccount');
+
+            if (Input::get('creditAccount1b') <> null) {
+                $creditAccount = Input::get('creditAccount1b');
+            } elseif (Input::get('creditAccount2b') <> null) {
+                $creditAccount = Input::get('creditAccount2b');
+            } elseif (Input::get('creditAccount3b') <> null) {
+                $creditAccount = Input::get('creditAccount3b');
+            } elseif (Input::get('creditAccount4b') <> null) {
+                $creditAccount = Input::get('creditAccount4b');
+            } else {
+                $creditAccount = null;
+            }
+            if (Input::get('debitAccount1b') <> null) {
+                $debitAccount = Input::get('debitAccount1b');
+            } elseif (Input::get('debitAccount2b') <> null) {
+                $debitAccount = Input::get('debitAccount2b');
+            } elseif (Input::get('debitAccount3b') <> null) {
+                $debitAccount = Input::get('debitAccount3b');
+            } elseif (Input::get('debitAccount4b') <> null) {
+                $debitAccount = Input::get('debitAccount4b');
+            } else {
+                $debitAccount = null;
+            }
+
             $palletsNumber = Input::get('palletsNumber');
             $normalTransferAssociated = Input::get('normalTransferAssociated');
             if ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
@@ -338,8 +390,18 @@ class DetailsLoadingController extends Controller
             session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect()->back();
         } elseif (isset($showAddCorrectingTransfer)) {
+            $transferNormal = Palletstransfer::where('id', $showAddCorrectingTransfer)->first();
+            if ($transferNormal->palletsNumber <= $loading->anz) {
+                $palletsNumber = $loading->anz - $transferNormal->palletsNumber;
+            } else {
+                $palletsNumber = $transferNormal->palletsNumber - $loading->anz;
+            }
+            $palletsNumber2C = $palletsNumber;
+            $creditAccountCorr = $transferNormal->creditAccount;
+            $debitAccountCorr = $transferNormal->debitAccount;
+
             session()->flash('openPanelPallets', 'openPanelPallets');
-            return view('loadings.DetailsLoading', compact('loading', 'disp', 'transferToCorrect', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'showAddCorrectingTransfer', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'));
+            return view('loadings.DetailsLoading', compact('debitAccountCorr', 'creditAccountCorr', 'palletsNumber', 'palletsNumber2C', 'loading', 'disp', 'transferToCorrect', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'showAddCorrectingTransfer', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
         } elseif (isset($uploadDocument)) {
             $transfer = Palletstransfer::where('id', $uploadDocument)->first();
             $documents = $request->file('documentsTransfer' . $uploadDocument);
@@ -384,8 +446,8 @@ class DetailsLoadingController extends Controller
                 return redirect()->back();
             } elseif ($view == 'ok') {
                 $transfer = Palletstransfer::where('id', $transfer->id)->first();
-                return view('loadings.detailsLoading', compact('loading', 'disp', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
-                    'transfer', 'submitPalletsNormal', 'submitPalletsCorrecting', 'filesNames', 'theoricalPalletsNumberTruck', 'realPalletsNumberTruck'));
+                return view('loadings.detailsLoading', compact('loading', 'disp', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
+                    'transfer', 'submitPalletsNormal', 'submitPalletsCorrecting', 'filesNames', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
             }
         } elseif (isset($okSubmitPalletsModal)) {
             $okSubmitPalletsModalNormal = $this->defineSubmitPalletsValue($listPalletstransfersNormal, $listPalletstransfersCorrecting, $okSubmitPalletsModal)[0];
@@ -406,8 +468,8 @@ class DetailsLoadingController extends Controller
                     $q->where('type', 'Purchase-Sale')->orWhere('type', 'Sale-Purchase')->orWhere('type', 'Other');
                 })->get();
 
-                return view('loadings.detailsLoading', compact('loading', 'disp', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
-                    'transfer', 'okSubmitPalletsModalNormal', 'okSubmitPalletsModalCorrecting', 'filesNames'));
+                return view('loadings.detailsLoading', compact('loading', 'disp', 'listPalletsAccounts', 'listTrucksAccounts', 'listTrucksPossible', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting',
+                    'transfer', 'okSubmitPalletsModalNormal', 'okSubmitPalletsModalCorrecting', 'filesNames', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
             } elseif ($view == 'error') {
                 return redirect()->back();
             }
@@ -482,6 +544,7 @@ class DetailsLoadingController extends Controller
 
     public function actualTheoricalPalletsNumber($creditAccount, $debitAccount)
     {
+//        dd($creditAccount, $debitAccount);
         if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') {
             //truck account
             $actualTheoricalDebitPalletsNumber = Truck::where('id', explode('-', $debitAccount)[1])->value('theoricalNumberPallets');
@@ -1131,7 +1194,7 @@ class DetailsLoadingController extends Controller
     }
 
     /**
-     * define the general state of the loading according to all transfers state
+     * define the general state of the loading according to all transfers state and update every error
      * @param $loading
      * @param $listPalletstransfers
      */

@@ -1,57 +1,40 @@
 var lastDebitAccount = null;
 var lastCreditAccount = null;
 
-function selectAccount(accountSelected) {
+function selectAccount(accountSelected, index) {
     if (lastDebitAccount !== accountSelected) {
-        $("#select-credit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
+        $("#select-credit"+index+" option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
         if (lastDebitAccount !== null) {
-            $("#select-credit option[value=\'" + lastDebitAccount + "\']").show().prop('disabled', false);
+            $("#select-credit"+index+" option[value=\'" + lastDebitAccount + "\']").show().prop('disabled', false);
         }
     }
     lastDebitAccount = accountSelected;
 }
 
-function creditaccount(accountSelected) {
+function creditaccount(accountSelected, index) {
     if (lastCreditAccount !== accountSelected) {
-        $("#select-debit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
+        $("#select-debit"+index+" option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
         if (lastCreditAccount !== null) {
-            $("#select-debit option[value=\'" + lastCreditAccount + "\']").show().prop('disabled', false);
+            $("#select-debit"+index+" option[value=\'" + lastCreditAccount + "\']").show().prop('disabled', false);
         }
     }
     lastCreditAccount = accountSelected;
-}
-var lastDebitAccount2 = null;
-var lastCreditAccount2 = null;
-
-function selectAccount2(accountSelected) {
-    if (lastDebitAccount2 !== accountSelected) {
-        $("#select-credit2 option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
-        if (lastDebitAccount !== null) {
-            $("#select-credit2 option[value=\'" + lastDebitAccount2 + "\']").show().prop('disabled', false);
-        }
-    }
-    lastDebitAccount2 = accountSelected;
-}
-
-function creditaccount2(accountSelected) {
-    if (lastCreditAccount2 !== accountSelected) {
-        $("#select-debit2 option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
-        if (lastCreditAccount !== null) {
-            $("#select-debit2 option[value=\'" + lastCreditAccount2 + "\']").show().prop('disabled', false);
-        }
-    }
-    lastCreditAccount2 = accountSelected;
 }
 
 function displayFieldsTypeNormal(typeSelected) {
     console.log(typeSelected);
     if (typeSelected) {
-        document.getElementById("creditAccount1L").style.display = "block";
-        document.getElementById("creditAccount2L").style.display = "block";
-        document.getElementById("debitAccount1L").style.display = "block";
-        document.getElementById("debitAccount2L").style.display = "block";
-
         if (document.getElementById("Deposit-WithdrawalOptionL").value == typeSelected.value) {
+            document.getElementById("creditAccount0").style.display = "none";
+            document.getElementById("creditAccount1").style.display = "none";
+            document.getElementById("creditAccount2").style.display = "block";
+            document.getElementById("creditAccount3").style.display = "none";
+            document.getElementById("debitAccount0").style.display = "none";
+            document.getElementById("debitAccount1").style.display = "block";
+            document.getElementById("debitAccount2").style.display = "none";
+            document.getElementById("debitAccount3").style.display = "none";
+            document.getElementById("debitAccount4").style.display = "none";
+
             document.getElementById("deposit-withdrawal1L").style.display = "block";
             document.getElementById("deposit-withdrawal2L").style.display = "block";
             document.getElementById("withdrawal-deposit1L").style.display = "none";
@@ -60,6 +43,15 @@ function displayFieldsTypeNormal(typeSelected) {
         }
         else {
             if (document.getElementById("Withdrawal-DepositOptionL").value == typeSelected.value) {
+                document.getElementById("creditAccount0").style.display = "none";
+                document.getElementById("creditAccount1").style.display = "block";
+                document.getElementById("creditAccount2").style.display = "none";
+                document.getElementById("creditAccount3").style.display = "none";
+                document.getElementById("debitAccount0").style.display = "none";
+                document.getElementById("debitAccount1").style.display = "none";
+                document.getElementById("debitAccount2").style.display = "block";
+                document.getElementById("debitAccount3").style.display = "none";
+
                 document.getElementById("deposit-withdrawal1L").style.display = "none";
                 document.getElementById("deposit-withdrawal2L").style.display = "none";
                 document.getElementById("withdrawal-deposit1L").style.display = "block";
@@ -67,19 +59,66 @@ function displayFieldsTypeNormal(typeSelected) {
                 document.getElementById("DWL").style.display = "block";
             }
             else {
-                document.getElementById("deposit-withdrawal1L").style.display = "none";
-                document.getElementById("deposit-withdrawal2L").style.display = "none";
-                document.getElementById("withdrawal-deposit1L").style.display = "none";
-                document.getElementById("withdrawal-deposit2L").style.display = "none";
-                document.getElementById("DWL").style.display = "none";
+                if(document.getElementById("Withdrawal_OnlyOptionL").value == typeSelected.value){
+                    document.getElementById("creditAccount0").style.display = "none";
+                    document.getElementById("creditAccount1").style.display = "block";
+                    document.getElementById("creditAccount2").style.display = "none";
+                    document.getElementById("creditAccount3").style.display = "none";
+                    document.getElementById("debitAccount0").style.display = "none";
+                    document.getElementById("debitAccount1").style.display = "none";
+                    document.getElementById("debitAccount2").style.display = "none";
+                    document.getElementById("debitAccount3").style.display = "block";
+
+                    document.getElementById("deposit-withdrawal1L").style.display = "none";
+                    document.getElementById("deposit-withdrawal2L").style.display = "none";
+                    document.getElementById("withdrawal-deposit1L").style.display = "none";
+                    document.getElementById("withdrawal-deposit2L").style.display = "none";
+                    document.getElementById("DWL").style.display = "none";
+                }else{
+                    if(document.getElementById("Deposit_OnlyOptionL").value == typeSelected.value){
+                        document.getElementById("creditAccount0").style.display = "none";
+                        document.getElementById("creditAccount1").style.display = "none";
+                        document.getElementById("creditAccount2").style.display = "none";
+                        document.getElementById("creditAccount3").style.display = "block";
+                        document.getElementById("debitAccount0").style.display = "none";
+                        document.getElementById("debitAccount1").style.display = "block";
+                        document.getElementById("debitAccount2").style.display = "none";
+                        document.getElementById("debitAccount3").style.display = "none";
+
+                        document.getElementById("deposit-withdrawal1L").style.display = "none";
+                        document.getElementById("deposit-withdrawal2L").style.display = "none";
+                        document.getElementById("withdrawal-deposit1L").style.display = "none";
+                        document.getElementById("withdrawal-deposit2L").style.display = "none";
+                        document.getElementById("DWL").style.display = "none";
+                    }else{
+                        document.getElementById("creditAccount0").style.display = "block";
+                        document.getElementById("creditAccount1").style.display = "none";
+                        document.getElementById("creditAccount2").style.display = "none";
+                        document.getElementById("creditAccount3").style.display = "none";
+                        document.getElementById("debitAccount0").style.display = "block";
+                        document.getElementById("debitAccount1").style.display = "none";
+                        document.getElementById("debitAccount2").style.display = "none";
+                        document.getElementById("debitAccount3").style.display = "none";
+
+                        document.getElementById("deposit-withdrawal1L").style.display = "none";
+                        document.getElementById("deposit-withdrawal2L").style.display = "none";
+                        document.getElementById("withdrawal-deposit1L").style.display = "none";
+                        document.getElementById("withdrawal-deposit2L").style.display = "none";
+                        document.getElementById("DWL").style.display = "none";
+                    }
+                }
             }
         }
     }
     else {
-        document.getElementById("creditAccount1L").style.display = "none";
-        document.getElementById("creditAccount2L").style.display = "none";
-        document.getElementById("debitAccount1L").style.display = "none";
-        document.getElementById("debitAccount2L").style.display = "none";
+        document.getElementById("creditAccount0").style.display = "block";
+        document.getElementById("creditAccount1").style.display = "none";
+        document.getElementById("creditAccount2").style.display = "none";
+        document.getElementById("creditAccount3").style.display = "none";
+        document.getElementById("debitAccount0").style.display = "block";
+        document.getElementById("debitAccount1").style.display = "none";
+        document.getElementById("debitAccount2").style.display = "none";
+        document.getElementById("debitAccount3").style.display = "none";
         document.getElementById("deposit-withdrawal1L").style.display = "none";
         document.getElementById("deposit-withdrawal2L").style.display = "none";
         document.getElementById("withdrawal-deposit1L").style.display = "none";
@@ -88,81 +127,95 @@ function displayFieldsTypeNormal(typeSelected) {
     }
 }
 
+
 function displayFieldsTypeCorrecting(typeSelected) {
     console.log(typeSelected);
     if (typeSelected) {
-        document.getElementById("creditAccount1L").style.display = "block";
-        document.getElementById("creditAccount2L").style.display = "block";
-        document.getElementById("debitAccount1L").style.display = "block";
-        document.getElementById("debitAccount2L").style.display = "block";
-
-        if (document.getElementById("Sale-PurchaseOptionL").value == typeSelected.value) {
-            $('#select-credit').find("option[value='account-6']").attr('selected',true);
-            $('#select-credit').change();
-            $('#select-debit').find("option[value='account-6']").attr('selected',false);
-            $('#select-debit').change();
-            $('#select-credit2').find("option[value='account-6']").attr('selected',false);
-            $('#select-credit2').change();
-            $('#select-debit2').find("option[value='account-6']").attr('selected',true);
-            $('#select-debit2').change();
-            document.getElementById("sale-purchase1L").style.display = "block";
-            document.getElementById("sale-purchase2L").style.display = "block";
-            document.getElementById("purchase-sale1L").style.display = "none";
-            document.getElementById("purchase-sale2L").style.display = "none";
+        // if (document.getElementById("Sale-PurchaseOptionL").value == typeSelected.value) {
+        //      // $('#select-credit').find("option[value='account-6']").attr('selected',true);
+        //      // $('#select-credit').change();
+        //      // $('#select-debit').find("option[value='account-6']").attr('selected',false);
+        //      // $('#select-debit').change();
+        //      // $('#select-credit2').find("option[value='account-6']").attr('selected',false);
+        //      // $('#select-credit2').change();
+        //      // $('#select-debit2').find("option[value='account-6']").attr('selected',true);
+        //      // $('#select-debit2').change();
+        //      document.getElementById("sale-purchase1L").style.display = "block";
+        //      document.getElementById("sale-purchase2L").style.display = "block";
+        //      document.getElementById("purchase-sale1L").style.display = "none";
+        //      document.getElementById("purchase-sale2L").style.display = "none";
+        //      document.getElementById("SPL").style.display = "block";
+        //  }
+        //  else {
+        if (document.getElementById("Purchase-SaleOptionL").value == typeSelected.value) {
+            document.getElementById("creditAccount0").style.display = "none";
+            document.getElementById("debitAccount0").style.display = "none";
+            document.getElementById("creditAccount4").style.display = "block";
+            document.getElementById("debitAccount4").style.display = "block";
+            document.getElementById("creditAccount3").style.display = "none";
+            document.getElementById("debitAccount3").style.display = "none";
+            // document.getElementById("sale-purchase1L").style.display = "none";
+            // document.getElementById("sale-purchase2L").style.display = "none";
+            document.getElementById("purchase-sale1L").style.display = "block";
+            document.getElementById("purchase-sale2L").style.display = "block";
             document.getElementById("SPL").style.display = "block";
+            $('#select-debit4b').find("option[value='account-1']").attr('selected',true);
+            $('#select-debit4b').change();
+            $('#select-credit4b').find("option[value='account-1']").attr('selected',false);
+            $('#select-credit4b').change();
+            $('#select-credit2').find("option[value='account-1']").attr('selected',true);
+            $('#select-credit2').change();
+            $('#select-debit2').find("option[value='account-1']").attr('selected',false);
+            $('#select-debit2').change();
         }
         else {
-            if (document.getElementById("Purchase-SaleOptionL").value == typeSelected.value) {
-                $('#select-debit').find("option[value='account-6']").attr('selected',true);
-                $('#select-debit').change();
-                $('#select-credit').find("option[value='account-6']").attr('selected',false);
-                $('#select-credit').change();
-                $('#select-credit2').find("option[value='account-6']").attr('selected',true);
-                $('#select-credit2').change();
-                $('#select-debit2').find("option[value='account-6']").attr('selected',false);
-                $('#select-debit2').change();
-                document.getElementById("sale-purchase1L").style.display = "none";
-                document.getElementById("sale-purchase2L").style.display = "none";
-                document.getElementById("purchase-sale1L").style.display = "block";
-                document.getElementById("purchase-sale2L").style.display = "block";
-                document.getElementById("SPL").style.display = "block";
-            }
-            else {
-                $('#select-credit').find("option[value='account-6']").attr('selected',false);
-                $('#select-credit').change();
-                $('#select-debit').find("option[value='account-6']").attr('selected',false);
-                $('#select-debit').change();
-                $('#select-credit2').find("option[value='account-6']").attr('selected',false);
-                $('#select-credit2').change();
-                $('#select-debit2').find("option[value='account-6']").attr('selected',false);
-                $('#select-debit2').change();
-                document.getElementById("sale-purchase1L").style.display = "none";
-                document.getElementById("sale-purchase2L").style.display = "none";
-                document.getElementById("purchase-sale1L").style.display = "none";
-                document.getElementById("purchase-sale2L").style.display = "none";
-                document.getElementById("SPL").style.display = "none";
-            }
+            document.getElementById("creditAccount0").style.display = "none";
+            document.getElementById("debitAccount0").style.display = "none";
+            document.getElementById("creditAccount3").style.display = "block";
+            document.getElementById("debitAccount3").style.display = "block";
+            document.getElementById("creditAccount4").style.display = "none";
+            document.getElementById("debitAccount4").style.display = "none";
+            // document.getElementById("sale-purchase1L").style.display = "none";
+            // document.getElementById("sale-purchase2L").style.display = "none";
+            document.getElementById("purchase-sale1L").style.display = "none";
+            document.getElementById("purchase-sale2L").style.display = "none";
+            document.getElementById("SPL").style.display = "none";
+            $('#select-credit4b').find("option[value='account-1']").attr('selected',false);
+            $('#select-credit4b').change();
+            $('#select-debit4b').find("option[value='account-1']").attr('selected',false);
+            $('#select-debit4b').change();
+            $('#select-credit2').find("option[value='account-1']").attr('selected',false);
+            $('#select-credit2').change();
+            $('#select-debit2').find("option[value='account-1']").attr('selected',false);
+            $('#select-debit2').change();
         }
+        // }
     } else {
-        $('#select-credit').find("option[value='account-6']").attr('selected',false);
-        $('#select-credit').change();
-        $('#select-debit').find("option[value='account-6']").attr('selected',false);
-        $('#select-debit').change();
-        $('#select-credit2').find("option[value='account-6']").attr('selected',false);
-        $('#select-credit2').change();
-        $('#select-debit2').find("option[value='account-6']").attr('selected',false);
-        $('#select-debit2').change();
-        document.getElementById("creditAccount1L").style.display = "none";
-        document.getElementById("creditAccount2L").style.display = "none";
-        document.getElementById("debitAccount1L").style.display = "none";
-        document.getElementById("debitAccount2L").style.display = "none";
-        document.getElementById("sale-purchase1L").style.display = "none";
-        document.getElementById("sale-purchase2L").style.display = "none";
+        document.getElementById("creditAccount0").style.display = "block";
+        document.getElementById("debitAccount0").style.display = "block";
+        document.getElementById("creditAccount3").style.display = "none";
+        document.getElementById("debitAccount3").style.display = "none";
+        document.getElementById("creditAccount4").style.display = "none";
+        document.getElementById("debitAccount4").style.display = "none";
+        // document.getElementById("sale-purchase1L").style.display = "none";
+        // document.getElementById("sale-purchase2L").style.display = "none";
         document.getElementById("purchase-sale1L").style.display = "none";
         document.getElementById("purchase-sale2L").style.display = "none";
         document.getElementById("SPL").style.display = "none";
+        $('#select-credit4b').find("option[value='account-1']").attr('selected',false);
+        $('#select-credit4b').change();
+        $('#select-debit4b').find("option[value='account-1']").attr('selected',false);
+        $('#select-debit4b').change();
+        $('#select-credit2').find("option[value='account-1']").attr('selected',false);
+        $('#select-credit2').change();
+        $('#select-debit2').find("option[value='account-1']").attr('selected',false);
+        $('#select-debit2').change();
     }
 }
+
+
+
+// --------------------------------------
 
 var lastDebitAccountK = null;
 var lastCreditAccountK = null;
@@ -211,29 +264,29 @@ function displayFieldsTypeIdCorrecting(typeSelected, typeId) {
     console.log(typeSelected);
     if (typeSelected) {
         if (document.getElementById("Purchase-SaleOption" + id).value == typeSelected.value) {
-            $('#select-debit' + id).find("option[value='account-6']").attr('selected', true);
+            $('#select-debit' + id).find("option[value='account-1']").attr('selected', true);
             $('#select-debit' + id).change();
-            $('#select-credit' + id).find("option[value='account-6']").attr('selected', false);
+            $('#select-credit' + id).find("option[value='account-1']").attr('selected', false);
             $('#select-credit' + id).change();
         } else {
             if (document.getElementById("Sale-PurchaseOption" + id).value == typeSelected.value) {
-                $('#select-debit' + id).find("option[value='account-6']").attr('selected', false);
+                $('#select-debit' + id).find("option[value='account-1']").attr('selected', false);
                 $('#select-debit' + id).change();
-                $('#select-credit' + id).find("option[value='account-6']").attr('selected', true);
+                $('#select-credit' + id).find("option[value='account-1']").attr('selected', true);
                 $('#select-credit' + id).change();
             }
             else {
-                $('#select-debit' + id).find("option[value='account-6']").attr('selected', false);
+                $('#select-debit' + id).find("option[value='account-1']").attr('selected', false);
                 $('#select-debit' + id).change();
-                $('#select-credit' + id).find("option[value='account-6']").attr('selected', false);
+                $('#select-credit' + id).find("option[value='account-1']").attr('selected', false);
                 $('#select-credit' + id).change();
             }
         }
     }
     else {
-        $('#select-debit' + id).find("option[value='account-6']").attr('selected', false);
+        $('#select-debit' + id).find("option[value='account-1']").attr('selected', false);
         $('#select-debit' + id).change();
-        $('#select-credit' + id).find("option[value='account-6']").attr('selected', false);
+        $('#select-credit' + id).find("option[value='account-1']").attr('selected', false);
         $('#select-credit' + id).change();
     }
 }

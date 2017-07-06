@@ -21,13 +21,13 @@ class PalletsaccountsTableSeeder extends Seeder
         ));
         Palletsaccount::firstOrCreate(array(
             'id' => 2,
-            'name' => 'Loading',
+            'name' => 'LOADING',
             'type' => 'Other',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 3,
-            'name' => 'Unloading',
+            'name' => 'UNLOADING',
             'type' => 'Other',
         ));
 
