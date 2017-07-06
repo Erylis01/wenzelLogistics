@@ -90,16 +90,16 @@ class PalletsaccountsController extends Controller
         }
     }
 
-    /** show the add form
+    /** show the form to add a new pallets account
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public
     function showAdd()
     {
         if (Auth::check()) {
+            //list of the warehouses if the account created is a Network
             $listWarehouses = DB::table('warehouses')->get();
-//        $listTrucks = DB::table('trucks')->where('palletsaccount_name', null)->get();
-            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses', 'listTrucks'));
+            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses'));
         } else {
             return view('auth.login');
         }
@@ -118,6 +118,7 @@ class PalletsaccountsController extends Controller
         $realNumberPallets = Input::get('realNumberPallets');
         $theoricalNumberPallets = $realNumberPallets;
 
+        //get the warehouses associated if the account is a Network
         $warehousesAssociatedName = Input::get('warehousesAssociated');
         if (isset($warehousesAssociatedName)) {
             foreach ($warehousesAssociatedName as $nameWarehouse) {
@@ -125,7 +126,7 @@ class PalletsaccountsController extends Controller
             }
         }
 
-//    $trucksAssociated = Input::get('trucksAssociated');
+        //get carrier account special information
         $adress = Input::get('adress');
         $phone = Input::get('phone');
         $email = Input::get('email');
@@ -151,6 +152,7 @@ class PalletsaccountsController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+            //pallets account creation
             if ($type == 'Network') {
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
@@ -163,17 +165,12 @@ class PalletsaccountsController extends Controller
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => 0, 'theoricalNumberPallets' => 0, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
                 );
-//            if (isset($trucksAssociated)) {
-//                foreach ($trucksAssociated as $truckA) {
-//                    Truck::where('name', explode(' - ', $truckA)[0])->where('licensePlate', explode(' - ', $truckA)[1])->update(['palletsaccount_name' => $name]);
-//                }
-//            }
             } elseif ($type == 'Other') {
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
                 );
             }
-
+//redirect
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
             return redirect('/allPalletsaccounts');
         }
@@ -189,12 +186,11 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             //general data
-
             $listWarehouses = DB::table('warehouses')->get();
-//        $listTrucks = DB::table('trucks')->where('palletsaccount_name', null)->get();
             $account = Palletsaccount::where('id', $id)->first();
             $name = $account->name;
 
+            //according to the type of account, get the right entities associated
             if ($account->type == 'Network') {
                 $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
                 foreach ($warehousesAssociated as $warehouse) {
@@ -205,6 +201,7 @@ class PalletsaccountsController extends Controller
             }
 
             //table data transfers
+            //search data
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
             $searchColumns = $request->get('searchColumns');
@@ -218,12 +215,15 @@ class PalletsaccountsController extends Controller
                 $q->where('creditAccount',  'LIKE',  $name. '-' .'%')->orWhere('debitAccount', 'LIKE',$name. '-' .'%');
             });
 
+            //if the user is sorting the table
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 $searchColumnsString = $request->get('searchColumnsString');;
                 $searchColumns = explode('-', $searchColumnsString);
+                //if sorting while searching something in the table
                 if (isset($searchQuery) && $searchQuery <> '') {
+                    //if searching in the whole table
                     if (in_array('ALL', explode('-', $searchColumnsString))) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
@@ -233,6 +233,7 @@ class PalletsaccountsController extends Controller
                             }
                         });
                     } else {
+                        //if searching in special columns
                         $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
                             foreach ($searchColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -242,7 +243,7 @@ class PalletsaccountsController extends Controller
                         });
                     }
                 }
-
+//if searching in the license plate columns that is not a field of the data table Pallets account but Truck
                 if ($sortby == 'licensePlate') {
                     $listTransfers = $query->with(['trucks' => function ($query, $order) {
                         $query->orderBy('licensePlate', $order);
@@ -251,6 +252,7 @@ class PalletsaccountsController extends Controller
                     $listTransfers = $query->orderBy($sortby, $order)->get();
                 }
             } else {
+                //if not sorting but searching
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
                     if (in_array('ALL', $searchColumns)) {

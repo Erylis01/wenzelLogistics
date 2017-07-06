@@ -58,7 +58,7 @@ class WarehousesController extends Controller
                 }
                 $count = count($query->get());
                 $listWarehouses = $query->orderBy($sortby, $order)->paginate(10);
-                $links = $listWarehouses->appends(['sortby' => $sortby, 'order' => $order])->render();
+                $links = $listWarehouses->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
@@ -79,10 +79,14 @@ class WarehousesController extends Controller
                             }
                         });
                     }
+                    $listWarehouses = $query->paginate(10);
+                    $links = $listWarehouses->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                }else{
+                    $listWarehouses = $query->paginate(10);
+                    $links = '';
                 }
                 $count = count($query->get());
-                $listWarehouses = $query->paginate(10);
-                $links = '';
+
             }
             return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns','refresh'));
         } else {

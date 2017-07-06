@@ -25,6 +25,7 @@ class PalletstransfersController extends Controller
      */
     public function showAll(Request $request)
     {
+        //data search query
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
@@ -59,7 +60,7 @@ class PalletstransfersController extends Controller
                 }
                 $count = count($query->get());
                 $listPalletstransfers = $query->orderBy($sortby, $order)->paginate(10);
-                $links = $listPalletstransfers->appends(['sortby' => $sortby, 'order' => $order])->render();
+                $links = $listPalletstransfers->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumnsString'=>$searchColumnsString])->render();
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
@@ -80,10 +81,14 @@ class PalletstransfersController extends Controller
                             }
                         });
                     }
+                    $listPalletstransfers = $query->orderBy('id', 'asc')->paginate(10);
+                    $links = $listPalletstransfers->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                }else{
+                    $listPalletstransfers = $query->orderBy('id', 'asc')->paginate(10);
+                    $links = '';
                 }
                 $count = count($query->get());
-                $listPalletstransfers = $query->orderBy('id', 'asc')->paginate(10);
-                $links = '';
+
             }
 //
             return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'sortby', 'order', 'links', 'count', 'searchColumns', 'searchQuery', 'searchQueryArray', 'listColumns', 'searchColumnsString'));

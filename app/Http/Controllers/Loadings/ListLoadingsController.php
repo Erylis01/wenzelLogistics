@@ -66,7 +66,7 @@ class ListLoadingsController extends Controller
                     $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumnsString'=>$searchColumnsString])->render();
             }else {
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    $searchColumnsString=implode('-',$searchColumns);
+                        $searchColumnsString=implode('-',$searchColumns);
                     if (in_array('ALL', $searchColumns)) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
@@ -84,10 +84,15 @@ class ListLoadingsController extends Controller
                             }
                         });
                     }
+
+                    $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
+                    $links = $listLoadings->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                }else{
+                    $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
+                    $links = '';
                 }
                 $count = count($query->get());
-                $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
-                $links = '';
+
             }
             return view('loadings.loadings', compact('refresh','listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
         } else {

@@ -59,7 +59,7 @@ class TrucksController extends Controller
                 }
                 $count = count($query->get());
                 $listTrucks = $query->orderBy($sortby, $order)->paginate(10);
-                $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order])->render();
+                $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
@@ -80,10 +80,14 @@ class TrucksController extends Controller
                             }
                         });
                     }
+                    $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
+                    $links =$listTrucks->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                }else{
+                    $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
+                    $links = '';
                 }
                 $count = count($query->get());
-                $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
-                $links = '';
+
             }
             return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns','refresh'));
         } else {
@@ -302,22 +306,12 @@ class TrucksController extends Controller
         $palletsaccount_name = Input::get('palletsaccount_name');
         $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->get();
 
-//        //validation
-//        $rules = array(
-//            'name' => 'required|string|max:255|unique:trucks,name,' . $id,
-//        );
-//
-//        $validator = Validator::make(Input::all(), $rules);
-//        if ($validator->fails()) {
-//            return redirect()->back()
-//                ->withErrors($validator)
-//                ->withInput();
-//
-//        }
+        //check if there is already one truck ith same name and same license plate
         if (count($truckTest) > 1) {
             session()->flash('messageErrorUpdateTruck', 'Error ! This truck already exists');
             return redirect()->back();
         } else {
+            //if not update the truck
             Truck::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]);
 
             session()->flash('messageUpdateTruck', 'Successfully updated truck');
