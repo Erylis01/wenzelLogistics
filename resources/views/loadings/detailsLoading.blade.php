@@ -622,9 +622,13 @@
                                                                 <div class="panel-heading">
                                                                     <a data-toggle="collapse" href="#Pan2collapse">Pallets
                                                                         location ?</a>
-                                                                    <span class="col-lg-offset-7">
-{{$theoricalNumberPalletsTruck}} pallets on truck ({{$realNumberPalletsTruck}} confirmed)
+                                                                    <span class="col-lg-offset-3">
+order : {{$loading->anz}}
                                 </span>
+                                                                    <span class="col-lg-offset-3">
+truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}} (confirmed)
+                                </span>
+
                                                                 </div>
                                                                 @if(Session::has('openPanelPallets'))
                                                                     <div id="Pan2collapse"
@@ -681,7 +685,7 @@
                                                                                                             <div class="form-group">
                                                                                                                 <div class="text-center">
                                                                                                                     <label for="legend"
-                                                                                                                           class="control-label">CORRECTING
+                                                                                                                           class="control-label"><span class="glyphicon glyphicon-check"> </span> CORRECTING
                                                                                                                         TRANSFER</label>
                                                                                                                 </div>
                                                                                                             </div>

@@ -39,7 +39,7 @@
                         </div>
                         <form role="form" method="GET" action="{{route('showAllTrucks', ['refresh'=>'false'])}}">
                             {{ csrf_field() }}
-                            <div class="col-lg-5 input-group searchBar">
+                            <div class="col-lg-8 input-group searchBar">
                             <span class="input-group-btn searchInput">
                                 @if(isset($searchQuery))
                                     <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
@@ -90,7 +90,7 @@
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
-                                <span class="col-lg-offset-6">
+                                <span class="col-lg-offset-4">
                                     <a href="{{route('showAllTrucks', ['refresh'=>'true'])}}" class="btn btn-add"><span
                                                 class="glyphicon glyphicon-refresh"></span></a>
                             </span>

@@ -1,5 +1,4 @@
 
-
 .panel-palletsaccounts-details{
     font-size:18px;
 }
@@ -120,14 +119,15 @@
 .table-loading-account>table>tbody{
     font-size:16px;
     width: 100%;
-    max-height: 450px;
+    max-height: 500px;
     overflow: auto;
     display: inline-block;
 }
 
 .notCarrier{
     margin-left:25%;
-    width:600px;
+    min-width :616px;
+    width:616px;
 }
 
 /*HIDDEN DIV*/

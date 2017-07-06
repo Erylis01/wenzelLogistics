@@ -135,8 +135,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-lg-8 col-lg-offset-3 table-responsive">
-                                    <table class="table table-hover table-bordered">
+                                <div class="col-lg-6 col-lg-offset-3 table-responsive">
+                                    <table class="table table-hover table-bordered table-truck">
                                         <thead>
                                         <tr>
                                             <th class="text-center">Confirmed<br> pallets nbr
@@ -173,6 +173,7 @@
                                        class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span>Add transfer</a>
                                 </div>
+                                <!-- search bar-->
                                 <form role="form" method="GET"
                                       action="{{route('showDetailsTruck', $truck->id)}}">
                                     {{ csrf_field() }}
@@ -319,8 +320,8 @@
                                     @foreach($listTransfers as $transfer)
                                         {{--@php($idDebitAccount=\App\Palletsaccount::where('name', $transfer->debitAccount)->first()->id)--}}
                                         {{--@php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)--}}
-                                        @if($transfer->state=="In progress")
-                                            @php($class="inprogress")
+                                        @if($transfer->state=="Untreated")
+                                            @php($class="untreated")
                                         @elseif ($transfer->state=="Waiting documents")
                                             @php($class="waitingdocuments")
                                         @elseif ($transfer->state=="Complete")

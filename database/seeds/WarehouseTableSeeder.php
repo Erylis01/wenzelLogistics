@@ -18,6 +18,8 @@ class WarehouseTableSeeder extends Seeder
     {
         $this->importDataPFM();
         $this->importDataSystempo();
+        $this->importDataDPL();
+        $this->importDataTOMA();
 
     }
 
@@ -119,5 +121,80 @@ class WarehouseTableSeeder extends Seeder
         }
     }
 
+    public function importDataDPL()
+    {
+        $path = 'resources/assets/excel/ListWarehouses/DPL';
+        $files = File::allFiles($path);
+        foreach ($files as $file) {
+            if (strpos((string)$file, '.xls') !== false) {
+                Excel::load($file, function ($reader) {
+                    if (!empty($reader)) {
+                        $reader->noHeading();
+                        $sheet = $reader->getSheet(0)->toArray();
+                        $nbrows = count($sheet);
 
+                        for ($r = 1; $r < $nbrows; $r++) {
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
+                                //not double
+                                $k = count(Warehouse::get()) + 1;
+                                $id = Palletsaccount::where('name', 'DPL')->first()->id;
+
+                                Warehouse::firstOrCreate([
+                                    'id' => $k,
+                                    'name' => trim($sheet[$r][3]),
+                                    'nickname' => trim($sheet[$r][3]),
+                                    'adress' => trim($sheet[$r][2]),
+                                    'zipcode' => intval(trim(explode('-',$sheet[$r][0])[1])),
+                                    'town' => trim($sheet[$r][1]),
+                                    'country' => 'D',
+                                    'phone' => trim(str_replace(' ', '', $sheet[$r][6])),
+                                    'email' => trim($sheet[$r][7]),
+                                ])->palletsaccounts()->sync($id);
+                            }
+                        }
+                    }
+                }, 'ASCII');
+            }
+        }
+    }
+
+    public function importDataTOMA(){
+        $path = 'resources/assets/excel/ListWarehouses/TO-MA';
+        $files = File::allFiles($path);
+        foreach ($files as $file) {
+            if (strpos((string)$file, '.xls') !== false) {
+                Excel::load($file, function ($reader) {
+                    if (!empty($reader)) {
+                        $reader->noHeading();
+                        $sheet = $reader->getSheet(0)->toArray();
+                        $nbrows = count($sheet);
+
+                        for ($r = 1; $r < $nbrows; $r++) {
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
+                                //not double
+                                $k = count(Warehouse::get()) + 1;
+                                $id = Palletsaccount::where('name', 'TO-MA')->first()->id;
+
+                                Warehouse::firstOrCreate([
+                                    'id' => $k,
+                                    'name' => trim($sheet[$r][0]),
+                                    'nickname' => trim($sheet[$r][0]),
+                                    'adress' => trim($sheet[$r][1]),
+                                    'zipcode' => intval(trim($sheet[$r][0])[2]),
+                                    'town' => trim($sheet[$r][3]),
+                                    'country' => trim($sheet[$r][4]),
+                                    'phone' => trim(str_replace(' ', '', $sheet[$r][5])),
+                                    'phone' => trim(str_replace(' ', '', $sheet[$r][6])),
+                                    'email' => trim($sheet[$r][7]),
+                                    'namecontact' => trim($sheet[$r][8]),
+                                ])->palletsaccounts()->sync($id);
+                            }
+                        }
+                    }
+                }, 'ASCII');
+            }
+        }
+    }
 }

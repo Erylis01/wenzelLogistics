@@ -189,7 +189,7 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             //general data
-//        $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
+
             $listWarehouses = DB::table('warehouses')->get();
 //        $listTrucks = DB::table('trucks')->where('palletsaccount_name', null)->get();
             $account = Palletsaccount::where('id', $id)->first();
@@ -214,9 +214,8 @@ class PalletsaccountsController extends Controller
                 $listColumns = ['id', 'type', 'palletsNumber', 'loading_atrnr', 'date', 'state'];
             }
 
-
             $query = Palletstransfer::where(function ($q) use ($name) {
-                $q->where('creditAccount', $name)->orWhere('debitAccount', $name);
+                $q->where('creditAccount',  'LIKE',  $name. '-' .'%')->orWhere('debitAccount', 'LIKE',$name. '-' .'%');
             });
 
             if (request()->has('sortby') && request()->has('order')) {
@@ -243,14 +242,14 @@ class PalletsaccountsController extends Controller
                         });
                     }
                 }
-                if ($sortby = 'licensePlate') {
+
+                if ($sortby == 'licensePlate') {
                     $listTransfers = $query->with(['trucks' => function ($query, $order) {
                         $query->orderBy('licensePlate', $order);
                     }])->get();
                 } else {
                     $listTransfers = $query->orderBy($sortby, $order)->get();
                 }
-
             } else {
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
@@ -260,7 +259,6 @@ class PalletsaccountsController extends Controller
                                 foreach ($searchQueryArray as $searchQ) {
                                     $q->orWhere($column, 'LIKE', '%' . $searchQ . '%');
                                 }
-
                             }
                         });
                     } else {

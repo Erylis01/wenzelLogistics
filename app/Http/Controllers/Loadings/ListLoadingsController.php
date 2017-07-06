@@ -63,7 +63,7 @@ class ListLoadingsController extends Controller
                 }
                     $count = count($query->get());
                     $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
-                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order])->render();
+                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumnsString'=>$searchColumnsString])->render();
             }else {
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString=implode('-',$searchColumns);

@@ -85,7 +85,7 @@ class TrucksController extends Controller
                 $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
                 $links = '';
             }
-            return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns'));
+            return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns','refresh'));
         } else {
             return view('auth.login');
         }
@@ -227,7 +227,7 @@ class TrucksController extends Controller
             $licensePlate = $truck->licensePlate;
 
             $query = Palletstransfer::where(function ($q) use ($name, $licensePlate) {
-                $q->where('creditAccount', $name . '-' . $licensePlate)->orWhere('debitAccount', $name . '-' . $licensePlate);
+                $q->where('creditAccount', 'LIKE',  $name . '-' . $licensePlate.'%')->orWhere('debitAccount', 'LIKE',  $name . '-' . $licensePlate.'%');
             });
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?

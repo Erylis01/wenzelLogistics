@@ -75,54 +75,66 @@ class PalletsaccountsTableSeeder extends Seeder
 
         Palletsaccount::firstOrCreate(array(
             'id' => 11,
-            'name' => 'ECL Wolfurt',
+            'name' => 'DPL',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 12,
-            'name' => 'Impex-EUX',
+            'name' => 'ECL Wolfurt',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 13,
-            'name' => 'Impex-EUY',
+            'name' => 'Impex-EUX',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 14,
-            'name' => 'PFM - FR',
+            'name' => 'Impex-EUY',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 15,
-            'name' => 'Schefknecht',
+            'name' => 'PFM - FR',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 16,
-            'name' => 'SPAR Wels',
+            'name' => 'Schefknecht',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 17,
-            'name' => 'Systempo AT',
+            'name' => 'SPAR Wels',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 18,
-            'name' => 'Team Tex',
+            'name' => 'Systempo AT',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 19,
+            'name' => 'Team Tex',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 20,
+            'name' => 'TO-MA',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 21,
             'name' => 'Wildenhofer Salzburg',
             'type' => 'Network',
         ));
