@@ -215,7 +215,7 @@ function displayFieldsTypeCorrecting(typeSelected) {
 
 
 
-// --------------------------------------
+// ------------------------------PANELS---------
 
 var lastDebitAccountK = null;
 var lastCreditAccountK = null;

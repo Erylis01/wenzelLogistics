@@ -34,7 +34,6 @@
         @else
             <div class="col-lg-14 container-details">
                 <!--different panel style according to the state of the loading-->
-
                 @if($loading->state=="In progress")
                     <div class="panel panelInprogress">
                         @elseif ($loading->state=="Waiting documents")
@@ -79,7 +78,7 @@
                                                         <div class="panel-body panel-body-general">
 
 
-                                                            <!--subpanel 1 reading form suming up information from the table-->
+                                                            <!-------SUBPANEL 1 : reading form suming up information from the table------->
                                                             <div class="panel subpanel">
                                                                 <div class="panel-heading">
                                                                     <a data-toggle="collapse" href="#Pan1collapse">Information</a>
@@ -617,7 +616,7 @@
                                                                 @endif
                                                             </div>
 
-                                                            <!--subpanel 2 info about pallets transfer-->
+                                                            <!------SUBPANEL 2 : infos about pallets transfer-------->
                                                             <div class="panel subpanel">
                                                                 <div class="panel-heading">
                                                                     <a data-toggle="collapse" href="#Pan2collapse">Pallets
@@ -1028,7 +1027,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                 </div>
                                                                                                             @endif
                                                                                                         </div>
-                                                                                                        <!--errors-->
+                                                                                                        <!--errors messages-->
                                                                                                         <div class="form-group">
                                                                                                             @if(Session::has('errorFields'))
                                                                                                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('errorFields') }}</div>
@@ -2111,7 +2110,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                             @endif
                                                                                         </div>
                                                                                         <!-----------------NORMAL TRANSFERS---------->
-                                                                                                                                                                                <div class="form-group text-center">
+                                                                                        <div class="form-group text-center">
                                                                                             <label for="normal"
                                                                                                    class="control-label text-center">NORMAL</label>
                                                                                         </div>
@@ -2132,6 +2131,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                     <a data-toggle="collapse"
                                                                                                                                        href="#PanSubcollapse{{$transferNormal->id}}">Transfer {{$transferNormal->id}}
                                                                                                                                     </a>
+                                                                                                                                    <!--display errors signs-->
                                                                                                                                     @if(!empty($errorsTransfer))
                                                                                                                                         @foreach($errorsTransfer as $error)
                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -2856,6 +2856,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                         @endif
                                                                                                                         </tbody>
                                                                                                                     </table>
+                                                                                                                    <!--display errors signs-->
                                                                                                                     @foreach($errorsTransfer as $error)
                                                                                                                         @if($error->name=='DW-WD_notNumberLoadingOrder')
                                                                                                                             <div class="text-center">
@@ -3046,7 +3047,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                     </div>
                                                                                                 @endif
                                                                                         @endforeach
-<!------------CORRECTING TRANSFERS-------->
+<!------------CORRECTING TRANSFERS--------><!-----------------CORRECTING TRANSFERS---------->
                                                                                         <div class="form-group text-center">
                                                                                             <label for="correcting"
                                                                                                    class="control-label text-center">CORRECTING</label>
