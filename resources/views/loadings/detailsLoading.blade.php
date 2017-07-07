@@ -61,8 +61,8 @@
                                                             <span class="col-lg-5 text-left">
                                                                 @php($k=0)
                                                                 @foreach($listPalletstransfers as $transfer)
-                                                                    @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                                                    @if(!empty($errorsID)&&$k<10)
+                                                                    @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                                    @if(!empty($errorsTransfer)&&$k<10)
                                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                         @php($k=$k+1)
                                                                     @elseif($k==10)
@@ -486,7 +486,7 @@
                                                                                     <div class="modal fade"
                                                                                          id="updatePT_modal"
                                                                                          role="dialog">
-                                                                                        <div class="modal-dialog modal-md">
+                                                                                        <div class="modal-dialog modal-lg">
                                                                                             <div class="modal-content">
                                                                                                 <div class="modal-header">
                                                                                                     <button type="button"
@@ -1589,7 +1589,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                     @else
                                                                                                             </div>
                                                                                                         @endif
-                                                                                                    <!--2nd transfer-->
+                                                                                                    <!--2nd transfer : pallets number only-->
                                                                                                         @if(isset($type) &&($type=='Withdrawal-Deposit' ||$type=='Deposit-Withdrawal'))
                                                                                                             <div id="DWL"
                                                                                                                  style="display:block">
@@ -1641,7 +1641,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                     @else
                                                                                                             </div>
                                                                                                         @endif
-                                                                                                    <!--2nd transfer-->
+                                                                                                    <!--2nd transfer : pallets number credit account and debit account-->
                                                                                                         @if(isset($type) &&($type=='Purchase-Sale'))
                                                                                                             <div id="SPL"
                                                                                                                  style="display:block">
@@ -2079,10 +2079,10 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                         @endif
                                                                                                         <td class="text-center col2">{{$transfer->palletsNumber}}</td>
                                                                                                         <td class="text-center col5">{{$transfer->state}}</td>
-                                                                                                        @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                                                                        @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
                                                                                                         <td class="text-left colDanger">
-                                                                                                            @if(!empty($errorsID))
-                                                                                                                @foreach($errorsID as $error)
+                                                                                                            @if(!empty($errorsTransfer))
+                                                                                                                @foreach($errorsTransfer as $error)
                                                                                                                     <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                 @endforeach
                                                                                                             @else
@@ -2117,6 +2117,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                         </div>
 
                                                                                         @foreach($listPalletstransfersNormal as $transferNormal)
+                                                                                            @php($errorsTransfer=\App\Http\Controllers\PalletstransfersController::actualErrors($transferNormal))
                                                                                             @if($transferNormal->state=="Untreated")
                                                                                                 <div class="panel panelUntreated">
                                                                                                     @elseif ($transferNormal->state=="Waiting documents")
@@ -2131,9 +2132,8 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                     <a data-toggle="collapse"
                                                                                                                                        href="#PanSubcollapse{{$transferNormal->id}}">Transfer {{$transferNormal->id}}
                                                                                                                                     </a>
-                                                                                                                                    @php($errors=\App\Http\Controllers\PalletstransfersController::actualErrors($transferNormal))
-                                                                                                                                    @if(!empty($errors))
-                                                                                                                                        @foreach($errors as $error)
+                                                                                                                                    @if(!empty($errorsTransfer))
+                                                                                                                                        @foreach($errorsTransfer as $error)
                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                                         @endforeach
                                                                                                                                     @endif
@@ -2622,7 +2622,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                             </button>
                                                                                                                                         </div>
                                                                                                                                     @endif
-                                                                                                                                    @if(!empty($errors))
+                                                                                                                                    @if(!empty($errorsTransfer))
                                                                                                                                     <!--show addCorrectingTransfer -->
                                                                                                                                         <div class="col-lg-3">
                                                                                                                                             <button type="submit"
@@ -2654,7 +2654,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                     <div class="modal show"
                                                                                                          id="submitPallets_modal"
                                                                                                          role="dialog">
-                                                                                                        <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-dialog modal-lg">
                                                                                                             <div class="modal-content">
                                                                                                                 <div class="modal-header modalHeaderTransfer">
                                                                                                                         <button value="{{$transferNormal->id}}"
@@ -2856,13 +2856,12 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                         @endif
                                                                                                                         </tbody>
                                                                                                                     </table>
-                                                                                                                    @foreach($errors as $error)
+                                                                                                                    @foreach($errorsTransfer as $error)
                                                                                                                         @if($error->name=='DW-WD_notNumberLoadingOrder')
                                                                                                                             <div class="text-center">
                                                                                                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                                                                <span class="text-danger">Pallets number does NOT MATCH the number expected in the loading order ({{$loading->anz}}
-                                                                                                                                    )</span>
+                                                                                                                                <span class="text-danger">Pallets number does NOT MATCH the number expected in the loading order ({{$loading->anz}})</span>
                                                                                                                             </div>
                                                                                                                         @endif
                                                                                                                         @if($error->name=='Donly-Wonly_notSameNumber')
@@ -2875,7 +2874,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                     @endforeach
                                                                                                                 </div>
                                                                                                                 <div class="modal-footer">
-                                                                                                                        @if(!empty($errors))
+                                                                                                                        @if(!empty($errorsTransfer))
                                                                                                                             <button type="submit"
                                                                                                                                     class="btn btn-danger btn-modal"
                                                                                                                                     value="{{$transferNormal->id}}"
@@ -2905,13 +2904,13 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                     <div class="modal show"
                                                                                                          id="submitPalletsValidate_modal"
                                                                                                          role="dialog">
-                                                                                                        <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-dialog modal-lg">
                                                                                                             <div class="modal-content">
                                                                                                                 <div class="modal-header modalHeaderTransfer">
                                                                                                                    <button value="{{$transferNormal->id}}"
                                                                                                                                 class="close"
                                                                                                                                 type="submit"
-                                                                                                                                name="closeSubmitPalletsModal">
+                                                                                                                                name="closeSubmitValidatePalletsModal">
                                                                                                                             &times;
                                                                                                                         </button>
                                                                                                                     <h4 class="modal-title text-center">
@@ -3007,7 +3006,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                         </tr>
                                                                                                                         </tbody>
                                                                                                                     </table>
-                                                                                                                    @foreach($errors as $error)
+                                                                                                                    @foreach($errorsTransfer as $error)
                                                                                                                         @if($error->name=='DW-WD_notNumberLoadingOrder')
                                                                                                                             <div class="text-center">
                                                                                                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -3026,7 +3025,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                     @endforeach
                                                                                                                 </div>
                                                                                                                 <div class="modal-footer">
-                                                                                                                        @if(!empty($errors))
+                                                                                                                        @if(!empty($errorsTransfer))
                                                                                                                             <button type="submit"
                                                                                                                                     class="btn btn-danger btn-modal"
                                                                                                                                     value="{{$transferNormal->id}}"
@@ -3066,9 +3065,9 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                 <div class="col-lg-11 text-left headerSubpanelDetailsLoading">
                                                                                                                                     <a data-toggle="collapse"
                                                                                                                                        href="#PanSubcollapse{{$transferCorrecting->id}}">Transfer {{$transferCorrecting->id}}
-                                                                                                                                    </a>@php($errors=\App\Http\Controllers\PalletstransfersController::actualErrors($transferCorrecting))
-                                                                                                                                    @if(!empty($errors))
-                                                                                                                                        @foreach($errors as $error)
+                                                                                                                                    </a>@php($errorsTransfer=\App\Http\Controllers\PalletstransfersController::actualErrors($transferCorrecting))
+                                                                                                                                    @if(!empty($errorsTransfer))
+                                                                                                                                        @foreach($errorsTransfer as $error)
                                                                                                                                             <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                                                                         @endforeach
                                                                                                                                     @endif
@@ -3587,405 +3586,6 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                     @endif
                                                                                                                                 </div>
                                                                                                                             </div>
-                                                                                                                            <!-- Modal update -->
-                                                                                                                            {{--@if(isset($submitPalletsCorrecting) && $submitPalletsCorrecting==$transferCorrecting->id)--}}
-                                                                                                                                {{--<div class="modal show"--}}
-                                                                                                                                     {{--id="submitPallets_modal"--}}
-                                                                                                                                     {{--role="dialog">--}}
-                                                                                                                                    {{--<div class="modal-dialog modal-md">--}}
-                                                                                                                                        {{--<div class="modal-content">--}}
-                                                                                                                                            {{--<div class="modal-header modalHeaderTransfer">--}}
-                                                                                                                                                {{--<button value="{{$transferCorrecting->id}}"--}}
-                                                                                                                                                        {{--class="close"--}}
-                                                                                                                                                        {{--type="submit"--}}
-                                                                                                                                                        {{--name="closeSubmitPalletsModal">--}}
-                                                                                                                                                    {{--&times;--}}
-                                                                                                                                                {{--</button>--}}
-                                                                                                                                                {{--<h4 class="modal-title text-center ">--}}
-                                                                                                                                                    {{--INFORMATION--}}
-                                                                                                                                                {{--</h4>--}}
-                                                                                                                                            {{--</div>--}}
-                                                                                                                                            {{--<div class="modal-body center modalBodyTransfer">--}}
-                                                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                                                    {{--Here,--}}
-                                                                                                                                                    {{--PLANNED--}}
-                                                                                                                                                    {{--pallets--}}
-                                                                                                                                                    {{--number</p>--}}
-                                                                                                                                                {{--@php($partsActualCreditAccount=explode('-',request()->session()->get('actualCreditAccount')))--}}
-                                                                                                                                                {{--@php($a=$partsActualCreditAccount[count($partsActualCreditAccount)-1])--}}
-                                                                                                                                                {{--@php($b=$partsActualCreditAccount[count($partsActualCreditAccount)-2])--}}
-                                                                                                                                                {{--@if(count(array_diff ($partsActualCreditAccount, [$a, $b]))==1)--}}
-                                                                                                                                                    {{--@php($actualCreditAccount=array_diff ($partsActualCreditAccount, [$a, $b])[0])--}}
-                                                                                                                                                {{--@else--}}
-                                                                                                                                                    {{--@php($actualCreditAccount=implode(' - ', array_diff ($partsActualCreditAccount, [$a, $b])))--}}
-                                                                                                                                                {{--@endif--}}
-
-                                                                                                                                                {{--@php($partsActualDebitAccount=explode('-',request()->session()->get('actualDebitAccount')))--}}
-                                                                                                                                                {{--@php($aprim=$partsActualDebitAccount[count($partsActualDebitAccount)-1])--}}
-                                                                                                                                                {{--@php($bprim=$partsActualDebitAccount[count($partsActualDebitAccount)-2])--}}
-                                                                                                                                                {{--@if(count(array_diff ($partsActualDebitAccount, [$aprim, $bprim]))==1)--}}
-                                                                                                                                                    {{--@php($actualDebitAccount=array_diff ($partsActualDebitAccount, [$aprim, $bprim])[0])--}}
-                                                                                                                                                {{--@else--}}
-                                                                                                                                                    {{--@php($actualDebitAccount=implode( ' - ', array_diff ($partsActualDebitAccount, [$aprim, $bprim])))--}}
-                                                                                                                                                {{--@endif--}}
-
-                                                                                                                                                {{--<table class="table table-hover table-bordered">--}}
-                                                                                                                                                    {{--<thead>--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<th></th>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<th class="text-center">--}}
-                                                                                                                                                                {{--DEBIT--}}
-                                                                                                                                                            {{--</th>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<th class="text-center">--}}
-                                                                                                                                                                {{--CREDIT--}}
-                                                                                                                                                            {{--</th>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--</thead>--}}
-                                                                                                                                                    {{--<tbody>--}}
-                                                                                                                                                    {{--<!-- name account -->--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<td></td>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{request()->session()->get('debitAccount')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{request()->session()->get('creditAccount')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--<!-- actual -->--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                                                            {{--Actual--}}
-                                                                                                                                                        {{--</td>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--<!-- actual credit acc = credit acc && actual debit acc = debit acc-->--}}
-                                                                                                                                                    {{--@if($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))--}}
-                                                                                                                                                        {{--<!--update-->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Update--}}
-                                                                                                                                                                {{--number--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--- {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--+{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!--total-->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Total--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!-- actual credit acc <> credit acc && actual debit acc <> debit acc -->--}}
-                                                                                                                                                    {{--@elseif($actualCreditAccount<>request()->session()->get('creditAccount') && $actualDebitAccount<>request()->session()->get('debitAccount'))--}}
-                                                                                                                                                        {{--<!-- new transfer -->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--New--}}
-                                                                                                                                                                {{--transfer--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--- {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--+ {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!-- total -->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Total--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!--actual credit acc == credit acc && actual debit acc <> debit acc-->--}}
-                                                                                                                                                    {{--@elseif($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount<>request()->session()->get('debitAccount'))--}}
-                                                                                                                                                        {{--<!-- update-->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Update--}}
-                                                                                                                                                                {{--number--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--- {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--+{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!-- total -->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Total--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!-- actual credit acc <> credit acc && actual debit acc = debit acc-->--}}
-                                                                                                                                                    {{--@elseif($actualCreditAccount<>request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))--}}
-                                                                                                                                                        {{--<!-- update -->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Update--}}
-                                                                                                                                                                {{--number--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--- {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--+{{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                        {{--<!-- total-->--}}
-                                                                                                                                                        {{--<tr>--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--Total--}}
-                                                                                                                                                            {{--</td>--}}
-                                                                                                                                                            {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                            {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                                {{--<td class="text-center">--}}
-                                                                                                                                                                    {{--= {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                            {{--@endif--}}
-                                                                                                                                                        {{--</tr>--}}
-                                                                                                                                                    {{--@endif--}}
-                                                                                                                                                    {{--</tbody>--}}
-                                                                                                                                                {{--</table>--}}
-
-                                                                                                                                                {{--@foreach($errors as $error)--}}
-                                                                                                                                                    {{--@if($error->name=='Correcting_notCompleteNormal')--}}
-                                                                                                                                                        {{--<div class="text-center">--}}
-                                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                            {{--<span class="text-danger">Pallets number DOESN'T CORRECT the number expected in the loading order ({{$loading->anz}}--}}
-                                                                                                                                                                {{--)</span>--}}
-                                                                                                                                                        {{--</div>--}}
-                                                                                                                                                    {{--@endif--}}
-                                                                                                                                                    {{--@if($error->name=='SP-PS_notSameNumber')--}}
-                                                                                                                                                        {{--<div class="text-center">--}}
-                                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span><span--}}
-                                                                                                                                                                    {{--class="text-danger"> Pallets numbers are DIFFERENT for both transfers </span>--}}
-                                                                                                                                                        {{--</div>--}}
-
-                                                                                                                                                    {{--@endif--}}
-                                                                                                                                                {{--@endforeach--}}
-                                                                                                                                            {{--</div>--}}
-                                                                                                                                            {{--<div class="modal-footer">--}}
-                                                                                                                                                {{--@if(!empty($errors))--}}
-                                                                                                                                                    {{--<button type="submit"--}}
-                                                                                                                                                            {{--class="btn btn-danger btn-modal"--}}
-                                                                                                                                                            {{--value="{{$transferNormal->id}}"--}}
-                                                                                                                                                            {{--name="okSubmitPalletsValidateModal">--}}
-                                                                                                                                                        {{--Confirm--}}
-                                                                                                                                                    {{--</button>--}}
-                                                                                                                                                {{--@else--}}
-                                                                                                                                                    {{--<button type="submit"--}}
-                                                                                                                                                            {{--class="btn btn-default btn-form btn-modal"--}}
-                                                                                                                                                            {{--value="{{$transferCorrecting->id}}"--}}
-                                                                                                                                                            {{--name="okSubmitPalletsModal"--}}
-                                                                                                                                                            {{--data-toggle="modal"--}}
-                                                                                                                                                            {{--data-target="#submitPalletsValidate_modal">--}}
-                                                                                                                                                        {{--Confirm--}}
-                                                                                                                                                    {{--</button>--}}
-                                                                                                                                                {{--@endif--}}
-                                                                                                                                            {{--</div>--}}
-                                                                                                                                        {{--</div>--}}
-                                                                                                                                    {{--</div>--}}
-                                                                                                                                {{--</div>--}}
-                                                                                                                            {{--@endif--}}
-
-                                                                                                                        {{--<!-- Modal update -->--}}
-                                                                                                                            {{--@if(isset($okSubmitPalletsModalCorrecting) && $okSubmitPalletsModalCorrecting==$transferCorrecting->id && $transferCorrecting->state=='Complete Validated')--}}
-                                                                                                                                {{--<div class="modal show"--}}
-                                                                                                                                     {{--id="submitPalletsValidate_modal"--}}
-                                                                                                                                     {{--role="dialog">--}}
-                                                                                                                                    {{--<div class="modal-dialog modal-md">--}}
-                                                                                                                                        {{--<div class="modal-content">--}}
-                                                                                                                                            {{--<div class="modal-header modalHeaderTransfer">--}}
-                                                                                                                                                {{--<button value="{{$transferCorrecting->id}}"--}}
-                                                                                                                                                        {{--class="close"--}}
-                                                                                                                                                        {{--type="submit"--}}
-                                                                                                                                                        {{--name="closeSubmitPalletsModal">--}}
-                                                                                                                                                    {{--&times;--}}
-                                                                                                                                                {{--</button>--}}
-                                                                                                                                                {{--<h4 class="modal-title text-center">--}}
-                                                                                                                                                    {{--INFORMATION--}}
-                                                                                                                                                {{--</h4>--}}
-                                                                                                                                            {{--</div>--}}
-                                                                                                                                            {{--<div class="modal-body center modalBodyTransfer">--}}
-                                                                                                                                                {{--<p class="text-center">--}}
-                                                                                                                                                    {{--Here,--}}
-                                                                                                                                                    {{--CONFIRMED--}}
-                                                                                                                                                    {{--pallets--}}
-                                                                                                                                                    {{--number</p>--}}
-                                                                                                                                                {{--@php($partsCreditAccount=explode('-',request()->session()->get('creditAccount')))--}}
-                                                                                                                                                {{--@php($a=$partsCreditAccount[count($partsCreditAccount)-1])--}}
-                                                                                                                                                {{--@php($b=$partsCreditAccount[count($partsCreditAccount)-2])--}}
-                                                                                                                                                {{--@if(count(array_diff ($partsCreditAccount, [$a, $b]))==1)--}}
-                                                                                                                                                    {{--@php($creditAccountCorrectingValidate=array_diff ($partsCreditAccount, [$a, $b])[0])--}}
-                                                                                                                                                {{--@else--}}
-                                                                                                                                                    {{--@php($creditAccountCorrectingValidate=implode(' - ', array_diff ($partsCreditAccount, [$a, $b])))--}}
-                                                                                                                                                {{--@endif--}}
-
-                                                                                                                                                {{--@php($partsDebitAccount=explode('-',request()->session()->get('debitAccount')))--}}
-                                                                                                                                                {{--@php($aprim=$partsDebitAccount[count($partsDebitAccount)-1])--}}
-                                                                                                                                                {{--@php($bprim=$partsDebitAccount[count($partsDebitAccount)-2])--}}
-                                                                                                                                                {{--@if(count(array_diff ($partsDebitAccount, [$aprim, $bprim]))==1)--}}
-                                                                                                                                                    {{--@php($debitAccountCorrectingValidate=array_diff ($partsDebitAccount, [$aprim, $bprim])[0])--}}
-                                                                                                                                                {{--@else--}}
-                                                                                                                                                    {{--@php($debitAccountCorrectingValidate=implode( ' - ', array_diff ($partsDebitAccount, [$aprim, $bprim])))--}}
-                                                                                                                                                {{--@endif--}}
-                                                                                                                                                {{--<table class="table table-hover table-bordered">--}}
-                                                                                                                                                    {{--<thead>--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<th></th>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<th class="text-center">--}}
-                                                                                                                                                                {{--DEBIT--}}
-                                                                                                                                                            {{--</th>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<th class="text-center">--}}
-                                                                                                                                                                {{--CREDIT--}}
-                                                                                                                                                            {{--</th>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--</thead>--}}
-                                                                                                                                                    {{--<tbody>--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<td></td>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{$debitAccountCorrectingValidate}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{$creditAccountCorrectingValidate}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                                                            {{--Actual--}}
-                                                                                                                                                        {{--</td>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                                                            {{--New--}}
-                                                                                                                                                            {{--transfer--}}
-                                                                                                                                                        {{--</td>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--- {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--+ {{request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--<tr>--}}
-                                                                                                                                                        {{--<td class="text-center">--}}
-                                                                                                                                                            {{--Total--}}
-                                                                                                                                                        {{--</td>--}}
-                                                                                                                                                        {{--@if(Session::has('debitAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--= {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                        {{--@if(Session::has('creditAccount'))--}}
-                                                                                                                                                            {{--<td class="text-center">--}}
-                                                                                                                                                                {{--= {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>--}}
-                                                                                                                                                        {{--@endif--}}
-                                                                                                                                                    {{--</tr>--}}
-                                                                                                                                                    {{--</tbody>--}}
-                                                                                                                                                {{--</table>--}}
-                                                                                                                                            {{--</div>--}}
-                                                                                                                                            {{--@foreach($errors as $error)--}}
-                                                                                                                                                {{--@if($error->name=='Correcting_notCompleteNormal')--}}
-                                                                                                                                                    {{--<div class="text-center">--}}
-                                                                                                                                                        {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                        {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                        {{--<span class="text-danger">Pallets number DOESN'T CORRECT the number expected in the loading order ({{$loading->anz}}--}}
-                                                                                                                                                            {{--)</span>--}}
-                                                                                                                                                    {{--</div>--}}
-                                                                                                                                                {{--@endif--}}
-                                                                                                                                                {{--@if($error->name=='SP-PS_notSameNumber')--}}
-                                                                                                                                                    {{--<div class="text-center">--}}
-                                                                                                                                                        {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                                                                                        {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span><span--}}
-                                                                                                                                                                {{--class="text-danger"> Pallets numbers are DIFFERENT for both transfers </span>--}}
-                                                                                                                                                    {{--</div>--}}
-
-                                                                                                                                                {{--@endif--}}
-                                                                                                                                            {{--@endforeach--}}
-                                                                                                                                            {{--<div class="modal-footer">--}}
-                                                                                                                                                {{--@if(!empty($errors))--}}
-                                                                                                                                                    {{--<button type="submit"--}}
-                                                                                                                                                            {{--class="btn btn-danger btn-modal"--}}
-                                                                                                                                                            {{--value="{{$transferNormal->id}}"--}}
-                                                                                                                                                            {{--name="okSubmitPalletsValidateModal">--}}
-                                                                                                                                                        {{--Confirm--}}
-                                                                                                                                                    {{--</button>--}}
-                                                                                                                                                {{--@else--}}
-                                                                                                                                                    {{--<button type="submit"--}}
-                                                                                                                                                            {{--class="btn btn-default btn-form btn-modal"--}}
-                                                                                                                                                            {{--value="{{$transferCorrecting->id}}"--}}
-                                                                                                                                                            {{--name="okSubmitPalletsValidateModal">--}}
-                                                                                                                                                        {{--Confirm--}}
-                                                                                                                                                    {{--</button>--}}
-                                                                                                                                                {{--@endif--}}
-                                                                                                                                            {{--</div>--}}
-                                                                                                                                        {{--</div>--}}
-                                                                                                                                    {{--</div>--}}
-                                                                                                                                {{--</div>--}}
-                                                                                                                            {{--@endif--}}
                                                                                                                             @if($transferCorrecting->state=="Untreated")
                                                                                                                         </div>
                                                                                                                     @elseif ($transferCorrecting->state=="Waiting documents")
@@ -4001,7 +3601,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                     <div class="modal show"
                                                                                                          id="submitPallets_modal"
                                                                                                          role="dialog">
-                                                                                                        <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-dialog modal-lg">
                                                                                                             <div class="modal-content">
                                                                                                                 <div class="modal-header modalHeaderTransfer">
                                                                                                                         <button value="{{$transferCorrecting->id}}"
@@ -4205,7 +3805,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                         @endif
                                                                                                                         </tbody>
                                                                                                                     </table>
-                                                                                                                    @foreach($errors as $error)
+                                                                                                                    @foreach($errorsTransfer as $error)
                                                                                                                         @if($error->name=='Correcting_notCompleteNormal')
                                                                                                                             <div class="text-center">
                                                                                                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -4224,7 +3824,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                     @endforeach
                                                                                                                 </div>
                                                                                                                 <div class="modal-footer">
-                                                                                                                        @if(!empty($errors))
+                                                                                                                        @if(!empty($errorsTransfer))
                                                                                                                             <button type="submit"
                                                                                                                                     class="btn btn-danger btn-modal"
                                                                                                                                     value="{{$transferCorrecting->id}}"
@@ -4254,13 +3854,13 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                     <div class="modal show"
                                                                                                          id="submitPalletsValidate_modal"
                                                                                                          role="dialog">
-                                                                                                        <div class="modal-dialog modal-md">
+                                                                                                        <div class="modal-dialog modal-lg">
                                                                                                             <div class="modal-content">
                                                                                                                 <div class="modal-header modalHeaderTransfer">
                                                                                                                         <button value="{{$transferCorrecting->id}}"
                                                                                                                                 class="close"
                                                                                                                                 type="submit"
-                                                                                                                                name="closeSubmitPalletsModal">
+                                                                                                                                name="closeSubmitValidatePalletsModal">
                                                                                                                             &times;
                                                                                                                         </button>
                                                                                                                     <h4 class="modal-title text-center">
@@ -4356,7 +3956,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                         </tr>
                                                                                                                         </tbody>
                                                                                                                     </table>
-                                                                                                                    @foreach($errors as $error)
+                                                                                                                    @foreach($errorsTransfer as $error)
                                                                                                                         @if($error->name=='Correcting_notCompleteNormal')
                                                                                                                             <div class="text-center">
                                                                                                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
@@ -4375,7 +3975,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                     @endforeach
                                                                                                                 </div>
                                                                                                                 <div class="modal-footer">
-                                                                                                                        @if(!empty($errors))
+                                                                                                                        @if(!empty($errorsTransfer))
                                                                                                                             <button type="submit"
                                                                                                                                     class="btn btn-danger btn-modal"
                                                                                                                                     value="{{$transferCorrecting->id}}"

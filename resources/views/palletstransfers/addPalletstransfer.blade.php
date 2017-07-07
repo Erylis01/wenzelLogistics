@@ -92,9 +92,9 @@
                                                         id="Purchase_ExtOption">
                                                     Purchase_Ext
                                                 </option>
-                                                <option @if(old('type') == 'Purchase_Int') selected
-                                                        @endif value="Purchase_Int"
-                                                        id="Purchase_IntOption">
+                                                <option @if(old('type') == 'Purchase-Sale') selected
+                                                        @endif value="Purchase-Sale"
+                                                        id="Purchase-SaleOption">
                                                     Purchase_Int
                                                 </option>
                                                 <option @if(old('type') == 'Sale_Ext') selected
@@ -102,9 +102,9 @@
                                                         id="Sale_ExtOption">
                                                     Sale_Ext
                                                 </option>
-                                                <option @if(old('type') == 'Sale_Int') selected
-                                                        @endif value="Sale_Int"
-                                                        id="Sale_IntOption">
+                                                <option @if(old('type') == 'Sale-Purchase') selected
+                                                        @endif value="Sale-Purchase"
+                                                        id="Sale-PurchaseOption">
                                                     Sale_Int
                                                 </option>
                                                 <option @if(old('type') == 'Other') selected
@@ -142,9 +142,9 @@
                                                         id="Purchase_ExtOption">
                                                     Purchase_Ext
                                                 </option>
-                                                <option @if($type == 'Purchase_Int') selected
-                                                        @endif value="Purchase_Int"
-                                                        id="Purchase_IntOption">
+                                                <option @if($type == 'Purchase-Sale') selected
+                                                        @endif value="Purchase-Sale"
+                                                        id="Purchase-SaleOption">
                                                     Purchase_Int
                                                 </option>
                                                 <option @if($type == 'Sale_Ext') selected
@@ -152,9 +152,9 @@
                                                         id="Sale_ExtOption">
                                                     Sale_Ext
                                                 </option>
-                                                <option @if($type == 'Sale_Int') selected
-                                                        @endif value="Sale_Int"
-                                                        id="Sale_IntOption">
+                                                <option @if($type == 'Sale-Purchase') selected
+                                                        @endif value="Sale-Purchase"
+                                                        id="Sale-PurchaseOption">
                                                     Sale_Int
                                                 </option>
                                                 <option @if($type == 'Other') selected
@@ -187,16 +187,16 @@
                                                         id="Purchase_ExtOption">
                                                     Purchase_Ext
                                                 </option>
-                                                <option value="Purchase_Int"
-                                                        id="Purchase_IntOption">
+                                                <option value="Purchase-Sale"
+                                                        id="Purchase-SaleOption">
                                                     Purchase_Int
                                                 </option>
                                                 <option value="Sale_Ext"
                                                         id="Sale_ExtOption">
                                                     Sale_Ext
                                                 </option>
-                                                <option value="Sale_Int"
-                                                        id="Sale_IntOption">
+                                                <option value="Sale-Purchase"
+                                                        id="Sale-PurchaseOption">
                                                     Sale_Int
                                                 </option>
                                                 <option value="Other"
@@ -220,7 +220,7 @@
                                 <!--atrnr-->
                                 <div class="col-lg-1 text-left">
                                     <label for="loading_atrnr"
-                                           class="control-label">@if(isset($type)&&($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'))
+                                           class="control-label">@if(isset($type)&&($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Withdrawal_Only'||$type=='Deposit_Only'))
                                             <span id="atrnr" style="display:inline-block">*</span>@else<span id="atrnr"
                                                                                                              style="display:none">*</span>@endif
                                         Atrnr
@@ -309,14 +309,44 @@
                                                value="{{ old('date') }}" placeholder="Date" autofocus>
                                     @endif
                                 </div>
-                                <div class="col-lg-2 col-lg-offset-3 text-left">
+                                <div id="normalTransferAssociated" style="display:none">
+                                <!--transfer normal associated-->
+                                <div class="col-lg-2 text-right">
+                                    <label for="normalTransferAssociated"
+                                           class="control-label"><span>*</span>
+                                        Associated
+                                        :</label>
+                                </div>
+                                <div class="col-lg-1">
+                                        <select class="selectpicker show-tick form-control"
+                                                data-size="5"
+                                                data-live-search="true"
+                                                data-live-search-style="startsWith"
+                                                title="Normal transfer associated"
+                                                name="normalTransferAssociated">
+                                            @foreach($listPalletstransfersNormal as $normalTransfer )
+                                                @if(Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))
+                                                    <option value="{{$normalTransfer->id}}"
+                                                            selected>{{$normalTransfer->id}}</option>
+                                                @elseif(isset($transfer->normalTransferAssociated)&&$normalTransfer->id==$transfer->normalTransferAssociated)
+                                                    <option value="{{$normalTransfer->id}}"
+                                                            selected>{{$normalTransfer->id}}</option>
+                                                @else
+                                                    <option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                </div>
+                                </div>
+                                <!--show add pallets account-->
+                                <div class="col-lg-2  text-left">
                                     <a href="{{route('showAddPalletsaccount')}}" class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <!--debit account-->
-                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale_Ext'||$type=='Sale-Purchase'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-2" id="debitAccount1"
                                          style="display: block">
                                         @else
@@ -325,12 +355,12 @@
                                                 <label for="debitAccount" class="control-label"><span>*</span> Debit
                                                     account
                                                     :</label>
-                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Sale_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
                                 @endif
-                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Sale_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-4" id="debitAccount2"
                                          style="display: block">
                                         @else
@@ -366,14 +396,14 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Sale_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Sale_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
                                 @endif
 
                             <!--credit account-->
-                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Purchase_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-2" id="creditAccount1"
                                          style="display: block">
                                         @else
@@ -382,12 +412,12 @@
                                                 <label for="creditAccount" class="control-label"><span>*</span> Credit
                                                     account
                                                     :</label>
-                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Purchase_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
                                 @endif
-                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Purchase_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                     <div class="col-lg-4" id="creditAccount2"
                                          style="display: block">
                                         @else
@@ -423,7 +453,7 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                @if(isset($type)&&($type=='Other'||$type=='Purchase_Int'||$type=='Purchase_Ext'||$type=='Sale_Int'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
+                                                @if(isset($type)&&($type=='Other'||$type=='Purchase-Sale'||$type=='Sale-Purchase'||$type=='Purchase_Ext'||$type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'||$type=='Deposit_Only'||$type=='Withdrawal_Only'))
                                             </div>
                                             @else
                                     </div>
@@ -511,59 +541,13 @@
                                                                autofocus>
                                                     @endif
                                                 </div>
-                                                <!--debit account-->
-                                            {{--<div class="col-lg-1" >--}}
-                                            {{--<label for="debitAccount2" class="control-label">--}}
-                                            {{--Debit--}}
-                                            {{--:</label>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="col-lg-3">--}}
-                                            {{--<select class="selectpicker show-tick form-control"--}}
-                                            {{--data-size="10"--}}
-                                            {{--data-live-search="true"--}}
-                                            {{--data-live-search-style="startsWith"--}}
-                                            {{--title="Debit Account" name="debitAccount2">--}}
-                                            {{--@foreach($listNamesPalletsaccounts as $palletsAccount )--}}
-                                            {{--@if(Illuminate\Support\Facades\Input::old('debitAccount2') && $palletsAccount==old('debitAccount2'))--}}
-                                            {{--<option selected>{{$palletsAccount}}</option>--}}
-                                            {{--@elseif(isset($debitAccount2)&& $palletsAccount==$debitAccount2)--}}
-                                            {{--<option selected>{{$palletsAccount}}</option>--}}
-                                            {{--@else--}}
-                                            {{--<option>{{$palletsAccount}}</option>--}}
-                                            {{--@endif--}}
-                                            {{--@endforeach--}}
-                                            {{--</select>--}}
-                                            {{--</div>--}}
-                                            <!--credit account-->
-                                                {{--<div class="col-lg-2">--}}
-                                                {{--<label for="creditAccount2" class="control-label">--}}
-                                                {{--Credit--}}
-                                                {{--ac.--}}
-                                                {{--:</label>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="col-lg-3">--}}
-                                                {{--<select class="selectpicker show-tick form-control"--}}
-                                                {{--data-size="10"--}}
-                                                {{--data-live-search="true"--}}
-                                                {{--data-live-search-style="startsWith"--}}
-                                                {{--title="Credit Account" name="creditAccount2">--}}
-                                                {{--@foreach($listNamesPalletsaccounts as $palletsAccount )--}}
-                                                {{--@if(Illuminate\Support\Facades\Input::old('creditAccount2') && $palletsAccount==old('creditAccount2'))--}}
-                                                {{--<option selected>{{$palletsAccount}}</option>--}}
-                                                {{--@elseif(isset($creditAccount2)&& $palletsAccount==$creditAccount2)--}}
-                                                {{--<option selected>{{$palletsAccount}}</option>--}}
-                                                {{--@else--}}
-                                                {{--<option>{{$palletsAccount}}</option>--}}
-                                                {{--@endif--}}
-                                                {{--@endforeach--}}
-                                                {{--</select>--}}
-                                                {{--</div>--}}
                                             </div>
                                             @if(isset($type) &&($type=='Withdrawal-Deposit'||$type=='Deposit-Withdrawal'))
                                         </div>
                                         @else
                                 </div>
                             @endif
+
                             <div class="form-group">
                                 <div class="col-lg-4 col-lg-offset-4">
                                     <input type="submit"
@@ -684,24 +668,31 @@
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                                @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber')))
+                                                @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))
                                                     <div class="text-center">
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
-                                                                class="text-danger"> Pallets numbers are different for both transfers </span>
+                                                                class="text-danger"> Pallets numbers are DIFFERENT for both transfers </span>
                                                     </div>
                                                 @endif
-                                                @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&isset($anz)&&request()->session()->get('palletsNumber')<>$anz)||(Session::has('palletsNumber2')&&isset($anz)&&(request()->session()->get('palletsNumber2')<>$anz))))
+                                                @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit' )&&((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz))))
                                                     <div class="text-center">
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                        <span class="text-danger">Pallets number doesn't match the number expected in the loading order ({{$anz}}
+                                                        <span class="text-danger">Pallets number does NOT MATCH the number expected in the loading order ({{$loading->anz}}
                                                             )</span>
+                                                    </div>
+                                                @endif
+                                                @if(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly') )
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
+                                                                class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </span>
                                                     </div>
                                                 @endif
                                             </div>
                                             <div class="modal-footer">
-                                                @if((Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))||(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&isset($anz)&&request()->session()->get('palletsNumber')<>$anz)||(Session::has('palletsNumber2')&&isset($anz)&&(request()->session()->get('palletsNumber2')<>$anz)))))
+                                                @if((($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))||(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz))))||(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly')))
                                                     <button type="submit"
                                                             class="btn btn-danger btn-modal"
                                                             value="yes"

@@ -315,8 +315,8 @@
                                         @php($listPalletstransfers=\App\Palletstransfer::where('loading_atrnr',$loading->atrnr)->get())
                                             @php($k=0)
                                         @foreach($listPalletstransfers as $transfer)
-                                            @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                            @if(!empty($errorsID)&& $k<4)
+                                            @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                            @if(!empty($errorsTransfer)&& $k<4)
                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                             @endif
                                                 @php($k=$k+1)

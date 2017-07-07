@@ -112,95 +112,109 @@
                                 <thead>
                                 @if(isset($searchQuery))
                                     <tr>
-                                        <th class="text-center col1">ID<br><a
+                                        <th class="text-center col1 colHeightTitle">ID<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col2">Date<br><a
+                                        <th class="col1b colHeightTitle"></th>
+                                        <th class="colHeightTitle col8"></th>
+                                        <th class="text-center col2 colHeightTitle">Date<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col3">Type<br><a
+                                        <th class="text-center col3 colHeightTitle">Type<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col4">Credit Account<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"></a>
-                                        </th>
-                                        <th class="text-center col4">Debit Account<br><a
+                                        <th class="text-center col4 colHeightTitle">Debit Account<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col5">Pal. Nbr<br><a
+                                        <th class="text-center col4 colHeightTitle">Credit Account<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center col5 colHeightTitle">Pal.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col7">State<br><a
+                                        <th class="text-center col6 colHeightTitle">Loading<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center col7 colHeightTitle">State<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"></a>
                                         </th>
-                                        <th></th>
                                     </tr>
                                 @else
                                     <tr>
-                                        <th class="text-center col1">ID<br><a
+                                        <th class="text-center col1 colHeightTitle">ID<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col2">Date<br><a
+                                        <th class="col1b colHeightTitle"></th>
+                                        <th class="colHeightTitle col8"></th>
+                                        <th class="text-center col2 colHeightTitle">Date<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col3">Type<br><a
+                                        <th class="text-center col3 colHeightTitle">Type<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col4">Credit Account<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"></a>
-                                        </th>
-                                        <th class="text-center col4">Debit Account<br><a
+                                        <th class="text-center col4 colHeightTitle">Debit Account<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col5">Pal. Nbr<br><a
+                                        <th class="text-center col4 colHeightTitle">Credit Account<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center col5 colHeightTitle">Pal.<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"></a>
                                         </th>
-                                        <th class="text-center col7">State<br><a
+                                        <th class="text-center col6 colHeightTitle">Loading<br><a
+                                                    class="glyphicon glyphicon-chevron-up general-sorting"
+                                                    href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"></a><a
+                                                    class="glyphicon glyphicon-chevron-down general-sorting"
+                                                    href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"></a>
+                                        </th>
+                                        <th class="text-center col7 colHeightTitle">State<br><a
                                                     class="glyphicon glyphicon-chevron-up general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"></a><a
                                                     class="glyphicon glyphicon-chevron-down general-sorting"
                                                     href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"></a>
                                         </th>
-                                        <th></th>
                                     </tr>
                                 @endif
                                 </thead>
@@ -216,66 +230,83 @@
                                         @php($class="completevalidated")
                                     @endif
                                     <tr class="{{$class}}">
-                                        <td class="text-center"><a class="link"
+                                        <td class="text-center colHeight col1"><a class="link"
                                                                    href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
-                                        <td class="text-center">{{date('d-m-y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center">{{$transfer->type}}</td>
-                                        @if(isset($transfer->creditAccount))
-                                            @php($partsCreditAccount=explode('-', $transfer->creditAccount))
-                                            @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
-                                            @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
-                                            @if($typeCreditAccount=='account')
-                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->name)
-                                                <td class="text-center">
-                                                    <a class="link"
-                                                       href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$nameCreditAccount}}</a>
-                                                </td>
-                                            @elseif($typeCreditAccount=='truck')
-                                                @php($nameCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->name)
-                                                @php($licensePlateCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->licensePlate)
-                                                <td class="text-center">
-                                                    <a class="link"
-                                                       href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$nameCreditAccount}}
-                                                        - {{$licensePlateCreditAccount}}</a>
-                                                </td>
+                                        <td class="col1b colHeight"></td>
+                                        <td class="text-right colDanger colHeight col8">
+                                            @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                        @if(!empty($errorsTransfer))
+                                                @foreach($errorsTransfer as $error)
+                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                @endforeach
                                             @endif
-                                        @else
-                                            <td></td>
-                                        @endif
+                                        </td>
+                                        <td class="text-center colHeight col2">{{date('d-m-y', strtotime($transfer->date))}}</td>
+                                        @if($transfer->type=='Deposit-Withdrawal')
+                                        <td class="text-center colHeight col3">Dep-With</td>
+                                        @elseif($transfer->type=='Withdrawal-Deposit')
+                                            <td class="text-center colHeight col3">With-Dep</td>
+                                        @elseif($transfer->type=='Withdrawal_Only')
+                                            <td class="text-center colHeight col3">With_only</td>
+                                        @elseif($transfer->type=='Deposit_Only')
+                                            <td class="text-center colHeight col3">Dep_only</td>
+                                        @elseif($transfer->type=='Sale-Purchase')
+                                            <td class="text-center colHeight col3">Sale-Purch</td>
+                                        @elseif($transfer->type=='Purchase-Sale')
+                                            <td class="text-center colHeight col3">Purch-Sale</td>
+                                        @elseif($transfer->type=='Other')
+                                            <td class="text-center colHeight col3">Other</td>
+                                            @endif
                                         @if(isset($transfer->debitAccount))
                                             @php($partsDebitAccount=explode('-', $transfer->debitAccount))
                                             @php($typeDebitAccount=$partsDebitAccount[count($partsDebitAccount)-2])
                                             @php($idDebitAccount=$partsDebitAccount[count($partsDebitAccount)-1])
                                             @if($typeDebitAccount=='account')
                                                 @php($nameDebitAccount=\App\Palletsaccount::where('id', $idDebitAccount)->first()->name)
-                                                <td class="text-center">
+                                                <td class="text-center colHeight col4">
                                                     <a class="link"
                                                        href="{{route('showDetailsPalletsaccount',$idDebitAccount)}}">{{$nameDebitAccount}}</a>
                                                 </td>
                                             @elseif($typeDebitAccount=='truck')
                                                 @php($nameDebitAccount=\App\Truck::where('id', $idDebitAccount)->first()->name)
                                                 @php($licensePlateDebitAccount=\App\Truck::where('id', $idDebitAccount)->first()->licensePlate)
-                                                <td class="text-center">
+                                                <td class="text-center colHeight col4">
                                                     <a class="link"
                                                        href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$nameDebitAccount}}
                                                         - {{$licensePlateDebitAccount}}</a>
                                                 </td>
                                             @endif
                                         @else
-                                            <td></td>
+                                            <td class="colHeight col4"></td>
                                         @endif
-                                        <td class="text-center">{{$transfer->palletsNumber}}</td>
-                                        <td class="text-center">{{$transfer->state}}</td>
-                                        @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                        <td class="text-left colDanger">
-                                            @if(!empty($errorsID))
-                                                @foreach($errorsID as $error)
-                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                @endforeach
-                                            @else
+                                        @if(isset($transfer->creditAccount))
+                                            @php($partsCreditAccount=explode('-', $transfer->creditAccount))
+                                            @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
+                                            @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
+                                            @if($typeCreditAccount=='account')
+                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->name)
+                                                <td class="text-center colHeight col4">
+                                                    <a class="link"
+                                                       href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$nameCreditAccount}}</a>
+                                                </td>
+                                            @elseif($typeCreditAccount=='truck')
+                                                @php($nameCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->name)
+                                                @php($licensePlateCreditAccount=\App\Truck::where('id', $idCreditAccount)->first()->licensePlate)
+                                                <td class="text-center colHeight col4">
+                                                    <a class="link"
+                                                       href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$nameCreditAccount}}
+                                                        - {{$licensePlateCreditAccount}}</a>
+                                                </td>
                                             @endif
-                                        </td>
+                                        @else
+                                            <td class="colHeight col4"></td>
+                                        @endif
+                                        <td class="text-center colHeight col5">{{$transfer->palletsNumber}}</td>
+                                        <td class="text-center colHeight col6"><a class="link"
+                                                                                  href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
+                                            </td>
+                                        <td class="text-center colHeight col7">{{$transfer->state}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
