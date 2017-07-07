@@ -265,7 +265,7 @@
                                                                                     <li class="text-left"><a
                                                                                                 href="{{route('showDetailsTruck', $truck->id)}}"
                                                                                                 class="link">{{$truck->licensePlate}}</a>
-                                                                                        - {{$truck->realNumberPallets}}
+                                                                                        - {{$truck->realNumberPallets}} - {{$truck->theoricalNumberPallets}}
                                                                                     </li>
                                                                                 @endforeach
                                                                             @endif
@@ -509,12 +509,12 @@
                                                       action="{{route('updatePalletsaccount', $account->id)}}">
                                                     {{ csrf_field() }}
                                                     <div class="form-group">
-                                                <div class="col-lg-2 col-lg-offset-3">
-                                                    <a href="{{route('showAddPalletstransfer')}}"
-                                                       class="link"><span
-                                                                class="glyphicon glyphicon-plus-sign"></span>Add
-                                                        transfer</a>
-                                                </div>
+                                                        <div class="col-lg-2 col-lg-offset-3">
+                                                            <a href="{{route('showAddPalletstransfer')}}"
+                                                               class="link"><span
+                                                                        class="glyphicon glyphicon-plus-sign"></span>Add
+                                                                transfer</a>
+                                                        </div>
                                                         <div class="col-lg-2 col-lg-offset-2">
                                                             <input type="submit"
                                                                    class="btn btn-primary btn-block btn-form"
@@ -559,7 +559,8 @@
                                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"></a>
                                                                             </th>
                                                                             @if($account->type=='Carrier')
-                                                                                <th class="text-center col4">Truck<br>
+                                                                                <th class="text-center colTruck">
+                                                                                    Truck<br>
                                                                                     <a
                                                                                             class="glyphicon glyphicon-chevron-up general-sorting"
                                                                                             href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=asc')}}"></a><a
@@ -605,7 +606,8 @@
                                                                                         href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=desc')}}"></a>
                                                                             </th>
                                                                             @if($account->type=='Carrier')
-                                                                                <th class="text-center col4">Truck<br>
+                                                                                <th class="text-center colTruck">
+                                                                                    Truck<br>
                                                                                     <a
                                                                                             class="glyphicon glyphicon-chevron-up general-sorting"
                                                                                             href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=asc')}}"></a><a
@@ -632,8 +634,6 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     @foreach($listTransfers as $transfer)
-                                                                        {{--@php($idDebitAccount=\App\Palletsaccount::where('palletsname', $transfer->debitAccount)->first()->id)--}}
-                                                                        {{--@php($idCreditAccount=\App\Palletsaccount::where('name', $transfer->creditAccount)->first()->id)--}}
                                                                         @if($transfer->state=="Untreated")
                                                                             @php($class="untreated")
                                                                         @elseif ($transfer->state=="Waiting documents")
@@ -651,18 +651,32 @@
                                                                             <td class="text-center colType">{{$transfer->type}}</td>
                                                                             <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
                                                                             @if($account->type=='Carrier')
-                                                                                <td class="text-center col4"></td>
+                                                                                @php($partsCreditAccount=explode('-',$transfer->creditAccount))
+                                                                                @php($a=$partsCreditAccount[count($partsCreditAccount)-1])
+                                                                                @php($b=$partsCreditAccount[count($partsCreditAccount)-2])
+                                                                                @if(count(array_diff ($partsCreditAccount, [$a, $b]))==1)
+                                                                                    @php($creditAccount=array_diff ($partsCreditAccount, [$a, $b])[0])
+                                                                                @else
+                                                                                    @php($creditAccount=implode(' - ', array_diff ($partsCreditAccount, [$a, $b])))
+                                                                                @endif
+                                                                                @if(isset($creditAccount) && substr($creditAccount, 0, strlen($account->name)) === $account->name)
+                                                                                    <td class="text-center colTruck">{{$creditAccount}}</td>
+                                                                                @else
+                                                                                    @php($partsDebitAccount=explode('-',$transfer->debitAccount))
+                                                                                    @php($aprim=$partsDebitAccount[count($partsDebitAccount)-1])
+                                                                                    @php($bprim=$partsDebitAccount[count($partsDebitAccount)-2])
+                                                                                    @if(count(array_diff ($partsDebitAccount, [$aprim, $bprim]))==1)
+                                                                                        @php($debitAccount=array_diff ($partsDebitAccount, [$aprim, $bprim])[0])
+                                                                                    @else
+                                                                                        @php($debitAccount=implode( ' - ', array_diff ($partsDebitAccount, [$aprim, $bprim])))
+                                                                                    @endif
+                                                                                    @if(isset($debitAccount) && substr($debitAccount, 0, strlen($account->name)) === $account->name)
+                                                                                        <td class="text-center colTruck">{{$debitAccount}}</td>
+                                                                                    @else
+                                                                                        <td class="text-center colTruck"></td>
+                                                                                    @endif
+                                                                                @endif
                                                                             @endif
-                                                                            {{--@if($transfer->type=='Deposit')--}}
-                                                                            {{--<td class="text-center col4"><a class="link"--}}
-                                                                            {{--href="{{route('showDetailsTruck',$idDebitAccount)}}">{{$transfer->debitAccount}}</a>--}}
-                                                                            {{--</td>--}}
-                                                                            {{--@elseif($transfer->type=='Withdrawal')--}}
-                                                                            {{--<td class="text-center col4"><a class="link"--}}
-                                                                            {{--href="{{route('showDetailsTruck',$idCreditAccount)}}">{{$transfer->creditAccount}}</a>--}}
-                                                                            {{--</td>--}}
-                                                                            {{--@endif--}}
-
                                                                             <td class="text-center colType"><a
                                                                                         class="link"
                                                                                         href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
@@ -678,29 +692,6 @@
                                                     </div>
                                                 @endif
                                             </div>
-
-                                            {{--<div class="row">--}}
-                                            {{--<div class="general-pagination text-left">{!! $listLoadingsAssociated->render() !!}</div>--}}
-
-                                            {{--@if ($listLoadingsAssociated->currentPage()==$listLoadingsAssociated->lastPage())--}}
-                                            {{--<div class="general-legend col-lg-offset-9">--}}
-                                            {{--Showing @php($legend1=1+ ($listLoadingsAssociated->currentPage() -1) * 5)  {{$legend1}}--}}
-                                            {{--to {{$count}} of {{$count}} results--}}
-                                            {{--</div>--}}
-                                            {{--@elseif($listLoadingsAssociated->isEmpty())--}}
-                                            {{--<div class="general-legend col-lg-offset-9">--}}
-                                            {{--Showing 0 to 0 of 0 results--}}
-                                            {{--</div>--}}
-                                            {{--@else--}}
-                                            {{--<div class="general-legend col-lg-offset-9">--}}
-                                            {{--Showing @php($legend1=1+ ($listLoadingsAssociated->currentPage() -1) * 5)  {{$legend1}}--}}
-                                            {{--to @php($legend2= $listLoadingsAssociated->currentPage() * 5) {{$legend2}}--}}
-                                            {{--of {{$count}}--}}
-                                            {{--results--}}
-                                            {{--</div>--}}
-                                            {{--@endif--}}
-                                            {{--</div>--}}
-
                                         </div>
                                         @if($account->realNumberPallets==0||$account->realNumberPallets==null)
                                     </div>

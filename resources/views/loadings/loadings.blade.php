@@ -313,11 +313,13 @@
                                     <tr class="{{$class}}">
                                         <td class="text-center text-danger col0 colHeight">
                                         @php($listPalletstransfers=\App\Palletstransfer::where('loading_atrnr',$loading->atrnr)->get())
+                                            @php($k=0)
                                         @foreach($listPalletstransfers as $transfer)
                                             @php($errorsID= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                            @if(!empty($errorsID))
+                                            @if(!empty($errorsID)&& $k<4)
                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                             @endif
+                                                @php($k=$k+1)
                                         @endforeach
                                         </td>
                                         <td class="col0b colHeight"></td>

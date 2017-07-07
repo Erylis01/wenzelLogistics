@@ -98,17 +98,15 @@
     min-width:180px;
     width:180px;
 }
-.col4 {
-    max-width: 560px;
-    min-width: 560px;
-    width: 560px;
+.colTruck {
+    max-width: 551px;
+    min-width: 551px;
+    width: 551px;
 }
 
-/*.colAtrnr{*/
-    /*max-width: 50px;*/
-    /*min-width:50px;*/
-    /*width:50px;*/
-/*}*/
+.table-loading-account{
+    width:100%;
+}
 
 .table-loading-account>table>thead{
     display: inline-block;
