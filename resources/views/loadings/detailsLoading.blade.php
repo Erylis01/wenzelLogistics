@@ -2096,14 +2096,14 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                     <br>
 
                                                                                     <!--PANEL FOR EACH TRANSFER-->
-                                                                                    <form class="form-horizontal"
+                                                                                    <input class="form-horizontal"
                                                                                           role="form"
                                                                                           method="POST"
                                                                                           action="{{route('submitUpdateUpload', $loading->atrnr)}}"
-                                                                                          enctype="multipart/form-data">
+                                                                                           enctype="multipart/form-data"/>
                                                                                         <input type="hidden"
                                                                                                name="_token"
-                                                                                               value="{{ csrf_token() }}">
+                                                                                               value="{{ csrf_token() }}"/>
                                                                                         <div class="form-group">
                                                                                             @if(Session::has('errorAccountsPanel'))
                                                                                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('errorAccountsPanel') }}</div>
@@ -2161,7 +2161,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="type{{$transferNormal->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$transferNormal->type}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="5"
@@ -2283,7 +2283,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ $transferNormal->date }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    autofocus
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @elseif(isset($transferNormal->date))
                                                                                                                                             <input id="date{{$transferNormal->id}}"
                                                                                                                                                    type="date"
@@ -2292,7 +2292,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ $transferNormal->date }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    required
-                                                                                                                                                   autofocus>
+                                                                                                                                                   autofocus/>
 
                                                                                                                                         @elseif(isset($transferNormal->validate) && $transferNormal->validate==1)
                                                                                                                                             <input id="date{{$transferNormal->id}}"
@@ -2302,7 +2302,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ old('date'.$transferNormal->id) }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    autofocus
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else(Illuminate\Support\Facades\Input::old('date'))
                                                                                                                                             <input id="date{{$transferNormal->id}}"
                                                                                                                                                    type="date"
@@ -2311,7 +2311,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ old('date'.$transferNormal->id) }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    autofocus
-                                                                                                                                                   required>
+                                                                                                                                                   required/>
                                                                                                                                         @endif
                                                                                                                                     </div>
                                                                                                                                     <!--add account-->
@@ -2340,7 +2340,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    placeholder="Nbr"
                                                                                                                                                    min="0"
                                                                                                                                                    required
-                                                                                                                                                   autofocus>
+                                                                                                                                                   autofocus/>
                                                                                                                                         @elseif(isset($transferNormal->validate) && $transferNormal->validate==1)
                                                                                                                                             <input id="palletsNumber{{$transferNormal->id}}"
                                                                                                                                                    type="number"
@@ -2350,7 +2350,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    placeholder="Nbr"
                                                                                                                                                    min="0"
                                                                                                                                                    autofocus
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <input id="palletsNumber{{$transferNormal->id}}"
                                                                                                                                                    type="number"
@@ -2359,7 +2359,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{$transferNormal->palletsNumber}}"
                                                                                                                                                    placeholder="Nbr"
                                                                                                                                                    min="0"
-                                                                                                                                                   autofocus>
+                                                                                                                                                   autofocus/>
                                                                                                                                         @endif
                                                                                                                                     </div>
 
@@ -2389,7 +2389,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="debitAccount{{$transferNormal->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$debitAccountValidate}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="10"
@@ -2464,7 +2464,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="creditAccount{{$transferNormal->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$creditAccountValidate}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="10"
@@ -2524,7 +2524,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                         <input type="file"
                                                                                                                                                name="documentsTransfer{{$transferNormal->id}}[]"
                                                                                                                                                multiple
-                                                                                                                                               id="documentsTransfer{{$transferNormal->id}}">
+                                                                                                                                               id="documentsTransfer{{$transferNormal->id}}"/>
                                                                                                                                     </div>
                                                                                                                                     <!--button upload-->
                                                                                                                                     <div class="col-lg-2">
@@ -2578,12 +2578,12 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                             name="validate{{$transferNormal->id}}"
                                                                                                                                                             value="true"
                                                                                                                                                             checked
-                                                                                                                                                            id="validateYes">Yes</label>
+                                                                                                                                                            id="validateYes"/>Yes</label>
                                                                                                                                                 <label class="radio-inline"><input
                                                                                                                                                             type="radio"
                                                                                                                                                             name="validate{{$transferNormal->id}}"
                                                                                                                                                             value="false"
-                                                                                                                                                            id="validateNo">No</label>
+                                                                                                                                                            id="validateNo"/>No</label>
                                                                                                                                             @elseif(isset($transferNormal->validate) && $transferNormal->validate==0)
                                                                                                                                                 <label class="radio-inline"><input
                                                                                                                                                             type="radio"
@@ -2595,7 +2595,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                             name="validate{{$transferNormal->id}}"
                                                                                                                                                             value="false"
                                                                                                                                                             checked
-                                                                                                                                                            id="validateNo">No</label>
+                                                                                                                                                            id="validateNo"/>No</label>
                                                                                                                                             @endif
                                                                                                                                         </div>
                                                                                                                                         <!--submit-->
@@ -3097,7 +3097,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="type{{$transferCorrecting->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$transferCorrecting->type}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="5"
@@ -3205,7 +3205,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ $transferCorrecting->date }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    autofocus
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @elseif(isset($transferCorrecting->date))
                                                                                                                                             <input id="date{{$transferCorrecting->id}}"
                                                                                                                                                    type="date"
@@ -3214,8 +3214,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ $transferCorrecting->date }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    required
-                                                                                                                                                   autofocus>
-
+                                                                                                                                                   autofocus/>
                                                                                                                                         @elseif(isset($transferCorrecting->validate) && $transferCorrecting->validate==1)
                                                                                                                                             <input id="date{{$transferCorrecting->id}}"
                                                                                                                                                    type="date"
@@ -3224,7 +3223,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ old('date'.$transferCorrecting->id) }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    autofocus
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else(Illuminate\Support\Facades\Input::old('date'))
                                                                                                                                             <input id="date{{$transferCorrecting->id}}"
                                                                                                                                                    type="date"
@@ -3233,7 +3232,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{ old('date'.$transferCorrecting->id) }}"
                                                                                                                                                    placeholder="Date"
                                                                                                                                                    autofocus
-                                                                                                                                                   required>
+                                                                                                                                                   required/>
                                                                                                                                         @endif
                                                                                                                                     </div>
                                                                                                                                     <!--transfer normal associated-->
@@ -3249,13 +3248,13 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="normalTransferAssociated{{$transferCorrecting->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$transferCorrecting->normalTransferAssociated}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @elseif(isset($transferCorrecting->validate) && $transferCorrecting->validate==1)
                                                                                                                                             <input type="text"
                                                                                                                                                    name="normalTransferAssociated{{$transferCorrecting->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{old('normalTransferAssociated')}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="5"
@@ -3295,7 +3294,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    placeholder="Nbr"
                                                                                                                                                    min="0"
                                                                                                                                                    required
-                                                                                                                                                   autofocus>
+                                                                                                                                                   autofocus/>
                                                                                                                                         @elseif(isset($transferCorrecting->validate) && $transferCorrecting->validate==1)
                                                                                                                                             <input id="palletsNumber{{$transferCorrecting->id}}"
                                                                                                                                                    type="number"
@@ -3305,7 +3304,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    placeholder="Nbr"
                                                                                                                                                    min="0"
                                                                                                                                                    autofocus
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <input id="palletsNumber{{$transferCorrecting->id}}"
                                                                                                                                                    type="number"
@@ -3314,7 +3313,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    value="{{$transferCorrecting->palletsNumber}}"
                                                                                                                                                    placeholder="Nbr"
                                                                                                                                                    min="0"
-                                                                                                                                                   autofocus>
+                                                                                                                                                   autofocus/>
                                                                                                                                         @endif
                                                                                                                                     </div>
 
@@ -3344,7 +3343,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="debitAccount{{$transferCorrecting->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$debitAccountValidate}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="10"
@@ -3420,7 +3419,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                    name="creditAccount{{$transferCorrecting->id}}"
                                                                                                                                                    class="form-control"
                                                                                                                                                    value="{{$creditAccountValidate}}"
-                                                                                                                                                   readonly>
+                                                                                                                                                   readonly/>
                                                                                                                                         @else
                                                                                                                                             <select class="selectpicker show-tick form-control"
                                                                                                                                                     data-size="10"
@@ -3480,7 +3479,7 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                         <input type="file"
                                                                                                                                                name="documentsTransfer{{$transferCorrecting->id}}[]"
                                                                                                                                                multiple
-                                                                                                                                               id="documentsTransfer{{$transferCorrecting->id}}">
+                                                                                                                                               id="documentsTransfer{{$transferCorrecting->id}}"/>
                                                                                                                                     </div>
                                                                                                                                     <!--button upload-->
                                                                                                                                     <div class="col-lg-2">
@@ -3541,24 +3540,24 @@ truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}}
                                                                                                                                                             name="validate{{$transferCorrecting->id}}"
                                                                                                                                                             value="true"
                                                                                                                                                             checked
-                                                                                                                                                            id="validateYes">Yes</label>
+                                                                                                                                                            id="validateYes"/>Yes</label>
                                                                                                                                                 <label class="radio-inline"><input
                                                                                                                                                             type="radio"
                                                                                                                                                             name="validate{{$transferCorrecting->id}}"
                                                                                                                                                             value="false"
-                                                                                                                                                            id="validateNo">No</label>
+                                                                                                                                                            id="validateNo"/>No</label>
                                                                                                                                             @elseif(isset($transferCorrecting->validate) && $transferCorrecting->validate==0)
                                                                                                                                                 <label class="radio-inline"><input
                                                                                                                                                             type="radio"
                                                                                                                                                             name="validate{{$transferCorrecting->id}}"
                                                                                                                                                             value="true"
-                                                                                                                                                            id="validateYes">Yes</label>
+                                                                                                                                                            id="validateYes"/>Yes</label>
                                                                                                                                                 <label class="radio-inline"><input
                                                                                                                                                             type="radio"
                                                                                                                                                             name="validate{{$transferCorrecting->id}}"
                                                                                                                                                             value="false"
                                                                                                                                                             checked
-                                                                                                                                                            id="validateNo">No</label>
+                                                                                                                                                            id="validateNo"/>No</label>
                                                                                                                                             @endif
                                                                                                                                         </div>
                                                                                                                                         <!--submit-->
