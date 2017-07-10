@@ -192,6 +192,7 @@
                                                                     </th>
                                                                     <th class="text-center">Planned<br> pallets nbr</th>
                                                                     <th class="text-center">Rest<br> to confirm</th>
+                                                                    <th class="colDanger"></th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -200,6 +201,19 @@
                                                                     <td class="text-center">{{$palletsaccount->theoricalNumberPallets}}</td>
                                                                     <td class="text-center ">
                                                                         <strong>{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</strong>
+                                                                    </td>
+                                                                    <td class="colDanger">
+                                                                        @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $palletsaccount->name.'-'.'%')->orWhere('debitAccount','LIKE', $palletsaccount->name.'-'.'%')->get())
+                                                                        @php($k=0)
+                                                                        @foreach($listPalletstransfers as $transfer)
+                                                                            @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                                            @if(!empty($errorsTransfer)&& $k<2)
+                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                            @elseif(!empty($errorsTransfer)&& $k==2)
+                                                                                <span class="text-danger">...</span>
+                                                                            @endif
+                                                                            @php($k=$k+1)
+                                                                        @endforeach
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>

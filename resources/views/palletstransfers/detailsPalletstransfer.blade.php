@@ -34,7 +34,7 @@
             <h4>You need to login to see the content</h4>
         @else
             <div class="col-lg-14">
-                <div class="panel @if($loading->state=="In progress") panelInprogress @elseif ($loading->state=="Waiting documents") panelWaitingdocuments @elseif ($loading->state=="Complete") panelComplete @elseif ($loading->state=="Complete Validated")panel-general @else panelUntreated @endif">
+                <div class="panel @if ($transfer->state=="Waiting documents") panelWaitingdocuments @elseif ($transfer->state=="Complete") panelComplete @elseif ($transfer->state=="Complete Validated")panel-general @else panelUntreated @endif">
                     <div class="panel-heading">
                         <div class="col-lg-11 text-left">Details of the pallets
                             transfer n° {{$transfer->id}}
@@ -50,8 +50,7 @@
                                     data-toggle="modal"
                                     data-target="#deletePalletstransfer_modal"
                                     value="{{$transfer->id}}"
-                                    name="deletePalletstransferModal"
-                            ></button>
+                                    name="deletePalletstransferModal" ></button>
                         </div>
                     </div>
                     <form class="form-horizontal text-right" role="form" method="POST"
@@ -59,7 +58,7 @@
                           enctype="multipart/form-data">
                         <input type="hidden"
                                name="_token"
-                               value="{{ csrf_token() }}">
+                               value="{{ csrf_token() }}"/>
                         <div class="panel-body panel-body-general">
                             @if(Session::has('messageUpdatePalletstransfer'))
                                 <p class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletstransfer') }}</p>
@@ -83,15 +82,14 @@
                                                class="form-control"
                                                value="{{$transfer->type}}"
                                                required
-                                               readonly>
+                                               readonly/>
                                     @else
                                         <select class="selectpicker show-tick form-control"
                                                 data-size="10"
                                                 data-live-search="true"
                                                 data-live-search-style="startsWith"
                                                 title="Type" name="type" id="type" required
-                                                onchange="displayFieldsType(this);"
-                                        >
+                                                onchange="displayFieldsType(this);" >
                                             @if((Illuminate\Support\Facades\Input::old('type')) || (isset($transfer->type)))
                                                 <optgroup label="Normal">
                                                     <option @if(old('type') == 'Deposit-Withdrawal' || $transfer->type == 'Deposit-Withdrawal') selected
@@ -185,12 +183,12 @@
                                         <input type="text" name="loading_atrnr"
                                                class="form-control"
                                                value="{{$transfer->loading_atrnr}}"
-                                               readonly>
+                                               readonly/>
                                     @elseif(isset($transfer->validate) && $transfer->validate==1)
                                         <input type="text" name="loading_atrnr"
                                                class="form-control"
                                                value="{{old('loading_atrnr')}}"
-                                               readonly>
+                                               readonly/>
                                     @else
                                         <select class="selectpicker show-tick form-control"
                                                 data-size="5"
@@ -203,8 +201,7 @@
                                             <option value="">No loading</option>
                                             @foreach($listAtrnr as $atrnr )
                                                 @if((Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))||(isset($transfer->loading_atrnr)&&$atrnr==$transfer->loading_atrnr))
-                                                    <option value="{{$atrnr}}"
-                                                            selected>{{$atrnr}}</option>
+                                                    <option value="{{$atrnr}}" selected>{{$atrnr}}</option>
                                                 @else
                                                     <option value="{{$atrnr}}">{{$atrnr}}</option>
                                                 @endif
@@ -216,9 +213,7 @@
                                 @if(isset($transfer->loading_atrnr))
                                     <div class="col-lg-2 text-left">
                                         <a href="{{route('showDetailsLoading', $transfer->loading_atrnr)}}"
-                                           class="link"><span
-                                                    class="glyphicon glyphicon-info-sign"></span>
-                                            See loading</a>
+                                           class="link"><span class="glyphicon glyphicon-info-sign"></span> See loading</a>
                                     </div>
                                 @endif
                             </div>
@@ -247,9 +242,7 @@
                                 </div>
                                 <!--date-->
                                 <div class="col-lg-1">
-                                    <label for="date"
-                                           class="control-label">Date
-                                        :</label>
+                                    <label for="date" class="control-label">Date :</label>
                                 </div>
                                 <div class="col-lg-2">
                                     @if(isset($transfer->date)&&(isset($transfer->validate) && $transfer->validate==1))
@@ -281,13 +274,13 @@
                                                    name="normalTransferAssociated"
                                                    class="form-control"
                                                    value="{{$transfer->normalTransferAssociated}}"
-                                                   readonly>
+                                                   readonly/>
                                         @elseif(isset($transfer->validate) && $transfer->validate==1)
                                             <input type="text"
                                                    name="normalTransferAssociated{{$transfer->id}}"
                                                    class="form-control"
                                                    value="{{old('normalTransferAssociated')}}"
-                                                   readonly>
+                                                   readonly/>
                                         @else
                                             <select class="selectpicker show-tick form-control"
                                                     data-size="5"
@@ -297,8 +290,7 @@
                                                     name="normalTransferAssociated{{$transfer->id}}">
                                                 @foreach($listPalletstransfersNormal as $normalTransfer )
                                                     @if((Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))||(isset($transfer->normalTransferAssociated)&&$normalTransfer->id==$transfer->normalTransferAssociated))
-                                                        <option value="{{$normalTransfer->id}}"
-                                                                selected>{{$normalTransfer->id}}</option>
+                                                        <option value="{{$normalTransfer->id}}" selected>{{$normalTransfer->id}}</option>
                                                     @else
                                                         <option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>
                                                     @endif
@@ -309,15 +301,13 @@
                                 </div>
                                 <div class="col-lg-2  text-left">
                                     <a href="{{route('showAddPalletsaccount')}}"
-                                       class="link"><span
-                                                class="glyphicon glyphicon-plus-sign"></span>
+                                       class="link"><span class="glyphicon glyphicon-plus-sign"></span>
                                         Add account</a>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <!--debit account-->
-
                                 <div class="col-lg-2" id="debitAccount1"
                                      @if($transfer->type=='Other'||$transfer->type=='Purchase-Sale'||$transfer->type=='Sale_Ext'||$transfer->type=='Sale-Purchase'||$transfer->type=='Deposit-Withdrawal'||$transfer->type=='Withdrawal-Deposit'||$transfer->type=='Deposit_Only'||$transfer->type=='Withdrawal_Only') style="display: block" @endif>
                                     <label for="debitAccount"
@@ -349,8 +339,7 @@
                                                 data-live-search-style="startsWith"
                                                 title="Debit Account"
                                                 name="debitAccount"
-                                                id="debitAccount"
-                                        >
+                                                id="debitAccount" >
                                             @if(isset($transfer->debitAccount))
                                                 @php($partsDebitAccount=explode('-', $transfer->debitAccount))
                                                 @php($typeDebitAccount=$partsDebitAccount[count($partsDebitAccount)-2])
@@ -947,7 +936,7 @@
                     </form>
 
                     <!-- Modal Delete -->
-                    <div class="modal @if(isset($delete)) show @else fade" id="deletePalletstransfer_modal"
+                    <div class="modal @if(isset($delete)) show @else fade @endif" id="deletePalletstransfer_modal"
                          role="dialog">
                         <div class="modal-dialog modal-sm">
                             <div class="modal-content">
@@ -1001,6 +990,35 @@
                                             Close
                                         </button>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Send Email -->
+                    <div class="modal fade" id="sendEmailTransfer_modal"
+                         role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;
+                                    </button>
+                                    <h4 class="modal-title text-center">You can find contact information to warn people of a problem in the transfer {{$transfer->id}} ?</h4>
+                                </div>
+                                <div class="modal-body">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button"
+                                            class="btn btn-success btn-modal"
+                                            data-dismiss="modal">
+                                        Send email
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-default btn-modal"
+                                            data-dismiss="modal">
+                                        Close
+                                    </button>
                                 </div>
                             </div>
                         </div>

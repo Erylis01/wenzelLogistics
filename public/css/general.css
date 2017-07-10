@@ -145,8 +145,9 @@
     color: rgb(0, 160, 0);
     background-color: rgba(0, 208, 0, 0.1);
 }
-.panel-general > .panel-heading >a{
+.panel-general > .panel-heading >div>p >a{
     color: rgb(0, 160, 0);
+    text-decoration: underline;
  }
 .panelUntreated > .panel-heading{
     color:red;
@@ -154,7 +155,7 @@
     border-color: rgb(0, 160, 0);
     background-color: rgba(255, 0, 0, 0.1);
 }
-.panelUntreated > .panel-heading>a{
+.panelUntreated > .panel-heading >div >p >a{
     color:red;
     text-decoration: underline;
  }
@@ -164,7 +165,7 @@
     border-color: rgb(0, 160, 0);
     background-color: rgba(255, 112, 0, 0.3);
 }
-.panelInprogress > .panel-heading>a{
+.panelInprogress > .panel-heading>div >p >a{
     color:rgba(255, 112, 0, 1);
     text-decoration: underline;
  }
@@ -174,7 +175,7 @@
     font-size: 25px;
     border-color: rgb(0, 160, 0);
 }
-.panelWaitingdocuments > .panel-heading>a{
+.panelWaitingdocuments > .panel-heading>div>p>a{
     color:rgba(255, 208, 0, 1);
     text-decoration: underline;
 }
@@ -184,7 +185,7 @@
     font-size: 25px;
     border-color: rgb(0, 160, 0);
 }
- .panelComplete > .panel-heading>a{
+ .panelComplete > .panel-heading>div>p>a{
      color:rgba(160, 208, 0, 1);
      text-decoration: underline;
  }

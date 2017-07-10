@@ -88,7 +88,7 @@ class PalletsaccountsController extends Controller
                     }
                 }
                 //not sorting nor searching
-                $listPalletsaccounts = $query->get();
+                $listPalletsaccounts = $query->orderBy('name', 'asc')->get();
             }
             return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {

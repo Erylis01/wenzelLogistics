@@ -231,7 +231,6 @@
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                     <tr>
-
                                             <th class="text-center colID">ID<br>
                                                 <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                    @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"
@@ -282,6 +281,7 @@
                                                    @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=desc')}}"
                                                         @endif></a>
                                                 </th>
+                                        <th class="text-center colDanger2"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -296,6 +296,19 @@
                                                                                href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
                                             </td>
                                             <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
+                                          <td class="colDanger2">
+                                              @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->orWhere('debitAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->get())
+                                              @php($k=0)
+                                              @foreach($listPalletstransfers as $transfer)
+                                                  @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                  @if(!empty($errorsTransfer)&& $k<2)
+                                                      <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                  @elseif(!empty($errorsTransfer)&& $k==2)
+                                                      <span class="text-danger">...</span>
+                                                  @endif
+                                                  @php($k=$k+1)
+                                              @endforeach
+                                          </td>
                                         </tr>
                                     @endforeach
                                     </tbody>

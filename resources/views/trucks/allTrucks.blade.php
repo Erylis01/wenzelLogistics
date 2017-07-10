@@ -139,7 +139,7 @@
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"
                                                     @endif></a>
                                             </th>
-                                        <th class="text-center colNumber">Confirmed<br>pal. nbr
+                                        <th class="text-center colNumber">Confirmed<br>nbr
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
@@ -149,7 +149,7 @@
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"
                                                     @endif></a>
                                              </th>
-                                        <th class="text-center colNumber">Planned<br>pal. nbr
+                                        <th class="text-center colNumber">Planned<br>nbr
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
@@ -159,6 +159,7 @@
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
                                                     @endif></a>
                                             </th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -170,6 +171,19 @@
                                         <td class="colLicense">{{$trucks->licensePlate}}</td>
                                         <td class="colNumber">{{$trucks->realNumberPallets}}</td>
                                         <td class="colNumber">{{$trucks->theoricalNumberPallets}}</td>
+                                        <td class="colDanger">
+                                            @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->orWhere('debitAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->get())
+                                            @php($k=0)
+                                            @foreach($listPalletstransfers as $transfer)
+                                                @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                @if(!empty($errorsTransfer)&& $k<2)
+                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                    @elseif(!empty($errorsTransfer)&& $k==2)
+                                                    <span class="text-danger">...</span>
+                                                @endif
+                                                @php($k=$k+1)
+                                            @endforeach
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

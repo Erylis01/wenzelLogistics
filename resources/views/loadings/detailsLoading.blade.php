@@ -69,6 +69,7 @@
                                 <div class="col-lg-3">
                                     <a data-toggle="collapse" href="#Pan1collapse">Information</a>
                                 </div>
+                                <br>
                             </div>
                             <div id="Pan1collapse" class="panel-collapse @if (Session::has('openPanelInformation'))in @endif collapse">
                                 <!--msg update loading-->
@@ -268,7 +269,7 @@
                                     <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <!--msg-->
-                                        <div class="col-lg-12">
+                                        <div class="row">
                                             @if(Session::has('messageAddPalletstransfer'))
                                                 <p class="alert alert-success text-alert text-center">{{ Session::get('messageAddPalletstransfer') }}</p>
                                             @elseif(Session::has('messageDeletePalletstransfer'))
@@ -280,7 +281,7 @@
                                             @endif
                                         </div>
                                         <!--show add form-->
-                                        <div class="col-lg-12">
+                                        <div class="row">
                                             <div class="from-group">
                                                 <div class="col-lg-4 col-lg-offset-4">
                                                     <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" data-toggle="collapse" data-target="#addForm">

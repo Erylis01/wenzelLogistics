@@ -513,7 +513,7 @@
                         <!--table list transfers associated-->
                         <div class="row">
 
-                            <div class="table-responsive table-loading-account @if($account->type<>'Carrier') notCarrier" @endif>
+                            <div class="table-responsive table-loading-account @if($account->type<>'Carrier') notCarrier @endif" >
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                     <tr>
@@ -537,8 +537,7 @@
                                                @else href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=type&order=desc')}}"
                                                     @endif></a>
                                         </th>
-                                        <th class="text-center colPNumb">Pal.
-                                            nbr<br>
+                                        <th class="text-center colPNumb">Pal. nbr<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"
                                                @else href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=palletsNumber&order=asc')}}"
@@ -549,8 +548,7 @@
                                                     @endif></a>
                                         </th>
                                         @if($account->type=='Carrier')
-                                            <th class="text-center colTruck">
-                                                Truck<br>
+                                            <th class="text-center colTruck">Truck<br>
                                                 <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                    @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$account->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=licensePlate&order=asc')}}"
                                                    @else href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=licensePlate&order=asc')}}"
@@ -581,15 +579,13 @@
                                                @else href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=desc')}}"
                                                     @endif></a>
                                         </th>
+                                        <th class="colDanger"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($listTransfers as $transfer)
                                         <tr @if($transfer->state=="Untreated") class="untreated" @elseif($transfer->state=="Waiting documents") class="waitingdocuments" @elseif ($transfer->state=="Complete") class="complete" @else class="completevalidated" @endif>
-                                            <td class="text-center colID"><a
-                                                        class="link"
-                                                        href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
-                                            </td>
+                                            <td class="text-center colID"><a class="link" href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a> </td>
                                             <td class="text-center colType">{{$transfer->type}}</td>
                                             <td class="text-center colPNumb">{{$transfer->palletsNumber}}</td>
                                             @if($account->type=='Carrier')
@@ -619,11 +615,21 @@
                                                     @endif
                                                 @endif
                                             @endif
-                                            <td class="text-center colType"><a
-                                                        class="link"
-                                                        href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
-                                            </td>
+                                            <td class="text-center colType"><a class="link" href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a></td>
                                             <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
+                                            <td class="colDanger">
+                                                @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $account->name.'-'.'%')->orWhere('debitAccount','LIKE', $account->name.'-'.'%')->get())
+                                                @php($k=0)
+                                                @foreach($listPalletstransfers as $transfer)
+                                                    @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                    @if(!empty($errorsTransfer)&& $k<2)
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                    @elseif(!empty($errorsTransfer)&& $k==2)
+                                                        <span class="text-danger">...</span>
+                                                    @endif
+                                                    @php($k=$k+1)
+                                                @endforeach
+                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>

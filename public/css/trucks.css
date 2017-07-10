@@ -7,9 +7,9 @@
 /*TABLE*/
 
 .colID{
-    min-width:55px;
-    width:55px;
-    max-width:55px;
+    min-width:65px;
+    width:65px;
+    max-width:65px;
 }
 
 .colName{
@@ -19,17 +19,22 @@
 }
 
 .colLicense{
-    min-width:230px;
-    width:230px;
-    max-width:230px;
+    min-width:170px;
+    width:170px;
+    max-width:170px;
 
 }
 .colNumber{
-    min-width:130px;
-    width:130px;
-    max-width:130px;
+    min-width:120px;
+    width:120px;
+    max-width:120px;
 }
 .colDate{
+    max-width: 90px;
+    min-width:90px;
+    width:90px;
+}
+.colDanger{
     max-width: 90px;
     min-width:90px;
     width:90px;
@@ -73,13 +78,19 @@
 
 
 .colType{
-    max-width: 310px;
-    min-width:310px;
-    width:310px;
+    max-width: 220px;
+    min-width:220px;
+    width:220px;
 }
 
 .colAtrnr{
     max-width: 190px;
     min-width:190px;
     width:190px;
+}
+
+.colDanger2{
+    max-width: 80px;
+    min-width:80px;
+    width:80px;
 }
