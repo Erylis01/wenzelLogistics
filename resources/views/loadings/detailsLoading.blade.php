@@ -105,7 +105,7 @@
                                                                 </div>
                                                             </div>
                                                             <!--pt change pt-->
-                                                            @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='CamilleS' )
+                                                            @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='CamilleS'||Auth::user()->username=='Admin' )
                                                                 <div class="col-lg-2">
                                                                     <div class="input-group details-loading">
                                                                         <label for="pt" class="input-group-addon">PT :</label>

@@ -75,11 +75,11 @@
                 </div>
             </div>
             @if (Session::has('messageDelete'))
-                <div class="alert alert-info text-center">{{ Session::get('messageDelete') }}</div>
+                <p class="alert alert-info text-center text-alert">{{ Session::get('messageDelete') }}</p>
             @elseif (Session::has('messageSuccessRegistration'))
-                <div class="alert alert-success text-center">{{ Session::get('messageSuccessRegistration') }}</div>
+                <p class="alert alert-success text-center text-alert">{{ Session::get('messageSuccessRegistration') }}</p>
             @elseif (Session::has('messageRegistration'))
-                <div class="alert alert-success text-center">{{ Session::get('messageRegistration') }}</div>
+                <p class="alert alert-success text-center text-alert">{{ Session::get('messageRegistration') }}</p>
             @endif
         </div>
     </div>

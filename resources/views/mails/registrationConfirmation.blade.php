@@ -61,7 +61,7 @@ $style = [
                 <tr>
                     <td style="{{ $style['email-masthead'] }}">
                         <img class="{{$style['logo']}}"
-                             src="{{URL::asset('../../../public/image/wenzel_logistics.png')}}"
+                             src="{{URL::asset('/image/wenzel_logistics.png')}}"
                              alt="Wenzel Logistics logo">
                         <a style="{{ $fontFamily }} {{ $style['email-masthead_name'] }}" href="{{ url('/') }}" target="_blank">
                             Wenzel Logistics Gmbh

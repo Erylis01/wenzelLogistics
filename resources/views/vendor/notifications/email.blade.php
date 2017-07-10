@@ -26,8 +26,7 @@ $style = [
     /* Masthead ----------------------- */
 
     'email-masthead' => 'padding: 25px 0; text-align: center; background-color : rgba(0, 160, 0, 0.8);',
-    'email-masthead_name' => 'font-size: 16px; font-weight: bold; color: white; text-decoration: none; text-shadow: 0 1px 0 white;',
-'logo'=>'display: inline; height: 50px;',
+    'email-masthead_name' => 'font-size: 16px;  color: white; text-decoration: none; text-shadow: 0 1px 0 white;',
 
     'email-body' => 'width: 100%; margin: 0; padding: 0; border-top: 1px solid #EDEFF2; border-bottom: 1px solid #EDEFF2; background-color: #FFF;',
     'email-body_inner' => 'width: auto; max-width: 570px; margin: 0 auto; padding: 0;',
@@ -70,11 +69,12 @@ $style = [
         <td style="{{ $style['email-wrapper'] }}" align="center">
             <table width="100%" cellpadding="0" cellspacing="0">
                 <!-- Logo -->
-                    <td style="{{ $style['email-masthead'] }}">
-                        <img class="{{$style['logo']}}"
-                             src="{{URL::asset('../../../public/image/wenzel_logistics.png')}}"
-                             alt="Wenzel Logistics logo">
+                    <td style="{{ $style['email-masthead'] }}" class="text-center">
                         <a style="{{ $fontFamily }} {{ $style['email-masthead_name'] }}" href="{{ url('/') }}" target="_blank">
+                            <img style="display: inline-block;height:70px;"
+                             src="{{URL::asset('/image/wenzel_logistics.png')}}"
+                             alt="Wenzel Logistics logo">
+                        <br>
                             Wenzel Logistics Gmbh
                         </a>
                     </td>
