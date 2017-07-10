@@ -153,49 +153,13 @@
 
                             <div id="trucksAssociated">
                                 <div class="form-group">
-                                    <!--trucks associated-->
-                                    {{--<div class="col-lg-3">--}}
-                                        {{--<label for="trucksAssociated" class="control-label">Trucks--}}
-                                            {{--associated--}}
-                                            {{--:</label>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-lg-6">--}}
-                                        {{--<select class="selectpicker show-tick form-control" data-size="5"--}}
-                                                {{--data-live-search="true" data-live-search-style="startsWith"--}}
-                                                {{--title="Trucks Associated" name="trucksAssociated[]"--}}
-                                                {{--multiple>--}}
-                                            {{--@foreach($listTrucks as $truck )--}}
-                                                {{--@php($list[]=null)--}}
-                                                {{--@if(Illuminate\Support\Facades\Input::old('trucksAssociated'))--}}
-                                                    {{--@foreach(old('trucksAssociated') as $truckA)--}}
-                                                        {{--@if($truckA == $truck->name.' - '.$truck->licensePlate)--}}
-                                                            {{--<option selected>{{$truck->name}}--}}
-                                                                {{--- {{$truck->licensePlate}}</option>--}}
-                                                            {{--@php($list[]=$truck)--}}
-                                                        {{--@endif--}}
-                                                    {{--@endforeach--}}
-                                                    {{--@if(!in_array($truck, $list))--}}
-                                                        {{--<option>{{$truck->name}} - {{$truck->licensePlate}}</option>--}}
-                                                    {{--@endif--}}
-                                                {{--@else--}}
-                                                    {{--<option>{{$truck->name}} - {{$truck->licensePlate}}</option>--}}
-                                                {{--@endif--}}
-                                            {{--@endforeach--}}
-                                        {{--</select>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-lg-3 text-left">--}}
-                                        {{--<a href="{{route('showAddTruck')}}" class="link"><span--}}
-                                                    {{--class="glyphicon glyphicon-plus-sign"></span> Add truck</a>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                <div class="form-group">
                                     <!--adress-->
                                     <div class="col-lg-3">
                                         <label for="adress" class="control-label">Adress :</label>
                                     </div>
                                     <div class="col-lg-7">
                                             <input id="adress" type="text" class="form-control" name="adress"
-                                                   value="{{old('adress')}}" placeholder="Adress" autofocus>
+                                                   value="{{old('adress')}}" placeholder="Adress" autofocus/>
                                         @if ($errors->has('adress'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>
@@ -210,7 +174,7 @@
                                     </div>
                                     <div class="col-lg-2">
                                             <input id="phone" type="text" class="form-control" name="phone"
-                                                   value="{{old('phone')}}" placeholder="Phone" autofocus>
+                                                   value="{{old('phone')}}" placeholder="Phone" autofocus/>
                                         @if ($errors->has('phone'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('phone') }}</strong>
@@ -223,7 +187,7 @@
                                     </div>
                                     <div class="col-lg-3">
                                             <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                                   value="{{old('namecontact')}}" placeholder="Contact name" autofocus>
+                                                   value="{{old('namecontact')}}" placeholder="Contact name" autofocus/>
                                         @if ($errors->has('namecontact'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('namecontact') }}</strong>
@@ -238,7 +202,7 @@
                                     </div>
                                     <div class="col-lg-7">
                                             <input id="email" type="text" class="form-control" name="email"
-                                                   value="{{old('email')}}" placeholder="Email" autofocus>
+                                                   value="{{old('email')}}" placeholder="Email" autofocus/>
                                         @if ($errors->has('email'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -253,7 +217,7 @@
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Add"
-                                           name="addPalletsaccount">
+                                           name="addPalletsaccount"/>
                                 </div>
                             </div>
                         </form>

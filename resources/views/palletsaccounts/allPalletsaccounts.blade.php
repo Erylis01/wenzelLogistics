@@ -41,25 +41,18 @@
 
                     <div class="panel-body">
                         @if (Session::has('messageDeletePalletsaccount'))
-                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageDeletePalletsaccount') }}</div>
+                            <p class="alert alert-success text-alert text-center">{{ Session::get('messageDeletePalletsaccount') }}</p>
                         @elseif(Session::has('messageAddPalletsaccount'))
-                            <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddPalletsaccount') }}</div>
+                            <p class="alert alert-success text-alert text-center">{{ Session::get('messageAddPalletsaccount') }}</p>
                         @endif
 
                         <div class="table-responsive table-palletsaccounts">
                             <table class="table table-hover table-bordered">
                                 <thead>
-                                @if($totalpallets<0)
-                                    @php($class="text-inf0")
-                                @elseif($totalpallets>0)
-                                    @php($class="text-sup0")
-                                @else
-                                    @php($class="text-egal0")
-                                @endif
                                 <tr>
                                     <th class="text-center colTot1"><a href="{{route('showAllPalletstransfers')}}"
                                                                       class="link">TOTAL</a></th>
-                                    <th class="text-center colTotal1"><span class={{$class}}>{{$totalpallets}}</span>
+                                    <th class="text-center colTotal1"><span @if($totalpallets<0) class="text-inf0" @elseif($totalpallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$totalpallets}}</span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -71,13 +64,8 @@
                                 {{ csrf_field() }}
                                 <div class="col-lg-5 input-group searchBar">
                             <span class="input-group-btn searchInput">
-                                @if(isset($searchQuery))
-                                    <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
-                                           placeholder="search">
-                                @else
-                                    <input type="text" class="form-control" name="search" value=""
-                                           placeholder="search">
-                                @endif
+                                    <input type="text" class="form-control" name="search" @if(isset($searchQuery)) value="{{$searchQuery}}" @else value="" @endif
+                                           placeholder="search"/>
                             </span>
                                     <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
@@ -130,63 +118,48 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
-                                    @if(isset($searchQuery))
-                                        <th class="text-center colName1">Name<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=desc')}}"></a>
+
+                                        <th class="text-center colName1">Name<br>
+                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=asc')}}"
+                                            @else href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"
+                                                @endif></a>
+                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=name&order=desc')}}"
+                                            @else href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"
+                                                @endif></a>
                                         </th>
-                                        <th class="text-center colType1">Type<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"></a>
-                                        </th>
-                                        <th class="text-center colTotal1">Total<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=desc')}}"></a>
-                                        </th>
-                                    @else
-                                        <th class="text-center colName1">Name<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?sortby=name&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?sortby=name&order=desc')}}"></a>
-                                        </th>
-                                        <th class="text-center colType1">Type<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?sortby=type&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?sortby=type&order=desc')}}"></a>
-                                        </th>
-                                        <th class="text-center colTotal1">Total<br><a
-                                                    class="glyphicon glyphicon-chevron-up general-sorting"
-                                                    href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=asc')}}"></a><a
-                                                    class="glyphicon glyphicon-chevron-down general-sorting"
-                                                    href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=desc')}}"></a>
-                                        </th>
-                                    @endif
+                                        <th class="text-center colType1">Type<br>
+                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"
+                                               @else href="{{url('/allPalletsaccounts?sortby=type&order=asc')}}"
+                                                    @endif></a>
+                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"
+                                               @else href="{{url('/allPalletsaccounts?sortby=type&order=desc')}}"
+                                                    @endif></a>
+                                            </th>
+                                        <th class="text-center colTotal1">Total<br>
+                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=asc')}}"
+                                               @else href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=asc')}}"
+                                                    @endif></a>
+                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=realNumberPallets&order=desc')}}"
+                                               @else href="{{url('/allPalletsaccounts?sortby=realNumberPallets&order=desc')}}"
+                                                    @endif></a>
+                                            </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletsaccounts as $palletsaccount)
-                                    @if($palletsaccount->realNumberPallets<0)
-                                        @php($class="text-inf0")
-                                    @elseif($palletsaccount->realNumberPallets>0)
-                                        @php($class="text-sup0")
-                                    @else
-                                        @php($class="text-egal0")
-                                    @endif
                                     <tr>
                                         <td class="text-center colName1"><a
                                                     href="#{{str_replace(array(' ', '.', ',', '-'), '', $palletsaccount->name)}}-collapse"
                                                     data-toggle="collapse"
                                                     class="link">{{$palletsaccount->name}}</a></td>
                                         <td class="text-center colType1">{{$palletsaccount->type}}</td>
-                                        <td class="text-center colTotal1"><span class={{$class}}>{{$palletsaccount->realNumberPallets}}</span></td>
+                                        <td class="text-center colTotal1"><span  @if($palletsaccount->realNumberPallets<0) class="text-inf0" @elseif($palletsaccount->realNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->realNumberPallets}}</span></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

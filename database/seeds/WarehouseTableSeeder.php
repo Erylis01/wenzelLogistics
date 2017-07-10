@@ -19,7 +19,7 @@ class WarehouseTableSeeder extends Seeder
         $this->importDataPFM();
         $this->importDataSystempo();
         $this->importDataDPL();
-        $this->importDataTOMA();
+        $this->importDataAll();
 
     }
 
@@ -159,8 +159,8 @@ class WarehouseTableSeeder extends Seeder
         }
     }
 
-    public function importDataTOMA(){
-        $path = 'resources/assets/excel/ListWarehouses/TO-MA';
+    public function importDataAll(){
+        $path = 'resources/assets/excel/ListWarehouses/Others';
         $files = File::allFiles($path);
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
@@ -168,14 +168,15 @@ class WarehouseTableSeeder extends Seeder
                     if (!empty($reader)) {
                         $reader->noHeading();
                         $sheet = $reader->getSheet(0)->toArray();
+                        $nameAccount=$reader->getSheet(0)->getTitle();
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                 //not double
                                 $k = count(Warehouse::get()) + 1;
-                                $id = Palletsaccount::where('name', 'TO-MA')->first()->id;
+                                $id = Palletsaccount::where('name', $nameAccount)->first()->id;
 
                                 Warehouse::firstOrCreate([
                                     'id' => $k,

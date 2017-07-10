@@ -17,33 +17,38 @@ use Maatwebsite\Excel\Facades\Excel;
 class ListLoadingsController extends Controller
 {
     /**
-     * Display the content.
+     * Display the content - load new data when asked - display only search fields - display sorting table
      *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $refresh)
     {
         if (Auth::check()) {
-            if($refresh=='true'){
+            //to import all new loadings in excel files
+            if ($refresh == 'true') {
                 $this->importData();
+                $refresh = 'false';
             }
 
+            //search key and search columns
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
             $searchColumns = $request->get('searchColumns');
-
             $listColumns = ['atrnr', 'ladedatum', 'entladedatum', 'auftraggeber', 'landb', 'plzb', 'ortb', 'lande', 'plze', 'orte', 'anz', 'art', 'subfrachter', 'kennzeichen', 'zusladestellen', 'state'];
 
             $query = DB::table('loadings')
                 ->where('pt', 'ja');
 
+            //if the user wan to sort the table
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
-                $searchColumnsString=$request->get('searchColumnsString');;
-                $searchColumns=explode('-', $searchColumnsString);
+                $searchColumnsString = $request->get('searchColumnsString');;
+                $searchColumns = explode('-', $searchColumnsString);
+                //if sorting + search
                 if (isset($searchQuery) && $searchQuery <> '') {
-                    if (in_array('ALL', explode('-',$searchColumnsString ))) {
+                    //if search in all columns
+                    if (in_array('ALL', explode('-', $searchColumnsString))) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -52,6 +57,7 @@ class ListLoadingsController extends Controller
                             }
                         });
                     } else {
+                        //if search in specific columns
                         $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
                             foreach ($searchColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -61,12 +67,13 @@ class ListLoadingsController extends Controller
                         });
                     }
                 }
-                    $count = count($query->get());
-                    $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
-                    $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumnsString'=>$searchColumnsString])->render();
-            }else {
+                $count = count($query->get());
+                $listLoadings = $query->orderBy($sortby, $order)->paginate(10);
+                $links = $listLoadings->appends(['sortby' => $sortby, 'order' => $order, 'search' => $searchQuery, 'searchColumnsString' => $searchColumnsString])->render();
+            } else {
+                //if not sorting but search
                 if (isset($searchQuery) && $searchQuery <> '') {
-                        $searchColumnsString=implode('-',$searchColumns);
+                    $searchColumnsString = implode('-', $searchColumns);
                     if (in_array('ALL', $searchColumns)) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
@@ -84,24 +91,24 @@ class ListLoadingsController extends Controller
                             }
                         });
                     }
-
+                    $count = count($query->get());
                     $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
-                    $links = $listLoadings->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
-                }else{
+                    $links = $listLoadings->appends(['search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
+                } else {
+                    //if not sorting and not search
+                    $count = count($query->get());
                     $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
                     $links = '';
                 }
-                $count = count($query->get());
-
             }
-            return view('loadings.loadings', compact('refresh','listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns','searchColumnsString', 'listColumns'));
+            return view('loadings.loadings', compact('refresh', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }
     }
 
     /**
-     * Import data from an excel file
+     * Import data from an excel file in the directory Hypertrans
      */
     public function importData()
     {
@@ -128,9 +135,9 @@ class ListLoadingsController extends Controller
                                 $datee = new DateTime();
                                 $datee->setDate($datee_parse['year'], $datee_parse['month'], $datee_parse['day']);
 
-                                $k=count(Loading::get())+1;
+                                $k = count(Loading::get()) + 1;
                                 Loading::firstOrCreate([
-                                    'id'=>$k,
+                                    'id' => $k,
                                     'entladedatum' => $datee,
                                     'disp' => trim($sheet[$r][2]),
                                     'atrnr' => trim($sheet[$r][3]),
@@ -176,7 +183,7 @@ class ListLoadingsController extends Controller
                                     Truck::firstOrCreate([
                                         'name' => trim($nameAdress[0]),
                                         'licensePlate' => 'STOCK',
-                                        'palletsaccount_name'=>trim($nameAdress[0]),
+                                        'palletsaccount_name' => trim($nameAdress[0]),
                                     ]);
                                 }
 

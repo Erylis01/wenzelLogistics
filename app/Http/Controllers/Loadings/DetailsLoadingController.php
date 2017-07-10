@@ -211,7 +211,7 @@ class DetailsLoadingController extends Controller
         $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
         $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
 //list trucks possible
-//        $listTrucksPossible = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->orderBy('name', 'asc')->get();
+        $listTrucksPossible = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->orderBy('name', 'asc')->get();
 
         //looking for the truck associated to this loading
         if ($loading->kennzeichen == '') {

@@ -81,16 +81,16 @@ class PalletstransfersController extends Controller
                             }
                         });
                     }
+                    $count = count($query->get());
                     $listPalletstransfers = $query->orderBy('id', 'asc')->paginate(10);
                     $links = $listPalletstransfers->appends(['search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
                 } else {
+                    $count = count($query->get());
                     $listPalletstransfers = $query->orderBy('id', 'asc')->paginate(10);
                     $links = '';
                 }
-                $count = count($query->get());
-
             }
-//
+
             return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'sortby', 'order', 'links', 'count', 'searchColumns', 'searchQuery', 'searchQueryArray', 'listColumns', 'searchColumnsString'));
         } else {
             return view('auth.login');

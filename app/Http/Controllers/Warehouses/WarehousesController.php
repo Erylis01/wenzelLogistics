@@ -15,15 +15,18 @@ use Maatwebsite\Excel\Facades\Excel;
 class WarehousesController extends Controller
 {
     /**
-     * show all warehouses in a table. You can order the different columns
+     * show all warehouses in a table. You can order the different columns. You can search things in this table
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showAll(Request $request, $refresh)
     {
+        //import new warehouses when the user wants
         if ($refresh == 'true') {
             $this->refreshListWarehouses($request);
+            $refresh='false';
         }
+        //search keys and columns
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
@@ -31,13 +34,15 @@ class WarehousesController extends Controller
 
         if (Auth::check()) {
             $query = DB::table('warehouses');
-
+            //if the user sorts the table
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 $searchColumnsString = $request->get('searchColumnsString');;
                 $searchColumns = explode('-', $searchColumnsString);
+                //if the user sort the table while he is searching things
                 if (isset($searchQuery) && $searchQuery <> '') {
+                    //search in all columns
                     if (in_array('ALL', explode('-', $searchColumnsString))) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
@@ -47,6 +52,7 @@ class WarehousesController extends Controller
                             }
                         });
                     } else {
+                        //search in specifics columns
                         $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
                             foreach ($searchColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -60,6 +66,7 @@ class WarehousesController extends Controller
                 $listWarehouses = $query->orderBy($sortby, $order)->paginate(10);
                 $links = $listWarehouses->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
             } else {
+                //only searching
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
                     if (in_array('ALL', $searchColumns)) {
@@ -79,14 +86,15 @@ class WarehousesController extends Controller
                             }
                         });
                     }
+                    $count = count($query->get());
                     $listWarehouses = $query->paginate(10);
                     $links = $listWarehouses->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
                 }else{
+                    //not sorting nor searching
+                    $count = count($query->get());
                     $listWarehouses = $query->paginate(10);
                     $links = '';
                 }
-                $count = count($query->get());
-
             }
             return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns','refresh'));
         } else {
@@ -100,7 +108,7 @@ class WarehousesController extends Controller
      */
     public function add(Request $request)
     {
-        //get data
+        //get data from the form
         $zipcode = Input::get('zipcode');
         $zipcodeWarehouses = DB::table('warehouses')->where('zipcode', '=', $zipcode)->get();
         $validateAddWarehouse = $request->validateAddWarehouse;
@@ -115,6 +123,7 @@ class WarehousesController extends Controller
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
         $namepalletsaccounts = Input::get('namepalletsaccounts');
+
         foreach ($namepalletsaccounts as $namePA) {
             $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
         }
@@ -137,12 +146,13 @@ class WarehousesController extends Controller
             $rules = array_add($rules, 'fax', 'string|max:15');
         }
         $validator = Validator::make(Input::all(), $rules);
+        //if the rules haven't been respected
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
-//if there is an other warehouse in this city : be careful
+            //if there is an other warehouse in this city : be careful
             if (!$zipcodeWarehouses->isEmpty()) {
                 if (isset($validateAddWarehouse)) {
                     //you validate creating a new warehouse even if there is an other one in the city
@@ -200,6 +210,7 @@ class WarehousesController extends Controller
             $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
             $listPalletsAccounts = DB::table('palletsaccounts')->get();
 
+            //get warehouse data to display on the view
             $name = $warehouse->name;
             $nickname = $warehouse->nickname;
             $adress = $warehouse->adress;
@@ -210,6 +221,7 @@ class WarehousesController extends Controller
             $fax = $warehouse->fax;
             $email = $warehouse->email;
             $namecontact = $warehouse->namecontact;
+
             $palletsaccounts = DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get();
             foreach ($palletsaccounts as $palletsaccount) {
                 $namepalletsaccounts[] = Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('name');
@@ -312,15 +324,22 @@ class WarehousesController extends Controller
         return redirect('/allWarehouses');
     }
 
+    /**
+     * import warehouses data from excel files. Different import because of different kind of excel files
+     * @param Request $request
+     */
     public function refreshListWarehouses(Request $request)
     {
         $this->importDataPFM();
         $this->importDataSystempo();
         $this->importDataDPL();
-        $this->importDataTOMA();
+        $this->importDataAll();
     }
 
 
+    /**
+     * import data from the excel file for PFM
+     */
     public function importDataPFM()
     {
         $path = '../resources/assets/excel/ListWarehouses/PFM';
@@ -336,7 +355,7 @@ class WarehousesController extends Controller
                         for ($r = 1; $r < $nbrows; $r++) {
                             $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
-                                //not double
+                                //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
                                 $id = Palletsaccount::where('name', 'PFM - FR')->first()->id;
 
@@ -350,13 +369,11 @@ class WarehousesController extends Controller
 
                                 $cell7 = str_replace(' - ', ' ', trim($sheet[$r][7]));
                                 $cell7 = str_replace('-', ' ', $cell7);
-
                                 if (substr($cell7, 5, 1) == ' ') {
                                     $zipcode = trim(substr($cell7, 0, 5));
                                 } else {
                                     $zipcode = trim(substr($cell7, 0, 7));
                                 }
-
                                 $town = trim(str_replace($zipcode, '', $cell7));
 
                                 Warehouse::firstOrCreate([
@@ -380,6 +397,9 @@ class WarehousesController extends Controller
         }
     }
 
+    /**
+     * import data from the excel file for Systempo AT
+     */
     public function importDataSystempo()
     {
         $path = '../resources/assets/excel/ListWarehouses/Systempo';
@@ -395,7 +415,7 @@ class WarehousesController extends Controller
                         for ($r = 1; $r < $nbrows; $r++) {
                             $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
-                                //not double
+                                //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
                                 $id = Palletsaccount::where('name', 'Systempo AT')->first()->id;
 
@@ -419,9 +439,12 @@ class WarehousesController extends Controller
         }
     }
 
+    /**
+     * import data from the excel file for DPL
+     */
     public function importDataDPL()
     {
-        $path = 'resources/assets/excel/ListWarehouses/DPL';
+        $path = '../resources/assets/excel/ListWarehouses/DPL';
         $files = File::allFiles($path);
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
@@ -434,7 +457,7 @@ class WarehousesController extends Controller
                         for ($r = 1; $r < $nbrows; $r++) {
                             $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
-                                //not double
+                                //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
                                 $id = Palletsaccount::where('name', 'DPL')->first()->id;
 
@@ -457,9 +480,12 @@ class WarehousesController extends Controller
         }
     }
 
-    public function importDataTOMA()
+    /**
+     * import data from the excel file for others : standard format
+     */
+    public function importDataAll()
     {
-        $path = 'resources/assets/excel/ListWarehouses/TO-MA';
+        $path = '../resources/assets/excel/ListWarehouses/Others';
         $files = File::allFiles($path);
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
@@ -467,14 +493,15 @@ class WarehousesController extends Controller
                     if (!empty($reader)) {
                         $reader->noHeading();
                         $sheet = $reader->getSheet(0)->toArray();
+                        $nameAccount=$reader->getSheet(0)->getTitle();
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
-                                //not double
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
+                                //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
-                                $id = Palletsaccount::where('name', 'TO-MA')->first()->id;
+                                $id = Palletsaccount::where('name', $nameAccount)->first()->id;
 
                                 Warehouse::firstOrCreate([
                                     'id' => $k,

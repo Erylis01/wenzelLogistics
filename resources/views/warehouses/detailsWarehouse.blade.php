@@ -55,9 +55,9 @@
                             <p class="text-center legend-auth">* required field</p>
 
                             @if(Session::has('messageRefuseUpdateWarehouse'))
-                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageRefuseUpdateWarehouse') }}</div>
+                                <p class="alert alert-danger text-alert text-center">{{ Session::get('messageRefuseUpdateWarehouse') }}</p>
                             @elseif (Session::has('messageUpdateWarehouse'))
-                                <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateWarehouse') }}</div>
+                                <p class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateWarehouse') }}</p>
                             @endif
 
                             <div class="form-group">
@@ -247,7 +247,7 @@
                                            class="btn btn-primary btn-block btn-form"
                                            value="Update"
                                            name="updateWarehouse" data-toggle="modal"
-                                           data-target="#updateWarehouse_modal">
+                                           data-target="#updateWarehouse_modal"/>
                                 </div>
                             </div>
 
@@ -342,9 +342,7 @@
                                 </div>
                             </div>
                         </div>
-
                         @php(session()->pull('testZipcode'))
-
                     </div>
                 </div>
             </div>

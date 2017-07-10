@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class ProfileController extends Controller
 {
        /**
-     * Display the right view.
+     * Display the profile.
      *
      * @return \Illuminate\Http\Response
      */

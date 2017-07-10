@@ -49,160 +49,52 @@
                             <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
                                 @if(Session::has('errorFields'))
-                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('errorFields') }}</div>
+                                    <p class="alert alert-danger text-alert text-center">{{ Session::get('errorFields') }}</p>
                                 @endif
                             </div>
                             <div class="form-group">
                                 <!--type-->
                                 <div class="col-lg-1 col-lg-offset-1">
-                                    <label for="type" class="control-label"><span>*</span>Type
-                                        :</label>
+                                    <label for="type" class="control-label">*Type :</label>
                                 </div>
                                 <div class="col-lg-2">
                                     <select class="selectpicker show-tick form-control" data-size="10"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Type" name="type" id="type" required
                                             onchange="displayFieldsType(this);">
-                                        @if(Illuminate\Support\Facades\Input::old('type'))
+                                        @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
                                             <optgroup label="Normal">
-                                                <option @if(old('type') == 'Deposit-Withdrawal') selected
-                                                        @endif value="Deposit-Withdrawal"
-                                                        id="Deposit-WithdrawalOption">
+                                                <option @if(strcmp(old('type'),'Deposit-Withdrawal')==0|| strcmp($type,'Deposit-Withdrawal')==0) selected @endif value="Deposit-Withdrawal" id="Deposit-WithdrawalOptionL">
                                                     Deposit-Withdrawal
                                                 </option>
-                                                <option @if(old('type') == 'Withdrawal-Deposit') selected
-                                                        @endif value="Withdrawal-Deposit"
-                                                        id="Withdrawal-DepositOption">
+                                                <option @if(strcmp(old('type'),'Withdrawal-Deposit')==0|| strcmp($type,'Withdrawal-Deposit')==0) selected @endif value="Withdrawal-Deposit" id="Withdrawal-DepositOptionL">
                                                     Withdrawal-Deposit
                                                 </option>
-                                                <option @if(old('type') == 'Deposit_Only') selected
-                                                        @endif value="Deposit_Only"
-                                                        id="Deposit_OnlyOption">
+                                                <option @if(strcmp(old('type'),'Deposit_Only')==0 || strcmp($type,'Deposit_Only')==0) selected @endif value="Deposit_Only" id="Deposit_OnlyOptionL">
                                                     Deposit_Only
                                                 </option>
-                                                <option @if(old('type') == 'Withdrawal_Only') selected
-                                                        @endif value="Withdrawal_Only"
-                                                        id="Withdrawal_OnlyOption">
+                                                <option @if(strcmp(old('type'),'Withdrawal_Only')==0 ||strcmp($type,'Withdrawal_Only')==0) selected @endif value="Withdrawal_Only" id="Withdrawal_OnlyOptionL">
                                                     Withdrawal_Only
                                                 </option>
                                             </optgroup>
                                             <optgroup label="Correcting">
-                                                <option @if(old('type') == 'Purchase_Ext') selected
-                                                        @endif value="Purchase_Ext"
-                                                        id="Purchase_ExtOption">
-                                                    Purchase_Ext
+                                                <option @if(strcmp('Purchase-Sale',old('type'))==0 || strcmp($type,'Purchase-Sale')==0) selected @endif value="Purchase-Sale" id="Purchase-SaleOptionL">
+                                                    Purchase-Sale
                                                 </option>
-                                                <option @if(old('type') == 'Purchase-Sale') selected
-                                                        @endif value="Purchase-Sale"
-                                                        id="Purchase-SaleOption">
-                                                    Purchase_Int
-                                                </option>
-                                                <option @if(old('type') == 'Sale_Ext') selected
-                                                        @endif value="Sale_Ext"
-                                                        id="Sale_ExtOption">
-                                                    Sale_Ext
-                                                </option>
-                                                <option @if(old('type') == 'Sale-Purchase') selected
-                                                        @endif value="Sale-Purchase"
-                                                        id="Sale-PurchaseOption">
-                                                    Sale_Int
-                                                </option>
-                                                <option @if(old('type') == 'Other') selected
-                                                        @endif value="Other"
-                                                        id="OtherOption">
-                                                    Other
-                                                </option>
-                                            </optgroup>
-                                        @elseif(isset($type))
-                                            <optgroup label="Normal">
-                                                <option @if($type == 'Deposit-Withdrawal') selected
-                                                        @endif value="Deposit-Withdrawal"
-                                                        id="Deposit-WithdrawalOption">
-                                                    Deposit-Withdrawal
-                                                </option>
-                                                <option @if($type == 'Withdrawal-Deposit') selected
-                                                        @endif value="Withdrawal-Deposit"
-                                                        id="Withdrawal-DepositOption">
-                                                    Withdrawal-Deposit
-                                                </option>
-                                                <option @if($type == 'Deposit_Only') selected
-                                                        @endif value="Deposit_Only"
-                                                        id="Deposit_OnlyOption">
-                                                    Deposit_Only
-                                                </option>
-                                                <option @if($type == 'Withdrawal_Only') selected
-                                                        @endif value="Withdrawal_Only"
-                                                        id="Withdrawal_OnlyOption">
-                                                    Withdrawal_Only
-                                                </option>
-                                            </optgroup>
-                                            <optgroup label="Correcting">
-                                                <option @if($type == 'Purchase_Ext') selected
-                                                        @endif value="Purchase_Ext"
-                                                        id="Purchase_ExtOption">
-                                                    Purchase_Ext
-                                                </option>
-                                                <option @if($type == 'Purchase-Sale') selected
-                                                        @endif value="Purchase-Sale"
-                                                        id="Purchase-SaleOption">
-                                                    Purchase_Int
-                                                </option>
-                                                <option @if($type == 'Sale_Ext') selected
-                                                        @endif value="Sale_Ext"
-                                                        id="Sale_ExtOption">
-                                                    Sale_Ext
-                                                </option>
-                                                <option @if($type == 'Sale-Purchase') selected
-                                                        @endif value="Sale-Purchase"
-                                                        id="Sale-PurchaseOption">
-                                                    Sale_Int
-                                                </option>
-                                                <option @if($type == 'Other') selected
-                                                        @endif value="Other"
-                                                        id="OtherOption">
+                                                <option @if(strcmp('Other',old('type'))==0 || strcmp($type,'Other')==0) selected @endif value="Other" id="OtherOptionL">
                                                     Other
                                                 </option>
                                             </optgroup>
                                         @else
                                             <optgroup label="Normal">
-                                                <option value="Deposit-Withdrawal"
-                                                        id="Deposit-WithdrawalOption">
-                                                    Deposit-Withdrawal
-                                                </option>
-                                                <option value="Withdrawal-Deposit"
-                                                        id="Withdrawal-DepositOption">
-                                                    Withdrawal-Deposit
-                                                </option>
-                                                <option value="Deposit_Only"
-                                                        id="Deposit_OnlyOption">
-                                                    Deposit_Only
-                                                </option>
-                                                <option value="Withdrawal_Only"
-                                                        id="Withdrawal_OnlyOption">
-                                                    Withdrawal_Only
-                                                </option>
+                                                <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOptionL">Deposit-Withdrawal</option>
+                                                <option value="Withdrawal-Deposit" id="Withdrawal-DepositOptionL">Withdrawal-Deposit</option>
+                                                <option value="Deposit_Only" id="Deposit_OnlyOptionL">Deposit_Only</option>
+                                                <option value="Withdrawal_Only" id="Withdrawal_OnlyOptionL">Withdrawal_Only</option>
                                             </optgroup>
                                             <optgroup label="Correcting">
-                                                <option value="Purchase_Ext"
-                                                        id="Purchase_ExtOption">
-                                                    Purchase_Ext
-                                                </option>
-                                                <option value="Purchase-Sale"
-                                                        id="Purchase-SaleOption">
-                                                    Purchase_Int
-                                                </option>
-                                                <option value="Sale_Ext"
-                                                        id="Sale_ExtOption">
-                                                    Sale_Ext
-                                                </option>
-                                                <option value="Sale-Purchase"
-                                                        id="Sale-PurchaseOption">
-                                                    Sale_Int
-                                                </option>
-                                                <option value="Other"
-                                                        id="otherOption">
-                                                    Other
-                                                </option>
+                                                <option value="Purchase-Sale" id="Purchase-SaleOptionL">Purchase-Sale</option>
+                                                <option value="Other" id="OtherOptionL">Other</option>
                                             </optgroup>
                                         @endif
                                     </select>
@@ -233,9 +125,7 @@
                                             onchange="displayFieldsAtrnr(this);">
                                         <option value="">No loading</option>
                                         @foreach($listAtrnr as $atrnr )
-                                            @if(Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))
-                                                <option selected>{{$atrnr}}</option>
-                                            @elseif(isset($loading_atrnr)&&$atrnr==$loading_atrnr)
+                                            @if((Illuminate\Support\Facades\Input::old('loading_atrnr') && $atrnr==old('loading_atrnr'))||(isset($loading_atrnr)&&$atrnr==$loading_atrnr))
                                                 <option selected>{{$atrnr}}</option>
                                             @else
                                                 <option>{{$atrnr}}</option>
@@ -245,90 +135,53 @@
                                 </div>
                             </div>
                             <!--deposit-->
-                            @if(isset($type) && $type=='Deposit-Withdrawal')
-                                <div class="form-group" id="deposit-withdrawal1" style="display:block">
-                                    @else
-                                        <div class="form-group" id="deposit-withdrawal1">
-                                            @endif
+
+                                <div class="form-group" id="deposit-withdrawal1" @if(isset($type) && $type=='Deposit-Withdrawal') style="display:block" @endif>
                                             <div class="col-lg-12 text-center">
                                                 <label for="deposit" class="control-label">DEPOSIT</label>
                                             </div>
-                                            @if(isset($type) &&$type=='Deposit-Withdrawal')
-                                        </div>
-                                        @else
                                 </div>
-                            @endif
                         <!--withdrawal-->
-                            @if(isset($type) &&$type=='Withdrawal-Deposit')
-                                <div class="form-group" id="withdrawal-deposit1" style="display:block">
-                                    @else
-                                        <div class="form-group" id="withdrawal-deposit1">
-                                            @endif
+
+                                <div class="form-group" id="withdrawal-deposit1" @if(isset($type) &&$type=='Withdrawal-Deposit') style="display:block" @endif>
                                             <div class="col-lg-12 text-center">
                                                 <label for="withdrawal" class="control-label">WITHDRAWAL</label>
                                             </div>
-                                            @if(isset($type) &&$type=='Withdrawal-Deposit')
-                                        </div>
-                                        @else
                                 </div>
-                            @endif
                             <div class="form-group">
                                 <!--number of pallets-->
                                 <div class="col-lg-2">
-                                    <label for="palletsNumber" class="control-label"><span>*</span> Pallets number
+                                    <label for="palletsNumber" class="control-label">* Pallets number
                                         :</label>
                                 </div>
                                 <div class="col-lg-1">
-                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber'))
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="{{ old('palletsNumber') }}" placeholder="Nbr" min="0"
-                                               required autofocus>
-                                    @elseif(isset($palletsNumber))
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="{{$palletsNumber}}" placeholder="Nbr" min="0"
-                                               required autofocus>
-                                    @else
-                                        <input id="palletsNumber" type="number" class="form-control"
-                                               name="palletsNumber"
-                                               value="0" placeholder="Nbr" min="0"
-                                               required autofocus>
-                                    @endif
+                                    <div class="col-lg-1">
+                                        <input id="palletsNumber" type="number" class="form-control" name="palletsNumber"
+                                               @if(isset($palletsNumber)) value="{{$palletsNumber}}"
+                                               @elseif(Illuminate\Support\Facades\Input::old('palletsNumber')) value="{{ old('palletsNumber') }}"
+                                               @else value="0" @endif placeholder="Nbr" min="0" autofocus />
+                                    </div>
                                 </div>
                                 <!--date-->
                                 <div class="col-lg-1">
                                     <label for="date" class="control-label">Date :</label>
                                 </div>
                                 <div class="col-lg-2">
-                                    @if(isset($date))
                                         <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ $date }}" placeholder="Date" autofocus>
-                                    @else
-                                        <input id="date" type="date" class="form-control" name="date"
-                                               value="{{ old('date') }}" placeholder="Date" autofocus>
-                                    @endif
+                                               @if(isset($date)) value="{{ $date }}" @else value="{{ old('date') }}" @endif placeholder="Date" autofocus/>
                                 </div>
                                 <div id="normalTransferAssociated" style="display:none">
                                 <!--transfer normal associated-->
                                 <div class="col-lg-2 text-right">
                                     <label for="normalTransferAssociated"
-                                           class="control-label"><span>*</span>
+                                           class="control-label">*
                                         Associated
                                         :</label>
                                 </div>
-                                <div class="col-lg-1">
-                                        <select class="selectpicker show-tick form-control"
-                                                data-size="5"
-                                                data-live-search="true"
-                                                data-live-search-style="startsWith"
-                                                title="Normal transfer associated"
-                                                name="normalTransferAssociated">
+                                    <div class="col-lg-1">
+                                        <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="normalTransferAssociated">
                                             @foreach($listPalletstransfersNormal as $normalTransfer )
-                                                @if(Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))
-                                                    <option value="{{$normalTransfer->id}}"
-                                                            selected>{{$normalTransfer->id}}</option>
-                                                @elseif(isset($transfer->normalTransferAssociated)&&$normalTransfer->id==$transfer->normalTransferAssociated)
+                                                @if((Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))|| (isset($normalTransferAssociated)&&$normalTransfer->id==$normalTransferAssociated)||(!isset($normalTransferAssociated) && $showAddCorrectingTransfer==$normalTransfer->id))
                                                     <option value="{{$normalTransfer->id}}"
                                                             selected>{{$normalTransfer->id}}</option>
                                                 @else
@@ -336,7 +189,7 @@
                                                 @endif
                                             @endforeach
                                         </select>
-                                </div>
+                                    </div>
                                 </div>
                                 <!--show add pallets account-->
                                 <div class="col-lg-2  text-left">
@@ -461,15 +314,11 @@
                             </div>
                             <div class="form-group">
                                 @if(Session::has('errorFields2'))
-                                    <div class="alert alert-danger text-alert text-center">{{ Session::get('errorFields2') }}</div>
+                                    <p class="alert alert-danger text-alert text-center">{{ Session::get('errorFields2') }}</p>
                                 @endif
                             </div>
                             <!--withdrawal-->
-                            @if(isset($type) &&$type=='Deposit-Withdrawal')
-                                <div id="deposit-withdrawal2" style="display:block">
-                                    @else
-                                        <div id="deposit-withdrawal2">
-                                            @endif
+                                <div id="deposit-withdrawal2" @if(isset($type) &&$type=='Deposit-Withdrawal') style="display:block" @endif>
                                             <div class="form-group">
                                                 <div class="col-lg-12 text-center">
                                                     <label for="withdrawal" class="control-label">WITHDRAWAL</label>
@@ -482,17 +331,10 @@
                                                         you will have to do it by the transfer details page</p>
                                                 </div>
                                             </div>
-                                            @if(isset($type) &&$type=='Deposit-Withdrawal')
-                                        </div>
-                                        @else
                                 </div>
-                            @endif
                         <!--deposit-->
-                            @if(isset($type) &&$type=='Withdrawal-Deposit')
-                                <div id="withdrawal-deposit2" style="display:block">
-                                    @else
-                                        <div id="withdrawal-deposit2">
-                                            @endif
+
+                                <div id="withdrawal-deposit2" @if(isset($type) &&$type=='Withdrawal-Deposit') style="display:block" @endif>
                                             <div class="form-group">
                                                 <div class="col-lg-12 text-center">
                                                     <label for="deposit" class="control-label">DEPOSIT</label>
@@ -505,17 +347,10 @@
                                                         you will have to do it by the transfer details page</p>
                                                 </div>
                                             </div>
-                                            @if(isset($type) &&$type=='Withdrawal-Deposit')
-                                        </div>
-                                        @else
                                 </div>
-                            @endif
                         <!--2nd transfer-->
-                            @if(isset($type) &&($type=='Withdrawal-Deposit' ||$type=='Deposit-Withdrawal'))
-                                <div id="DW" style="display:block">
-                                    @else
-                                        <div id="DW">
-                                            @endif
+
+                                <div id="DW" @if(isset($type) &&($type=='Withdrawal-Deposit' ||$type=='Deposit-Withdrawal')) style="display:block" @endif>
                                             <div class="form-group">
                                                 <!--number of pallets-->
                                                 <div class="col-lg-2">
@@ -523,30 +358,10 @@
                                                         :</label>
                                                 </div>
                                                 <div class="col-lg-1">
-                                                    @if(Illuminate\Support\Facades\Input::old('palletsNumber2'))
-                                                        <input id="palletsNumber2" type="number" class="form-control"
-                                                               name="palletsNumber2"
-                                                               value="{{ old('palletsNumber2') }}" placeholder="Nbr"
-                                                               min="0"
-                                                               autofocus>
-                                                    @elseif(isset($palletsNumber2))
-                                                        <input id="palletsNumber2" type="number" class="form-control"
-                                                               name="palletsNumber2"
-                                                               value="{{$palletsNumber2}}" placeholder="Nbr" min="0"
-                                                               autofocus>
-                                                    @else
-                                                        <input id="palletsNumber2" type="number" class="form-control"
-                                                               name="palletsNumber2"
-                                                               value="" placeholder="Nbr" min="0"
-                                                               autofocus>
-                                                    @endif
+                                                    <input id="palletsNumber2" type="number"class="form-control" name="palletsNumber2" value=" @if(Illuminate\Support\Facades\Input::old('palletsNumber2')){{ old('palletsNumber2') }}  @elseif(isset($palletsNumber2)) {{$palletsNumber2}} @else 0 @endif" placeholder="Nbr" min="0"  autofocus />
                                                 </div>
                                             </div>
-                                            @if(isset($type) &&($type=='Withdrawal-Deposit'||$type=='Deposit-Withdrawal'))
-                                        </div>
-                                        @else
                                 </div>
-                            @endif
 
                             <div class="form-group">
                                 <div class="col-lg-4 col-lg-offset-4">
@@ -554,7 +369,7 @@
                                            class="btn btn-primary btn-block btn-form"
                                            value="Add"
                                            name="addPalletstransfer" data-toggle="modal"
-                                           data-target="#submitAdd_modal">
+                                           data-target="#submitAdd_modal"/>
                                 </div>
                             </div>
                             <!-- Modal submit -->
@@ -671,23 +486,23 @@
                                                 @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))
                                                     <div class="text-center">
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
-                                                                class="text-danger"> Pallets numbers are DIFFERENT for both transfers </span>
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span><p
+                                                                class="text-danger"> Pallets numbers are DIFFERENT for both transfers </p>
                                                     </div>
                                                 @endif
                                                 @if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit' )&&((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz))))
                                                     <div class="text-center">
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                        <span class="text-danger">Pallets number does NOT MATCH the number expected in the loading order ({{$loading->anz}}
-                                                            )</span>
+                                                        <p class="text-danger">Pallets number does NOT MATCH the number expected in the loading order ({{$loading->anz}}
+                                                            )</p>
                                                     </div>
                                                 @endif
                                                 @if(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly') )
                                                     <div class="text-center">
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span><span
-                                                                class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </span>
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span><p
+                                                                class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </p>
                                                     </div>
                                                 @endif
                                             </div>
@@ -713,9 +528,7 @@
                                 </div>
                             @endif
                         </form>
-
                     </div>
-
                 </div>
                 @endif
             </div>

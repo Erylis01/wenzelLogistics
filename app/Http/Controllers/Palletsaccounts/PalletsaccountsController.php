@@ -36,12 +36,15 @@ class PalletsaccountsController extends Controller
 
             $query = DB::table('palletsaccounts');
 
+            //if the user is sorting the table
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 $searchColumnsString = $request->get('searchColumnsString');;
                 $searchColumns = explode('-', $searchColumnsString);
+                //if the user is searching data in the table
                 if (isset($searchQuery) && $searchQuery <> '') {
+                    //searching in all columns
                     if (in_array('ALL', explode('-', $searchColumnsString))) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
@@ -51,6 +54,7 @@ class PalletsaccountsController extends Controller
                             }
                         });
                     } else {
+                        //Searching in specifics columns
                         $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
                             foreach ($searchColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -62,6 +66,7 @@ class PalletsaccountsController extends Controller
                 }
                 $listPalletsaccounts = $query->orderBy($sortby, $order)->get();
             } else {
+                //only searching
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
                     if (in_array('ALL', $searchColumns)) {
@@ -82,6 +87,7 @@ class PalletsaccountsController extends Controller
                         });
                     }
                 }
+                //not sorting nor searching
                 $listPalletsaccounts = $query->get();
             }
             return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
@@ -93,8 +99,7 @@ class PalletsaccountsController extends Controller
     /** show the form to add a new pallets account
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public
-    function showAdd()
+    public function showAdd()
     {
         if (Auth::check()) {
             //list of the warehouses if the account created is a Network
@@ -108,8 +113,7 @@ class PalletsaccountsController extends Controller
     /**
      * add a new pallets account to the list
      */
-    public
-    function add(Request $request)
+    public function add(Request $request)
     {
         //get data
         $name = Input::get('name');
@@ -146,7 +150,7 @@ class PalletsaccountsController extends Controller
             $rules = array_add($rules, 'nickname', 'string|max:15|unique:palletsaccounts');
         }
         $validator = Validator::make(Input::all(), $rules);
-
+//if the rules are not respected
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
@@ -283,17 +287,17 @@ class PalletsaccountsController extends Controller
     }
 
     /**
-     * update the pallets account n° ID
+     * update the pallets account n° ID - if carrier : clear trucks possible
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $clearTrucks = Input::get('clearTrucks');
 
         if (isset($clearTrucks)) {
+            //CARRIER ONLY : this button will clear every pallets number for ervery truck and put the sum in the "truck" STOCK that is the stock of the carrier
             $palletsaccount_name = Palletsaccount::where('id', $id)->first()->name;
             $listTrucks = Truck::where('palletsaccount_name', $palletsaccount_name)->get();
             foreach ($listTrucks as $truck) {
@@ -308,13 +312,13 @@ class PalletsaccountsController extends Controller
             }
             session()->flash('messageClearTrucks', 'Successfully cleared trucks');
         } else {
+            //update data
             $nickname = Input::get('nickname');
             Palletsaccount::where('id', $id)->update(['nickname' => $nickname]);
             $type = Input::get('type');
             Palletsaccount::where('id', $id)->update(['type' => $type]);
             if (isset($type) && $type == 'Network') {
                 $warehousesAssociatedName = Input::get('namewarehouses');
-
                 if (isset($warehousesAssociatedName)) {
                     foreach ($warehousesAssociatedName as $warehouseAName) {
                         $idwarehouses[] = Warehouse::where('name', $warehouseAName)->value('id');
@@ -349,8 +353,7 @@ class PalletsaccountsController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public
-    function delete($id)
+    public function delete($id)
     {
         DB::table('palletsaccounts')->where('id', $id)->delete();
         // redirect

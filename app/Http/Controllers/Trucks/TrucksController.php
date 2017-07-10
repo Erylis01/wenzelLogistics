@@ -26,18 +26,23 @@ class TrucksController extends Controller
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
         $listColumns = ['id', 'name', 'licensePlate', 'realNumberPallets', 'theoricalNumberPallets'];
+
         if (Auth::check()) {
+            //import new trucks and create pallets account associated
             if($refresh=='true'){
                 $this->importData();
+                $refresh='false';
             }
 
             $query = DB::table('trucks');
 
+            //if the user wants to sort the table
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
                 $searchColumnsString = $request->get('searchColumnsString');;
                 $searchColumns = explode('-', $searchColumnsString);
+                //if the user wants to search something in the table
                 if (isset($searchQuery) && $searchQuery <> '') {
                     if (in_array('ALL', explode('-', $searchColumnsString))) {
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
@@ -61,9 +66,11 @@ class TrucksController extends Controller
                 $listTrucks = $query->orderBy($sortby, $order)->paginate(10);
                 $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
             } else {
+                //not sorting but searching
                 if (isset($searchQuery) && $searchQuery <> '') {
                     $searchColumnsString = implode('-', $searchColumns);
                     if (in_array('ALL', $searchColumns)) {
+                        //searching in all columns
                         $query->where(function ($q) use ($searchQueryArray, $listColumns) {
                             foreach ($listColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -72,6 +79,7 @@ class TrucksController extends Controller
                             }
                         });
                     } else {
+                        //Searching in specifics columns
                         $query->where(function ($q) use ($searchQueryArray, $searchColumns) {
                             foreach ($searchColumns as $column) {
                                 foreach ($searchQueryArray as $searchQ) {
@@ -80,14 +88,15 @@ class TrucksController extends Controller
                             }
                         });
                     }
+                    $count = count($query->get());
                     $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
                     $links =$listTrucks->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
                 }else{
+                    //not sorting nor searching
+                    $count = count($query->get());
                     $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
                     $links = '';
                 }
-                $count = count($query->get());
-
             }
             return view('trucks.allTrucks', compact('listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns','refresh'));
         } else {
@@ -168,22 +177,13 @@ class TrucksController extends Controller
         $palletsaccount_name = Input::get('palletsaccount_name');
         $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->first();
 
-//        //validation
-//        $rules = array(
-//            'name' => 'required|string|max:255|unique:warehouses',
-//        );
-//
-//        $validator = Validator::make(Input::all(), $rules);
-//        if ($validator->fails()) {
-//            return redirect()->back()
-//                ->withErrors($validator)
-//                ->withInput();
-//        } else
+        //if the truck already exists -> error !
         if ($truckTest <> null) {
             session()->flash('messageErrorAddTruck', 'Error ! This truck already exists');
             $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
             return view('trucks.addTruck', compact('name', 'realNumberPallets', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
         } else {
+            //if the truck doesn't already exists -> create
             Truck::create(
                 ['name' => $name, 'realNumberPallets' => $realNumberPallets,'theorcialNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
             );
@@ -215,8 +215,7 @@ class TrucksController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public
-    function showDetails($id, Request $request)
+    public function showDetails($id, Request $request)
     {
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
@@ -233,6 +232,7 @@ class TrucksController extends Controller
             $query = Palletstransfer::where(function ($q) use ($name, $licensePlate) {
                 $q->where('creditAccount', 'LIKE',  $name . '-' . $licensePlate.'%')->orWhere('debitAccount', 'LIKE',  $name . '-' . $licensePlate.'%');
             });
+            //transfers table : sorting and searching possible
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
                 $order = $request->get('order'); // Order direction: asc or desc
@@ -294,8 +294,7 @@ class TrucksController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         //get data
         $name = Input::get('name');
@@ -311,7 +310,7 @@ class TrucksController extends Controller
             session()->flash('messageErrorUpdateTruck', 'Error ! This truck already exists');
             return redirect()->back();
         } else {
-            //if not update the truck
+            //if not, update the truck
             Truck::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]);
 
             session()->flash('messageUpdateTruck', 'Successfully updated truck');
