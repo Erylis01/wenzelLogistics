@@ -164,3 +164,7 @@
     color:black;
     font-style: italic;
 }
+.headerSubpanelDetailsLoading>a:hover{
+    color:black;
+    font-style: italic;
+}
