@@ -13,9 +13,9 @@
 }
 
 .colName{
-    width:570px;
-    min-width:570px;
-    max-width:570px;
+    width:540px;
+    min-width:540px;
+    max-width:540px;
 }
 
 .colLicense{
@@ -25,9 +25,9 @@
 
 }
 .colNumber{
-    min-width:120px;
-    width:120px;
-    max-width:120px;
+    min-width:100px;
+    width:100px;
+    max-width:100px;
 }
 .colDate{
     max-width: 90px;
@@ -43,6 +43,9 @@
 .table-trucks>tbody{
     font-size:16px;
 }
+.table-trucks>tbody>tr>td{
+    padding:5px;
+}
 
 /*DETAILS TRUCK*/
 .addTransfer{
@@ -52,6 +55,7 @@
 .table-truck{
     font-size:16px;
 }
+
 
 /*.table-transfers>table>tbody>tr>td{*/
     /*font-size:16px;*/

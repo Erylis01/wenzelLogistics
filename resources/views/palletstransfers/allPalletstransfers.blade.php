@@ -18,7 +18,7 @@
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsTransfers')
     class="active"
@@ -204,14 +204,20 @@
                                         <td class="col1b colHeight"></td>
                                         <td class="text-right colDanger colHeight col8">
                                             @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                            @php($k=0)
                                         @if(!empty($errorsTransfer))
-                                                @foreach($errorsTransfer as $error)
-                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                @endforeach
+                                                @foreach($errorsTransfer as $errorTrans)
+                                                    @if(!empty($errorTrans)&& $k<2)
+                                                        <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>
+                                                    @elseif(!empty($errorTrans)&& $k==2)
+                                                        <span class="text-danger">...</span>
+                                                    @endif
+                                                    @php($k=$k+1)
+                                                    @endforeach
                                             @endif
                                         </td>
                                         <td class="text-center colHeight col2">{{date('d-m-y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center colHeight col3">@if($transfer->type=='Deposit-Withdrawal') Dep-With @elseif($transfer->type=='Withdrawal-Deposit') With-Dep @elseif($transfer->type=='Withdrawal_Only') With_only @elseif($transfer->type=='Deposit_Only') Dep_only @elseif($transfer->type=='Sale-Purchase') Sale-Purch @elseif($transfer->type=='Purchase-Sale') Purch-Sale @elseif($transfer->type=='Other') Other @endif</td>
+                                        <td class="text-center colHeight col3">@if($transfer->type=='Deposit-Withdrawal') Dep-With @elseif($transfer->type=='Withdrawal-Deposit') With-Dep @elseif($transfer->type=='Withdrawal_Only') With_only @elseif($transfer->type=='Deposit_Only') Dep_only @elseif($transfer->type=='Sale-Purchase') Sale-Purch @elseif($transfer->type=='Purchase-Sale') Purch-Sale @elseif($transfer->type=='Other') Other @elseif($transfer->type=='Debt') Debt @endif</td>
                                         <td class="text-center colHeight col4">
                                         @if(isset($transfer->debitAccount))
                                             @php($partsDebitAccount=explode('-', $transfer->debitAccount))

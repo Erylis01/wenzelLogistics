@@ -27,41 +27,53 @@
 
 /*TABLE*/
 
-.table-palletsaccounts{
-    margin:-10px;
-    font-size:18px;
+.table-palletsaccounts>tbody>tr>td{
+    font-size:16px;
+    padding:4px;
 }
 
-.table-palletsaccounts>table>thead{
-    display: inline-block;
-    width: 100%;
-}
 
-.table-palletsaccounts>table>tbody{
-     font-size:16px;
-    width: 100%;
-    max-height: 400px;
-    overflow: auto;
-    display: inline-block;
- }
+/*.table-palletsaccounts>table>thead{*/
+    /*display: inline-block;*/
+    /*width: 100%;*/
+/*}*/
+
+/*.table-palletsaccounts>table>tbody{*/
+     /*font-size:16px;*/
+    /*width: 100%;*/
+    /*max-height: 400px;*/
+    /*overflow: auto;*/
+    /*display: inline-block;*/
+ /*}*/
 
 .colName1{
-    min-width:312px;
-    max-width: 312px;
+    min-width:650px;
+    max-width: 650px;
+    width:650px;
 }
 .colType1{
     min-width:96px;
     max-width:96px;
+    width:96px;
 }
 .colTot1{
-    min-width:408px;
-    max-width:408px;
+    min-width:310px;
+    max-width:310px;
+    width:310px;
 }
 
 .colTotal1{
     min-width:60px;
     max-width:60px;
+    width:60px;
 }
+
+.colNbr1{
+    min-width:100px;
+    max-width:100px;
+    width:100px;
+}
+
 
 .text-inf0{
     color:rgba(255,0,0,0.8);
@@ -105,9 +117,9 @@
 }
 
 .colDanger{
-    max-width: 80px;
-    min-width: 80px;
-    width: 80px;
+    max-width: 70px;
+    min-width: 70px;
+    width: 70px;
 }
 
 .table-loading-account{
@@ -130,8 +142,8 @@
 
 .notCarrier{
     margin-left:25%;
-    min-width :616px;
-    width:616px;
+    min-width :636px;
+    width:636px;
 }
 
 /*HIDDEN DIV*/

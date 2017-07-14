@@ -18,7 +18,7 @@
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsTransfers')
     class="active"
@@ -38,9 +38,9 @@
                     <div class="panel-heading">
                         <div class="col-lg-11 text-left">Details of the pallets
                             transfer n° {{$transfer->id}}
-                            @if(!empty($errors))
-                                @foreach($errors as $error)
-                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                            @if(!empty($errorsTransfer))
+                                @foreach($errorsTransfer as $errorT)
+                                    <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorT->name}}"></span>
                                 @endforeach
                             @endif
                         </div>
@@ -90,59 +90,51 @@
                                                 data-live-search-style="startsWith"
                                                 title="Type" name="type" id="type" required
                                                 onchange="displayFieldsType(this);" >
-                                            @if((Illuminate\Support\Facades\Input::old('type')) || (isset($transfer->type)))
+                                            @if(Illuminate\Support\Facades\Input::old('type') || isset($transfer->type))
                                                 <optgroup label="Normal">
-                                                    <option @if(old('type') == 'Deposit-Withdrawal' || $transfer->type == 'Deposit-Withdrawal') selected
-                                                            @endif value="Deposit-Withdrawal"
-                                                            id="Deposit-WithdrawalOption">
+                                                    <option @if(strcmp(old('type'),'Deposit-Withdrawal')==0|| strcmp($transfer->type,'Deposit-Withdrawal')==0) selected @endif value="Deposit-Withdrawal" id="Deposit-WithdrawalOption">
                                                         Deposit-Withdrawal
                                                     </option>
-                                                    <option @if(old('type') == 'Withdrawal-Deposit' || $transfer->type == 'Withdrawal-Deposit') selected
-                                                            @endif value="Withdrawal-Deposit"
-                                                            id="Withdrawal-DepositOption">
+                                                    <option @if(strcmp(old('type'),'Withdrawal-Deposit')==0|| strcmp($transfer->type,'Withdrawal-Deposit')==0) selected @endif value="Withdrawal-Deposit" id="Withdrawal-DepositOption">
                                                         Withdrawal-Deposit
                                                     </option>
-                                                    <option @if(old('type') == 'Deposit_Only' || $transfer->type == 'Deposit_Only') selected
-                                                            @endif value="Deposit_Only" id="Deposit_OnlyOption">
+                                                    <option @if(strcmp(old('type'),'Deposit_Only')==0 || strcmp($transfer->type,'Deposit_Only')==0) selected @endif value="Deposit_Only" id="Deposit_OnlyOption">
                                                         Deposit_Only
                                                     </option>
-                                                    <option @if(old('type') == 'Withdrawal_Only' || $transfer->type == 'Withdrawal_Only') selected
-                                                            @endif value="Withdrawal_Only" id="Withdrawal_OnlyOption">
+                                                    <option @if(strcmp(old('type'),'Withdrawal_Only')==0 ||strcmp($transfer->type,'Withdrawal_Only')==0) selected @endif value="Withdrawal_Only" id="Withdrawal_OnlyOption">
                                                         Withdrawal_Only
                                                     </option>
                                                 </optgroup>
                                                 <optgroup label="Correcting">
-                                                    <option @if(old('type') == 'Purchase-Sale' || $transfer->type == 'Purchase-Sale') selected
-                                                            @endif value="Purchase-Sale" id="Purchase-SaleOption">
+                                                    <option @if(strcmp('Purchase-Sale',old('type'))==0 || strcmp($transfer->type,'Purchase-Sale')==0) selected @endif value="Purchase-Sale" id="Purchase-SaleOption">
                                                         Purchase-Sale
                                                     </option>
-                                                    <option @if(old('type') == 'Other' || $transfer->type == 'Other') selected
-                                                            @endif value="Other" id="OtherOption">
+                                                    <option @if(strcmp('Sale-Purchase',old('type'))==0 || strcmp($transfer->type,'Sale-Purchase')==0) selected @endif value="Sale-Purchase" id="Sale-PurchaseOption">
+                                                        Sale-Purchase
+                                                    </option>
+                                                    <option @if(strcmp('Purchase_Ext',old('type'))==0 || strcmp($transfer->type,'Purchase_Ext')==0) selected @endif value="Purchase_Ext" id="Purchase_ExtOption">
+                                                        Purchase_Ext
+                                                    </option>
+                                                    <option @if(strcmp('Sale_Ext',old('type'))==0 || strcmp($transfer->type,'Sale_Ext')==0) selected @endif value="Sale_Ext" id="Sale_ExtOption">
+                                                        Sale_Ext
+                                                    </option>
+                                                    <option @if(strcmp('Other',old('type'))==0 || strcmp($transfer->type,'Other')==0) selected @endif value="Other" id="OtherOption">
                                                         Other
                                                     </option>
                                                 </optgroup>
                                             @else
                                                 <optgroup label="Normal">
-                                                    <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOption">
-                                                        Deposit-Withdrawal
-                                                    </option>
-                                                    <option value="Withdrawal-Deposit" id="Withdrawal-DepositOption">
-                                                        Withdrawal-Deposit
-                                                    </option>
-                                                    <option value="Deposit_Only" id="Deposit_OnlyOption">
-                                                        Deposit_Only
-                                                    </option>
-                                                    <option value="Withdrawal_Only" id="Withdrawal_OnlyOption">
-                                                        Withdrawal_Only
-                                                    </option>
+                                                    <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOption">Deposit-Withdrawal</option>
+                                                    <option value="Withdrawal-Deposit" id="Withdrawal-DepositOption">Withdrawal-Deposit</option>
+                                                    <option value="Deposit_Only" id="Deposit_OnlyOption">Deposit_Only</option>
+                                                    <option value="Withdrawal_Only" id="Withdrawal_OnlyOption">Withdrawal_Only</option>
                                                 </optgroup>
                                                 <optgroup label="Correcting">
-                                                    <option value="Purchase-Sale" id="Purchase-SaleOption">
-                                                        Purchase-Sale
-                                                    </option>
-                                                    <option value="Other" id="OtherOption">
-                                                        Other
-                                                    </option>
+                                                    <option value="Purchase-Sale" id="Purchase-SaleOption">Purchase-Sale</option>
+                                                    <option value="Sale-Purchase" id="Sale-PurchaseOption">Sale-Purchase</option>
+                                                    <option value="Purchase_Ext" id="Purchase_ExtOption">Purchase_Ext</option>
+                                                    <option value="Sale_Ext" id="Sale_ExtOption">Sale_Ext</option>
+                                                    <option value="Other" id="OtherOption">Other</option>
                                                 </optgroup>
                                             @endif
                                         </select>
@@ -152,20 +144,20 @@
                                 <div class="col-lg-3">
                                     @if(isset($transfer->details)&&(isset($transfer->validate) && $transfer->validate==1))
                                         <textarea class="form-control" rows="1"
-                                                  id="details" placeholder="Details"
+                                                  id="details" placeholder="Details (broken pallets, gift, receipt...)"
                                                   readonly>{{$transfer->details}}</textarea>
                                     @elseif(isset($transfer->details))
                                         <textarea class="form-control" rows="1"
                                                   id="details"
-                                                  placeholder="Details">{{$transfer->details}}</textarea>
+                                                  placeholder="Details (broken pallets, gift, receipt...)">{{$transfer->details}}</textarea>
                                     @elseif(isset($transfer->validate) && $transfer->validate==1)
                                         <textarea class="form-control" rows="1"
-                                                  id="details" placeholder="Details"
+                                                  id="details" placeholder="Details (broken pallets, gift, receipt...)"
                                                   readonly>{{old('details')}}</textarea>
                                     @else
                                         <textarea class="form-control" rows="1"
                                                   id="details"
-                                                  placeholder="Details">{{old('details')}}</textarea>
+                                                  placeholder="Details (broken pallets, gift, receipt...)">{{old('details')}}</textarea>
                                     @endif
                                 </div>
                                 <!--atrnr-->
@@ -502,11 +494,19 @@
                                 <div @if(!empty($filesNames)&&isset($transfer->palletsNumber)&&isset($transfer->creditAccount)&&isset($transfer->debitAccount)) class="col-lg-4 col-lg-offset-1"
                                      @else class="col-lg-4 col-lg-offset-5" @endif>
                                     <button type="submit" class="btn btn-primary btn-block btn-form"
-                                            value="{{$transfer->id}}" name="submitPallets" data-toggle="modal"
-                                            data-target="#submitPallets_modal">
+                                            value="{{$transfer->id}}" name="update" data-toggle="modal"
+                                            data-target="#submitUpdate_modal">
                                         Update
                                     </button>
                                 </div>
+                                    @if(!empty($errorsTransfer) && $transfer->type<>'Purchase-Sale' && $transfer->type<>'Sale-Purchase' && $transfer->type<>'Other')
+                                    <!--show addCorrectingTransfer -->
+                                        <div class="col-lg-3">
+                                            <button type="submit" class="btn btn-primary btn-block btn-form" value="{{$transfer->id}}" name="showAddCorrectingTransfer" data-toggle="modal" data-target="#addForm">
+                                                Add correcting transfer
+                                            </button>
+                                        </div>
+                                    @endif
                             </div>
                         </div>
 
@@ -518,7 +518,7 @@
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">
                                         <div class="modal-header modalHeaderTransfer">
-                                            <button value="close"
+                                            <button value="{{$transfer->id}}"
                                                     class="close"
                                                     type="submit"
                                                     name="closeSubmitUpdateModal">
@@ -782,7 +782,7 @@
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">
                                         <div class="modal-header modalHeaderTransfer">
-                                            <button value="close"
+                                            <button value="{{$transfer->id}}"
                                                     class="close"
                                                     type="submit"
                                                     name="closeSubmitValidateUpdateModal">

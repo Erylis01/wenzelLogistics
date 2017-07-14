@@ -16,7 +16,7 @@ class PalletsaccountsTableSeeder extends Seeder
 //        DB::table('palletsaccounts')->delete();
         Palletsaccount::firstOrCreate(array(
             'id' => 1,
-            'name' => 'STOCK',
+            'name' => 'WENZEL',
             'type' => 'Other',
         ));
         Palletsaccount::firstOrCreate(array(

@@ -24,6 +24,7 @@ class CreatePalletsaccountsTable extends Migration
             $table->string('phone', 15)->nullable();
             $table->string('email')->nullable();
             $table->string('namecontact')->nullable();
+            $table->boolean('notExchange')->default(false);
 
             $table->timestamps();
         });

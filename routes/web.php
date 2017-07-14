@@ -47,7 +47,7 @@ Route::post('/addTruck', 'TrucksController@add')->name('addTruck');
 Route::get('/addTruck', 'TrucksController@showAdd')->name('showAddTruck');
 
 //PALLETS ACCOUNTS
-Route::get('/allPalletsaccounts', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
+Route::get('/allPalletsaccounts/{nb}', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
 Route::get('/detailsPalletsaccount/{id}', 'PalletsaccountsController@showDetails')->name('showDetailsPalletsaccount');
 Route::post('/detailsPalletsaccount/{id}', 'PalletsaccountsController@update')->name('updatePalletsaccount');
 Route::delete('/detailsPalletsaccount/{id}', 'PalletsaccountsController@delete')->name('deletePalletsaccount');

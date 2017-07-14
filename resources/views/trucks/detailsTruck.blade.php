@@ -18,7 +18,7 @@
     class="active"
 @endsection
 @section('classPalletsAccounts')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsTransfers')
     class="nonActive"
@@ -297,17 +297,25 @@
                                             </td>
                                             <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
                                           <td class="colDanger2">
-                                              @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->orWhere('debitAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->get())
+                                              {{--@php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->orWhere('debitAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->get())--}}
                                               @php($k=0)
-                                              @foreach($listPalletstransfers as $transfer)
-                                                  @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                                  @if(!empty($errorsTransfer)&& $k<2)
-                                                      <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                  @elseif(!empty($errorsTransfer)&& $k==2)
-                                                      <span class="text-danger">...</span>
-                                                  @endif
-                                                  @php($k=$k+1)
-                                              @endforeach
+                                              @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                              @if(!empty($errorsTransfer)&&$k<2)
+                                                  <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                              @elseif(!empty($errorsTransfer) && $k==2)
+                                                  <span class="text-danger">...</span>
+                                              @endif
+                                              @php($k=$k+1)
+
+                                              {{--@foreach($listPalletstransfers as $transfer)--}}
+                                                  {{--@php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))--}}
+                                                  {{--@if(!empty($errorsTransfer)&& $k<2)--}}
+                                                      {{--<span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>--}}
+                                                  {{--@elseif(!empty($errorsTransfer)&& $k==2)--}}
+                                                      {{--<span class="text-danger">...</span>--}}
+                                                  {{--@endif--}}
+                                                  {{--@php($k=$k+1)--}}
+                                              {{--@endforeach--}}
                                           </td>
                                         </tr>
                                     @endforeach

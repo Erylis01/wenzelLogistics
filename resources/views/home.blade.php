@@ -18,7 +18,7 @@
     class="nonActive"
 @endsection
 @section('classPalletsAccounts')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsTransfers')
     class="nonActive"
@@ -77,7 +77,7 @@
                     </a>
 
                     <!-- All pallets accounts -->
-                    <a href="{{ route('showAllPalletsaccounts') }}">
+                    <a href="{{ route('showAllPalletsaccounts', ['nb'=>'all']) }}">
                         <div class="col-lg-2 text-center home">
                             <div class="service-box">
                                 <h3 class="menu-title">Accounts</h3>

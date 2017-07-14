@@ -57,11 +57,16 @@
                 <div class="col-lg-2 text-center navbar-truck navbar-title-link">
                     <a @yield('classTrucks') href="{{ route('showAllTrucks', ['refresh'=>'false']) }}">Trucks</a>
                 </div>
-                <div class="col-lg-2 text-center navbar-accounts navbar-title-link">
-                    <a @yield('classPalletsAccounts') href="{{ route('showAllPalletsaccounts') }}">Pallets Accounts</a>
+                <div class="col-lg-2 text-center navbar-accounts navbar-title-link dropdown">
+                    <a class="dropdown-toggle @yield('classPalletsAccounts')" data-toggle="dropdown">Pallets Accounts <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('showAllPalletsaccounts', ['nb'=>'all']) }}">All</a></li>
+                        <li><a  href="{{ route('showAllPalletsaccounts', ['nb'=>'part']) }}">Part</a></li>
+                    </ul>
                 </div>
+
                 <div class="col-lg-2 text-center navbar-transfers navbar-title-link">
-                    <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}">Pallets
+                    <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}" >Pallets
                         Transfers</a>
                 </div>
 

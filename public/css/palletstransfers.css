@@ -22,15 +22,15 @@
     overflow: hidden;
     z-index: 99;
     background-color: white;
-    max-width:55px;
-    min-width: 55px;
-    width:55px;
+    max-width:60px;
+    min-width: 60px;
+    width:60px;
     top: auto;
 }
 .col1b{
-    max-width:55px;
-    min-width: 55px;
-    width:55px;
+    max-width:60px;
+    min-width: 60px;
+    width:60px;
 }
 
 .colHeight{

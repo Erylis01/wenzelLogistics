@@ -63,7 +63,7 @@ class TrucksController extends Controller
                     }
                 }
                 $count = count($query->get());
-                $listTrucks = $query->orderBy($sortby, $order)->paginate(10);
+                $listTrucks = $query->orderBy($sortby, $order)->paginate(20);
                 $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
             } else {
                 //not sorting but searching
@@ -89,12 +89,12 @@ class TrucksController extends Controller
                         });
                     }
                     $count = count($query->get());
-                    $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
+                    $listTrucks = $query->orderBy('name', 'asc')->paginate(20);
                     $links =$listTrucks->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
                 }else{
                     //not sorting nor searching
                     $count = count($query->get());
-                    $listTrucks = $query->orderBy('name', 'asc')->paginate(10);
+                    $listTrucks = $query->orderBy('name', 'asc')->paginate(20);
                     $links = '';
                 }
             }

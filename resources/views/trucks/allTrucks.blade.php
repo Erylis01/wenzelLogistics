@@ -18,7 +18,7 @@
     class="active"
 @endsection
 @section('classPalletsAccounts')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsTransfers')
     class="nonActive"
@@ -94,7 +94,6 @@
                                             class="glyphicon glyphicon-plus-sign"></span> Add truck</a>
                             </span>
                         </div>
-
                         </form>
                     </div>
                     <div class="panel-body panel-body-general">
@@ -139,7 +138,7 @@
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"
                                                     @endif></a>
                                             </th>
-                                        <th class="text-center colNumber">Confirmed<br>nbr
+                                        <th class="text-center colNumber">Confirmed<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
@@ -149,7 +148,7 @@
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"
                                                     @endif></a>
                                              </th>
-                                        <th class="text-center colNumber">Planned<br>nbr
+                                        <th class="text-center colNumber">Planned<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
@@ -159,6 +158,7 @@
                                                @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
                                                     @endif></a>
                                             </th>
+                                    <th class="text-center colNumber">Rest<br><br></th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -171,17 +171,20 @@
                                         <td class="colLicense">{{$trucks->licensePlate}}</td>
                                         <td class="colNumber">{{$trucks->realNumberPallets}}</td>
                                         <td class="colNumber">{{$trucks->theoricalNumberPallets}}</td>
+                                        <td class="colNumber">{{$trucks->theoricalNumberPallets - $trucks->realNumberPallets}}</td>
                                         <td class="colDanger">
                                             @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->orWhere('debitAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->get())
                                             @php($k=0)
                                             @foreach($listPalletstransfers as $transfer)
                                                 @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                                @if(!empty($errorsTransfer)&& $k<2)
-                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                    @elseif(!empty($errorsTransfer)&& $k==2)
+                                                @foreach($errorsTransfer as $errorT)
+                                                @if(!empty($errorT)&& $k<2)
+                                                    <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorT->name}}"></span>
+                                                    @elseif(!empty($errorT)&& $k==2)
                                                     <span class="text-danger">...</span>
                                                 @endif
                                                 @php($k=$k+1)
+                                                    @endforeach
                                             @endforeach
                                         </td>
                                     </tr>
@@ -193,7 +196,7 @@
                             <div class="general-pagination text-left">{!! $listTrucks->render() !!}</div>
                             @if ($listTrucks->currentPage()==$listTrucks->lastPage())
                                 <div class="general-legend col-lg-offset-8">
-                                    Showing @php($legend1=1+ ($listTrucks->currentPage() -1) * 10)  {{$legend1}}
+                                    Showing @php($legend1=1+ ($listTrucks->currentPage() -1) * 20)  {{$legend1}}
                                     to {{$count}} of {{$count}} results
                                 </div>
                             @elseif($listTrucks->isEmpty())
@@ -202,8 +205,8 @@
                                 </div>
                             @else
                                 <div class="general-legend col-lg-offset-8">
-                                    Showing @php($legend1=1+ ($listTrucks->currentPage() -1) * 10)  {{$legend1}}
-                                    to @php($legend2= $listTrucks->currentPage() * 10) {{$legend2}} of {{$count}}
+                                    Showing @php($legend1=1+ ($listTrucks->currentPage() -1) * 20)  {{$legend1}}
+                                    to @php($legend2= $listTrucks->currentPage() * 20) {{$legend2}} of {{$count}}
                                     results
                                 </div>
                             @endif

@@ -25,7 +25,7 @@ class PalletsaccountsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showAll(Request $request)
+    public function showAll(Request $request, $nb)
     {
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
@@ -34,7 +34,13 @@ class PalletsaccountsController extends Controller
         if (Auth::check()) {
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
 
-            $query = DB::table('palletsaccounts');
+            if($nb=='all'){
+                $query = DB::table('palletsaccounts');
+            }elseif($nb=='part'){
+                $query = DB::table('palletsaccounts')->where(function ($q){
+                    $q->where('realNumberPallets','<>', 0)->orWhere('theoricalNumberPallets','<>', 0);
+                });
+            }
 
             //if the user is sorting the table
             if (request()->has('sortby') && request()->has('order')) {
@@ -64,7 +70,9 @@ class PalletsaccountsController extends Controller
                         });
                     }
                 }
-                $listPalletsaccounts = $query->orderBy($sortby, $order)->get();
+                $count = count($query->get());
+                $listPalletsaccounts = $query->orderBy($sortby, $order)->paginate(20);
+                $links = $listPalletsaccounts->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
             } else {
                 //only searching
                 if (isset($searchQuery) && $searchQuery <> '') {
@@ -86,11 +94,17 @@ class PalletsaccountsController extends Controller
                             }
                         });
                     }
+                    $count = count($query->get());
+                    $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
+                    $links =$listPalletsaccounts->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                }else{
+                    //not sorting nor searching
+                    $count = count($query->get());
+                    $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
+                    $links = '';
                 }
-                //not sorting nor searching
-                $listPalletsaccounts = $query->orderBy('name', 'asc')->get();
             }
-            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'totalpallets', 'sortby', 'order', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
+            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts','nb', 'totalpallets', 'sortby', 'order','count','links', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }
@@ -190,7 +204,7 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             //general data
-            $listWarehouses = DB::table('warehouses')->get();
+            $listWarehouses = DB::table('warehouses')->orderBy('name', 'asc')->get();
             $account = Palletsaccount::where('id', $id)->first();
             $name = $account->name;
 
@@ -200,8 +214,9 @@ class PalletsaccountsController extends Controller
                 foreach ($warehousesAssociated as $warehouse) {
                     $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('name');
                 }
+                asort($namewarehouses);
             } elseif ($account->type == 'Carrier') {
-                $trucksAssociated = Truck::where('palletsaccount_name', $name)->get();
+                $trucksAssociated = Truck::where('palletsaccount_name', $name)->orderBy('licensePlate', 'asc')->get();
             }
 
             //table data transfers

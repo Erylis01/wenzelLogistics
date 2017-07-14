@@ -14,11 +14,11 @@ class ErrorTableSeeder extends Seeder
     public function run()
     {
         DB::table('errors')->delete();
-//        Error::create([
-//            'id'=>1,
-//            'name'=>'DW-WD_notSameNumber',
-//            'description'=>"on Deposit-Withdrawal transfers and Withdrawal-Deposit transfers, the pallets numbers have to match"
-//        ]);
+        Error::create([
+            'id'=>1,
+            'name'=>'DW-WD_atLeastOne',
+            'description'=>"When there is a Deposit-Withdrawal transfer, there must be at least one Withdrawal-Deposit transfer and inversely"
+        ]);
         Error::create([
             'id'=>2,
             'name'=>'DW-WD_notNumberLoadingOrder',
@@ -35,9 +35,14 @@ class ErrorTableSeeder extends Seeder
             'description'=>"The correcting transfer doesn't complete the normal transfer"
         ]);
         Error::create([
+            'id'=>6,
+            'name'=>'SP-PS_notEnoughTransfers',
+            'description'=>"There must be same number of SP and PS transfers"
+        ]);
+        Error::create([
             'id'=>5,
-            'name'=>'SP-PS_notSameNumber',
-            'description'=>"on Sale-Purchase transfers and Purchase-Sale transfers, the pallets numbers have to match"
+            'name'=>'Correcting_notEnoughTransfers',
+            'description'=>"There must be an even number of correcting transfers"
         ]);
     }
 }
