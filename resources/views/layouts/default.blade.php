@@ -113,7 +113,7 @@
 <!-- Bootstrap core JavaScript
     ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
 <link rel="stylesheet" href="{{asset('css/bootstrap-select.min.css')}}"/>
 <script src="{{ asset('js/bootstrap-select.js') }}"></script>
 @yield('scriptEnd')

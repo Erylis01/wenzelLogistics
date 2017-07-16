@@ -160,7 +160,6 @@ class DetailsLoadingController extends Controller
      */
     public function submitUpdateUpload($atrnr, Request $request)
     {
-
         $loading = Loading::where('atrnr', $atrnr)->first();
         //BUTTONS
         //update only the panel information

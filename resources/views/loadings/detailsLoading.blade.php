@@ -278,6 +278,7 @@
                                 <div class="panel-body">
                                     <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data" id="formSubmitUpdateUpload">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                        <input type="hidden" name="action" id="actionForm" />
                                         <!--msg-->
                                         <div class="row">
                                             @if(Session::has('messageAddPalletstransfer'))
@@ -294,7 +295,7 @@
                                         <div class="row">
                                             <div class="from-group">
                                                 <div class="col-lg-4 col-lg-offset-4">
-                                                    <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="blockSubmitAdd(this);">
+                                                    <button type="submit" class="btn btn-add btn-block" id="addTransferButton" value="addTransferForm" name="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="formSubmit(this);">
                                                         Add transfer
                                                     </button>
                                                 </div>
@@ -2112,8 +2113,11 @@
             <!-- END MODAL SECTION -->
         @endif
     </div>
+@endsection
 
 
+
+@section('scriptEnd')
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
@@ -2121,4 +2125,4 @@
     </script>
     <script type="text/javascript" src="{{asset('js/addUpdateTransferLoading.js')}}">
     </script>
-@endsection
+    @endsection
