@@ -170,11 +170,11 @@
                                 <div class="form-group">
                                     <!--warehouses associated-->
                                     <div class="col-lg-3">
-                                        <label for="namewarehouses"
-                                               class="control-label"><a class="link" data-toggle="modal"
-                                                                        data-target="#warehouses_modal">Warehouses
-                                                associated
-                                                :</a></label>
+                                        <label for="namewarehouses" class="control-label">
+                                            @if(isset($namewarehouses))<a class="link" data-toggle="modal"
+                                                                          data-target="#warehouses_modal">Warehouses
+                                                associated :</a>
+                                            @endif Warehouses associated :</label>
                                     </div>
 
                                     <div class="col-lg-7">
@@ -227,10 +227,7 @@
                                 <div class="form-group">
                                     <!--trucks associated-->
                                     <div class="col-lg-3">
-                                        <label for="trucksAssociated"
-                                               class="control-label">Trucks
-                                            associated
-                                            :</label>
+                                        <label for="trucksAssociated" class="control-label">Trucks associated :</label>
                                     </div>
                                     <div class="col-lg-7">
                                         <ul>
@@ -248,8 +245,7 @@
                                     </div>
                                     <div class="col-lg-2 text-left">
                                         <a href="{{route('showAddTruck')}}"
-                                           class="link"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span>
+                                           class="link"><span class="glyphicon glyphicon-plus-sign"></span>
                                             Add truck</a>
                                     </div>
                                 </div>
@@ -598,7 +594,9 @@
                                                     @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
                                                     @foreach($errorsTransfer as $errorT)
                                                         @if(!empty($errorT)&& $k<2)
-                                                            <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorT->name}}"></span>
+                                                            <span class="glyphicon glyphicon-warning-sign text-danger"
+                                                                  data-toggle="tooltip"
+                                                                  title="{{$errorT->name}}"></span>
                                                         @elseif(!empty($errorT)&& $k==2)
                                                             <span class="text-danger">...</span>
                                                         @endif

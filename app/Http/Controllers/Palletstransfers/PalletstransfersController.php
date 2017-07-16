@@ -600,8 +600,11 @@ class PalletstransfersController extends Controller
 
         if ($validator->fails()) {
             session()->flash('errorFields', "The field(s) has(ve) not been filled as expected. REFILL !");
+
+        } elseif($debitAccount==$creditAccount || (isset($debitAccount2) && isset($creditAccount2) && $debitAccount2 == $creditAccount2) || (isset($debitAccount3) && isset($creditAccount3) && $debitAccount3 == $creditAccount3)){
+            session()->flash('errorFields', "The fields have not been filled as expected : debit account and credit account must be different");
             return redirect()->back();
-        } else {
+        }else {
             if (isset($upload)) {
                 $filesNames = $this->upload($documents, $transfer);
                 if (!empty($filesNames) && $validate == 'true') {
@@ -942,7 +945,7 @@ class PalletstransfersController extends Controller
      */
     public function delete($id)
     {
-        if(Palletstransfer::where('normalTransferAssociated', $id)->first() <> null){
+        if (Palletstransfer::where('normalTransferAssociated', $id)->first() <> null) {
             $idAssociated = Palletstransfer::where('normalTransferAssociated', $id)->first()->id;
             $this->delete($idAssociated);
         }
@@ -1217,8 +1220,8 @@ class PalletstransfersController extends Controller
             }
         }
         foreach ($listAccounts as $account) {
-            $listTransfersDW_acc=Palletstransfer::where('type', 'Deposit-Withdrawal')->where('loading_atrnr', $loading->atrnr)->where('creditAccount', $account)->get();
-            $listTransfersWD_acc=Palletstransfer::where('type', 'Withdrawal-Deposit')->where('loading_atrnr', $loading->atrnr)->where('debitAccount', $account)->get();
+            $listTransfersDW_acc = Palletstransfer::where('type', 'Deposit-Withdrawal')->where('loading_atrnr', $loading->atrnr)->where('creditAccount', $account)->get();
+            $listTransfersWD_acc = Palletstransfer::where('type', 'Withdrawal-Deposit')->where('loading_atrnr', $loading->atrnr)->where('debitAccount', $account)->get();
 
             //check if for DW transfers there is at least 1 WD transfer and inversely
             if (count($listTransfersWD_acc) == 0) {
@@ -1309,7 +1312,7 @@ class PalletstransfersController extends Controller
             }
         }
 
-        if ((count($listTransfersSP) + count($listTransfersPS) + count($listTransfersDebt) )% 2 <> 0) {
+        if ((count($listTransfersSP) + count($listTransfersPS) + count($listTransfersDebt)) % 2 <> 0) {
             foreach ($listTransfersSP as $transferSP) {
                 $transferSP->errors()->attach($idErrorCorrecting_NotEnoughTransfers);
             }
@@ -1662,7 +1665,6 @@ class PalletstransfersController extends Controller
 
             }
         }
-
 
 
 //////STATE GENERAL////

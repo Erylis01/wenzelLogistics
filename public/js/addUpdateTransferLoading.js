@@ -1,7 +1,94 @@
-var lastDebitAccount = null;
-var lastCreditAccount = null;
+function openClosePanel1() {
+    if ($('#Pan1collapse').hasClass('in')) {
+        $("#infoPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#infoPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
 
-function selectAccount(accountSelected, index) {
+function openClosePanelSub1() {
+    if ($('#PanSub1collapse').hasClass('in')) {
+        $("#generalPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#generalPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+
+function openClosePanelSub2() {
+    if ($('#PanSub2collapse').hasClass('in')) {
+        $("#loadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+        $("#PanSub3collapse").removeClass('panel-collapse collapse in');
+        $("#PanSub3collapse").addClass('panel-collapse collapse');
+        $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#loadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+        // $("#PanSub3collapse").collapse('show');
+        $("#PanSub3collapse").removeClass('panel-collapse collapse');
+        $("#PanSub3collapse").addClass('panel-collapse collapse in');
+        $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+
+function openClosePanelSub3() {
+    if ($('#PanSub3collapse').hasClass('in')) {
+        $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+        $("#PanSub2collapse").removeClass('panel-collapse collapse in');
+        $("#PanSub2collapse").addClass('panel-collapse collapse');
+        $("#loadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+        // $("#PanSub3collapse").collapse('show');
+        $("#PanSub2collapse").removeClass('panel-collapse collapse');
+        $("#PanSub2collapse").addClass('panel-collapse collapse in');
+        $("#loadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+
+
+    if ($('#PanSub3collapse').hasClass('in')) {
+        $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+
+function openClosePanel2() {
+    if($('#Pan2collapse').hasClass('in')){
+        $("#palletsPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    }else{
+        $("#palletsPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+
+function blockSubmitAdd(button){
+    // $('button[type=submit], input[type=submit]').prop('disabled',true);
+    // $('#addPalletstransfer').prop('disabled', true);
+    // console.log(button);
+    // document.write(button.attr('name'));
+    // document.write('test');
+    // $('#addPalletstransfer').on("click", function() {
+    //     $(this).attr("disabled", "disabled");
+    // });
+    var addPalletstransfer = $('#addPalletstransfer').val();
+    $.ajax({
+        type: 'POST',
+        url: '../app/Http/Controllers/Loadings/DetailsLoadingController/submitUpdateUpload',
+        data: 'addPalletstransfer='+ addPalletstransfer,  // fix: need to append your data to the call
+        success: function(data){
+            alert('olol');
+        }
+    });
+    $('#formSubmitUpdateUpload').submit();
+    $('#addPalletstransfer').prop('disabled', true);
+// document.write(addPalletstransfer);
+
+
+
+
+    //     $('#addPalletstransfer').attr('disabled', 'disabled');
+    // $('#select-debit1b').find("option[value='account-1']").attr('selected',true);
+}
+
+function selectAccount(index) {
     if (index !== '3') {
         $("#select-debit3").empty();
         $("#select-credit3").empty();
@@ -51,17 +138,9 @@ function selectAccount(accountSelected, index) {
             }
         }
 }
-
-    // if (lastDebitAccount !== accountSelected) {
-    //     $("#select-credit"+index+" option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
-    //     if (lastDebitAccount !== null) {
-    //         $("#select-credit"+index+" option[value=\'" + lastDebitAccount + "\']").show().prop('disabled', false);
-    //     }
-    // }
-    // lastDebitAccount = accountSelected;
 }
 
-function creditaccount(accountSelected, index) {
+function creditaccount(index) {
     if(index !=='3') {
         $("#select-debit3").empty();
         $("#select-credit3").empty();
@@ -111,14 +190,6 @@ function creditaccount(accountSelected, index) {
             }
         }
     }
-
-    // if (lastCreditAccount !== accountSelected) {
-    //     $("#select-debit"+index+" option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
-    //     if (lastCreditAccount !== null) {
-    //         $("#select-debit"+index+" option[value=\'" + lastCreditAccount + "\']").show().prop('disabled', false);
-    //     }
-    // }
-    // lastCreditAccount = accountSelected;
 }
 
 function displayFieldsTypeNormal(typeSelected) {

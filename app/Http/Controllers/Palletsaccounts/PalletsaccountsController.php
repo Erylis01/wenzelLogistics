@@ -211,10 +211,12 @@ class PalletsaccountsController extends Controller
             //according to the type of account, get the right entities associated
             if ($account->type == 'Network') {
                 $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
-                foreach ($warehousesAssociated as $warehouse) {
-                    $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('name');
+                if(!$warehousesAssociated->isEmpty()){
+                    foreach ($warehousesAssociated as $warehouse) {
+                        $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('name');
+                    }
+                    asort($namewarehouses);
                 }
-                asort($namewarehouses);
             } elseif ($account->type == 'Carrier') {
                 $trucksAssociated = Truck::where('palletsaccount_name', $name)->orderBy('licensePlate', 'asc')->get();
             }

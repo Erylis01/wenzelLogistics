@@ -70,8 +70,12 @@
                         <div class="panel subpanel">
                             <!--head panel info-->
                             <div class="panel-heading">
-                                <div class="col-lg-3">
-                                    <a data-toggle="collapse" href="#Pan1collapse">Information</a>
+                                <div class="col-lg-2">
+                                    <a data-toggle="collapse" href="#Pan1collapse" onclick="openClosePanel1();"><span id="infoPanelLogo" @if (Session::has('openPanelInformation')) class="glyphicon glyphicon-menu-up" @else class="glyphicon glyphicon-menu-down" @endif></span> Information</a>
+                                </div>
+                                <div class="col-lg-9 text-center">
+                                    @php($carrier=explode(',', $loading->subfrachter)[0])
+                                    <p><span class="glyphicon glyphicon-road"></span> {{$carrier}} - {{$loading->plzb}} {{$loading->ortb}} {{$loading->landb}} <span class="glyphicon glyphicon-arrow-right"></span> {{$loading->plze}} {{$loading->orte}} {{$loading->lande}} - {{$loading->anz}} {{$loading->art}}</p>
                                 </div>
                                 <br>
                             </div>
@@ -86,9 +90,9 @@
                                         <!-- subpanel general-->
                                         <div class="panel subpanel">
                                             <div class="panel-heading">
-                                                <a data-toggle="collapse" href="#PanSub3collapse">General</a>
+                                                <a data-toggle="collapse" href="#PanSub1collapse" onclick="openClosePanelSub1();"><span id="generalPanelLogo" @if (Session::has('openPanelInformation')) class="glyphicon glyphicon-menu-up" @else class="glyphicon glyphicon-menu-down" @endif></span> General</a>
                                             </div>
-                                            <div id="PanSub3collapse" class="panel-collapse @if(Session::has('openPanelInformation'))in @endif collapse">
+                                            <div id="PanSub1collapse" class="panel-collapse @if(Session::has('openPanelInformation'))in @endif collapse">
                                                 <div class="panel-body">
                                                     <div class="form-group">
                                                         <!--referenz-->
@@ -172,12 +176,12 @@
                                         <!-- subpanel loading-->
                                         <div class="panel subpanel col-lg-6">
                                             <div class="panel-heading">
-                                                <a class="col-lg-3 text-left" data-toggle="collapse" href="#PanSub1collapse">Loading</a>
+                                                <a class="col-lg-4 text-left" data-toggle="collapse" href="#PanSub2collapse" onclick="openClosePanelSub2();"><span id="loadingPanelLogo" @if (Session::has('openPanelInformation')) class="glyphicon glyphicon-menu-up" @else class="glyphicon glyphicon-menu-down" @endif></span> Loading</a>
                                                 <div class="col-lg-5 col-lg-offset-1 text-right details-loading">
                                                     <input type="date" name="ladedatum" class="form-control  text-center" value="{{ $loading->ladedatum }}" placeholder="ladedatum" required />
                                                 </div>
                                             </div>
-                                            <div id="PanSub1collapse" class="panel-collapse @if (Session::has('openPanelInformation')) in @endif collapse">
+                                            <div id="PanSub2collapse" class="panel-collapse @if (Session::has('openPanelInformation')) in @endif collapse">
                                                 <div class="panel-body">
                                                     <div class="form-group">
                                                         <!--beladestelle-->
@@ -214,12 +218,12 @@
                                         <!-- subpanel unloading-->
                                         <div class="panel subpanel col-lg-6">
                                             <div class="panel-heading">
-                                                <a class="col-lg-3 text-left" data-toggle="collapse" href="#PanSub2collapse">Offloading</a>
+                                                <a class="col-lg-4 text-left" data-toggle="collapse" href="#PanSub3collapse" onclick="openClosePanelSub3();"><span id="offloadingPanelLogo" @if (Session::has('openPanelInformation')) class="glyphicon glyphicon-menu-up" @else class="glyphicon glyphicon-menu-down" @endif></span> Offloading</a>
                                                 <div class="col-lg-5 col-lg-offset-1 text-right details-loading">
                                                     <input type="date" name="entladedatum" class="form-control" value="{{ $loading->entladedatum }}" placeholder="entladedatum" required />
                                                 </div>
                                             </div>
-                                            <div id="PanSub2collapse" class="panel-collapse @if (Session::has('openPanelInformation')) in @endif collapse">
+                                            <div id="PanSub3collapse" class="panel-collapse @if (Session::has('openPanelInformation')) in @endif collapse">
                                                 <div class="panel-body">
                                                     <div class="form-group">
                                                         <!--entladestelle-->
@@ -261,7 +265,7 @@
                         <div class="panel subpanel">
                             <div class="panel-heading">
                                 <div class="col-lg-3">
-                                    <a data-toggle="collapse" href="#Pan2collapse">Pallets location ?</a>
+                                    <a data-toggle="collapse" href="#Pan2collapse" onclick="openClosePanel2();"><span id="palletsPanelLogo" @if (Session::has('openPanelPallets')) class="glyphicon glyphicon-menu-up" @else class="glyphicon glyphicon-menu-down" @endif></span> Pallets location ?</a>
                                 </div>
                                 <div class="col-lg-offset-2 col-lg-3">
                                     <p>order : {{$loading->anz}}</p>
@@ -272,7 +276,7 @@
                             </div>
                             <div id="Pan2collapse" class="panel-collapse @if(Session::has('openPanelPallets')) in @endif collapse">
                                 <div class="panel-body">
-                                    <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data">
+                                    <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data" id="formSubmitUpdateUpload">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <!--msg-->
                                         <div class="row">
@@ -290,7 +294,7 @@
                                         <div class="row">
                                             <div class="from-group">
                                                 <div class="col-lg-4 col-lg-offset-4">
-                                                    <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" data-toggle="collapse" data-target="#addForm">
+                                                    <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="blockSubmitAdd(this);">
                                                         Add transfer
                                                     </button>
                                                 </div>
@@ -433,12 +437,12 @@
                                                                 </div>
                                                         @endif
                                                         <!--exchanging ?-->
-                                                                <div class="col-lg-2 checkbox" id="exchangingL" @if(isset($type) && ($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'))style="display: block" @else style="display:none" @endif>
+                                                                <div class="col-lg-3 checkbox" id="exchangingL" @if(isset($type) && ($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'))style="display: block" @else style="display:none" @endif>
                                                                     @php($notExchanging=\App\Palletsaccount::where('name', $truckAssociated->name)->first()->notExchange)
-                                                                    <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($notExchanging==1) checked @endif onchange="displayFieldsDebt(this);"/>Not exchanging</label>
+                                                                    <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($notExchanging==1) checked @endif onchange="displayFieldsDebt(this);"/>Agreed w/o exchange</label>
                                                                 </div>
                                                         <!--add pallet account-->
-                                                            <div class="col-lg-2 col-lg-offset-1 text-left">
+                                                            <div class="col-lg-2 text-left">
                                                                 <a href="{{route('showAddPalletsaccount')}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                                             </div>
                                                         </div>
@@ -462,7 +466,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-4" id="debitAccount3" @if(isset($type) && ($type=='Withdrawal_Only' || $type=='Other')) style="display: block" @else style="display:none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit3b" title="Debit Account" name="debitAccount3b" onchange="selectAccount(this.value, '3b');">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit3b" title="Debit Account" name="debitAccount3b" onchange="selectAccount('3b');">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                         @if((Illuminate\Support\Facades\Input::old('debitAccount3') && (strpos(old('debitAccount3'), '-') == 7 && explode('-', old('debitAccount3'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount3'))[1]))||(isset($debitAccount) && (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}"
@@ -493,7 +497,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-4" id="debitAccount2" @if(isset($type) && $type=='Withdrawal-Deposit') style="display: block" @else  style="display:none;" @endif >
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit2b" title="Debit Account" name="debitAccount2b" onchange="selectAccount(this.value, '2b');">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit2b" title="Debit Account" name="debitAccount2b" onchange="selectAccount('2b');">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                         @if((Illuminate\Support\Facades\Input::old('debitAccount2b') && (strpos(old('debitAccount2b'), '-') == 7 && explode('-', old('debitAccount2b'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount2b'))[1]))||(isset($debitAccount) && (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
@@ -504,7 +508,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-4" id="debitAccount4" @if(isset($type) && ($type=='Purchase-Sale' || $type=='Debt')) style="display: block" @else style="display: none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit4b" title="Debit Account" name="debitAccount4b" onchange="selectAccount(this.value, '4b');">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit4b" title="Debit Account" name="debitAccount4b" onchange="selectAccount('4b');">
                                                                     @if(isset($debitAccountCorr)&& isset($creditAccountCorr))
                                                                         @php($partsDebitAccount=explode('-',$debitAccountCorr))
                                                                         @php($idDC=$partsDebitAccount[count($partsDebitAccount)-1])
@@ -557,7 +561,7 @@
                                                             </div>
                                                             <div class="col-lg-4" id="creditAccount3"
                                                                  @if(isset($type) && ($type=='Deposit_Only'||$type=='Other')) style="display: block" @else style="display: none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount3b" id="select-credit3b" onchange="creditaccount(this.value, '3b');">
+                                                                <select class="selectpicker show-tick form-control" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount3b" id="select-credit3b" onchange="creditaccount('3b');">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                         @if((Illuminate\Support\Facades\Input::old('creditAccount3') && (strpos(old('creditAccount3'), '-') == 7 && explode('-', old('creditAccount3'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount3'))[1]))||(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}"
@@ -579,7 +583,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-4" id="creditAccount1" @if(isset($type) && ($type=='Withdrawal_Only'||$type=='Withdrawal-Deposit')) style="display: block;" @else style="display: none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount1b" id="select-credit1b" onchange="creditaccount(this.value, '1b');">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount1b" id="select-credit1b" onchange="creditaccount('1b');">
                                                                         @if((Illuminate\Support\Facades\Input::old('creditAccount1') && (strpos(old('creditAccount1'), '-') == 5 && explode('-', old('creditAccount1'))[0] == 'truck') && ($truckAssociated->id==explode('-', old('creditAccount1'))[1]))||(isset($creditAccount)&& (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') && ($truckAssociated->id==explode('-', $creditAccount)[1])))
                                                                             <option value="truck-{{$truckAssociated->id}}"
                                                                                     selected>{{$truckAssociated->name}}
@@ -591,7 +595,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-4" id="creditAccount2" @if(isset($type) && $type=='Deposit-Withdrawal') style="display: block;" @else style="display:none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount2b" id="select-credit2b" onchange="creditaccount(this.value, '2b');">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount2b" id="select-credit2b" onchange="creditaccount('2b');">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                         @if((Illuminate\Support\Facades\Input::old('creditAccount2b') && (strpos(old('creditAccount2b'), '-') == 7 && explode('-', old('creditAccount2b'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount2b'))[1]))||(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}"
@@ -603,7 +607,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-4" id="creditAccount4" @if(isset($type) && ($type=='Purchase-Sale'||$type=='Debt')) style="display: block" @else style="display: none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount4b" id="select-credit4b" onchange="creditaccount(this.value, '4b');">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount4b" id="select-credit4b" onchange="creditaccount('4b');">
                                                                     @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                         <option value="account-1">
                                                                             WENZEL
@@ -690,7 +694,7 @@
                                                                     <label for="debitAccount2" class="control-label">*Debit :</label>
                                                                 </div>
                                                                 <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account (=saler)" name="debitAccount2" id="select-debit2" onchange="selectAccount(this.value, '2');">
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account (=saler)" name="debitAccount2" id="select-debit2" onchange="selectAccount('2');">
                                                                         @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                             <option value="account-1">WENZEL</option>
                                                                             @if($typeDC=='truck')
@@ -722,7 +726,7 @@
                                                                     <label for="creditAccount2" class="control-label">*Credit :</label>
                                                                 </div>
                                                                 <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account (=purchaser)" name="creditAccount2" id="select-credit2" onchange="creditaccount(this.value, '2');">
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account (=purchaser)" name="creditAccount2" id="select-credit2" onchange="creditaccount('2');">
                                                                         @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                             <option value="account-1">WENZEL</option>
                                                                             @if($typeDC=='truck')
@@ -771,7 +775,7 @@
                                                                     <label for="debitAccount3" class="control-label">*Debit :</label>
                                                                 </div>
                                                                 <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account" name="debitAccount3" id="select-debit3" onchange="selectAccount(this.value, '3');">
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account" name="debitAccount3" id="select-debit3" onchange="selectAccount('3');">
                                                                         @if(isset($debitAccount3))
                                                                             @if(strpos($debitAccount3, '-') == 5 && explode('-', $debitAccount3)[0] == 'truck')
                                                                                 <option value="truck-{{explode('-', $debitAccount3)[1]}}"
@@ -787,7 +791,7 @@
                                                                     <label for="creditAccount3" class="control-label">*Credit :</label>
                                                                 </div>
                                                                 <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount3" id="select-credit3" onchange="creditaccount(this.value, '3');">
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount3" id="select-credit3" onchange="creditaccount('3');">
                                                                         @if(isset($creditAccount3))
                                                                             @if(strpos($creditAccount3, '-') == 5 && explode('-', $creditAccount3)[0] == 'truck')
                                                                                 <option value="truck-{{explode('-', $creditAccount3)[1]}}"
@@ -804,7 +808,7 @@
                                                         <!--btn submit add-->
                                                         <div class="form-group">
                                                             <div class="col-lg-4 col-lg-offset-4">
-                                                                <input type="submit" class="btn btn-primary btn-block btn-form" value="Add" name="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" />
+                                                                <input type="submit" class="btn btn-primary btn-block btn-form" value="Add" name="addPalletstransfer" id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1091,10 +1095,10 @@
                                                         <div class="col-lg-1">
                                                             <a class="link" href="{{route('showDetailsPalletstransfer',$transferNormal->id)}}"><span class="glyphicon glyphicon-eye-open"></span></a>
                                                         </div>
-                                                        <div class="col-lg-1">
-                                                            <a class="link"  data-toggle="modal"
-                                                               data-target="#sendEmailTransfer_modal"><span class="glyphicon glyphicon-envelope"></span></a>
-                                                        </div>
+                                                        {{--<div class="col-lg-1">--}}
+                                                            {{--<a class="link"  data-toggle="modal"--}}
+                                                               {{--data-target="#sendEmailTransfer_modal"><span class="glyphicon glyphicon-envelope"></span></a>--}}
+                                                        {{--</div>--}}
                                                     @if(!empty($errorsTransfer))
                                                         <!--show addCorrectingTransfer -->
                                                             <div class="col-lg-1">
@@ -1552,10 +1556,10 @@
                                                         <div class="col-lg-1">
                                                             <a class="link" href="{{route('showDetailsPalletstransfer',$transferCorrecting->id)}}"><span class="glyphicon glyphicon-eye-open"></span></a>
                                                         </div>
-                                                        <div class="col-lg-1">
-                                                            <a class="link"  data-toggle="modal"
-                                                               data-target="#sendEmailTransfer_modal"><span class="glyphicon glyphicon-envelope"></span></a>
-                                                        </div>
+                                                        {{--<div class="col-lg-1">--}}
+                                                            {{--<a class="link"  data-toggle="modal"--}}
+                                                               {{--data-target="#sendEmailTransfer_modal"><span class="glyphicon glyphicon-envelope"></span></a>--}}
+                                                        {{--</div>--}}
                                                         <div>
                                                             <button type="submit" class=" btn btn-primary btn-form glyphicon glyphicon-remove" value="{{$transferCorrecting->id}}" name="delete"></button>
                                                         </div>

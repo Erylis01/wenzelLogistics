@@ -147,7 +147,7 @@ class DetailsLoadingController extends Controller
             Loading::where('atrnr', 'like', $atrnr . '%')->update(['disp' => $disp]);
             session()->flash('messageUpdateLoading', 'Successfully updated loading');
         }
-        $this->state(Loading::where('atrnr', $atrnr)->first(), Palletstransfer::where('loading_atrnr', $atrnr)->get() );
+        $this->state(Loading::where('atrnr', $atrnr)->first(), Palletstransfer::where('loading_atrnr', $atrnr)->get());
         session()->flash('openPanelInformation', 'openPanelInformation');
     }
 
@@ -160,6 +160,7 @@ class DetailsLoadingController extends Controller
      */
     public function submitUpdateUpload($atrnr, Request $request)
     {
+
         $loading = Loading::where('atrnr', $atrnr)->first();
         //BUTTONS
         //update only the panel information
@@ -190,7 +191,6 @@ class DetailsLoadingController extends Controller
         $okSubmitPalletsValidateModal = Input::get('okSubmitPalletsValidateModal');
         //show the form to add a transfer to correct an other transfer
         $showAddCorrectingTransfer = Input::get('showAddCorrectingTransfer');
-
         // get all the pallets account except the carriers accounts that will be get after, truck by truck
         $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
         $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
@@ -291,9 +291,11 @@ class DetailsLoadingController extends Controller
                 }
             } elseif ($type == 'Purchase-Sale') {
                 $palletsNumber2 = Input::get('palletsNumber2C');
+                $palletsNumber2C=$palletsNumber2;
             } else {
                 $palletsNumber2 = null;
             }
+
             $addTransferForm = $this->addPalletsTransfer($notExchanging, $truckAssociated, $type, $debitAccount, $creditAccount, $debitAccount2, $creditAccount2, $palletsNumber, $palletsNumber2, $creditAccount3, $debitAccount3, $palletsNumber3, $normalTransferAssociated);
 
             if ($addTransferForm == 'error') {
@@ -303,6 +305,13 @@ class DetailsLoadingController extends Controller
                 } elseif ($type == 'Purchase-Sale' || $type == 'Other' || $type == 'Debt') {
                     $showAddCorrectingTransfer = true;
                     return view('loadings.detailsLoading', compact('loading', 'disp', 'date', 'details', 'type', 'normalTransferAssociated', 'creditAccount', 'debitAccount', 'palletsNumber', 'truckAssociated', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'showAddCorrectingTransfer', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
+                }elseif(isset($normalTransferAssociated)){
+                    $transferNormal = Palletstransfer::where('id', $showAddCorrectingTransfer)->first();
+                    $creditAccountCorr = $transferNormal->creditAccount;
+                    $debitAccountCorr = $transferNormal->debitAccount;
+                    return view('loadings.detailsLoading', compact('debitAccountCorr', 'creditAccountCorr', 'palletsNumber', 'palletsNumber2C', 'loading', 'disp', 'transferToCorrect', 'listPalletsAccounts', 'listTrucksAccounts', 'truckAssociated', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'date', 'showAddCorrectingTransfer', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
+                }else{
+                    return view('loadings.detailsLoading', compact('loading', 'disp', 'palletsNumber', 'palletsNumber2', 'truckAssociated', 'listPalletsAccounts', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'addTransferForm', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'));
                 }
             } else {
                 //redirect with modal open to validate the transfer adding
@@ -495,36 +504,43 @@ class DetailsLoadingController extends Controller
      */
     public function addPalletsTransfer($notExchanging, $truckAssociated, $type, $debitAccount, $creditAccount, $debitAccount2, $creditAccount2, $palletsNumber, $palletsNumber2, $creditAccount3, $debitAccount3, $palletsNumber3, $normalTransferAssociated)
     {
-        if (!isset($type)) {
-            session()->flash('errorType', "The type hasn't been filled");
+        if($debitAccount==$creditAccount || (isset($debitAccount2) && isset($creditAccount2) && $debitAccount2 == $creditAccount2) || (isset($debitAccount3) && isset($creditAccount3) && $debitAccount3 == $creditAccount3)){
             $view = 'error';
-        } elseif ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
-            if (!isset($debitAccount) && !isset($creditAccount) && !(isset($palletsNumber))) {
+            session()->flash('errorFields', "The fields have not been filled as expected : debit account and credit account must be different");
+        }else{
+            if (!isset($type)) {
+                session()->flash('errorType', "The type hasn't been filled");
                 $view = 'error';
-                session()->flash('errorFields', "The fields have not been filled as expected");
-            } elseif (isset($notExchanging) && ($palletsNumber2 == 0 || $palletsNumber == 0) && (!isset($debitAccount3) || !isset($creditAccount3) || !(isset($palletsNumber3)))) {
-                $view = 'error';
-                session()->flash('errorFields', "The fields have not been filled as expected");
+            } elseif ($type == 'Deposit-Withdrawal' || $type == 'Withdrawal-Deposit') {
+                if (!isset($debitAccount) && !isset($creditAccount) && !(isset($palletsNumber))) {
+                    $view = 'error';
+                    session()->flash('errorFields', "The fields have not been filled as expected");
+                } elseif (isset($notExchanging) && ($palletsNumber2 == 0 || $palletsNumber == 0) && (!isset($debitAccount3) || !isset($creditAccount3) || !(isset($palletsNumber3)))) {
+                    $view = 'error';
+                    session()->flash('errorFields', "The fields have not been filled as expected");
+                } else {
+                    $creditAccount2 = $debitAccount;
+                    $debitAccount2 = $creditAccount;
+                    $view = 'ok';
+                }
+            } elseif ($type == 'Purchase-Sale') {
+                if (!isset($normalTransferAssociated) && !isset($debitAccount) && !isset($creditAccount) && !isset($palletsNumber) && !isset($debitAccount2) && !isset($creditAccount2) && !isset($palletsNumber2)) {
+                    $view = 'error';
+                    session()->flash('errorFields', "The fields have not been filled as expected");
+                } else {
+                    $view = 'ok';
+                }
             } else {
-                $creditAccount2 = $debitAccount;
-                $debitAccount2 = $creditAccount;
-                $view = 'ok';
-            }
-        } elseif ($type == 'Purchase-Sale') {
-            if (!isset($normalTransferAssociated) && !isset($debitAccount) && !isset($creditAccount) && !isset($palletsNumber) && !isset($debitAccount2) && !isset($creditAccount2) && !isset($palletsNumber2)) {
-                $view = 'error';
-                session()->flash('errorFields', "The fields have not been filled as expected");
-            } else {
-                $view = 'ok';
-            }
-        } else {
-            if (!isset($normalTransferAssociated) && !isset($debitAccount) && !isset($creditAccount) && !(isset($palletsNumber))) {
-                $view = 'error';
-                session()->flash('errorFields', "The fields have not been filled as expected");
-            } else {
-                $view = 'ok';
+                if (!isset($normalTransferAssociated) && !isset($debitAccount) && !isset($creditAccount) && !(isset($palletsNumber))) {
+                    $view = 'error';
+                    session()->flash('errorFields', "The fields have not been filled as expected");
+                } else {
+                    $view = 'ok';
+                }
             }
         }
+
+
 
         if ($view == 'ok') {
             if (isset($notExchanging)) {
@@ -534,7 +550,6 @@ class DetailsLoadingController extends Controller
             }
 
             session()->flash('palletsNumber', $palletsNumber);
-            session()->flash('openPanelPallets', 'openPanelPallets');
             $actualTheoricalDebitPalletsNumber = $this->actualTheoricalPalletsNumber($creditAccount, $debitAccount)[0];
             $actualTheoricalCreditPalletsNumber = $this->actualTheoricalPalletsNumber($creditAccount, $debitAccount)[1];
             $this->displayAccounts($creditAccount, $debitAccount, null);
@@ -579,6 +594,7 @@ class DetailsLoadingController extends Controller
                 session()->put('palletsNumberCreditAccount3', $actualTheoricalCreditPalletsNumber3);
             }
         }
+        session()->flash('openPanelPallets', 'openPanelPallets');
         return $view;
     }
 
@@ -1286,8 +1302,8 @@ class DetailsLoadingController extends Controller
             }
         }
         foreach ($listAccounts as $account) {
-            $listTransfersDW_acc=Palletstransfer::where('type', 'Deposit-Withdrawal')->where('loading_atrnr', $loading->atrnr)->where('creditAccount', $account)->get();
-            $listTransfersWD_acc=Palletstransfer::where('type', 'Withdrawal-Deposit')->where('loading_atrnr', $loading->atrnr)->where('debitAccount', $account)->get();
+            $listTransfersDW_acc = Palletstransfer::where('type', 'Deposit-Withdrawal')->where('loading_atrnr', $loading->atrnr)->where('creditAccount', $account)->get();
+            $listTransfersWD_acc = Palletstransfer::where('type', 'Withdrawal-Deposit')->where('loading_atrnr', $loading->atrnr)->where('debitAccount', $account)->get();
 
             //check if for DW transfers there is at least 1 WD transfer and inversely
             if (count($listTransfersWD_acc) == 0) {
@@ -1378,7 +1394,7 @@ class DetailsLoadingController extends Controller
             }
         }
 
-        if ((count($listTransfersSP) + count($listTransfersPS) + count($listTransfersDebt) )% 2 <> 0) {
+        if ((count($listTransfersSP) + count($listTransfersPS) + count($listTransfersDebt)) % 2 <> 0) {
             foreach ($listTransfersSP as $transferSP) {
                 $transferSP->errors()->attach($idErrorCorrecting_NotEnoughTransfers);
             }
@@ -1731,7 +1747,6 @@ class DetailsLoadingController extends Controller
 
             }
         }
-
 
 
 //////STATE GENERAL////
