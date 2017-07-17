@@ -27,6 +27,11 @@
     nonActive
 @endsection
 
+@section('scriptBegin')
+    <script type="text/javascript" src="{{asset('js/addUpdateWarehouse.js')}}">
+    </script>
+@endsection
+
 @section('content')
     <div class="row">
         @if(Auth::guest())
@@ -39,19 +44,16 @@
                         <div class="col-lg-11 text-left">Details of the warehouse : {{$id}} - {{ $name }}
                         </div>
                         <div>
-                            <button type="button"
-                                    class=" btn btn-primary btn-form glyphicon glyphicon-remove"
-                                    data-toggle="modal"
-                                    data-target="#deleteWarehouse_modal"
-                                    value="{{$id}}"
-                                    name="deleteWarehouse_modal"
-                            ></button>
+                            <button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-remove"
+                                    data-toggle="modal" data-target="#deleteWarehouse_modal" value="{{$id}}"
+                                    name="deleteWarehouse_modal"></button>
                         </div>
-                        </div>
+                    </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('updateWarehouse', $id)}}">
+                              action="{{route('updateWarehouse', $id)}}" id="formUpdateWarehouse">
                             {{ csrf_field() }}
+                            <input type="hidden" name="actionUpdateForm" id="actionUpdateForm" />
                             <p class="text-center legend-auth">* required field</p>
 
                             @if(Session::has('messageRefuseUpdateWarehouse'))
@@ -82,8 +84,7 @@
                                     <label for="adress" class="control-label"><span>*</span> Adress :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="adress" type="text" class="form-control" name="adress"
-                                           value="{{ $adress }}" placeholder="Adress" required autofocus>
+                                    <input id="adress" type="text" class="form-control" name="adress" value="{{ $adress }}" placeholder="Adress" required autofocus>
                                     @if ($errors->has('adress'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>
@@ -185,14 +186,12 @@
                             <div class="form-group">
                                 <!--contact name-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Contact Name :</label>
+                                    <label for="namecontact" class="control-label">Contact Infos :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                        <textarea
-                                                class="form-control" name="namecontact"
-                                                id="namecontact"
-                                                rows="2"
-                                                placeholder="Contact Infos (name, ...)" autofocus>{{$namecontact}}</textarea>
+                                        <textarea class="form-control" name="namecontact"
+                                                id="namecontact" rows="2" placeholder="Contact Infos (name, ...)"
+                                                autofocus>{{$namecontact}}</textarea>
                                 </div>
                             </div>
 
@@ -246,8 +245,8 @@
                                     <input type="submit"
                                            class="btn btn-primary btn-block btn-form"
                                            value="Update"
-                                           name="updateWarehouse" data-toggle="modal"
-                                           data-target="#updateWarehouse_modal"/>
+                                           name="updateWarehouse" id="updateWarehouse" data-toggle="modal"
+                                           data-target="#updateWarehouse_modal" onclick="formUpdateSubmitBlock(this);"/>
                                 </div>
                             </div>
 
@@ -257,15 +256,12 @@
                                     <div class="modal-dialog modal-md">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="submit" class="close" value="close"
-                                                        name="refuseUpdateWarehouse">&times;
+                                                <button type="submit" class="close" value="refuseUpdateWarehouse"
+                                                        name="refuseUpdateWarehouse" id="refuseUpdateWarehouse" onclick="formUpdateSubmitBlock(this);">&times;
                                                 </button>
                                                 <h4 class="modal-title text-center">Be careful !</h4>
                                             </div>
                                             <div class="modal-body center">
-                                                <form role="form" method="POST"
-                                                      action="{{route('updateWarehouse', $id)}}">
-                                                    {{ csrf_field() }}
                                                     @if(count($zipcodeWarehouses)==1)
                                                         <p class="text-left">
                                                             An other warehouse ({{$zipcodeWarehouses[0]->name}}) already
@@ -273,34 +269,29 @@
                                                             sure to create a new one ?
                                                         </p>
                                                     @else
-                                                        <p class="text-left">
-                                                            Others warehouses already exist in this town :
-                                                        </p>
+                                                        <p class="text-left"> Others warehouses already exist in this town : </p>
                                                         <ul>
                                                             @foreach($zipcodeWarehouses as $warehouse)
                                                                 <li class="text-left">{{$warehouse->name}}</li>
                                                             @endforeach
                                                         </ul>
-                                                        <p class="text-left">
-                                                            Are you sure to create a new one ?
-                                                        </p>
+                                                        <p class="text-left"> Are you sure to create a new one ? </p>
                                                     @endif
                                                     <div class="text-center">
                                                         <button type="submit" class="btn btn-danger btn-modal"
-                                                                value="yes"
-                                                                name="validateUpdateWarehouse">
+                                                                value="validateUpdateWarehouse"
+                                                                name="validateUpdateWarehouse" id="validateUpdateWarehouse"  onclick="formUpdateSubmitBlock(this);">
                                                             Yes
                                                         </button>
 
-                                                        <button type="submit" class="btn btn-success btn-modal"
-                                                                value="close" name="refuseUpdateWarehouse">No
+                                                        <button type="submit" class="btn btn-success btn-modal" value="refuseUpdateWarehouse" name="refuseUpdateWarehouse" id="refuseUpdateWarehouseb" onclick="formUpdateSubmitBlock(this);">
+                                                            No
                                                         </button>
                                                     </div>
-                                                </form>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-default btn-modal"
-                                                        value="close" name="refuseUpdateWarehouse">
+                                                        value="refuseUpdateWarehouse" name="refuseUpdateWarehouse" id="refuseUpdateWarehouse3" onclick="formUpdateSubmitBlock(this);">
                                                     Close
                                                 </button>
                                             </div>
@@ -319,12 +310,13 @@
                                         <h4 class="modal-title text-center">Are you sure to delete this warehouse ?</h4>
                                     </div>
                                     <div class="modal-body center">
-                                        <form method="post" action="{{route('deleteWarehouse',$id)}}">
+                                        <form method="post" action="{{route('deleteWarehouse',$id)}}" id="formDeleteWarehouse">
                                             <input type="hidden" name="_method" value="delete">
+                                            <input type="hidden" name="actionDeleteForm" id="actionDeleteForm" />
                                             {{ csrf_field() }}
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-danger btn-modal" value="yes"
-                                                        name="deleteWarehouse">
+                                                <button type="submit" class="btn btn-danger btn-modal" value="deleteWarehouse"
+                                                        name="deleteWarehouse" id="deleteWarehouse" onclick="formDeleteSubmitBlock(this);">
                                                     Yes
                                                 </button>
                                                 <button type="button" class="btn btn-success btn-modal"
@@ -348,4 +340,9 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('scriptEnd')
+    <script type="text/javascript" src="{{asset('js/addUpdateWarehouse.js')}}">
+    </script>
 @endsection

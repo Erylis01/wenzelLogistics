@@ -1,24 +1,42 @@
-var lastDebitAccount = null;
-var lastCreditAccount = null;
+// var lastDebitAccount = null;
+// var lastCreditAccount = null;
+//
+// function selectAccount(accountSelected) {
+//     if (lastDebitAccount !== accountSelected) {
+//         $("#select-credit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
+//         if (lastDebitAccount !== null) {
+//             $("#select-credit option[value=\'" + lastDebitAccount + "\']").show().prop('disabled', false);
+//         }
+//     }
+//     lastDebitAccount = accountSelected;
+// }
+//
+// function creditaccount(accountSelected) {
+//     if (lastCreditAccount !== accountSelected) {
+//         $("#select-debit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
+//         if (lastCreditAccount !== null) {
+//             $("#select-debit option[value=\'" + lastCreditAccount + "\']").show().prop('disabled', false);
+//         }
+//     }
+//     lastCreditAccount = accountSelected;
+// }
 
-function selectAccount(accountSelected) {
-    if (lastDebitAccount !== accountSelected) {
-        $("#select-credit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
-        if (lastDebitAccount !== null) {
-            $("#select-credit option[value=\'" + lastDebitAccount + "\']").show().prop('disabled', false);
-        }
-    }
-    lastDebitAccount = accountSelected;
+function formAddSubmitBlock(button) {
+    $('input[id=actionAddForm]').val(button.value);
+    $("#"+button.id).attr('disabled','disabled');
+    $("#formAddPalletstransfer").submit();
 }
 
-function creditaccount(accountSelected) {
-    if (lastCreditAccount !== accountSelected) {
-        $("#select-debit option[value=\'" + accountSelected + "\']").hide().prop('disabled', true);
-        if (lastCreditAccount !== null) {
-            $("#select-debit option[value=\'" + lastCreditAccount + "\']").show().prop('disabled', false);
-        }
-    }
-    lastCreditAccount = accountSelected;
+function formUpdateSubmitBlock(button) {
+    $('input[id=actionUpdateForm]').val(button.value);
+    $("#"+button.id).attr('disabled','disabled');
+    $("#formUpdatePalletstransfer").submit();
+}
+
+function formDeleteSubmitBlock(button) {
+    $('input[id=actionDeleteForm]').val(button.value);
+    $("#"+button.id).attr('disabled','disabled');
+    $("#formDeletePalletstransfer").submit();
 }
 
 

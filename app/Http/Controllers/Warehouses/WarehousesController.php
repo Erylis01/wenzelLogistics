@@ -111,8 +111,7 @@ class WarehousesController extends Controller
         //get data from the form
         $zipcode = Input::get('zipcode');
         $zipcodeWarehouses = DB::table('warehouses')->where('zipcode', '=', $zipcode)->get();
-        $validateAddWarehouse = $request->validateAddWarehouse;
-        $refuseAddWarehouse = $request->refuseAddWarehouse;
+        $actionAddForm=$request->actionAddForm;
         $name = Input::get('name');
         $nickname = $name;
         $adress = Input::get('adress');
@@ -154,14 +153,14 @@ class WarehousesController extends Controller
         } else {
             //if there is an other warehouse in this city : be careful
             if (!$zipcodeWarehouses->isEmpty()) {
-                if (isset($validateAddWarehouse)) {
+                if (isset($actionAddForm)&& $actionAddForm=='validateAddWarehouse') {
                     //you validate creating a new warehouse even if there is an other one in the city
                     Warehouse::create(
                         ['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
                     )->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                     return redirect('/allWarehouses');
-                } elseif (isset($refuseAddWarehouse)) {
+                } elseif (isset($actionAddForm)&& $actionAddForm=='refuseAddWarehouse') {
                     //if after the warning message you refuse to add this warehouse : redirect with filled field to change them
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
@@ -242,8 +241,7 @@ class WarehousesController extends Controller
     public function update(Request $request, $id)
     {
         //get data
-        $validateUpdateWarehouse = $request->validateUpdateWarehouse;
-        $refuseUpdateWarehouse = $request->refuseUpdateWarehouse;
+        $actionUpdateForm=$request->actionUpdateForm;
         $namepalletsaccounts = Input::get('namepalletsaccounts');
         foreach ($namepalletsaccounts as $namePA) {
             $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
@@ -287,12 +285,12 @@ class WarehousesController extends Controller
         } else {
             //same warning as in the add form when there is already an other warehouse in the same city
             if (isset($zipcodeWarehouses) && !$zipcodeWarehouses->isEmpty()) {
-                if (isset($validateUpdateWarehouse)) {
+                if (isset($actionUpdateForm)&& $actionUpdateForm=='validateUpdateWarehouse') {
                     Warehouse::where('id', $id)->update(['nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
                     Warehouse::where('id', $id)->first()->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
                     return redirect()->back();
-                } elseif (isset($refuseUpdateWarehouse)) {
+                } elseif (isset($actionUpdateForm)&& $actionUpdateForm=='refuseUpdateWarehouse') {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseUpdateWarehouse', 'Please change the warehouse');
                     return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));

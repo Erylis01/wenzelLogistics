@@ -27,6 +27,10 @@
     nonActive
 @endsection
 
+@section('scriptBegin')
+    <script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
+@endsection
+
 @section('content')
     <div class="row">
         @if(Auth::guest())
@@ -39,8 +43,7 @@
                      @else class="panel panelUntreated" @endif>
                     <div class="panel-heading">
                         <div class="@if($account->type=='Network' && isset($namewarehouses)) col-lg-9 @else col-lg-11 @endif text-left">
-                            Details of the account n° {{$account->id}}
-                            : {{$account->name}}
+                            Details of the account n° {{$account->id}} : {{$account->name}}
                         </div>
                         {{--@if($account->type=='Network' && isset($namewarehouses))--}}
                         {{--<div class="col-lg-1">--}}
@@ -49,19 +52,16 @@
                         {{--</div>--}}
                         {{--@endif--}}
                         <div>
-                            <button type="button"
-                                    class=" btn btn-primary btn-form glyphicon glyphicon-remove"
-                                    data-toggle="modal"
-                                    data-target="#deletePalletsaccount_modal"
-                                    value="{{$account->id}}"
-                                    name="deletePalletsaccount_modal"
-                            ></button>
+                            <button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-remove"
+                                    data-toggle="modal" data-target="#deletePalletsaccount_modal"
+                                    value="{{$account->id}}" name="deletePalletsaccount_modal"></button>
                         </div>
                     </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('updatePalletsaccount', $account->id)}}">
+                              action="{{route('updatePalletsaccount', $account->id)}}" id="formUpdatePalletsaccount">
                             {{ csrf_field() }}
+                            <input type="hidden" name="actionUpdateForm" id="actionUpdateForm"/>
 
                             <div class="form-group">
                                 <!--nickname-->
@@ -69,18 +69,9 @@
                                     <label for="nickname" class="control-label">Nickname :</label>
                                 </div>
                                 <div class="col-lg-4">
-                                    @if(isset($account->nickname))
-                                        <input id="nickname" type="text" class="form-control"
-                                               name="nickname"
-                                               value="{{ $account->nickname }}"
-                                               placeholder="Nickname"
-                                               autofocus>
-                                    @else
-                                        <input id="nickname" type="text" class="form-control"
-                                               name="nickname"
-                                               value="" placeholder="Nickname"
-                                               autofocus>
-                                    @endif
+                                    <input id="nickname" type="text" class="form-control" name="nickname"
+                                           @if(isset($account->nickname)) value="{{ $account->nickname }}"
+                                           @else value="" @endif placeholder="Nickname" autofocus/>
                                     @if ($errors->has('nickname'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('nickname') }}</strong>
@@ -89,18 +80,14 @@
                                 </div>
                                 <!--type-->
                                 <div class="col-lg-1">
-                                    <label for="type" class="control-label"><span>*</span> Type
-                                        :</label>
+                                    <label for="type" class="control-label">*Type :</label>
                                 </div>
                                 <div class="col-lg-2">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
-                                    <select class="selectpicker show-tick form-control"
-                                            data-size="5"
+                                    <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true"
-                                            data-live-search-style="startsWith"
-                                            title="Type" name="type" id="type"
-                                            onchange="displayFields(this);"
-                                            required>
+                                            data-live-search-style="startsWith" title="Type" name="type" id="type"
+                                            onchange="displayFields(this);" required>
                                         @if(Illuminate\Support\Facades\Input::old('type') || isset($account->type))
                                             <option @if(old('type') == 'Carrier' || $account->type == 'Carrier') selected
                                                     @endif value="Carrier" id="carrierOption">
@@ -127,42 +114,27 @@
                             <div class="form-group">
                                 <!--confirmed number of pallets-->
                                 <div class="col-lg-3">
-                                    <label for="realNumberPallets" class="control-label">Confirmed
-                                        Pallets Nbr
-                                        :</label>
+                                    <label for="realNumberPallets" class="control-label">Confirmed Pallets Nbr :</label>
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="realNumberPallets" type="number"
-                                           class="form-control"
+                                    <input id="realNumberPallets" type="number" class="form-control"
                                            name="realNumberPallets"
                                            @if(isset($account->realNumberPallets)) value="{{ $account->realNumberPallets }}"
-                                           @else value="" @endif
-                                           placeholder="Confirmed pal. nbr"
-                                           required readonly autofocus>
+                                           @else value="" @endif placeholder="Confirmed pal. nbr" required readonly
+                                           autofocus>
                                 </div>
 
                                 <!--planned number of pallets-->
                                 <div class="col-lg-3">
-                                    <label for="theoricalNumberPallets" class="control-label">Planned
-                                        Pallets Nbr
+                                    <label for="theoricalNumberPallets" class="control-label">Planned Pallets Nbr
                                         :</label>
                                 </div>
                                 <div class="col-lg-2">
-                                    @if(isset($account->theoricalNumberPallets))
-                                        <input id="theoricalNumberPallets" type="number"
-                                               class="form-control"
-                                               name="theoricalNumberPallets"
-                                               value="{{ $account->theoricalNumberPallets }}"
-                                               placeholder="Planned pal. nbr"
-                                               readonly required autofocus>
-                                    @else
-                                        <input id="theoricalNumberPallets" type="number"
-                                               class="form-control"
-                                               name="theoricalNumberPallets"
-                                               value=""
-                                               placeholder="Planned pal. nbr"
-                                               readonly required autofocus>
-                                    @endif
+                                    <input id="theoricalNumberPallets" type="number" class="form-control"
+                                           name="theoricalNumberPallets"
+                                           @if(isset($account->theoricalNumberPallets)) value="{{ $account->theoricalNumberPallets }}"
+                                           @else value="" @endif placeholder="Planned pal. nbr" readonly required
+                                           autofocus/>
                                 </div>
                             </div>
 
@@ -171,20 +143,17 @@
                                     <!--warehouses associated-->
                                     <div class="col-lg-3">
                                         <label for="namewarehouses" class="control-label">
-                                            @if(isset($namewarehouses))<a class="link" data-toggle="modal"
-                                                                          data-target="#warehouses_modal">Warehouses
-                                                associated :</a>
-                                            @endif Warehouses associated :</label>
+                                            @if(isset($namewarehouses))
+                                                <a class="link" data-toggle="modal" data-target="#warehouses_modal">
+                                                    Warehouses associated :</a>
+                                            @else Warehouses associated :@endif</label>
                                     </div>
 
                                     <div class="col-lg-7">
                                         <select class="selectpicker show-tick form-control"
-                                                data-size="5"
-                                                data-live-search="true"
+                                                data-size="5" data-live-search="true"
                                                 data-live-search-style="startsWith"
-                                                title="Warehouses Associated"
-                                                name="namewarehouses[]"
-                                                multiple>
+                                                title="Warehouses Associated" name="namewarehouses[]" multiple>
                                             @foreach($listWarehouses as $warehouse )
                                                 @php($list[]=null)
                                                 @if(Illuminate\Support\Facades\Input::old('namewarehouses'))
@@ -215,9 +184,8 @@
 
                                     </div>
                                     <div class="col-lg-2 text-left">
-                                        <a href="{{route('showAddWarehouse')}}"
-                                           class="link"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span>
+                                        <a href="{{route('showAddWarehouse')}}" class="link">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
                                             Add warehouse</a>
                                     </div>
                                 </div>
@@ -233,9 +201,9 @@
                                         <ul>
                                             @if(isset($trucksAssociated))
                                                 @foreach($trucksAssociated as $truck)
-                                                    <li class="text-left"><a
-                                                                href="{{route('showDetailsTruck', $truck->id)}}"
-                                                                class="link">{{$truck->licensePlate}}</a>
+                                                    <li class="text-left">
+                                                        <a href="{{route('showDetailsTruck', $truck->id)}}"
+                                                           class="link">{{$truck->licensePlate}}</a>
                                                         - {{$truck->realNumberPallets}}
                                                         - {{$truck->theoricalNumberPallets}}
                                                     </li>
@@ -244,23 +212,21 @@
                                         </ul>
                                     </div>
                                     <div class="col-lg-2 text-left">
-                                        <a href="{{route('showAddTruck')}}"
-                                           class="link"><span class="glyphicon glyphicon-plus-sign"></span>
+                                        <a href="{{route('showAddTruck')}}" class="link">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
                                             Add truck</a>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <!--adress-->
                                     <div class="col-lg-3">
-                                        <label for="adress" class="control-label">Adress
-                                            :</label>
+                                        <label for="adress" class="control-label">Adress :</label>
                                     </div>
                                     <div class="col-lg-7">
                                         <input id="adress" type="text"
                                                class="form-control" name="adress"
                                                @if(isset($account->adress)) value="{{ $account->adress }}"
-                                               @else value="" @endif
-                                               placeholder="Adress" autofocus>
+                                               @else value="" @endif placeholder="Adress" autofocus>
                                         @if ($errors->has('adress'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>
@@ -271,15 +237,12 @@
                                 <div class="form-group">
                                     <!--phone-->
                                     <div class="col-lg-3">
-                                        <label for="phone" class="control-label">Phone
-                                            :</label>
+                                        <label for="phone" class="control-label">Phone :</label>
                                     </div>
                                     <div class="col-lg-2">
-                                        <input id="phone" type="text"
-                                               class="form-control" name="phone"
+                                        <input id="phone" type="text" class="form-control" name="phone"
                                                @if(isset($account->phone)) value="{{$account->phone}}" @else value=""
-                                               @endif
-                                               placeholder="Phone" autofocus>
+                                               @endif placeholder="Phone" autofocus>
                                         @if ($errors->has('phone'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('phone') }}</strong>
@@ -288,17 +251,13 @@
                                     </div>
                                     <!--name contact-->
                                     <div class="col-lg-2">
-                                        <label for="namecontact" class="control-label">Contact
-                                            :</label>
+                                        <label for="namecontact" class="control-label">Contact :</label>
                                     </div>
                                     <div class="col-lg-3">
 
-                                        <input id="namecontact" type="text"
-                                               class="form-control"
-                                               name="namecontact"
+                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
                                                @if(isset($account->namecontact)) value="{{$account->namecontact}}"
-                                               @else value="" @endif
-                                               placeholder="Contact name" autofocus>
+                                               @else value="" @endif placeholder="Contact name" autofocus>
                                         @if ($errors->has('namecontact'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('namecontact') }}</strong>
@@ -309,15 +268,12 @@
                                 <div class="form-group">
                                     <!--email-->
                                     <div class="col-lg-3">
-                                        <label for="email" class="control-label">Email
-                                            :</label>
+                                        <label for="email" class="control-label">Email :</label>
                                     </div>
                                     <div class="col-lg-7">
-                                        <input id="email" type="text"
-                                               class="form-control" name="email"
+                                        <input id="email" type="text" class="form-control" name="email"
                                                @if(isset($account->email)) value="{{$account->email}}" @else value=""
-                                               @endif
-                                               placeholder="Email" autofocus>
+                                               @endif placeholder="Email" autofocus>
                                         @if ($errors->has('email'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -335,10 +291,9 @@
 
                             <div class="form-group">
                                 <div class="col-lg-4 col-lg-offset-4">
-                                    <input type="submit"
-                                           class="btn btn-primary btn-block btn-form"
-                                           value="Update"
-                                           name="updatePalletsaccount">
+                                    <input type="submit" class="btn btn-primary btn-block btn-form"
+                                           value="Update" name="updatePalletsaccount" id="updatePalletsaccount"
+                                           onclick="formUpdateSubmitBlock(this);"/>
                                 </div>
 
                             </div>
@@ -357,24 +312,22 @@
                                             &times;
                                         </button>
                                         <h4 class="modal-title text-center">Are you sure to delete
-                                            this
-                                            pallets
-                                            account ?</h4>
+                                            this pallets account ?</h4>
                                     </div>
                                     <div class="modal-body center">
-                                        <form method="post"
-                                              action="{{route('deletePalletsaccount', $account->id)}}">
-                                            <input type="hidden" name="_method" value="delete">
+                                        <form method="post" action="{{route('deletePalletsaccount', $account->id)}}"
+                                              id="formDeletePalletsaccount">
+                                            <input type="hidden" name="_method" value="delete"/>
                                             {{ csrf_field() }}
+                                            <input type="hidden" name="actionDeleteForm" id="actionDeleteForm"/>
                                             <div class="text-center">
-                                                <button type="submit"
-                                                        class="btn btn-danger btn-modal"
-                                                        value="yes"
-                                                        name="deletePalletsaccount">
+                                                <button type="submit" class="btn btn-danger btn-modal"
+                                                        value="deletePalletsaccount" name="deletePalletsaccount"
+                                                        id="deletePalletsaccount"
+                                                        onclick="formDeleteSubmitBlock(this);">
                                                     Yes
                                                 </button>
-                                                <button type="button"
-                                                        class="btn btn-success btn-modal"
+                                                <button type="button" class="btn btn-success btn-modal"
                                                         data-dismiss="modal">No
                                                 </button>
                                             </div>
@@ -398,21 +351,16 @@
                                 {{ csrf_field() }}
                                 <div class="input-group col-lg-offset-3 col-lg-7">
                             <span class="input-group-btn searchInput">
-                                @if(isset($searchQuery))
                                     <input type="text" class="form-control searchBar" name="search"
-                                           value="{{$searchQuery}}"
-                                           placeholder="search">
-                                @else
-                                    <input type="text" class="form-control searchBar" name="search" value=""
-                                           placeholder="search">
-                                @endif
+                                           @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
+                                           @endif placeholder="search">
                             </span>
                                     <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect searchBar"
                                             data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
-                                      @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                      @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
                                             <option>ALL</option>
@@ -455,20 +403,19 @@
                         <br>
                         <div class=" row">
                             <form class="form-horizontal text-right" role="form" method="POST"
-                                  action="{{route('updatePalletsaccount', $account->id)}}">
+                                  action="{{route('updatePalletsaccount', $account->id)}}" id="formClearPalletsaccount">
                                 {{ csrf_field() }}
+                                <input type="hidden" name="actionClearForm" id="actionClearForm"/>
                                 <div class="form-group">
                                     <div class="col-lg-2 col-lg-offset-3">
-                                        <a href="{{route('showAddPalletstransfer')}}"
-                                           class="link"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span>Add
-                                            transfer</a>
+                                        <a href="{{route('showAddPalletstransfer')}}" class="link">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                            Add transfer</a>
                                     </div>
                                     <div class="col-lg-2 col-lg-offset-2">
-                                        <input type="submit"
-                                               class="btn btn-primary btn-block btn-form"
-                                               value="Clear trucks"
-                                               name="clearTrucks">
+                                        <input type="submit" class="btn btn-primary btn-block btn-form"
+                                               value="Clear trucks" name="clearTrucks" id="clearTrucks"
+                                               onclick="formClearSubmitBlock(this);"/>
                                     </div>
                                 </div>
                             </form>
@@ -612,8 +559,7 @@
                         </div>
 
                         <!-- Modal warehouses -->
-                        <div class="modal fade" id="warehouses_modal"
-                             role="dialog">
+                        <div class="modal fade" id="warehouses_modal" role="dialog">
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
                                     @if($account->type=='Network' && isset($namewarehouses))
@@ -632,8 +578,7 @@
                                             @endforeach
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button"
-                                                    class="btn btn-default btn-modal"
+                                            <button type="button" class="btn btn-default btn-modal"
                                                     data-dismiss="modal">
                                                 Close
                                             </button>
@@ -707,5 +652,8 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('scriptEnd')
     <script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
 @endsection

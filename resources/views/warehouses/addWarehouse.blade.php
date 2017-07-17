@@ -27,6 +27,11 @@
     nonActive
 @endsection
 
+@section('scriptBegin')
+    <script type="text/javascript" src="{{asset('js/addUpdateWarehouse.js')}}">
+    </script>
+@endsection
+
 @section('content')
     <div class="row">
         @if(Auth::guest())
@@ -39,8 +44,9 @@
                     </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('addWarehouse')}}">
+                              action="{{route('addWarehouse')}}" id="formAddWarehouse">
                             {{ csrf_field() }}
+                            <input type="hidden" name="actionAddForm" id="actionAddForm" />
                             <p class="text-center legend-auth">* required field</p>
 
                             @if(Session::has('messageRefuseAddWarehouse'))
@@ -52,13 +58,8 @@
                                     <label for="name" class="control-label"><span>*</span> Name :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    @if(isset($name))
                                         <input id="name" type="text" class="form-control" name="name"
-                                               value="{{$name}}" placeholder="Name" required autofocus>
-                                    @else
-                                        <input id="name" type="text" class="form-control" name="name"
-                                               value="{{ old('name') }}" placeholder="Name" required autofocus>
-                                    @endif
+                                               @if(isset($name)) value="{{$name}}" @else value="{{ old('name') }}" @endif placeholder="Name" required autofocus>
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -73,13 +74,8 @@
                                     <label for="adress" class="control-label"><span>*</span> Adress :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    @if(isset($adress))
                                         <input id="adress" type="text" class="form-control" name="adress"
-                                               value="{{$adress}}" placeholder="Adress" required autofocus>
-                                    @else
-                                        <input id="adress" type="text" class="form-control" name="adress"
-                                               value="{{old('adress')}}" placeholder="Adress" required autofocus>
-                                    @endif
+                                               @if(isset($adress)) value="{{$adress}}" @else value="{{old('adress')}}" @endif placeholder="Adress" required autofocus>
                                     @if ($errors->has('adress'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>
@@ -94,13 +90,8 @@
                                     <label for="zipcode" class="control-label"><span>*</span> Zip Code :</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    @if(isset($zipcode))
                                         <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
-                                               value="{{$zipcode}}" placeholder="Zip Code" required autofocus>
-                                    @else
-                                        <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
-                                               value="{{old('zipcode')}}" placeholder="Zip Code" required autofocus>
-                                    @endif
+                                               @if(isset($zipcode)) value="{{$zipcode}}" @else value="{{old('zipcode')}}" @endif placeholder="Zip Code" required autofocus>
                                     @if ($errors->has('zipcode'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('zipcode') }}</strong>
@@ -112,13 +103,8 @@
                                     <label for="town" class="control-label"><span>*</span> Town :</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    @if(isset($town))
                                         <input id="town" type="text" class="form-control" name="town"
-                                               value="{{$town}}" placeholder="Town" required autofocus>
-                                    @else
-                                        <input id="town" type="text" class="form-control" name="town"
-                                               value="{{old('town')}}" placeholder="Town" required autofocus>
-                                    @endif
+                                               @if(isset($town)) value="{{$town}}" @else value="{{old('town')}}" @endif placeholder="Town" required autofocus>
                                     @if ($errors->has('town'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('town') }}</strong>
@@ -133,13 +119,8 @@
                                     <label for="country" class="control-label"><span>*</span> Country :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    @if(isset($country))
                                         <input id="country" type="text" class="form-control" name="country"
-                                               value="{{$country}}" placeholder="Country" required autofocus>
-                                    @else
-                                        <input id="country" type="text" class="form-control" name="country"
-                                               value="{{old('country')}}" placeholder="Country" required autofocus>
-                                    @endif
+                                               @if(isset($country)) value="{{$country}}" @else value="{{old('country')}}" @endif placeholder="Country" required autofocus>
                                     @if ($errors->has('country'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('country') }}</strong>
@@ -154,13 +135,8 @@
                                     <label for="phone" class="control-label">Phone :</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    @if(isset($phone))
                                         <input id="phone" type="text" class="form-control" name="phone"
-                                               value="{{$phone}}" placeholder="Phone" required autofocus>
-                                    @else
-                                        <input id="phone" type="text" class="form-control" name="phone"
-                                               value="{{old('phone')}}" placeholder="Phone" autofocus>
-                                    @endif
+                                               @if(isset($phone)) value="{{$phone}}" @else value="{{old('phone')}}" @endif placeholder="Phone" autofocus>
                                     @if ($errors->has('phone'))
                                     <span class="help-block">
                                     <strong>{{ $errors->first('phone') }}</strong>
@@ -172,13 +148,8 @@
                                     <label for="fax" class="control-label">Fax/Mobile :</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    @if(isset($fax))
                                         <input id="fax" type="text" class="form-control" name="fax"
-                                               value="{{$fax}}" placeholder="Fax/Mobile" autofocus>
-                                    @else
-                                        <input id="fax" type="text" class="form-control" name="fax"
-                                               value="{{old('fax')}}" placeholder="Fax/Mobile" autofocus>
-                                    @endif
+                                               @if(isset($fax)) value="{{$fax}}" @else value="{{old('fax')}}" @endif placeholder="Fax/Mobile" autofocus>
                                     @if ($errors->has('fax'))
                                     <span class="help-block">
                                     <strong>{{ $errors->first('fax') }}</strong>
@@ -193,13 +164,8 @@
                                     <label for="email" class="control-label">Email :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    @if(isset($email))
                                         <input id="email" type="text" class="form-control" name="email"
-                                               value="{{$email}}" placeholder="Email" autofocus>
-                                    @else
-                                        <input id="email" type="text" class="form-control" name="email"
-                                               value="{{old('email')}}" placeholder="Email" autofocus>
-                                    @endif
+                                               @if(isset($email)) value="{{$email}}" @else value="{{old('email')}}" @endif placeholder="Email" autofocus>
                                     @if ($errors->has('email'))
                                     <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -261,15 +227,15 @@
                                         </select>
                                 </div>
                                 <div class="col-lg-3 text-left">
-                                    <a href="{{route('showAddPalletsaccount')}}" class="link"><span
-                                                class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                    <a href="{{route('showAddPalletsaccount')}}" class="link">
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-lg-8 col-lg-offset-3">
                                     <button type="submit" class="btn btn-primary btn-block btn-form"
-                                            name="addWarehouse" data-toggle="modal" data-target="#addWarehouse_modal">
+                                            name="addWarehouse" id="addWarehouse" value="addWarehouse" data-toggle="modal" data-target="#addWarehouse_modal" onclick="formAddSubmitBlock(this);">
                                         Add
                                     </button>
                                 </div>
@@ -287,8 +253,6 @@
                                                 <h4 class="modal-title text-center">Be careful !</h4>
                                             </div>
                                             <div class="modal-body center">
-                                                <form role="form" method="POST" action="{{route('addWarehouse')}}">
-                                                    {{ csrf_field() }}
                                                     @if(count($zipcodeWarehouses)==1)
                                                         <p class="text-left">
                                                             An other warehouse ({{$zipcodeWarehouses[0]->name}}) already
@@ -296,34 +260,29 @@
                                                             sure to create a new one ?
                                                         </p>
                                                     @else
-                                                        <p class="text-left">
-                                                            Others warehouses already exist in this town :
-                                                        </p>
+                                                        <p class="text-left"> Others warehouses already exist in this town : </p>
                                                         <ul>
                                                             @foreach($zipcodeWarehouses as $warehouse)
                                                                 <li class="text-left">{{$warehouse->name}}</li>
                                                             @endforeach
                                                         </ul>
-                                                        <p class="text-left">
-                                                            Are you sure to create a new one ?
-                                                        </p>
+                                                        <p class="text-left"> Are you sure to create a new one ? </p>
                                                     @endif
                                                     <div class="text-center">
                                                         <button type="submit" class="btn btn-danger btn-modal"
                                                                 value="yes"
-                                                                name="validateAddWarehouse">
+                                                                name="validateAddWarehouse" id="validateAddWarehouse" value="validateAddWarehouse" onclick="formAddSubmitBlock(this);">
                                                             Yes
                                                         </button>
 
                                                         <button type="submit" class="btn btn-success btn-modal"
-                                                                value="close" name="refuseAddWarehouse">No
+                                                                value="refuseAddWarehouse" name="refuseAddWarehouse" id="refuseAddWarehouse" onclick="formAddSubmitBlock(this);">No
                                                         </button>
                                                     </div>
-                                                </form>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-default btn-modal"
-                                                        value="close" name="refuseAddWarehouse">
+                                                        value="refuseAddWarehouse" name="refuseAddWarehouse" id="refuseAddWarehouseb" onclick="formAddSubmitBlock(this);">
                                                     Close
                                                 </button>
                                             </div>
@@ -338,4 +297,8 @@
             </div>
         @endif
     </div>
+@endsection
+@section('scriptEnd')
+    <script type="text/javascript" src="{{asset('js/addUpdateWarehouse.js')}}">
+    </script>
 @endsection

@@ -27,6 +27,10 @@
     nonActive
 @endsection
 
+@section('scriptBegin')
+    <script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
+@endsection
+
 @section('content')
     <div class="row">
         @if(Auth::guest())
@@ -41,13 +45,14 @@
                     </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('addPalletsaccount')}}">
+                              action="{{route('addPalletsaccount')}}" id="formAddPalletsaccount">
                             {{ csrf_field() }}
+                            <input type="hidden" name="actionAddForm" id="actionAddForm"/>
                             <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
                                 <!--name-->
                                 <div class="col-lg-3">
-                                    <label for="name" class="control-label"><span>*</span> Name :</label>
+                                    <label for="name" class="control-label">*Name :</label>
                                 </div>
                                 <div class="col-lg-6">
                                     <input id="name" type="text" class="form-control" name="name"
@@ -77,7 +82,7 @@
                             <div class="form-group">
                                 <!--type-->
                                 <div class="col-lg-3">
-                                    <label for="type" class="control-label"><span>*</span> Type :</label>
+                                    <label for="type" class="control-label">*Type :</label>
                                 </div>
                                 <div class="col-lg-2">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
@@ -92,7 +97,9 @@
                                             <option @if(old('type') == 'Network') selected @endif value="Network"
                                                     id="networkOption">Network
                                             </option>
-                                            <option @if(old('type') == 'Other') selected @endif value="Other" id="otherOption">Other</option>
+                                            <option @if(old('type') == 'Other') selected @endif value="Other"
+                                                    id="otherOption">Other
+                                            </option>
                                         @else
                                             <option value="Carrier" id="carrierOption">Carrier</option>
                                             <option value="Network" id="networkOption">Network</option>
@@ -102,14 +109,12 @@
                                 </div>
                                 <!--number of pallets-->
                                 <div class="col-lg-2" id="realNumberPallets1">
-                                    <label for="realNumberPallets" class="control-label">Pallets Number
-                                        :</label>
+                                    <label for="realNumberPallets" class="control-label">Pallets Number :</label>
                                 </div>
                                 <div class="col-lg-2" id="realNumberPallets2">
                                     <input id="realNumberPallets" type="number" class="form-control"
-                                           name="realNumberPallets"
-                                           value="{{old('realNumberPallets')}}" placeholder="Pallets number"
-                                           autofocus>
+                                           name="realNumberPallets" value="{{old('realNumberPallets')}}"
+                                           placeholder="Pallets number" autofocus/>
                                 </div>
                             </div>
 
@@ -117,8 +122,7 @@
                                 <div class="form-group">
                                     <!--warehouses associated-->
                                     <div class="col-lg-3">
-                                        <label for="warehousesAssociated" class="control-label">Warehouses
-                                            associated
+                                        <label for="warehousesAssociated" class="control-label">Warehouses associated
                                             :</label>
                                     </div>
                                     <div class="col-lg-6">
@@ -145,8 +149,8 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-3 text-left">
-                                        <a href="{{route('showAddWarehouse')}}" class="link"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
+                                        <a href="{{route('showAddWarehouse')}}" class="link">
+                                            <span class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
                                     </div>
                                 </div>
                             </div>
@@ -158,8 +162,8 @@
                                         <label for="adress" class="control-label">Adress :</label>
                                     </div>
                                     <div class="col-lg-7">
-                                            <input id="adress" type="text" class="form-control" name="adress"
-                                                   value="{{old('adress')}}" placeholder="Adress" autofocus/>
+                                        <input id="adress" type="text" class="form-control" name="adress"
+                                               value="{{old('adress')}}" placeholder="Adress" autofocus/>
                                         @if ($errors->has('adress'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>
@@ -173,8 +177,8 @@
                                         <label for="phone" class="control-label">Phone :</label>
                                     </div>
                                     <div class="col-lg-2">
-                                            <input id="phone" type="text" class="form-control" name="phone"
-                                                   value="{{old('phone')}}" placeholder="Phone" autofocus/>
+                                        <input id="phone" type="text" class="form-control" name="phone"
+                                               value="{{old('phone')}}" placeholder="Phone" autofocus/>
                                         @if ($errors->has('phone'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('phone') }}</strong>
@@ -186,8 +190,8 @@
                                         <label for="namecontact" class="control-label">Contact :</label>
                                     </div>
                                     <div class="col-lg-3">
-                                            <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                                   value="{{old('namecontact')}}" placeholder="Contact name" autofocus/>
+                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
+                                               value="{{old('namecontact')}}" placeholder="Contact name" autofocus/>
                                         @if ($errors->has('namecontact'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('namecontact') }}</strong>
@@ -201,8 +205,8 @@
                                         <label for="email" class="control-label">Email :</label>
                                     </div>
                                     <div class="col-lg-7">
-                                            <input id="email" type="text" class="form-control" name="email"
-                                                   value="{{old('email')}}" placeholder="Email" autofocus/>
+                                        <input id="email" type="text" class="form-control" name="email"
+                                               value="{{old('email')}}" placeholder="Email" autofocus/>
                                         @if ($errors->has('email'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -214,10 +218,8 @@
 
                             <div class="form-group">
                                 <div class="col-lg-4 col-lg-offset-4">
-                                    <input type="submit"
-                                           class="btn btn-primary btn-block btn-form"
-                                           value="Add"
-                                           name="addPalletsaccount"/>
+                                    <input type="submit" class="btn btn-primary btn-block btn-form" value="Add"
+                                           name="addPalletsaccount" id="addPalletsaccount" onclick="formAddSubmitBlock(this);"/>
                                 </div>
                             </div>
                         </form>
@@ -227,4 +229,6 @@
         @endif
     </div>
 @endsection
+@section('scriptEnd')
 <script type="text/javascript" src="{{asset('js/addUpdatePalletsaccount.js')}}"></script>
+    @endsection

@@ -42,19 +42,13 @@
                             {{ csrf_field() }}
                             <div class="col-lg-5 input-group searchBar">
                             <span class="input-group-btn searchInput">
-                                @if(isset($searchQuery))
-                                    <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
-                                           placeholder="search">
-                                @else
-                                    <input type="text" class="form-control" name="search" value=""
-                                           placeholder="search">
-                                @endif
+                                <input type="text" class="form-control" name="search" @if(isset($searchQuery)) value="{{$searchQuery}}" @else value="" @endif placeholder="search">
                             </span>
                                 <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
-                                      @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                      @if(!isset($searchQuery) || (isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
                                             <option>ALL</option>
@@ -91,9 +85,9 @@
                                 <button class="btn glyphicon glyphicon-search" type="submit"
                                         name="searchSubmit"></button>
                             </span>
-                                <span class="col-lg-offset-8">
+                                <span class="col-lg-offset-9">
                                 <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span
-                                            class="glyphicon glyphicon-plus-sign"></span> Add transfers</a>
+                                            class="glyphicon glyphicon-plus-sign"></span> Transfers</a>
                         </span>
                             </div>
                         </form>

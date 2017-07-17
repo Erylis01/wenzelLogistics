@@ -43,19 +43,13 @@
                             <!--search bar-->
                             <div class="col-lg-8 input-group searchBar">
                             <span class="input-group-btn searchInput">
-                                @if(isset($searchQuery))
-                                    <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
-                                           placeholder="search">
-                                @else
-                                    <input type="text" class="form-control" name="search" value=""
-                                           placeholder="search">
-                                @endif
+                                <input type="text" class="form-control" name="search" @if(isset($searchQuery)) value="{{$searchQuery}}" @else value="" @endif placeholder="search">
                             </span>
                                 <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
-                                      @if((isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                      @if(!isset($searchQuery) || (isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
                                             <option>ALL</option>
@@ -118,7 +112,6 @@
                             <table class="table table-hover table-bordered table-warehouses">
                                 <thead>
                                 <tr>
-
                                         {{--<th class="text-center">ID<br> <a--}}
                                                     {{--class="glyphicon glyphicon-chevron-up general-sorting"--}}
                                                     {{--href="{{url('/allWarehouses?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listWarehouses->currentPage().'&sortby=id&order=asc')}}"></a><a--}}

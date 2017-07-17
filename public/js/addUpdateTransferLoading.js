@@ -1,3 +1,9 @@
+function formSubmitBlock(button) {
+    $('input[id=actionForm]').val(button.value);
+    $("#"+button.id).attr('disabled','disabled');
+    $("#formSubmitUpdateUpload").submit();
+}
+
 function openClosePanel1() {
     if ($('#Pan1collapse').hasClass('in')) {
         $("#infoPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
@@ -37,7 +43,6 @@ function openClosePanelSub3() {
         $("#loadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
     } else {
         $("#offloadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
-        // $("#PanSub3collapse").collapse('show');
         $("#PanSub2collapse").removeClass('panel-collapse collapse');
         $("#PanSub2collapse").addClass('panel-collapse collapse in');
         $("#loadingPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
@@ -57,12 +62,6 @@ function openClosePanel2() {
     } else {
         $("#palletsPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
     }
-}
-
-
-function formSubmit(button) {
-    $('input[id=actionForm]').val(button.value);
-    $("#"+button.id).attr('disabled','disabled');
 }
 
 function selectAccount(index) {

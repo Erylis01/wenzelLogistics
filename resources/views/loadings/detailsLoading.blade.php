@@ -27,6 +27,10 @@
     nonActive
 @endsection
 
+@section('scriptBegin')
+    <script type="text/javascript" src="{{asset('js/addUpdateTransferLoading.js')}}"></script>
+@endsection
+
 @section('content')
     <div class="container-fluid">
         @if(Auth::guest())
@@ -61,10 +65,13 @@
                         <!--add subloading-->
                         <div>
                             <a href="{{route('showAddSubloading', $loading->atrnr)}}" class=" btn btn-add"><span
-                                        class="glyphicon glyphicon-plus-sign"></span> Add subloading</a>
+                                        class="glyphicon glyphicon-plus-sign"></span> Subloading</a>
                         </div>
                     </div>
                     <div class="panel-body panel-body-general">
+                        <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data" id="formSubmitUpdateUpload">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            <input type="hidden" name="actionForm" id="actionForm" />
                         <!-------SUBPANEL 1 : reading form suming up information from the table------->
                         <div class="row">
                         <div class="panel subpanel">
@@ -85,8 +92,6 @@
                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
                                 @endif
                                 <div class="panel-body">
-                                    <form class="form-horizontal" role="form" method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <!-- subpanel general-->
                                         <div class="panel subpanel">
                                             <div class="panel-heading">
@@ -252,9 +257,67 @@
                                         </div>
                                         <!-- update-->
                                         <div class="col-lg-4 col-lg-offset-4">
-                                            <input type="submit" class="btn btn-primary btn-block btn-form" value="Update" name="update" />
+                                            <input type="submit" class="btn btn-primary btn-block btn-form" value="Update" name="update" onclick="formSubmitBlock(this);"/>
                                         </div>
-                                    </form>
+                                </div>
+                            </div>
+                            <!-- Modal update pt -->
+                            <div class="modal fade" id="updatePT_modal" role="dialog">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                &times;
+                                            </button>
+                                            <h4 class="modal-title">Why would you like to change the loading into a loading WITHOUT exchange
+                                                pallets ?</h4>
+                                        </div>
+                                        <div class="modal-body center">
+                                <textarea class="form-control" rows="5" id="reasonUpdatePT" name="reasonUpdatePT" required
+                                          autofocus>{{$loading->reasonUpdatePT}}</textarea>
+                                            <button type="button" class="btn btn-success btn-modal" data-toggle="modal"
+                                                    data-target="#updateValidatePT_modal">
+                                                Update
+                                            </button>
+                                            <!-- Modal update validate pt -->
+                                            <div class="modal fade" id="updateValidatePT_modal" role="dialog">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                            <h4 class="modal-title"> Are you sure that loading is WITHOUT exchange
+                                                                pallets?</h4>
+                                                        </div>
+                                                        <div class="modal-body center">
+                                                            <h4>If you have made a mistake you can change this information directly on the
+                                                                database</h4>
+                                                            <br>
+                                                            <div class="col-lg-offset-3">
+                                                                <input type="submit" class="btn btn-danger btn-modal" value="updateValidatePT"
+                                                                       name="updateValidatePT" onclick="formSubmitBlock(this);"/>
+                                                                <button type="button" class="btn btn-success btn-modal"
+                                                                        data-dismiss="modal">
+                                                                    No
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -276,9 +339,6 @@
                             </div>
                             <div id="Pan2collapse" class="panel-collapse @if(Session::has('openPanelPallets')) in @endif collapse">
                                 <div class="panel-body">
-                                    <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data" id="formSubmitUpdateUpload">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                        <input type="hidden" name="action" id="actionForm" />
                                         <!--msg-->
                                         <div class="row">
                                             @if(Session::has('messageAddPalletstransfer'))
@@ -295,7 +355,7 @@
                                         <div class="row">
                                             <div class="from-group">
                                                 <div class="col-lg-4 col-lg-offset-4">
-                                                    <button type="submit" class="btn btn-add btn-block" id="addTransferButton" value="addTransferForm" name="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="formSubmit(this);">
+                                                    <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" id="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="formSubmitBlock(this);">
                                                         Add transfer
                                                     </button>
                                                 </div>
@@ -304,12 +364,12 @@
                                         <br>
                                         <!--Add form-->
                                         <div id="addForm" class="row collapse in">
-                                            @if(isset($addTransferForm)|| isset($addPalletstransfer)|| isset($showAddCorrectingTransfer))
+                                            @if(isset($actionForm) && ($actionForm== 'addTransferForm'||$actionForm=='addPalletstransfer'||explode('-', $actionForm)[0]=='showAddCorrectingTransfer' || isset($showAddCorrectingTransfer)) )
                                                 <div class="panel subpanel">
                                                     <div class="panel-body">
                                                         <div class="form-group">
                                                             <div class="text-center">
-                                                                <label for="legend" class="control-label">@if(isset($showAddCorrectingTransfer))<span class="glyphicon glyphicon-check"></span> CORRECTING TRANSFER @else NORMAL TRANSFER @endif</label>
+                                                                <label for="legend" class="control-label">@if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))<span class="glyphicon glyphicon-check"></span> CORRECTING TRANSFER @else NORMAL TRANSFER @endif</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -318,7 +378,7 @@
                                                                 <label for="type" class="control-label">*Type :</label>
                                                             </div>
                                                             <div class="col-lg-2">
-                                                                @if(isset($showAddCorrectingTransfer))
+                                                                @if(isset($showAddCorrectingTransfer)||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))
                                                                     <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Type" name="type" id="typeL" onchange="displayFieldsTypeCorrecting(this);">
                                                                         @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
                                                                             <optgroup label="Correcting">
@@ -380,7 +440,7 @@
                                                             </div>
                                                             <!--close add form-->
                                                             <div class="col-lg-offset-11">
-                                                                <button type="submit" class="btn glyphicon glyphicon-remove" value="close" name="closeSubmitAddModal"></button>
+                                                                <button type="submit" class="btn glyphicon glyphicon-remove" value="closeSubmitAddModal" name="closeSubmitAddModal" id="closeSubmitAddModal" onclick="formSubmitBlock(this);"></button>
                                                             </div>
                                                         </div>
                                                         <!--deposit-->
@@ -420,14 +480,14 @@
                                                                 <input id="date" type="date" class="form-control" name="date" value="{{ $loading->ladedatum }}" placeholder="Date" autofocus />
                                                             </div>
                                                             <!--transfer normal associated-->
-                                                            @if(isset($showAddCorrectingTransfer))
+                                                            @if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))
                                                                 <div class="col-lg-2 text-right">
                                                                     <label for="normalTransferAssociated" class="control-label">*Correction on :</label>
                                                                 </div>
                                                                 <div class="col-lg-1">
                                                                     <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="normalTransferAssociated" id="normalTransferAssociated">
                                                                         @foreach($listPalletstransfersNormal as $normalTransfer )
-                                                                            @if((Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))|| (isset($normalTransferAssociated)&&$normalTransfer->id==$normalTransferAssociated)||(!isset($normalTransferAssociated) && $showAddCorrectingTransfer==$normalTransfer->id))
+                                                                            @if((Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))|| (isset($normalTransferAssociated)&&$normalTransfer->id==$normalTransferAssociated)||(!isset($normalTransferAssociated) && explode('-', $actionForm)[1] ==$normalTransfer->id))
                                                                                 <option value="{{$normalTransfer->id}}"
                                                                                         selected>{{$normalTransfer->id}}</option>
                                                                             @else
@@ -809,7 +869,9 @@
                                                         <!--btn submit add-->
                                                         <div class="form-group">
                                                             <div class="col-lg-4 col-lg-offset-4">
-                                                                <input type="submit" class="btn btn-primary btn-block btn-form" value="Add" name="addPalletstransfer" id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" />
+                                                                <button type="submit" class="btn btn-add btn-block" value="addPalletstransfer" name="addPalletstransfer"  id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" onclick="formSubmitBlock(this);">
+                                                                    Add
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -817,12 +879,12 @@
                                             @endif
                                         </div>
                                         <!-- Modal submit -->
-                                        @if(isset($addPalletstransfer))
+                                        @if(isset($actionForm) && $actionForm=='addPalletstransfer')
                                             <div class="modal show" id="submitAdd_modal" role="dialog">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header modalHeaderTransfer">
-                                                            <button type="submit" class="close" value="close" name="closeSubmitAddModal">
+                                                            <button type="submit" class="close" value="closeSubmitAddModal" name="closeSubmitAddModal" id="closeSubmitAddModalb" onclick="formSubmitBlock(this);">
                                                                 &times;
                                                             </button>
                                                             <h4 class="modal-title text-center">INFORMATION</h4>
@@ -942,7 +1004,7 @@
                                                                     {{--Confirm--}}
                                                                 {{--</button>--}}
                                                             {{--@else--}}
-                                                                <button type="submit" class="btn btn-default btn-form btn-modal" value="yes" name="okSubmitAddModal">
+                                                                <button type="submit" class="btn btn-default btn-form btn-modal" value="okSubmitAddModal" name="okSubmitAddModal" id="okSubmitAddModal" onclick="formSubmitBlock(this);">
                                                                     Confirm
                                                                 </button>
                                                             {{--@endif--}}
@@ -951,7 +1013,6 @@
                                                 </div>
                                             </div>
                                         @endif
-                                    </form>
                                     <br>
 
                                     <!---TABLE ALL TRANSFERS-->
@@ -1068,8 +1129,6 @@
 
                                     <!--PANEL FOR EACH TRANSFER-->
                                     <div class="row">
-                                        <form class="form-horizontal" role="form" method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                                             <!--msg error-->
                                             <div class="form-group">
                                                 @if(Session::has('errorAccountsPanel'))
@@ -1103,12 +1162,12 @@
                                                     @if(!empty($errorsTransfer))
                                                         <!--show addCorrectingTransfer -->
                                                             <div class="col-lg-1">
-                                                                <button type="submit" class="btn btn-primary btn-form  glyphicon glyphicon-wrench" value="{{$transferNormal->id}}" name="showAddCorrectingTransfer" data-toggle="modal" data-target="#addForm">
+                                                                <button type="submit" class="btn btn-primary btn-form  glyphicon glyphicon-wrench" value="showAddCorrectingTransfer-{{$transferNormal->id}}" name="showAddCorrectingTransfer" id="showAddCorrectingTransfer" data-toggle="modal" data-target="#addForm" onclick="formSubmitBlock(this);">
                                                                 </button>
                                                             </div>
                                                         @endif
                                                         <div>
-                                                            <button type="submit" class="btn btn-primary btn-form glyphicon glyphicon-remove" value="{{$transferNormal->id}}" name="delete"></button>
+                                                            <button type="submit" class="btn btn-primary btn-form glyphicon glyphicon-remove" value="delete-{{$transferNormal->id}}" name="delete" id="delete" onclick="formSubmitBlock(this);"></button>
                                                         </div>
                                                     </div>
                                                     <div id="PanSubcollapse{{$transferNormal->id}}"
@@ -1195,7 +1254,7 @@
                                                             </div>
                                                             <!--button upload-->
                                                             <div class="col-lg-2">
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="{{$transferNormal->id}}" name="upload">
+                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="upload-{{$transferNormal->id}}" name="upload" id="upload" onclick="formSubmitBlock(this);">
                                                                     Upload
                                                                 </button>
                                                             </div>
@@ -1211,7 +1270,7 @@
                                                                         @foreach($filesNames as $nameF)
                                                                             @if(!in_array($nameF, $list))
                                                                                 <div>
-                                                                                    <button type="submit" name="deleteDocument" class="btn-add glyphicon glyphicon-remove" value="{{$nameF}}-{{$transferNormal->id}}"></button>
+                                                                                    <button type="submit" name="deleteDocument" id="deleteDocument" class="btn-add glyphicon glyphicon-remove" value="deleteDocument-{{$nameF}}-{{$transferNormal->id}}" onclick="formSubmitBlock(this);"></button>
                                                                                     <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transferNormal->id}}/{{$transfer->type}}/{{$nameF}}" class="link">{{$nameF}}</a>
                                                                                 </div>
                                                                                 @php(array_push($list,$nameF))
@@ -1239,7 +1298,7 @@
                                                             @endif
                                                         <!--submit-->
                                                             <div @if(!empty($filesNames)&&isset($transferNormal->palletsNumber)&&isset($transferNormal->creditAccount)&&isset($transferNormal->debitAccount)) class="col-lg-2 col-lg-offset-2" @else class="col-lg-2 col-lg-offset-6"  @endif>
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="{{$transferNormal->id}}" name="submitPallets" data-toggle="modal" data-target="#submitPallets_modal">
+                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferNormal->id}}" name="submitPallets" id="submitPallets" data-toggle="modal" data-target="#submitPallets_modal" onclick="formSubmitBlock(this);">
                                                                     Update
                                                                 </button>
                                                             </div>
@@ -1264,10 +1323,10 @@
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
                                                                 <div class="modal-header modalHeaderTransfer">
-                                                                    <button value="{{$transferNormal->id}}"
+                                                                    <button value="closeSubmitPalletsModal-{{$transferNormal->id}}"
                                                                             class="close"
                                                                             type="submit"
-                                                                            name="closeSubmitPalletsModal">
+                                                                            name="closeSubmitPalletsModal" id="closeSubmitPalletsModal" onclick="formSubmitBlock(this);">
                                                                         &times;
                                                                     </button>
                                                                     <h4 class="modal-title text-center ">
@@ -1349,10 +1408,11 @@
                                                                             @else
                                                                             class="btn btn-default btn-form btn-modal"
                                                                             @endif
-                                                                            value="{{$transferNormal->id}}"
+                                                                            value="okSubmitPalletsModal-{{$transferNormal->id}}"
                                                                             name="okSubmitPalletsModal"
+                                                                            id="okSubmitPalletsModal"
                                                                             data-toggle="modal"
-                                                                            data-target="#submitPalletsValidate_modal">
+                                                                            data-target="#submitPalletsValidate_modal" onclick="formSubmitBlock(this);">
                                                                         Ok
                                                                     </button>
                                                                 </div>
@@ -1369,10 +1429,10 @@
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
                                                                 <div class="modal-header modalHeaderTransfer">
-                                                                    <button value="{{$transferNormal->id}}"
+                                                                    <button value="closeSubmitPalletsModal-{{$transferNormal->id}}"
                                                                             class="close"
                                                                             type="submit"
-                                                                            name="closeSubmitPalletsModal">
+                                                                            name="closeSubmitPalletsModal" id="closeSubmitPalletsModalb" onclick="formSubmitBlock(this);">
                                                                         &times;
                                                                     </button>
                                                                     <h4 class="modal-title text-center">
@@ -1481,8 +1541,8 @@
                                                                             @else
                                                                             class="btn btn-default btn-form btn-modal"
                                                                             @endif
-                                                                            value="{{$transferNormal->id}}"
-                                                                            name="okSubmitPalletsValidateModal">
+                                                                            value="okSubmitPalletsValidateModal-{{$transferNormal->id}}"
+                                                                            name="okSubmitPalletsValidateModal" id="okSubmitPalletsValidateModal" onclick="formSubmitBlock(this);">
                                                                         Confirm
                                                                     </button>
                                                                 </div>
@@ -1562,7 +1622,7 @@
                                                                {{--data-target="#sendEmailTransfer_modal"><span class="glyphicon glyphicon-envelope"></span></a>--}}
                                                         {{--</div>--}}
                                                         <div>
-                                                            <button type="submit" class=" btn btn-primary btn-form glyphicon glyphicon-remove" value="{{$transferCorrecting->id}}" name="delete"></button>
+                                                            <button type="submit" class=" btn btn-primary btn-form glyphicon glyphicon-remove" value="delete-{{$transferCorrecting->id}}" name="delete" id="deleteb" onclick="formSubmitBlock(this);"></button>
                                                         </div>
                                                     </div>
                                                     <div id="PanSubcollapse{{$transferCorrecting->id}}"
@@ -1656,7 +1716,7 @@
                                                             </div>
                                                             <!--button upload-->
                                                             <div class="col-lg-2">
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="{{$transferCorrecting->id}}" name="upload">
+                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="upload-{{$transferCorrecting->id}}" name="upload" id="upload" onclick="formSubmitBlock(this);">
                                                                     Upload
                                                                 </button>
                                                             </div>
@@ -1672,7 +1732,7 @@
                                                                         @foreach($filesNames as $nameF)
                                                                             @if(!in_array($nameF, $list))
                                                                                 <div>
-                                                                                    <button type="submit" name="deleteDocument" class="btn-add glyphicon glyphicon-remove" value="{{$nameF}}-{{$transferCorrecting->id}}"></button>
+                                                                                    <button type="submit" name="deleteDocument" id="deleteDocumentb" class="btn-add glyphicon glyphicon-remove" value="deleteDocument-{{$nameF}}-{{$transferCorrecting->id}}" onclick="formSubmitBlock(this);"></button>
                                                                                     <a href="../../storage/app/proofsPallets/documentsTransfer/{{$transferCorrecting->id}}/{{$transfer->type}}/{{$nameF}}" class="link">{{$nameF}}</a>
                                                                                 </div>
                                                                                 @php(array_push($list,$nameF))
@@ -1700,19 +1760,19 @@
                                                             @endif
                                                         <!--submit-->
                                                             <div @if(!empty($filesNames)&&isset($transferCorrecting->palletsNumber)&&isset($transferCorrecting->creditAccount)&&isset($transferCorrecting->debitAccount)) class="col-lg-2 col-lg-offset-2" @else class="col-lg-2 col-lg-offset-6"  @endif>
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="{{$transferCorrecting->id}}" name="submitPallets" data-toggle="modal" data-target="#submitPallets_modal">
+                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferCorrecting->id}}" name="submitPallets" id="submitPalletsb" data-toggle="modal" data-target="#submitPallets_modal" onclick="formSubmitBlock(this);">
                                                                     Update
                                                                 </button>
                                                             </div>
 
-                                                            @if(!empty($errorsTransfer))
-                                                            <!--show addCorrectingTransfer -->
-                                                                <div class="col-lg-3">
-                                                                    <button type="submit" class="btn btn-primary btn-block btn-form" value="{{$transferCorrecting->id}}" name="showAddCorrectingTransfer" data-toggle="modal" data-target="#addForm">
-                                                                        Add correcting transfer
-                                                                    </button>
-                                                                </div>
-                                                            @endif
+                                                            {{--@if(!empty($errorsTransfer))--}}
+                                                            {{--<!--show addCorrectingTransfer -->--}}
+                                                                {{--<div class="col-lg-3">--}}
+                                                                    {{--<button type="submit" class="btn btn-primary btn-block btn-form" value="showAddCorrectingTransfer-{{$transferCorrecting->id}}" name="showAddCorrectingTransfer" data-toggle="modal" data-target="#addForm">--}}
+                                                                        {{--Add correcting transfer--}}
+                                                                    {{--</button>--}}
+                                                                {{--</div>--}}
+                                                            {{--@endif--}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1725,10 +1785,10 @@
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
                                                                 <div class="modal-header modalHeaderTransfer">
-                                                                    <button value="{{$transferCorrecting->id}}"
+                                                                    <button value="closeSubmitPalletsModal-{{$transferCorrecting->id}}"
                                                                             class="close"
                                                                             type="submit"
-                                                                            name="closeSubmitPalletsModal">
+                                                                            name="closeSubmitPalletsModal" id="closeSubmitPalletsModalbb" onclick="formSubmitBlock(this);">
                                                                         &times;
                                                                     </button>
                                                                     <h4 class="modal-title text-center ">
@@ -1901,10 +1961,11 @@
                                                                             @if(!empty($errorsTransfer)) class="btn btn-danger btn-modal"
                                                                             @else class="btn btn-default btn-form btn-modal"
                                                                             @endif
-                                                                            value="{{$transferCorrecting->id}}"
+                                                                            value="okSubmitPalletsModal-{{$transferCorrecting->id}}"
                                                                             name="okSubmitPalletsModal"
+                                                                            id="okSubmitPalletsModalb"
                                                                             data-toggle="modal"
-                                                                            data-target="#submitPalletsValidate_modal">
+                                                                            data-target="#submitPalletsValidate_modal" onclick="formSubmitBlock(this);">
                                                                         Confirm
                                                                     </button>
                                                                 </div>
@@ -1921,10 +1982,10 @@
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
                                                                 <div class="modal-header modalHeaderTransfer">
-                                                                    <button value="{{$transferCorrecting->id}}"
+                                                                    <button value="closeSubmitPalletsModal-{{$transferCorrecting->id}}"
                                                                             class="close"
                                                                             type="submit"
-                                                                            name="closeSubmitValidatePalletsModal">
+                                                                            name="closeSubmitPalletsModal" id="closeSubmitPalletsModalbbb" onclick="formSubmitBlock(this);">
                                                                         &times;
                                                                     </button>
                                                                     <h4 class="modal-title text-center">
@@ -2022,8 +2083,8 @@
                                                                             @else
                                                                             class="btn btn-default btn-form btn-modal"
                                                                             @endif
-                                                                            value="{{$transferCorrecting->id}}"
-                                                                            name="okSubmitPalletsValidateModal">
+                                                                            value="okSubmitPalletsValidateModal-{{$transferCorrecting->id}}"
+                                                                            name="okSubmitPalletsValidateModal" id="okSubmitPalletsValidateModalb" onclick="formSubmitBlock(this);">
                                                                         Confirm
                                                                     </button>
                                                                 </div>
@@ -2032,85 +2093,16 @@
                                                     </div>
                                                 @endif
                                             @endforeach
-                                        </form>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <!-- BEGIN MODAL SECTION -->
-            <!-- Modal update pt -->
-            <div class="modal fade" id="updatePT_modal" role="dialog">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                &times;
-                            </button>
-                            <h4 class="modal-title">Why would you like to change the loading into a loading WITHOUT exchange
-                                pallets ?</h4>
-                        </div>
-                        <div class="modal-body center">
-                            <form role="form" method="POST" action="">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                                <textarea class="form-control" rows="5" id="reasonUpdatePT" name="reasonUpdatePT" required
-                                          autofocus>{{$loading->reasonUpdatePT}}</textarea>
-                                <button type="button" class="btn btn-success btn-modal" data-toggle="modal"
-                                        data-target="#updateValidatePT_modal">
-                                    Update
-                                </button>
-                                <!-- Modal update validate pt -->
-                                <div class="modal fade" id="updateValidatePT_modal" role="dialog">
-                                    <div class="modal-dialog modal-sm">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">
-                                                    &times;
-                                                </button>
-                                                <h4 class="modal-title"> Are you sure that loading is WITHOUT exchange
-                                                    pallets?</h4>
-                                            </div>
-                                            <div class="modal-body center">
-                                                <h4>If you have made a mistake you can change this information directly on the
-                                                    database</h4>
-                                                <br>
-                                                <form role="form" method="POST"
-                                                      action="{{ route('submitUpdateUpload', $loading->atrnr) }}">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                                                    <div class="col-lg-offset-3">
-                                                        <input type="submit" class="btn btn-danger btn-modal" value="Yes"
-                                                               name="updateValidatePT"/>
-                                                        <button type="button" class="btn btn-success btn-modal"
-                                                                data-dismiss="modal">
-                                                            No
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
-                                                    Close
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END MODAL SECTION -->
         @endif
     </div>
 @endsection
@@ -2125,4 +2117,4 @@
     </script>
     <script type="text/javascript" src="{{asset('js/addUpdateTransferLoading.js')}}">
     </script>
-    @endsection
+@endsection

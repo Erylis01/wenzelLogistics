@@ -311,9 +311,10 @@ class PalletsaccountsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $clearTrucks = Input::get('clearTrucks');
+        dd('stop');
+        $actionClearForm=$request->actionClearForm;
 
-        if (isset($clearTrucks)) {
+        if (isset($actionClearForm) && $actionClearForm=='Clear trucks') {
             //CARRIER ONLY : this button will clear every pallets number for ervery truck and put the sum in the "truck" STOCK that is the stock of the carrier
             $palletsaccount_name = Palletsaccount::where('id', $id)->first()->name;
             $listTrucks = Truck::where('palletsaccount_name', $palletsaccount_name)->get();
@@ -372,6 +373,7 @@ class PalletsaccountsController extends Controller
      */
     public function delete($id)
     {
+        dd('stop');
         DB::table('palletsaccounts')->where('id', $id)->delete();
         // redirect
         session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
