@@ -1197,7 +1197,7 @@
                                                 @php($errorsTransfer=\App\Http\Controllers\PalletstransfersController::actualErrors($transferNormal))
                                                 <div @if($transferNormal->state=="Untreated") class="panel panelUntreated" @elseif ($transferNormal->state=="Waiting documents") class="panel panelWaitingdocuments" @elseif ($transferNormal->state=="Complete") class="panel panelComplete"  @elseif ($transferNormal->state=="Complete Validated") class="panel panel-general" @endif>
                                                     <div class="panel-heading">
-                                                        <div class="@if(empty($errorsTransfer)) col-lg-9 @else col-lg-8 @endif text-left headerSubpanelDetailsLoading">
+                                                        <div class="@if(empty($errorsTransfer)) col-lg-10 @else col-lg-9 @endif text-left headerSubpanelDetailsLoading">
                                                             <a data-toggle="collapse" href="#PanSubcollapse{{$transferNormal->id}}">Transfer {{$transferNormal->id}} </a>
                                                             <!--display errors signs-->
                                                             @if(!empty($errorsTransfer))
@@ -1659,7 +1659,7 @@
                                                 @php($errorsTransfer=\App\Http\Controllers\PalletstransfersController::actualErrors($transferCorrecting))
                                                 <div @if($transferCorrecting->state=="Untreated") class="panel panelUntreated" @elseif ($transferCorrecting->state=="Waiting documents") class="panel panelWaitingdocuments" @elseif ($transferCorrecting->state=="Complete") class="panel panelComplete"  @elseif ($transferCorrecting->state=="Complete Validated") class="panel panel-general" @endif>
                                                     <div class="panel-heading">
-                                                        <div class="col-lg-9 text-left headerSubpanelDetailsLoading">
+                                                        <div class="col-lg-10 text-left headerSubpanelDetailsLoading">
                                                             <a data-toggle="collapse" href="#PanSubcollapse{{$transferCorrecting->id}}">Transfer {{$transferCorrecting->id}} </a>
                                                             <!--display errors signs-->
                                                             @if(!empty($errorsTransfer))

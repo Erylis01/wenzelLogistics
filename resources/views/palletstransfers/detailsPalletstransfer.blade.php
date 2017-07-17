@@ -938,7 +938,7 @@
                     <!-- Modal Delete -->
                     <div class="modal @if(isset($delete)) show @else fade @endif" id="deletePalletstransfer_modal"
                          role="dialog">
-                        <div class="modal-dialog modal-sm">
+                        <div class="modal-dialog modal-md">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     @if(isset($delete))
@@ -950,9 +950,9 @@
                                     @endif
                                     <h4 class="modal-title text-center">Are you
                                         sure to
-                                        delete the
+                                        delete the following
                                         pallets
-                                        transfer {{$transfer->id}} ?</h4>
+                                        transfer ?</h4>
                                 </div>
                                 <div class="modal-body center">
                                     <form method="post"
@@ -960,6 +960,28 @@
                                         <input type="hidden" name="_method"
                                                value="delete">
                                         {{ csrf_field() }}
+                                        @php($partsCreditAccount=explode('-',$transfer->creditAccount))
+                                        @php($a=$partsCreditAccount[count($partsCreditAccount)-1])
+                                        @php($b=$partsCreditAccount[count($partsCreditAccount)-2])
+                                        @if(count(array_diff ($partsCreditAccount, [$a, $b]))==1)
+                                            @php($creditAccountValidate=array_diff ($partsCreditAccount, [$a, $b])[0])
+                                        @else
+                                            @php($creditAccountValidate=implode(' - ', array_diff ($partsCreditAccount, [$a, $b])))
+                                        @endif
+
+                                        @php($partsDebitAccount=explode('-',$transfer->debitAccount))
+                                        @php($aprim=$partsDebitAccount[count($partsDebitAccount)-1])
+                                        @php($bprim=$partsDebitAccount[count($partsDebitAccount)-2])
+                                        @if(count(array_diff ($partsDebitAccount, [$aprim, $bprim]))==1)
+                                            @php($debitAccountValidate=array_diff ($partsDebitAccount, [$aprim, $bprim])[0])
+                                        @else
+                                            @php($debitAccountValidate=implode( ' - ', array_diff ($partsDebitAccount, [$aprim, $bprim])))
+                                        @endif
+                                        <div class="text-center">
+                                            <p>{{$transfer->palletsNumber}} pallets</p>
+                                            <p>from : {{$debitAccountValidate}}</p>
+                                            <p>to : {{$creditAccountValidate}}</p>
+                                        </div>
                                         <div class="text-center">
                                             <button type="submit"
                                                     class="btn btn-danger btn-modal"

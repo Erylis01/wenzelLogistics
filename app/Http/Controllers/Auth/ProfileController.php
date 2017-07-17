@@ -40,7 +40,6 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
-        dd('stop');
         $user = Auth::user();
         $id = $user->id;
         $lastname = Input::get('lastname');
@@ -129,7 +128,6 @@ class ProfileController extends Controller
      */
     public function destroy()
     {
-        dd('stop');
         $id = Auth::user()->id;
         // delete
         $user = User::find($id);

@@ -8,6 +8,7 @@ use App\Loading;
 use App\Palletsaccount;
 use App\Palletstransfer;
 use App\Truck;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -601,10 +602,10 @@ class PalletstransfersController extends Controller
         if ($validator->fails()) {
             session()->flash('errorFields', "The field(s) has(ve) not been filled as expected. REFILL !");
 
-        } elseif($debitAccount==$creditAccount || (isset($debitAccount2) && isset($creditAccount2) && $debitAccount2 == $creditAccount2) || (isset($debitAccount3) && isset($creditAccount3) && $debitAccount3 == $creditAccount3)){
+        } elseif ($debitAccount == $creditAccount || (isset($debitAccount2) && isset($creditAccount2) && $debitAccount2 == $creditAccount2) || (isset($debitAccount3) && isset($creditAccount3) && $debitAccount3 == $creditAccount3)) {
             session()->flash('errorFields', "The fields have not been filled as expected : debit account and credit account must be different");
             return redirect()->back();
-        }else {
+        } else {
             if (isset($upload)) {
                 $filesNames = $this->upload($documents, $transfer);
                 if (!empty($filesNames) && $validate == 'true') {
@@ -1018,12 +1019,78 @@ class PalletstransfersController extends Controller
 
 
         Palletstransfer::where('id', $id)->delete();
+        session()->flash('messageDeletePalletstransfer', 'Successfully deleted the pallets transfer!');
+
         if (isset($loading_atrnr)) {
             $this->state(Loading::where('atrnr', $loading_atrnr)->where('pt', 'JA')->first(), Palletstransfer::where('loading_atrnr', $loading_atrnr)->get());
+
+            ////////PANEL INFO///////
+            $loading = Loading::where('atrnr', $loading_atrnr)->first();
+            //looking for the user who did this loading order
+            foreach (User::get() as $user) {
+                if ($user->initials == $loading->disp) {
+                    $disp = $user->lastname . ' ' . $user->firstname;
+                }
+            }
+            if (!isset($disp)) {
+                //llx_user : table get from Dolibarr, not updated with the website
+                foreach (DB::table('llx_user')->get() as $userDolibarr) {
+                    //get the 2 first initials of lastname and firstname
+                    if ($userDolibarr->lastname == 'SuperAdmin') {
+                        $lastnameIni = 'Gu';
+                        $firstnameIni = 'Ad';
+                    } else {
+                        $lastnameIni = substr($userDolibarr->lastname, 0, 2);
+                        $firstnameIni = substr($userDolibarr->firstname, 0, 2);
+                    }
+                    if ($lastnameIni . $firstnameIni == $loading->disp && $userDolibarr->lastname == 'SuperAdmin') {
+                        $disp = 'Adrien GUNDOGAN';
+                    } elseif ($lastnameIni . $firstnameIni == $loading->disp) {
+                        $disp = $userDolibarr->lastname . ' ' . $userDolibarr->firstname;
+                    } elseif (!isset($disp) && $lastnameIni . $firstnameIni <> $loading->disp) {
+                        $disp = $loading->disp;
+                    }
+                }
+            }
+            //link to the mother loading of the subloading
+            if (substr_count($loading->atrnr, '-') <> 0) {
+                $atrnr1 = explode('-', $loading->atrnr)[0];
+                $atrnr2 = array_slice(explode('-', $loading->atrnr), 1);
+                $atrnr2 = implode('-', $atrnr2);
+            }
+            //////PALLETS PANEL//////
+            // get all the pallets account except the carriers accounts that will be get after, truck by truck
+            //les fameuses listes utilisees uniquement dans les listes déroulantes des select
+            //possibilites : listPalletsAccounts + listTrucksAccounts, listPalletsAccounts, listTrucksPossible
+            $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
+            $listTrucksAccounts = Truck::orderBy('name', 'asc')->get();
+
+            $listPalletstransfers = Palletstransfer::where('loading_atrnr', $loading_atrnr)->orderBy('id', 'asc')->get();
+            $listPalletstransfersNormal = Palletstransfer::where('loading_atrnr', $loading_atrnr)->where(function ($q) {
+                $q->where('type', 'Deposit_Only')->orWhere('type', 'Withdrawal_Only')->orWhere('type', 'Withdrawal-Deposit')->orWhere('type', 'Deposit-Withdrawal');
+            })->orderBy('id', 'asc')->get();
+            $listPalletstransfersCorrecting = Palletstransfer::where('loading_atrnr', $loading_atrnr)->where(function ($q) {
+                $q->where('type', 'Purchase-Sale')->orWhere('type', 'Sale-Purchase')->orWhere('type', 'Other')->orWhere('type', 'Debt');
+            })->orderBy('id', 'asc')->get();
+            //looking for the truck associated to this loading
+            if ($loading->kennzeichen == '') {
+                $truckAssociated = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', 'OTHER')->first();
+            } else {
+                $truckAssociated = Truck::where('name', trim(explode(',', $loading->subfrachter)[0]))->where('licensePlate', $loading->kennzeichen)->first();
+            }
+
+            //get pallets numbers of the truck
+            if ($truckAssociated <> null) {
+                $theoricalNumberPalletsTruck = $truckAssociated->theoricalNumberPallets;
+                $realNumberPalletsTruck = $truckAssociated->realNumberPallets;
+            }
+
+            return view('loadings.detailsLoading', compact('sortby', 'order', 'loading', 'disp', 'atrnr1', 'atrnr2', 'listPalletsAccounts', 'truckAssociated', 'listTrucksAccounts', 'listPalletstransfers', 'listPalletstransfersNormal', 'listPalletstransfersCorrecting', 'theoricalNumberPalletsTruck', 'realNumberPalletsTruck'
+            ));
+
+        } else {
+            return redirect('/allPalletstransfers');
         }
-        // redirect
-        session()->flash('messageDeletePalletstransfer', 'Successfully deleted the pallets transfer!');
-        return redirect('/allPalletstransfers');
     }
 
     /**

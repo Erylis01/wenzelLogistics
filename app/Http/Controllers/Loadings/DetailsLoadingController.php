@@ -160,38 +160,10 @@ class DetailsLoadingController extends Controller
      */
     public function submitUpdateUpload($atrnr, Request $request)
     {
-
-//        dd($request->all());
         $loading = Loading::where('atrnr', $atrnr)->first();
 
         //BUTTONS
         $actionForm=Input::get('actionForm');
-        //update only the panel information
-//        $update = Input::get('update');
-//        //show the form to add a transfer
-//        $addTransferForm = Input::get('addTransferForm');
-//        //add a transfer then redirect with a pop up modal to validate the adding
-//        $addPalletstransfer = Input::get('addPalletstransfer');
-//        //validate the adding
-//        $okSubmitAddModal = Input::get('okSubmitAddModal');
-//        //cancel the adding
-//        $closeSubmitAddModal = Input::get('closeSubmitAddModal');
-//        //upload a document for a transfer
-//        $uploadDocument = Input::get('upload');
-//        //delete a transfer
-//        $delete = Input::get('delete');
-//        //delete a document of a transfer
-//        $deleteDocument = Input::get('deleteDocument');
-//        // update a transfer then redirect with a pop up modal to validate the update
-//        $submitPallets = Input::get('submitPallets');
-//        // cancel the update
-//        $closeSubmitPalletsModal = Input::get('closeSubmitPalletsModal');
-//        //validate the update
-//        $okSubmitPalletsModal = Input::get('okSubmitPalletsModal');
-//        //validate the transfer whenall its complete
-//        $okSubmitPalletsValidateModal = Input::get('okSubmitPalletsValidateModal');
-//        //show the form to add a transfer to correct an other transfer
-//        $showAddCorrectingTransfer = Input::get('showAddCorrectingTransfer');
 
         // get all the pallets account except the carriers accounts that will be get after, truck by truck
         $listPalletsAccounts = Palletsaccount::where('type', 'Network')->orWhere('type', 'Other')->orderBy('name', 'asc')->get();
