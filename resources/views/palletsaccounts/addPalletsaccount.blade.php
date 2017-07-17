@@ -112,9 +112,25 @@
                                     <label for="realNumberPallets" class="control-label">Pallets Number :</label>
                                 </div>
                                 <div class="col-lg-2" id="realNumberPallets2">
-                                    <input id="realNumberPallets" type="number" class="form-control"
-                                           name="realNumberPallets" value="{{old('realNumberPallets')}}"
-                                           placeholder="Pallets number" autofocus/>
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-number"
+                                                    data-type="minus" data-field="realNumberPallets">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                            </button>
+                                        </span>
+                                        <input id="realNumberPallets" type="number" name="realNumberPallets"
+                                               class="form-control input-number"
+                                               value="{{old('realNumberPallets')}}"
+                                               min="-999999" max="999999" autofocus
+                                                required data-toggle="tooltip" data-placement="top" title="pallets number">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-number"
+                                                    data-type="plus" data-field="realNumberPallets">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 

@@ -27,6 +27,11 @@
     active
 @endsection
 
+@section('scriptBegin')
+    <script type="text/javascript" src="{{asset('js/updateDeleteProfile.js')}}">
+    </script>
+@endsection
+
 @section('content')
     <div class="row">
         @if(Auth::guest())
@@ -45,11 +50,10 @@
 
                             <!--lastname-->
                             <div class="form-group {{ $errors->has('lastname') ? ' has-error' : '' }}">
-                                <label for="lastname" class="col-lg-4 control-label"><span>*</span> Lastname :</label>
+                                <label for="lastname" class="col-lg-4 control-label">* Lastname :</label>
                                 <div class="col-lg-6">
                                     <input id="lastname" type="text" class="form-control" name="lastname"
                                            value="{{ $lastname }}" placeholder="Lastname" required autofocus>
-
                                     @if ($errors->has('lastname'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('lastname') }}</strong>
@@ -57,16 +61,12 @@
                                     @endif
                                 </div>
                             </div>
-
-
                             <!--firstname-->
                             <div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
-                                <label for="firstname" class="col-lg-4 control-label"><span>*</span> Firstname :</label>
-
+                                <label for="firstname" class="col-lg-4 control-label">* Firstname :</label>
                                 <div class="col-lg-6">
                                     <input id="firstname" type="text" class="form-control" name="firstname"
                                            value="{{ $firstname }}" placeholder="Firstname" required autofocus>
-
                                     @if ($errors->has('firstname'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('firstname') }}</strong>
@@ -74,14 +74,12 @@
                                     @endif
                                 </div>
                             </div>
-
                             <!--username-->
                             <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                                 <label for="username" class="col-lg-4 control-label">
                                     <div data-toggle="modal" data-target="#username_modal"
                                          class="glyphicon glyphicon-info-sign link"></div>
-                                    <span>*</span>
-                                    Username :</label>
+                                    * Username :</label>
 
                                 <div class="col-lg-6">
                                     <input id="username" type="text" class="form-control" name="username"
@@ -112,8 +110,7 @@
 
                             <!--email-->
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                <label for="email" class="col-lg-4 control-label"><span>*</span> E-Mail Address
-                                    :</label>
+                                <label for="email" class="col-lg-4 control-label">* E-Mail Address :</label>
 
                                 <div class="col-lg-6">
                                     <input id="email" type="email" class="form-control" name="email"
@@ -132,8 +129,7 @@
 
                             <!--password-->
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                <label for="password" class="col-lg-4 control-label">Actual
-                                    password :</label>
+                                <label for="password" class="col-lg-4 control-label">Actual password :</label>
 
                                 <div class="col-lg-6">
                                     <input id="password" type="password" class="form-control"
@@ -176,14 +172,12 @@
                                 <div class="row">
                                     <div class="col-lg-3 col-lg-offset-4">
                                         <button type="button" class="btn btn-primary btn-block btn-form"
-                                                data-toggle="modal"
-                                                data-target="#update_modal">Update
+                                                data-toggle="modal" data-target="#update_modal">Update
                                         </button>
                                     </div>
                                     <div class="col-lg-3">
                                         <button type="button" class="btn btn-primary btn-block btn-form"
-                                                data-toggle="modal"
-                                                data-target="#delete_modal">Delete
+                                                data-toggle="modal" data-target="#delete_modal">Delete
                                         </button>
                                     </div>
                                 </div>
@@ -198,15 +192,16 @@
                                             <h4 class="modal-title">Are you sure to update your profile ?</h4>
                                         </div>
                                         <div class="modal-body center">
-                                            <form method="post" action="{{ route('updateProfile') }}">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <form role="form" method="post" action="{{ route('updateProfile') }}" id="formUpdateProfile">
+                                                {{ csrf_field() }}
+                                                {{--<input type="hidden" name="actionUpdateForm" id="actionUpdateForm"/>--}}
                                                 <div class="col-lg-offset-3">
-                                                    <input type="submit" class="btn btn-danger btn-modal" value="Yes"
-                                                           name="update">
+                                                    <button type="submit" class="btn btn-danger btn-modal" value="update"
+                                                            name="update" id="update" >Yes</button>
+                                                            {{--onclick="formUpdateSubmitBlock(this);">Yes</button>--}}
 
                                                     <button type="button" class="btn btn-success btn-modal"
                                                             data-dismiss="modal">No
-                                                        .
                                                     </button>
                                                 </div>
                                             </form>
@@ -230,12 +225,13 @@
                                             <h4 class="modal-title">Are you sure to delete your profile ?</h4>
                                         </div>
                                         <div class="modal-body center">
-                                            <form method="post" action="{{route('destroyProfile')}}">
+                                            <form method="post" action="{{route('destroyProfile')}}" id="formDeleteProfile">
                                                 <input type="hidden" name="_method" value="delete">
                                                 {{ csrf_field() }}
+                                                <input type="hidden" name="actionDeleteForm" id="actionDeleteForm"/>
                                                 <div class="col-lg-offset-3">
-                                                    <button type="submit" class="btn btn-danger btn-modal" value="yes"
-                                                            name="delete">
+                                                    <button type="submit" class="btn btn-danger btn-modal" value="delete"
+                                                            name="delete" id="delete" onclick="formDeleteSubmitBlock(this);">
                                                         Yes
                                                     </button>
                                                     <button type="button" class="btn btn-success btn-modal"
@@ -264,4 +260,14 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('scriptEnd')
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+    <script type="text/javascript" src="{{asset('js/updateDeleteProfile.js')}}">
+    </script>
 @endsection

@@ -119,18 +119,34 @@
                                 <div class="col-lg-3">
                                     <label for="realNumberPallets" class="control-label">Pallets Number :</label>
                                 </div>
-                                <div class="col-lg-2">
-                                    <input id="realNumberPallets" type="number" class="form-control"
-                                           name="realNumberPallets"
-                                           @if(isset($realNumberPallets)) value="{{$realNumberPallets}}"
-                                           @else value="{{ old('realNumberPallets') }}" @endif placeholder="Nbr"
-                                           autofocus/>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-number"
+                                                    data-type="minus" data-field="realNumberPallets">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                            </button>
+                                        </span>
+                                        <input id="realNumberPallets" type="number" name="realNumberPallets"
+                                               class="form-control input-number"
+                                               @if(isset($realNumberPallets)) value="{{$realNumberPallets}}"
+                                               @else value="{{ old('realNumberPallets') }}" @endif
+                                                min="-999999" max="999999" autofocus
+                                                required data-toggle="tooltip" data-placement="top" title="pallets number">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-number"
+                                                    data-type="plus" data-field="realNumberPallets">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-lg-8 col-lg-offset-3">
-                                    <button type="submit" class="btn btn-primary btn-block btn-form" name="addTruck" value="addTruck" id="addTruck" onclick="formAddSubmitBlock(this);">
+                                    <button type="submit" class="btn btn-primary btn-block btn-form" name="addTruck"
+                                            value="addTruck" id="addTruck" onclick="formAddSubmitBlock(this);">
                                         Add
                                     </button>
                                 </div>
@@ -144,6 +160,11 @@
 @endsection
 
 @section('scriptEnd')
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
     <script type="text/javascript" src="{{asset('js/addUpdateTruck.js')}}">
     </script>
 @endsection

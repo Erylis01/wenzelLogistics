@@ -157,7 +157,19 @@
                                                     <div class="form-group">
                                                         <!--anz-->
                                                         <div class="col-lg-2 details-loading">
-                                                            <input type="number" name="anz" class="form-control" value="{{ $loading->anz }}" placeholder="anz." min="0" required data-toggle="tooltip" data-placement="top" title="Anzahl" />
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="anz">
+                                                                        <span class="glyphicon glyphicon-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="number" name="anz" class="form-control input-number" value="{{ $loading->anz }}" min="0" max="999999" placeholder="anz." required data-toggle="tooltip" data-placement="top" title="Anzahl">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="anz">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                         <div class="col-lg-1 details-loading text-center"><p>-</p></div>
                                                         <!--art-->
@@ -464,13 +476,25 @@
                                                         <div class="form-group">
                                                             <!--number of pallets-->
                                                             <div class="col-lg-2">
-                                                                <label for="palletsNumber" class="control-label">*Pallets number :</label>
+                                                                <label for="palletsNumber" class="control-label">*Pallets given :</label>
                                                             </div>
-                                                            <div class="col-lg-1">
-                                                                <input id="palletsNumber" type="number" class="form-control" name="palletsNumber" onchange="updateFieldsPalletsNumber(this);"
-                                                                       @if(isset($palletsNumber)) value="{{$palletsNumber}}"
-                                                                       @elseif(Illuminate\Support\Facades\Input::old('palletsNumber')) value="{{ old('palletsNumber') }}"
-                                                                       @else value="0" @endif placeholder="Nbr" min="0" autofocus />
+                                                            <div class="col-lg-2">
+                                                                <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber">
+                                                                        <span class="glyphicon glyphicon-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                    <input id="palletsNumber" type="number" name="palletsNumber"
+                                                                           class="form-control input-number"  @if(isset($palletsNumber)) value="{{$palletsNumber}}"
+                                                                           @elseif(Illuminate\Support\Facades\Input::old('palletsNumber')) value="{{ old('palletsNumber') }}"
+                                                                           @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber(this);">
+                                                                    <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                </div>
                                                             </div>
                                                             <!--date-->
                                                             <div class="col-lg-1">
@@ -734,11 +758,26 @@
                                                             <div class="form-group">
                                                                 <!--number of pallets-->
                                                                 <div class="col-lg-1">
-                                                                    <label for="palletsNumber2" class="control-label">*Nbr :</label>
+                                                                    <label for="palletsNumber2" class="control-label">*Pallets taken :</label>
                                                                 </div>
-                                                                <div class="col-lg-1 text-left">
-                                                                    <input onchange="updateFieldsPalletsNumber(this);" id="palletsNumber2" type="number" class="form-control" name="palletsNumber2" @if(Illuminate\Support\Facades\Input::old('palletsNumber2')) value="{{ old('palletsNumber2') }}"  @elseif(isset($palletsNumber2)) value="{{$palletsNumber2}}" @else value="" @endif placeholder="Nbr" min="0"  autofocus />
-                                                                </div>
+                                                                <div class="col-lg-2 text-left">
+                                                                    <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber2">
+                                                                        <span class="glyphicon glyphicon-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                        <input id="palletsNumber2" type="number" name="palletsNumber2"
+                                                                               class="form-control input-number"  @if(isset($palletsNumber2)) value="{{$palletsNumber2}}"
+                                                                               @elseif(Illuminate\Support\Facades\Input::old('palletsNumber2')) value="{{ old('palletsNumber2') }}"
+                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber(this);">
+                                                                        <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber2">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                    </div>
+                                                                    </div>
                                                             </div>
                                                         </div>
                                                         <!--2nd transfer : pallets number credit account and debit account-->
@@ -749,7 +788,22 @@
                                                                     <label for="palletsNumber2C" class="control-label">*Nbr :</label>
                                                                 </div>
                                                                 <div class="col-lg-1 text-left">
-                                                                    <input id="palletsNumber2C" type="number" class="form-control" name="palletsNumber2C" @if(Illuminate\Support\Facades\Input::old('palletsNumber2C')) value="{{ old('palletsNumber2C') }}" @elseif(isset($palletsNumber2C)) value="{{$palletsNumber2C}}" @else value="" @endif placeholder="Nbr" min="0" autofocus />
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                            <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber2C">
+                                                                                <span class="glyphicon glyphicon-minus"></span>
+                                                                            </button>
+                                                                        </span>
+                                                                        <input id="palletsNumber2C" type="number" name="palletsNumber2C"
+                                                                               class="form-control input-number"  @if(isset($palletsNumber2C)) value="{{$palletsNumber2C}}"
+                                                                               @elseif(Illuminate\Support\Facades\Input::old('palletsNumber2C')) value="{{ old('palletsNumber2C') }}"
+                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber(this);">
+                                                                        <span class="input-group-btn">
+                                                                            <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber2C">
+                                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                                            </button>
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-lg-2 text-right">
                                                                     <label for="debitAccount2" class="control-label">*Debit :</label>
