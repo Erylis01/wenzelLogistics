@@ -113,6 +113,11 @@
     color: black;
 }
 
+/* */
+.text-underline{
+    text-decoration: underline;
+}
+
 /*PANEL*/
 
 .subpanel{

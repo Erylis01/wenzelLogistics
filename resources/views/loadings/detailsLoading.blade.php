@@ -163,7 +163,7 @@
                                                                         <span class="glyphicon glyphicon-minus"></span>
                                                                     </button>
                                                                 </span>
-                                                                <input type="number" name="anz" class="form-control input-number" value="{{ $loading->anz }}" min="0" max="999999" placeholder="anz." required data-toggle="tooltip" data-placement="top" title="Anzahl">
+                                                                <input type="number" name="anz" id="anz" class="form-control input-number" value="{{ $loading->anz }}" min="0" max="999999" placeholder="anz." required data-toggle="tooltip" data-placement="top" title="Anzahl">
                                                                 <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="anz">
                                                                         <span class="glyphicon glyphicon-plus"></span>
@@ -380,104 +380,97 @@
                                                 <div class="panel subpanel">
                                                     <div class="panel-body">
                                                         <div class="form-group">
-                                                            <div class="text-center">
-                                                                <label for="legend" class="control-label">@if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))<span class="glyphicon glyphicon-check"></span> CORRECTING TRANSFER @else NORMAL TRANSFER @endif</label>
+                                                            <div class="col-lg-4 text-right">
+                                                                <label for="legend" class="control-label text-underline">@if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))<span class="glyphicon glyphicon-check"></span> CORRECTING TRANSFER @else NORMAL TRANSFER @endif : </label>
                                                             </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <!--type-->
-                                                            <div class="col-lg-1 col-lg-offset-1">
-                                                                <label for="type" class="control-label">*Type :</label>
-                                                            </div>
-                                                            <div class="col-lg-2">
-                                                                @if(isset($showAddCorrectingTransfer)||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))
-                                                                    <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Type" name="type" id="typeL" onchange="displayFieldsTypeCorrecting(this);">
-                                                                        @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
-                                                                            <optgroup label="Correcting">
-                                                                                <option @if(strcmp('Purchase-Sale',old('type'))==0 || strcmp($type,'Purchase-Sale')==0) selected @endif value="Purchase-Sale" id="Purchase-SaleOptionL">
-                                                                                    Purchase-Sale
-                                                                                </option>
-                                                                                <option @if(strcmp('Debt',old('type'))==0 || strcmp($type,'Debt')==0) selected @endif value="Debt" id="DebtOptionL">
-                                                                                    Debt
-                                                                                </option>
-                                                                                <option @if(strcmp('Other',old('type'))==0 || strcmp($type,'Other')==0) selected @endif value="Other" id="OtherOptionL">
-                                                                                    Other
-                                                                                </option>
-                                                                            </optgroup>
-                                                                        @else
-                                                                            <optgroup label="Correcting">
-                                                                                <option value="Purchase-Sale" id="Purchase-SaleOptionL">Purchase-Sale</option>
-                                                                                <option value="Debt" id="DebtOptionL">Debt</option>
-                                                                                <option value="Other" id="OtherOptionL">Other</option>
-                                                                            </optgroup>
-                                                                        @endif
-                                                                    </select>
+                                                            <div class="col-lg-7 text-left">
+                                                                @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
+                                                                    <label class="radio-inline" data-toggle="tooltip" data-placement="top" title="On loading place : deposit of empty pallets, then withdrawal of full pallets. On offloading place : deposit of full pallets, then withdrawal of empty pallets">
+                                                                        <input type="radio" name="type" value="Deposit-Withdrawal" @if(strcmp(old('type'),'Deposit-Withdrawal')==0|| strcmp($type,'Deposit-Withdrawal')==0) checked @endif id="typeDW" onchange="displayFieldsTypeNormal(this);"/>Deposit-Withdrawal</label>
+                                                                    <label class="radio-inline" data-toggle="tooltip" data-placement="top" title="Deposit of pallets on an extra account">
+                                                                        <input type="radio" name="type" value="Deposit_Only" @if(strcmp(old('type'),'Deposit_Only')==0 || strcmp($type,'Deposit_Only')==0) checked @endif id="typeDonly" onchange="displayFieldsTypeNormal(this);"/>Deposit only</label>
+                                                                    <label class="radio-inline" data-toggle="tooltip" data-placement="top" title="Withdrawal of pallets on an extra account">
+                                                                        <input type="radio" name="type" value="Withdrawal_Only" @if(strcmp(old('type'),'Withdrawal_Only')==0 ||strcmp($type,'Withdrawal_Only')==0) checked @endif id="typeWonly" onchange="displayFieldsTypeNormal(this);"/>Withdrawal only</label>
                                                                 @else
-                                                                    <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Type" name="type" id="typeL" onchange="displayFieldsTypeNormal(this);">
-                                                                        @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
-                                                                            <optgroup label="Normal">
-                                                                                <option @if(strcmp(old('type'),'Deposit-Withdrawal')==0|| strcmp($type,'Deposit-Withdrawal')==0) selected @endif value="Deposit-Withdrawal" id="Deposit-WithdrawalOptionL">
-                                                                                    Deposit-Withdrawal
-                                                                                </option>
-                                                                                <option @if(strcmp(old('type'),'Withdrawal-Deposit')==0|| strcmp($type,'Withdrawal-Deposit')==0) selected @endif value="Withdrawal-Deposit" id="Withdrawal-DepositOptionL">
-                                                                                    Withdrawal-Deposit
-                                                                                </option>
-                                                                                <option @if(strcmp(old('type'),'Deposit_Only')==0 || strcmp($type,'Deposit_Only')==0) selected @endif value="Deposit_Only" id="Deposit_OnlyOptionL">
-                                                                                    Deposit_Only
-                                                                                </option>
-                                                                                <option @if(strcmp(old('type'),'Withdrawal_Only')==0 ||strcmp($type,'Withdrawal_Only')==0) selected @endif value="Withdrawal_Only" id="Withdrawal_OnlyOptionL">
-                                                                                    Withdrawal_Only
-                                                                                </option>
-                                                                            </optgroup>
-                                                                        @else
-                                                                            <optgroup label="Normal">
-                                                                                <option value="Deposit-Withdrawal" id="Deposit-WithdrawalOptionL">Deposit-Withdrawal</option>
-                                                                                <option value="Withdrawal-Deposit" id="Withdrawal-DepositOptionL">Withdrawal-Deposit</option>
-                                                                                <option value="Deposit_Only" id="Deposit_OnlyOptionL">Deposit_Only</option>
-                                                                                <option value="Withdrawal_Only" id="Withdrawal_OnlyOptionL">Withdrawal_Only</option>
-                                                                            </optgroup>
-                                                                        @endif
-                                                                    </select>
-                                                                @endif
-                                                            </div>
-                                                            <!--details-->
-                                                            <div class="col-lg-6">
-                                                                @if(isset($details))
-                                                                    <textarea class="form-control" rows="1" id="details"
-                                                                              placeholder="Details (broken pallets, gift, receipt...)">{{$details}}</textarea>
-                                                                @else
-                                                                    <textarea class="form-control" rows="1" id="details"
-                                                                              placeholder="Details (broken pallets, gift, receipt...)">{{old('details')}}</textarea>
+                                                                    <label class="radio-inline" data-toggle="tooltip" data-placement="top" title="On loading place : deposit of empty pallets, then withdrawal of full pallets. On offloading place : deposit of full pallets, then withdrawal of empty pallets">
+                                                                        <input type="radio" name="type" value="Deposit-Withdrawal" checked id="typeDW" onchange="displayFieldsTypeNormal(this);"/>Deposit-Withdrawal</label>
+                                                                    <label class="radio-inline" data-toggle="tooltip" data-placement="top" title="Deposit of pallets on an extra account">
+                                                                        <input type="radio" name="type" value="Deposit_Only" id="typeDonly" onchange="displayFieldsTypeNormal(this);"/>Deposit only</label>
+                                                                    <label class="radio-inline" data-toggle="tooltip" data-placement="top" title="Withdrawal of pallets on an extra account">
+                                                                        <input type="radio" name="type" value="Withdrawal_Only" id="typeWonly" onchange="displayFieldsTypeNormal(this);"/>Withdrawal only</label>
                                                                 @endif
                                                             </div>
                                                             <!--close add form-->
-                                                            <div class="col-lg-offset-11">
+                                                            <div class="col-lg-offset-1">
                                                                 <button type="submit" class="btn glyphicon glyphicon-remove" value="closeSubmitAddModal" name="closeSubmitAddModal" id="closeSubmitAddModal" onclick="formSubmitBlock(this);"></button>
                                                             </div>
                                                         </div>
-                                                        <!--deposit-->
-                                                        <div class="form-group" id="deposit-withdrawal1L" @if(isset($type) && $type=='Deposit-Withdrawal')style="display: block" @else style="display:none" @endif>
+
+                                                                {{--@if(isset($showAddCorrectingTransfer)||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))--}}
+                                                                    {{--<select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Type" name="type" id="typeL" onchange="displayFieldsTypeCorrecting(this);">--}}
+                                                                        {{--@if(Illuminate\Support\Facades\Input::old('type') || isset($type))--}}
+                                                                            {{--<optgroup label="Correcting">--}}
+                                                                                {{--<option @if(strcmp('Purchase-Sale',old('type'))==0 || strcmp($type,'Purchase-Sale')==0) selected @endif value="Purchase-Sale" id="Purchase-SaleOptionL">--}}
+                                                                                    {{--Purchase-Sale--}}
+                                                                                {{--</option>--}}
+                                                                                {{--<option @if(strcmp('Debt',old('type'))==0 || strcmp($type,'Debt')==0) selected @endif value="Debt" id="DebtOptionL">--}}
+                                                                                    {{--Debt--}}
+                                                                                {{--</option>--}}
+                                                                                {{--<option @if(strcmp('Other',old('type'))==0 || strcmp($type,'Other')==0) selected @endif value="Other" id="OtherOptionL">--}}
+                                                                                    {{--Other--}}
+                                                                                {{--</option>--}}
+                                                                            {{--</optgroup>--}}
+                                                                        {{--@else--}}
+                                                                            {{--<optgroup label="Correcting">--}}
+                                                                                {{--<option value="Purchase-Sale" id="Purchase-SaleOptionL">Purchase-Sale</option>--}}
+                                                                                {{--<option value="Debt" id="DebtOptionL">Debt</option>--}}
+                                                                                {{--<option value="Other" id="OtherOptionL">Other</option>--}}
+                                                                            {{--</optgroup>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--</select>--}}
+
+                                                        <!--errors messages-->
+                                                        <div class="form-group">
+                                                            @if(Session::has('errorFields'))
+                                                                <p class="alert alert-danger text-alert text-center"> {{ Session::get('errorFields') }}</p>
+                                                            @elseif(Session::has('errorType'))
+                                                                <p class="alert alert-danger text-alert text-center">{{ Session::get('errorType') }} </p>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--details-->
+                                                            <div class="col-lg-5">
+                                                                @if(isset($details))
+                                                                    <textarea class="form-control" rows="1" id="details"
+                                                                              placeholder="Details (broken pallets, gift, receipt...)" data-toggle="tooltip" data-placement="top" title="details">{{$details}}</textarea>
+                                                                @else
+                                                                    <textarea class="form-control" rows="1" id="details"
+                                                                              placeholder="Details (broken pallets, gift, receipt...)" data-toggle="tooltip" data-placement="top" title="details">{{old('details')}}</textarea>
+                                                                @endif
+                                                            </div>
+                                                            <!--date-->
+                                                            <div class="col-lg-2">
+                                                                <input id="date" type="date" class="form-control" name="date" value="{{ $loading->ladedatum }}" autofocus data-toggle="tooltip" data-placement="top" title="date" />
+                                                            </div>
+                                                            <!--exchanging ?-->
+                                                            @php($notExchanging=\App\Palletsaccount::where('name', $truckAssociated->name)->first()->notExchange)
+                                                            <div class="col-lg-3 checkbox" id="exchanging" @if((isset($type) && ($type=='Deposit-Withdrawal'||$type=='Withdrawal_Only' || $type=='Deposit_Only'))||isset($notExchanging)) style="display: block" @else style="display:none" @endif>
+                                                                <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($notExchanging==1) checked @endif onchange="displayFieldsNotExchanging();"/>Agreed w/o exchange</label>
+                                                            </div>
+                                                            <!--add pallet account-->
+                                                            <div class="col-lg-2 text-right">
+                                                                <a href="{{route('showAddPalletsaccount', ['originalPage'=>'detailsLoading-'.$loading->atrnr])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Account</a>
+                                                            </div>
+                                                        </div>
+                                                        <!--deposit title-->
+                                                        <div class="form-group" id="deposit-withdrawal1" @if(isset($type) && ($type<>'Deposit-Withdrawal'))style="display: none" @else style="display:block" @endif>
                                                             <div class="col-lg-12 text-center">
                                                                 <label for="deposit" class="control-label">DEPOSIT</label>
                                                             </div>
                                                         </div>
-                                                        <!--withdrawal-->
-                                                        <div class="form-group" id="withdrawal-deposit1L" @if(isset($type) && $type=='Withdrawal-Deposit') style="display:block" @else  style="display:none;" @endif>
-                                                            <div class="col-lg-12 text-center">
-                                                                <label for="withdrawal" class="control-label">WITHDRAWAL</label>
-                                                            </div>
-                                                        </div>
-                                                        <!--purchase-->
-                                                        <div class="form-group" id="purchase-sale1L" @if(isset($type) && $type=='Purchase-Sale')style="display:block" @else style="display: none;" @endif>
-                                                            <div class="col-lg-12 text-center">
-                                                                <label for="purchase" class="control-label">PURCHASE</label>
-                                                            </div>
-                                                        </div>
+                                                        <!-- pallets number debit account credit account -->
                                                         <div class="form-group">
                                                             <!--number of pallets-->
-                                                            <div class="col-lg-2">
-                                                                <label for="palletsNumber" class="control-label">*Pallets given :</label>
-                                                            </div>
                                                             <div class="col-lg-2">
                                                                 <div class="input-group">
                                                                 <span class="input-group-btn">
@@ -488,7 +481,7 @@
                                                                     <input id="palletsNumber" type="number" name="palletsNumber"
                                                                            class="form-control input-number"  @if(isset($palletsNumber)) value="{{$palletsNumber}}"
                                                                            @elseif(Illuminate\Support\Facades\Input::old('palletsNumber')) value="{{ old('palletsNumber') }}"
-                                                                           @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber(this);">
+                                                                           @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber();">
                                                                     <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber">
                                                                         <span class="glyphicon glyphicon-plus"></span>
@@ -496,64 +489,38 @@
                                                                 </span>
                                                                 </div>
                                                             </div>
-                                                            <!--date-->
-                                                            <div class="col-lg-1">
-                                                                <label for="date" class="control-label">Date :</label>
+                                                            <div class="col-lg-2" id="palletsGiven" @if(isset($type) && ($type=='Withdrawal_Only'))style="display: none" @else style="display:block" @endif>
+                                                                <label for="palletsNumber" class="control-label">pallets given</label>
                                                             </div>
-                                                            <div class="col-lg-2">
-                                                                <input id="date" type="date" class="form-control" name="date" value="{{ $loading->ladedatum }}" placeholder="Date" autofocus />
+                                                            <div class="col-lg-2" id="palletsTaken" @if(isset($type) && ($type=='Deposit_Only'))style="display: block" @else style="display:none" @endif>
+                                                                <label for="palletsNumber" class="control-label">pallets taken</label>
                                                             </div>
-                                                            <!--transfer normal associated-->
-                                                            @if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))
-                                                                <div class="col-lg-2 text-right">
-                                                                    <label for="normalTransferAssociated" class="control-label">*Correction on :</label>
-                                                                </div>
-                                                                <div class="col-lg-1">
-                                                                    <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="normalTransferAssociated" id="normalTransferAssociated">
-                                                                        @foreach($listPalletstransfersNormal as $normalTransfer )
-                                                                            @if((Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))|| (isset($normalTransferAssociated)&&$normalTransfer->id==$normalTransferAssociated)||(!isset($normalTransferAssociated) && explode('-', $actionForm)[1] ==$normalTransfer->id))
-                                                                                <option value="{{$normalTransfer->id}}"
-                                                                                        selected>{{$normalTransfer->id}}</option>
-                                                                            @else
-                                                                                <option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                        @endif
-                                                        <!--exchanging ?-->
-                                                                <div class="col-lg-3 checkbox" id="exchangingL" @if(isset($type) && ($type=='Deposit-Withdrawal'||$type=='Withdrawal-Deposit'))style="display: block" @else style="display:none" @endif>
-                                                                    @php($notExchanging=\App\Palletsaccount::where('name', $truckAssociated->name)->first()->notExchange)
-                                                                    <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($notExchanging==1) checked @endif onchange="displayFieldsDebt(this);"/>Agreed w/o exchange</label>
-                                                                </div>
-                                                        <!--add pallet account-->
-                                                            <div class="col-lg-2 text-left">
-                                                                <a href="{{route('showAddPalletsaccount', ['originalPage'=>'detailsLoading-'.$loading->atrnr])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                                            <!-- debit account -->
+                                                            <div class="col-lg-1 text-right">
+                                                                <label for="debitAccount" class="control-label">from</label>
                                                             </div>
-                                                        </div>
-                                                        <!--errors messages-->
-                                                        <div class="form-group">
-                                                            @if(Session::has('errorFields'))
-                                                                <p class="alert alert-danger text-alert text-center"> {{ Session::get('errorFields') }}</p>
-                                                            @elseif(Session::has('errorType'))
-                                                                <p class="alert alert-danger text-alert text-center">{{ Session::get('errorType') }} </p>
+                                                            @if(isset($truckAssociated))
+                                                            <input type="hidden" name="truckAssociatedId" id="truckAssociatedId" value="{{$truckAssociated->id}}"/>
+                                                            <input type="hidden" name="truckAssociatedName" id="truckAssociatedName" value="{{$truckAssociated->name}}"/>
+                                                            <input type="hidden" name="truckAssociatedLicensePlate" id="truckAssociatedLicensePlate" value="{{$truckAssociated->licensePlate}}"/>
                                                             @endif
-                                                        </div>
-                                                        <!--credit/debit account-->
-                                                        <div class="form-group">
-                                                            <!--debit account-->
-                                                            <div class="col-lg-2">
-                                                                <label for="debitAccount" class="control-label">*Debit account :</label>
-                                                            </div>
-                                                            <div class="col-lg-4" id="debitAccount0"  @if(!isset($type)) style="display: block" @else style="display:none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account" name="debitAccount" disabled="true" >
-                                                                    <option></option>
+                                                            <!-- deposit withdrawal or deposit only : truck or wenzel -->
+                                                            <div class="col-lg-3" id="debitAccountDWD"  @if(isset($type) && $type == 'Withdrawal_Only') style="display: none" @else style="display:block;" @endif>
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccountDWD" id="select-debitAccountDWD" onchange="selectAccount()">
+                                                                    @if(isset($notExchanging) && $notExchanging==1)
+                                                                        <option value="account-1" selected>WENZEL</option>
+                                                                    @elseif(isset($truckAssociated))
+                                                                        <option value="truck-{{$truckAssociated->id}}" selected>{{$truckAssociated->name}} - {{$truckAssociated->licensePlate}}</option>
+                                                                    @else
+                                                                        <option selected></option>
+                                                                    @endif
                                                                 </select>
                                                             </div>
-                                                            <div class="col-lg-4" id="debitAccount3" @if(isset($type) && ($type=='Withdrawal_Only' || $type=='Other')) style="display: block" @else style="display:none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit3b" title="Debit Account" name="debitAccount3b" onchange="selectAccount('3b');">
+                                                            <!-- withdrawal only : all accounts possible -->
+                                                            <div class="col-lg-3" id="debitAccountW"  @if(isset($type) && $type == 'Withdrawal_Only') style="display: block" @else style="display:none;" @endif >
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccountW" id="select-debitAccountW" onchange="selectAccount();" >
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('debitAccount3') && (strpos(old('debitAccount3'), '-') == 7 && explode('-', old('debitAccount3'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount3'))[1]))||(isset($debitAccount) && (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount)[1])))
+                                                                        @if((Illuminate\Support\Facades\Input::old('debitAccountW') && (strpos(old('debitAccountW'), '-') == 7 && explode('-', old('debitAccountW'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccountW'))[1]))||(isset($debitAccountW) && (strpos($debitAccountW, '-') == 7 && explode('-', $debitAccountW)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccountW)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}"
                                                                                     selected>{{$palletsAccount->name}}</option>
                                                                         @else
@@ -561,7 +528,7 @@
                                                                         @endif
                                                                     @endforeach
                                                                     @foreach($listTrucksAccounts as $trucksAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('debitAccount3') && (strpos(old('debitAccount3'), '-') == 5 && explode('-', old('debitAccount3'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('debitAccount3'))[1]))|| (isset($debitAccount)&& (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') && ($trucksAccount->id==explode('-', $debitAccount)[1])))
+                                                                        @if((Illuminate\Support\Facades\Input::old('debitAccountW') && (strpos(old('debitAccountW'), '-') == 5 && explode('-', old('debitAccountW'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('debitAccountW'))[1]))|| (isset($debitAccountW)&& (strpos($debitAccountW, '-') == 5 && explode('-', $debitAccountW)[0] == 'truck') && ($trucksAccount->id==explode('-', $debitAccountW)[1])))
                                                                             <option value="truck-{{$trucksAccount->id}}"
                                                                                     selected>{{$trucksAccount->name}}
                                                                                 - {{$trucksAccount->licensePlate}}</option>
@@ -572,19 +539,15 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div class="col-lg-4" id="debitAccount1" @if(isset($type) && ($type=='Deposit_Only'||$type=='Deposit-Withdrawal')) style="display: block" @else style="display:none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit1b" title="Debit Account" name="debitAccount1b" onchange="selectAccount(this.value, '1b');">
-                                                                        @if((Illuminate\Support\Facades\Input::old('debitAccount1') && (strpos(old('debitAccount1'), '-') == 5 && explode('-', old('debitAccount1'))[0] == 'truck') && ($truckAssociated->id==explode('-', old('debitAccount1'))[1]))||(isset($debitAccount)&& (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck') && ($truckAssociated->id==explode('-', $debitAccount)[1])))
-                                                                            <option value="truck-{{$truckAssociated->id}}" selected>{{$truckAssociated->name}} - {{$truckAssociated->licensePlate}}</option>
-                                                                        @else
-                                                                            <option value="truck-{{$truckAssociated->id}}">{{$truckAssociated->name}} - {{$truckAssociated->licensePlate}}</option>
-                                                                        @endif
-                                                                </select>
+                                                            <!-- credit account -->
+                                                            <div class="col-lg-1 text-right">
+                                                                <label for="creditAccount" class="control-label">to</label>
                                                             </div>
-                                                            <div class="col-lg-4" id="debitAccount2" @if(isset($type) && $type=='Withdrawal-Deposit') style="display: block" @else  style="display:none;" @endif >
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit2b" title="Debit Account" name="debitAccount2b" onchange="selectAccount('2b');">
+                                                            <!-- deposit withdrawal : only network and other accounts -->
+                                                            <div class="col-lg-3" id="creditAccountDW"  @if(isset($type) && ($type == 'Withdrawal_Only' || $type=='Deposit_Only')) style="display: none" @else style="display:block;" @endif >
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccountDW" id="select-creditAccountDW" onchange="selectAccount();">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('debitAccount2b') && (strpos(old('debitAccount2b'), '-') == 7 && explode('-', old('debitAccount2b'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount2b'))[1]))||(isset($debitAccount) && (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount)[1])))
+                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccountDW') && (strpos(old('creditAccountDW'), '-') == 7 && explode('-', old('creditAccountDW'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccountDW'))[1]))||(isset($creditAccountDW) && (strpos($creditAccountDW, '-') == 7 && explode('-', $creditAccountDW)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccountDW)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
                                                                         @else
                                                                             <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
@@ -592,63 +555,11 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div class="col-lg-4" id="debitAccount4" @if(isset($type) && ($type=='Purchase-Sale' || $type=='Debt')) style="display: block" @else style="display: none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit4b" title="Debit Account" name="debitAccount4b" onchange="selectAccount('4b');">
-                                                                    @if(isset($debitAccountCorr)&& isset($creditAccountCorr))
-                                                                        @php($partsDebitAccount=explode('-',$debitAccountCorr))
-                                                                        @php($idDC=$partsDebitAccount[count($partsDebitAccount)-1])
-                                                                        @php($typeDC=$partsDebitAccount[count($partsDebitAccount)-2])
-                                                                        @if(count(array_diff ($partsDebitAccount, [$idDC, $typeDC]))==1)
-                                                                            @php($debitAccountC=array_diff ($partsDebitAccount, [$idDC, $typeDC])[0])
-                                                                        @else
-                                                                            @php($debitAccountC=implode( ' - ', array_diff ($partsDebitAccount, [$idDC, $typeDC])))
-                                                                        @endif
-                                                                        @php($partsCreditAccount=explode('-',$creditAccountCorr))
-                                                                        @php($idCC=$partsCreditAccount[count($partsCreditAccount)-1])
-                                                                        @php($typeCC=$partsCreditAccount[count($partsCreditAccount)-2])
-                                                                        @if(count(array_diff ($partsCreditAccount, [$idCC, $typeCC]))==1)
-                                                                            @php($creditAccountC=array_diff ($partsCreditAccount, [$idCC, $typeCC])[0])
-                                                                        @else
-                                                                            @php($creditAccountC=implode( ' - ', array_diff ($partsCreditAccount, [$idCC, $typeCC])))
-                                                                        @endif
-                                                                   {{--@php($transfNorm=\App\Palletstransfer::where('id', $normalTransferAssociated)->first())--}}
-                                                                        <option value="account-1">WENZEL</option>
-                                                                        @if($typeDC=='truck')
-                                                                            <option value="truck-{{$idDC}}">{{$debitAccountC}}</option>
-                                                                        @elseif($typeDC=='account')
-                                                                            <option value="account-{{$idDC}}">{{$debitAccountC}}</option>
-                                                                        @endif
-                                                                        @if($typeCC=='truck')
-                                                                            <option value="truck-{{$idCC}}">{{$creditAccountC}}</option>
-                                                                        @elseif($typeCC=='account')
-                                                                            <option value="account-{{$idCC}}">{{$creditAccountC}}</option>
-                                                                        @endif
-                                                                    @elseif(isset($debitAccount))
-                                                                        @if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck')
-                                                                            @php($nameTruckAccount = App\Truck::where('id', explode('-', $debitAccount)[1])->value('name'))
-                                                                            @php($licensePlate = App\Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate'))
-                                                                            <option selected value="truck-{{explode('-', $debitAccount)[1]}}">{{$nameTruckAccount}} - {{$licensePlate}}</option>
-                                                                        @elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account')
-                                                                            @php($namePalletsAccount = App\Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name'))
-                                                                            <option selected value="account-{{explode('-', $debitAccount)[1]}}">{{$namePalletsAccount}}</option>
-                                                                        @endif
-                                                                    @endif
-                                                                </select>
-                                                            </div>
-                                                            <!--credit account-->
-                                                            <div class="col-lg-2">
-                                                                <label for="creditAccount" class="control-label">*Credit account :</label>
-                                                            </div>
-                                                            <div class="col-lg-4" id="creditAccount0" @if(!isset($type)) style="display: block" @else style="display: none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount" disabled="true">
-                                                                    <option></option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-lg-4" id="creditAccount3"
-                                                                 @if(isset($type) && ($type=='Deposit_Only'||$type=='Other')) style="display: block" @else style="display: none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount3b" id="select-credit3b" onchange="creditaccount('3b');">
+                                                            <!-- deposit only : all accounts possible-->
+                                                            <div class="col-lg-3" id="creditAccountD"  @if(isset($type) && ($type == 'Deposit_Only')) style="display: block" @else style="display:none;" @endif>
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-creditAccountD" title="Account (takes pallets)" name="creditAccountD" onchange="selectAccount();">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccount3') && (strpos(old('creditAccount3'), '-') == 7 && explode('-', old('creditAccount3'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount3'))[1]))||(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1])))
+                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccountD') && (strpos(old('creditAccountD'), '-') == 7 && explode('-', old('creditAccountD'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccountD'))[1]))||(isset($creditAccountD) && (strpos($creditAccountD, '-') == 7 && explode('-', $creditAccountD)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccountD)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}"
                                                                                     selected>{{$palletsAccount->name}}</option>
                                                                         @else
@@ -656,7 +567,7 @@
                                                                         @endif
                                                                     @endforeach
                                                                     @foreach($listTrucksAccounts as $trucksAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccount3') && (strpos(old('creditAccount3'), '-') == 5 && explode('-', old('creditAccount3'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('creditAccount3'))[1]))||(isset($creditAccount)&& (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') && ($trucksAccount->id==explode('-', $creditAccount)[1])))
+                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccountD') && (strpos(old('creditAccountD'), '-') == 5 && explode('-', old('creditAccountD'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('creditAccountD'))[1]))|| (isset($creditAccountD)&& (strpos($creditAccountD, '-') == 5 && explode('-', $creditAccountD)[0] == 'truck') && ($trucksAccount->id==explode('-', $creditAccountD)[1])))
                                                                             <option value="truck-{{$trucksAccount->id}}"
                                                                                     selected>{{$trucksAccount->name}}
                                                                                 - {{$trucksAccount->licensePlate}}</option>
@@ -667,100 +578,30 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div class="col-lg-4" id="creditAccount1" @if(isset($type) && ($type=='Withdrawal_Only'||$type=='Withdrawal-Deposit')) style="display: block;" @else style="display: none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount1b" id="select-credit1b" onchange="creditaccount('1b');">
-                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccount1') && (strpos(old('creditAccount1'), '-') == 5 && explode('-', old('creditAccount1'))[0] == 'truck') && ($truckAssociated->id==explode('-', old('creditAccount1'))[1]))||(isset($creditAccount)&& (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') && ($truckAssociated->id==explode('-', $creditAccount)[1])))
-                                                                            <option value="truck-{{$truckAssociated->id}}"
-                                                                                    selected>{{$truckAssociated->name}}
-                                                                                - {{$truckAssociated->licensePlate}}</option>
-                                                                        @else
-                                                                            <option value="truck-{{$truckAssociated->id}}">{{$truckAssociated->name}}
-                                                                                - {{$truckAssociated->licensePlate}}</option>
-                                                                        @endif
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-lg-4" id="creditAccount2" @if(isset($type) && $type=='Deposit-Withdrawal') style="display: block;" @else style="display:none;" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount2b" id="select-credit2b" onchange="creditaccount('2b');">
-                                                                    @foreach($listPalletsAccounts as $palletsAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccount2b') && (strpos(old('creditAccount2b'), '-') == 7 && explode('-', old('creditAccount2b'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount2b'))[1]))||(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1])))
-                                                                            <option value="account-{{$palletsAccount->id}}"
-                                                                                    selected>{{$palletsAccount->name}}</option>
-                                                                        @else
-                                                                            <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
-                                                                        @endif
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-lg-4" id="creditAccount4" @if(isset($type) && ($type=='Purchase-Sale'||$type=='Debt')) style="display: block" @else style="display: none" @endif>
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount4b" id="select-credit4b" onchange="creditaccount('4b');">
-                                                                    @if(isset($debitAccountCorr) && isset($creditAccountCorr))
-                                                                        <option value="account-1">
-                                                                            WENZEL
-                                                                        </option>
-                                                                        @if($typeDC=='truck')
-                                                                            <option value="truck-{{$idDC}}">{{$debitAccountC}}</option>
-                                                                        @elseif($typeDC=='account')
-                                                                            <option value="account-{{$idDC}}">{{$debitAccountC}}</option>
-                                                                        @endif
-                                                                        @if($typeCC=='truck')
-                                                                            <option value="truck-{{$idCC}}">{{$creditAccountC}}</option>
-                                                                        @elseif($typeCC=='account')
-                                                                            <option value="account-{{$idCC}}">{{$creditAccountC}}</option>
-                                                                        @endif
-                                                                    @elseif(isset($creditAccount))
-                                                                        @if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck')
-                                                                            @php($nameTruckAccount = App\Truck::where('id', explode('-', $creditAccount)[1])->value('name'))
-                                                                            @php($licensePlate = App\Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate'))
-                                                                            <option selected
-                                                                                    value="truck-{{explode('-', $creditAccount)[1]}}">{{$nameTruckAccount}}
-                                                                                - {{$licensePlate}}</option>
-                                                                        @elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account')
-                                                                            @php($namePalletsAccount = App\Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name'))
-                                                                            <option selected
-                                                                                    value="account-{{explode('-', $creditAccount)[1]}}">{{$namePalletsAccount}}</option>
-                                                                        @endif
+                                                            <!-- withdrawal only : truck -->
+                                                            <div class="col-lg-3" id="creditAccountW"  @if(isset($type) && ($type == 'Withdrawal_Only')) style="display: block" @else style="display:none;" @endif >
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="select-creditAccountW" id="select-creditAccountW">
+                                                                    @if(isset($notExchanging) && $notExchanging==1)
+                                                                        <option value="account-1" selected>WENZEL</option>
+                                                                    @elseif(isset($truckAssociated))
+                                                                        <option value="truck-{{$truckAssociated->id}}" selected>{{$truckAssociated->name}} - {{$truckAssociated->licensePlate}}</option>
+                                                                    @else
+                                                                        <option selected></option>
                                                                     @endif
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <!--errors messages-->
-                                                        <div class="form-group">
-                                                            @if(Session::has('errorFields2'))
-                                                                <p class="alert alert-danger text-alert text-center"> {{ Session::get('errorFields2') }} </p>
-                                                            @endif
-                                                        </div>
-                                                        <!--withdrawal-->
-                                                        <div id="deposit-withdrawal2L" @if(isset($type) &&$type=='Deposit-Withdrawal') style="display:block;" @else style="display: none;" @endif>
-                                                            <div class="form-group">
+                                                        <!--withdrawal title-->
+                                                        <div class="form-group" id="deposit-withdrawal2" @if(isset($type) &&$type<>'Deposit-Withdrawal') style="display:none;" @else style="display: block;" @endif>
                                                                 <div class="col-lg-12 text-center">
                                                                     <label for="withdrawal" class="control-label">WITHDRAWAL</label>
                                                                 </div>
-                                                            </div>
                                                         </div>
-                                                        <!--deposit-->
-                                                        <div id="withdrawal-deposit2L" @if(isset($type) &&$type=='Withdrawal-Deposit') style="display:block" @else style="display: none" @endif>
+                                                        <!--2nd transfer DW -->
+                                                        <div id="DW" @if(isset($type) &&($type<>'Deposit-Withdrawal')) style="display:none;" @else style="display:block;"@endif>
                                                             <div class="form-group">
-                                                                <div class="col-lg-12 text-center">
-                                                                    <label for="deposit" class="control-label">DEPOSIT</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--sale-->
-                                                        <div id="purchase-sale2L" @if(isset($type) &&$type=='Purchase-Sale')style="display:block" @else style="display: none;" @endif>
-                                                            <div class="form-group">
-                                                                <div class="col-lg-12 text-center">
-                                                                    <label for="sale" class="control-label">SALE</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--2nd transfer : pallets number only-->
-                                                        <div id="DWL" @if(isset($type) &&($type=='Withdrawal-Deposit' ||$type=='Deposit-Withdrawal')) style="display:block;" @else style="display:none;"@endif>
-                                                            <div class="form-group">
-                                                                <!--number of pallets-->
-                                                                <div class="col-lg-1">
-                                                                    <label for="palletsNumber2" class="control-label">*Pallets taken :</label>
-                                                                </div>
-                                                                <div class="col-lg-2 text-left">
+                                                                <!--number of pallets 2-->
+                                                                <div class="col-lg-2">
                                                                     <div class="input-group">
                                                                 <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber2">
@@ -770,16 +611,226 @@
                                                                         <input id="palletsNumber2" type="number" name="palletsNumber2"
                                                                                class="form-control input-number"  @if(isset($palletsNumber2)) value="{{$palletsNumber2}}"
                                                                                @elseif(Illuminate\Support\Facades\Input::old('palletsNumber2')) value="{{ old('palletsNumber2') }}"
-                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber(this);">
+                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber();">
                                                                         <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber2">
                                                                         <span class="glyphicon glyphicon-plus"></span>
                                                                     </button>
                                                                 </span>
                                                                     </div>
-                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <label for="palletsNumber2" class="control-label">pallets taken</label>
+                                                                </div>
+                                                                <!-- debit account -->
+                                                                <div class="col-lg-1 text-right">
+                                                                    <label for="debitAccount2" class="control-label">from</label>
+                                                                </div>
+                                                                <!-- deposit withdrawal : debit account 2 = credit account 1 -->
+                                                                <div class="col-lg-3" id="debitAccount2DW"  @if(isset($type) && $type <> 'Deposit-Withdrawal') style="display: none" @else style="display:block;" @endif>
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account" name="debitAccount2DW" id="select-debitAccount2DW" disabled="true">
+                                                                        <option></option>
+                                                                    </select>
+                                                                </div>
+                                                                <!-- credit account -->
+                                                                <div class="col-lg-1 text-right">
+                                                                    <label for="creditAccount2" class="control-label">to</label>
+                                                                </div>
+                                                                <!-- deposit withdrawal : credit account 2 = debit account 1 -->
+                                                                <div class="col-lg-3" id="creditAccount2DW"  @if(isset($type) && $type <> 'Deposit-Withdrawal') style="display: none" @else style="display:block;" @endif>
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount2DW" id="select-creditAccount2DW" disabled="true">
+                                                                        <option></option>
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
+
+                                                        <!--3rd transfer : Debt - pallets number credit account and debit account-->
+                                                        <div id="debt" @if(isset($type) &&($type=='Deposit-Withdrawal' || $type=='Deposit_Only' || $type=='Withdrawal_Only') && isset($notExchanging) && $notExchanging==1 && (isset($palletsNumber) && $palletsNumber <> $loading->anz || isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)) style="display:block" @else  style="display:none;" @endif>
+                                                            <div class="form-group">
+                                                                <div class="col-lg-12 text-center">
+                                                                    <label for="debt" class="control-label">DEBT</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="debt1" @if(isset($type) &&(($type=='Deposit-Withdrawal' && isset($palletsNumber) && $palletsNumber < $loading->anz)|| ($type=='Withdrawal_Only')) && isset($notExchanging) && $notExchanging==1 ) style="display:block" @else  style="display:none;" @endif>
+                                                                <div class="col-lg-2">
+                                                                    <input class="form-control text-center" type="text" id="debitAccount3a" name="debitAccount3a" readonly value="WENZEL" />
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <p class="text-center">has a debt of</p>
+                                                                </div>
+                                                                <div class="col-lg-1">
+                                                                    <input class="form-control text-center" type="text" id="palletsNumber3a" name="palletsNumber3a" readonly @if(isset($palletsNumber2) && isset($type) && $type=='Deposit-Withdrawal') value="{{$loading->anz- $palletsNumber2}}" @elseif(isset($palletsNumber) && isset($type) && $type=='Withdrawal_Only') value="{{$palletsNumber}}" @else value="" @endif/>
+                                                                </div>
+                                                                <div class="col-lg-1">
+                                                                    <p class="text-center"> pallets toward</p>
+                                                                </div>
+                                                                <div class="col-lg-3">
+                                                                    <select class="selectpicker show-tick form-control text-center" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccount3a" id="creditAccount3a">
+                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                            @if((Illuminate\Support\Facades\Input::old('creditAccount3a') && (strpos(old('creditAccount3a'), '-') == 7 && explode('-', old('creditAccount3a'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount3a'))[1]))||(isset($creditAccount3a) && (strpos($creditAccount3a, '-') == 7 && explode('-', $creditAccount3a)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount3a)[1])))
+                                                                                <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
+                                                                            @else
+                                                                                <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="debt2" @if(isset($type) &&(($type=='Deposit-Withdrawal' && isset($palletsNumber2) && $palletsNumber2 < $loading->anz)|| ($type=='Deposit_Only')) && isset($notExchanging) && $notExchanging==1 ) style="display:block" @else  style="display:none;" @endif>
+                                                                <div class="col-lg-3">
+                                                                    <select class="selectpicker show-tick form-control text-center" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccount3b" id="debitAccount3b">
+                                                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                                                            @if((Illuminate\Support\Facades\Input::old('debitAccount3b') && (strpos(old('debitAccount3b'), '-') == 7 && explode('-', old('debitAccount3b'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount3b'))[1]))||(isset($debitAccount3b) && (strpos($debitAccount3b, '-') == 7 && explode('-', $debitAccount3b)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount3b)[1])))
+                                                                                <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
+                                                                            @else
+                                                                                <option value="account-{{$palletsAccount->id}}">{{$palletsAccount->name}}</option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <p class="text-center">has a debt of</p>
+                                                                </div>
+                                                                <div class="col-lg-1">
+                                                                    <input class="form-control text-center" type="text" id="palletsNumber3b" name="palletsNumber3b" readonly @if(isset($palletsNumber) && isset($type) && $type=='Deposit-Withdrawal') value="{{$loading->anz- $palletsNumber}}" @elseif(isset($palletsNumber) && isset($type) && $type=='Deposit_Only') value="{{$palletsNumber}}" @else value="" @endif/>
+                                                                </div>
+                                                                <div class="col-lg-1">
+                                                                    <p class="text-center">pallets toward</p>
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <input class="form-control text-center" type="text" id="creditAccount3b" name="creditAccount3b" readonly value="WENZEL" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                            <!--btn submit add-->
+                                                            <div class="form-group">
+                                                                <div class="col-lg-4 col-lg-offset-4">
+                                                                    <button type="submit" class="btn btn-add btn-block" value="addPalletstransfer" name="addPalletstransfer"  id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" onclick="formSubmitBlock(this);">
+                                                                        Add
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        {{--<!--purchase-->--}}
+                                                        {{--<div id="purchase-sale1L" @if(isset($type) &&$type=='Purchase-Sale')style="display:block" @else style="display: none;" @endif>--}}
+                                                            {{--<div class="form-group">--}}
+                                                                {{--<div class="col-lg-12 text-center">--}}
+                                                                    {{--<label for="purchase" class="control-label">PURCHASE</label>--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="form-group">--}}
+                                                            {{--<!--transfer normal associated-->--}}
+                                                            {{--@if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))--}}
+                                                                {{--<div class="col-lg-2 text-right">--}}
+                                                                    {{--<label for="normalTransferAssociated" class="control-label">*Correction on :</label>--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="col-lg-1">--}}
+                                                                    {{--<select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="normalTransferAssociated" id="normalTransferAssociated">--}}
+                                                                        {{--@foreach($listPalletstransfersNormal as $normalTransfer )--}}
+                                                                            {{--@if((Illuminate\Support\Facades\Input::old('normalTransferAssociated') && $normalTransfer->id==old('normalTransferAssociated'))|| (isset($normalTransferAssociated)&&$normalTransfer->id==$normalTransferAssociated)||(!isset($normalTransferAssociated) && explode('-', $actionForm)[1] ==$normalTransfer->id))--}}
+                                                                                {{--<option value="{{$normalTransfer->id}}"--}}
+                                                                                        {{--selected>{{$normalTransfer->id}}</option>--}}
+                                                                            {{--@else--}}
+                                                                                {{--<option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>--}}
+                                                                            {{--@endif--}}
+                                                                        {{--@endforeach--}}
+                                                                    {{--</select>--}}
+                                                                {{--</div>--}}
+                                                        {{--@endif--}}
+                                                        {{--</div>--}}
+
+                                                        {{--<!--credit/debit account-->--}}
+                                                        {{--<div class="form-group">--}}
+                                                            {{--<div class="col-lg-4" id="debitAccount4" @if(isset($type) && ($type=='Purchase-Sale' || $type=='Debt')) style="display: block" @else style="display: none;" @endif>--}}
+                                                                {{--<select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debit4b" title="Debit Account" name="debitAccount4b" onchange="selectAccount();">--}}
+                                                                    {{--@if(isset($debitAccountCorr)&& isset($creditAccountCorr))--}}
+                                                                        {{--@php($partsDebitAccount=explode('-',$debitAccountCorr))--}}
+                                                                        {{--@php($idDC=$partsDebitAccount[count($partsDebitAccount)-1])--}}
+                                                                        {{--@php($typeDC=$partsDebitAccount[count($partsDebitAccount)-2])--}}
+                                                                        {{--@if(count(array_diff ($partsDebitAccount, [$idDC, $typeDC]))==1)--}}
+                                                                            {{--@php($debitAccountC=array_diff ($partsDebitAccount, [$idDC, $typeDC])[0])--}}
+                                                                        {{--@else--}}
+                                                                            {{--@php($debitAccountC=implode( ' - ', array_diff ($partsDebitAccount, [$idDC, $typeDC])))--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@php($partsCreditAccount=explode('-',$creditAccountCorr))--}}
+                                                                        {{--@php($idCC=$partsCreditAccount[count($partsCreditAccount)-1])--}}
+                                                                        {{--@php($typeCC=$partsCreditAccount[count($partsCreditAccount)-2])--}}
+                                                                        {{--@if(count(array_diff ($partsCreditAccount, [$idCC, $typeCC]))==1)--}}
+                                                                            {{--@php($creditAccountC=array_diff ($partsCreditAccount, [$idCC, $typeCC])[0])--}}
+                                                                        {{--@else--}}
+                                                                            {{--@php($creditAccountC=implode( ' - ', array_diff ($partsCreditAccount, [$idCC, $typeCC])))--}}
+                                                                        {{--@endif--}}
+                                                                   {{--@php($transfNorm=\App\Palletstransfer::where('id', $normalTransferAssociated)->first())--}}
+                                                                        {{--<option value="account-1">WENZEL</option>--}}
+                                                                        {{--@if($typeDC=='truck')--}}
+                                                                            {{--<option value="truck-{{$idDC}}">{{$debitAccountC}}</option>--}}
+                                                                        {{--@elseif($typeDC=='account')--}}
+                                                                            {{--<option value="account-{{$idDC}}">{{$debitAccountC}}</option>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@if($typeCC=='truck')--}}
+                                                                            {{--<option value="truck-{{$idCC}}">{{$creditAccountC}}</option>--}}
+                                                                        {{--@elseif($typeCC=='account')--}}
+                                                                            {{--<option value="account-{{$idCC}}">{{$creditAccountC}}</option>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@elseif(isset($debitAccount))--}}
+                                                                        {{--@if (strpos($debitAccount, '-') == 5 && explode('-', $debitAccount)[0] == 'truck')--}}
+                                                                            {{--@php($nameTruckAccount = App\Truck::where('id', explode('-', $debitAccount)[1])->value('name'))--}}
+                                                                            {{--@php($licensePlate = App\Truck::where('id', explode('-', $debitAccount)[1])->value('licensePlate'))--}}
+                                                                            {{--<option selected value="truck-{{explode('-', $debitAccount)[1]}}">{{$nameTruckAccount}} - {{$licensePlate}}</option>--}}
+                                                                        {{--@elseif (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account')--}}
+                                                                            {{--@php($namePalletsAccount = App\Palletsaccount::where('id', explode('-', $debitAccount)[1])->value('name'))--}}
+                                                                            {{--<option selected value="account-{{explode('-', $debitAccount)[1]}}">{{$namePalletsAccount}}</option>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@endif--}}
+                                                                {{--</select>--}}
+                                                            {{--</div>--}}
+                                                            {{--<!--credit account-->--}}
+                                                            {{--<div class="col-lg-4" id="creditAccount4" @if(isset($type) && ($type=='Purchase-Sale'||$type=='Debt')) style="display: block" @else style="display: none" @endif>--}}
+                                                                {{--<select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount4b" id="select-credit4b" onchange="creditaccount('4b');">--}}
+                                                                    {{--@if(isset($debitAccountCorr) && isset($creditAccountCorr))--}}
+                                                                        {{--<option value="account-1">--}}
+                                                                            {{--WENZEL--}}
+                                                                        {{--</option>--}}
+                                                                        {{--@if($typeDC=='truck')--}}
+                                                                            {{--<option value="truck-{{$idDC}}">{{$debitAccountC}}</option>--}}
+                                                                        {{--@elseif($typeDC=='account')--}}
+                                                                            {{--<option value="account-{{$idDC}}">{{$debitAccountC}}</option>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@if($typeCC=='truck')--}}
+                                                                            {{--<option value="truck-{{$idCC}}">{{$creditAccountC}}</option>--}}
+                                                                        {{--@elseif($typeCC=='account')--}}
+                                                                            {{--<option value="account-{{$idCC}}">{{$creditAccountC}}</option>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@elseif(isset($creditAccount))--}}
+                                                                        {{--@if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck')--}}
+                                                                            {{--@php($nameTruckAccount = App\Truck::where('id', explode('-', $creditAccount)[1])->value('name'))--}}
+                                                                            {{--@php($licensePlate = App\Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate'))--}}
+                                                                            {{--<option selected--}}
+                                                                                    {{--value="truck-{{explode('-', $creditAccount)[1]}}">{{$nameTruckAccount}}--}}
+                                                                                {{--- {{$licensePlate}}</option>--}}
+                                                                        {{--@elseif (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account')--}}
+                                                                            {{--@php($namePalletsAccount = App\Palletsaccount::where('id', explode('-', $creditAccount)[1])->value('name'))--}}
+                                                                            {{--<option selected--}}
+                                                                                    {{--value="account-{{explode('-', $creditAccount)[1]}}">{{$namePalletsAccount}}</option>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@endif--}}
+                                                                {{--</select>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+
+
+
+                                                        {{--<!--sale-->--}}
+                                                        {{--<div id="purchase-sale2L" @if(isset($type) &&$type=='Purchase-Sale')style="display:block" @else style="display: none;" @endif>--}}
+                                                            {{--<div class="form-group">--}}
+                                                                {{--<div class="col-lg-12 text-center">--}}
+                                                                    {{--<label for="sale" class="control-label">SALE</label>--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+
                                                         <!--2nd transfer : pallets number credit account and debit account-->
                                                         <div id="SPL" @if(isset($type) &&($type=='Purchase-Sale'))style="display:block" @else  style="display:none;" @endif>
                                                             <div class="form-group">
@@ -797,7 +848,7 @@
                                                                         <input id="palletsNumber2C" type="number" name="palletsNumber2C"
                                                                                class="form-control input-number"  @if(isset($palletsNumber2C)) value="{{$palletsNumber2C}}"
                                                                                @elseif(Illuminate\Support\Facades\Input::old('palletsNumber2C')) value="{{ old('palletsNumber2C') }}"
-                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber(this);">
+                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber();">
                                                                         <span class="input-group-btn">
                                                                             <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber2C">
                                                                                 <span class="glyphicon glyphicon-plus"></span>
@@ -809,7 +860,7 @@
                                                                     <label for="debitAccount2" class="control-label">*Debit :</label>
                                                                 </div>
                                                                 <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account (=saler)" name="debitAccount2" id="select-debit2" onchange="selectAccount('2');">
+                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account (=saler)" name="debitAccount2" id="select-debit2" onchange="selectAccount();">
                                                                         @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                             <option value="account-1">WENZEL</option>
                                                                             @if($typeDC=='truck')
@@ -871,63 +922,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!--3rd transfer : Debt - pallets number credit account and debit account-->
-                                                        <div id="debt" @if(isset($type) &&($type=='Withdrawal-Deposit' || $type=='Deposit-Withdrawal') && isset($notExchanging) && $notExchanging==1 && (isset($palletsNumber) && $palletsNumber ==0 || isset($palletsNumber2) && $palletsNumber2 ==0)) style="display:block" @else  style="display:none;" @endif>
-                                                            <div class="form-group">
-                                                                <div class="col-lg-2 col-lg-offset-5 text-center">
-                                                                    <label for="debt" class="control-label">DEBT</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <!--number of pallets-->
-                                                                <div class="col-lg-1">
-                                                                    <label for="palletsNumber3" class="control-label">*Nbr :</label>
-                                                                </div>
-                                                                <div class="col-lg-1 text-left">
-                                                                    <input onchange="updateFieldsPalletsNumber(this);" id="palletsNumber3" type="number" class="form-control" name="palletsNumber3" @if(Illuminate\Support\Facades\Input::old('palletsNumber3')) value="{{ old('palletsNumber3') }}" @elseif(isset($palletsNumber3)) value="{{$palletsNumber3}}" @else value="" @endif placeholder="Nbr" min="0" autofocus />
-                                                                </div>
-                                                                <div class="col-lg-2 text-right">
-                                                                    <label for="debitAccount3" class="control-label">*Debit :</label>
-                                                                </div>
-                                                                <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Debit Account" name="debitAccount3" id="select-debit3" onchange="selectAccount('3');">
-                                                                        @if(isset($debitAccount3))
-                                                                            @if(strpos($debitAccount3, '-') == 5 && explode('-', $debitAccount3)[0] == 'truck')
-                                                                                <option value="truck-{{explode('-', $debitAccount3)[1]}}"
-                                                                                selected>{{\App\Truck::where('id', explode('-', $debitAccount3)[1])->value('name')}} - {{\App\Truck::where('id', explode('-', $debitAccount3)[1])->value('licensePlate')}}</option>
-                                                                            @elseif(strpos($debitAccount3, '-') == 7 && explode('-', $debitAccount3)[0] == 'account')
-                                                                                <option value="account-{{explode('-', $debitAccount3)[1]}}"
-                                                                                        selected>{{\App\Palletsaccount::where('id', explode('-', $debitAccount3)[1])->value('name')}}</option>
-                                                                            @endif
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-lg-2 text-right">
-                                                                    <label for="creditAccount3" class="control-label">*Credit :</label>
-                                                                </div>
-                                                                <div class="col-lg-3">
-                                                                    <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Credit Account" name="creditAccount3" id="select-credit3" onchange="creditaccount('3');">
-                                                                        @if(isset($creditAccount3))
-                                                                            @if(strpos($creditAccount3, '-') == 5 && explode('-', $creditAccount3)[0] == 'truck')
-                                                                                <option value="truck-{{explode('-', $creditAccount3)[1]}}"
-                                                                                        selected>{{\App\Truck::where('id', explode('-', $creditAccount3)[1])->value('name')}} - {{\App\Truck::where('id', explode('-', $creditAccount3)[1])->value('licensePlate')}}</option>
-                                                                            @elseif(strpos($creditAccount3, '-') == 7 && explode('-', $creditAccount3)[0] == 'account')
-                                                                                <option value="account-{{explode('-', $creditAccount3)[1]}}"
-                                                                                        selected>{{\App\Palletsaccount::where('id', explode('-', $creditAccount3)[1])->value('name')}}</option>
-                                                                            @endif
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--btn submit add-->
-                                                        <div class="form-group">
-                                                            <div class="col-lg-4 col-lg-offset-4">
-                                                                <button type="submit" class="btn btn-add btn-block" value="addPalletstransfer" name="addPalletstransfer"  id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" onclick="formSubmitBlock(this);">
-                                                                    Add
-                                                                </button>
-                                                            </div>
-                                                        </div>
+
                                                     </div>
                                                 </div>
                                             @endif
@@ -1168,7 +1163,7 @@
                                                         <td class="text-left colDanger">
                                                             @if(!empty($errorsTransfer))
                                                                 @foreach($errorsTransfer as $errorTrans)
-                                                                    <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>
+                                                                    <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" data-placement="top" title="{{$errorTrans->name}}"></span>
                                                                 @endforeach
                                                             @else
                                                             @endif

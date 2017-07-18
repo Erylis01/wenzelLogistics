@@ -1,6 +1,6 @@
 function formSubmitBlock(button) {
     $('input[id=actionForm]').val(button.value);
-    $("#"+button.id).attr('disabled','disabled');
+    $("#" + button.id).attr('disabled', 'disabled');
     $("#formSubmitUpdateUpload").submit();
 }
 
@@ -65,25 +65,25 @@ function openClosePanel2() {
 }
 
 //plugin bootstrap minus and plus
-$('.btn-number').click(function(e){
+$('.btn-number').click(function (e) {
     e.preventDefault();
     var fieldName = $(this).attr('data-field');
-    var type      = $(this).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
+    var type = $(this).attr('data-type');
+    var input = $("input[name='" + fieldName + "']");
     var currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
-        if(type == 'minus') {
-            if(currentVal > input.attr('min')) {
+        if (type == 'minus') {
+            if (currentVal > input.attr('min')) {
                 input.val(currentVal - 1).change();
             }
-            if(parseInt(input.val()) == input.attr('min')) {
+            if (parseInt(input.val()) == input.attr('min')) {
                 $(this).attr('disabled', true);
             }
-        } else if(type == 'plus') {
-            if(currentVal < input.attr('max')) {
+        } else if (type == 'plus') {
+            if (currentVal < input.attr('max')) {
                 input.val(currentVal + 1).change();
             }
-            if(parseInt(input.val()) == input.attr('max')) {
+            if (parseInt(input.val()) == input.attr('max')) {
                 $(this).attr('disabled', true);
             }
         }
@@ -91,24 +91,24 @@ $('.btn-number').click(function(e){
         input.val(0);
     }
 });
-$('.input-number').focusin(function(){
+$('.input-number').focusin(function () {
     $(this).data('oldValue', $(this).val());
 });
-$('.input-number').change(function() {
+$('.input-number').change(function () {
 
-    minValue =  parseInt($(this).attr('min'));
-    maxValue =  parseInt($(this).attr('max'));
+    minValue = parseInt($(this).attr('min'));
+    maxValue = parseInt($(this).attr('max'));
     valueCurrent = parseInt($(this).val());
 
     name = $(this).attr('name');
-    if(valueCurrent >= minValue) {
-        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    if (valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
     } else {
         alert('Sorry, the minimum value was reached');
         $(this).val($(this).data('oldValue'));
     }
-    if(valueCurrent <= maxValue) {
-        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    if (valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
     } else {
         alert('Sorry, the maximum value was reached');
         $(this).val($(this).data('oldValue'));
@@ -119,246 +119,214 @@ $('.input-number').change(function() {
 
 
 // PALLETS LOCATION ONLY ///
-function selectAccount(index) {
-    if (index !== '3') {
-        $("#select-debit3").empty();
-        $("#select-credit3").empty();
-        if ($("#notExchanging").is(":checked")) {
-            if (index == '1b') {
-                var value1 = $("#select-debit1b").find(":selected").val();
-                var text1 = $("#select-debit1b").find(":selected").text();
-                $("#select-credit3").append($('<option></option>').attr("value", value1).text(text1));
-                $("#select-debit3").append($('<option></option>').attr("value", value1).text(text1));
-                var value2 = $("#select-credit2b").find(":selected").val();
-                var text2 = $("#select-credit2b").find(":selected").text();
-                $("#select-debit3").append($('<option></option>').attr("value", value2).text(text2));
-                $("#select-credit3").append($('<option></option>').attr("value", value2).text(text2));
-            } else {
-                if (index == '2b') {
-                    var value1 = $("#select-debit2b").find(":selected").val();
-                    var text1 = $("#select-debit2b").find(":selected").text();
-                    $("#select-credit3").append($('<option></option>').attr("value", value1).text(text1));
-                    $("#select-debit3").append($('<option></option>').attr("value", value1).text(text1));
-                    var value2 = $("#select-credit1b").find(":selected").val();
-                    var text2 = $("#select-credit1b").find(":selected").text();
-                    $("#select-debit3").append($('<option></option>').attr("value", value2).text(text2));
-                    $("#select-credit3").append($('<option></option>').attr("value", value2).text(text2));
-                }
-            }
-            var value3 = 'account-1';
-            var text3 = 'WENZEL';
-            $("#select-debit3").append($('<option></option>').attr("value", value3).text(text3));
-            $("#select-credit3").append($('<option></option>').attr("value", value3).text(text3));
-        }
-        $('#select-debit3').selectpicker('refresh');
-        $('#select-debit3').selectpicker('render');
-        $('#select-credit3').selectpicker('refresh');
-        $('#select-credit3').selectpicker('render');
+function selectAccount() {
+    var valueDebit2 = null;
+    var textDebit2 = null;
+    var valueCredit2 = null;
+    var textCredit2 = null;
+    if($("#typeDW").is(":checked")){
+        valueCredit2 = $("#select-debitAccountDWD").find(":selected").val();
+        textCredit2 = $("#select-debitAccountDWD").find(":selected").text();
+        $("#select-creditAccount2DW").empty();
+        $("#select-creditAccount2DW").append($('<option></option>').attr("value", valueCredit2).text(textCredit2));
+        $("#select-creditAccount2DW").find("option[value=\'" + valueCredit2 + "\']").attr('selected',true);
 
-        if ($("#palletsNumber").val() !== 0 && $("#palletsNumber2").val() == 0 && $("#notExchanging").is(":checked")) {
-            $('#select-debit3').find("option[value=\'" + value3 + "\']").attr('selected', true);
-            $('#select-debit3').change();
-            $('#select-credit3').find("option[value=\'" + value2 + "\']").attr('selected', true);
-            $('#select-credit3').change();
-        } else {
-            if ($("#palletsNumber").val() == 0 && $("#palletsNumber2").val() !== 0 && $("#notExchanging").is(":checked")) {
-                $('#select-debit3').find("option[value=\'" + value2 + "\']").attr('selected', true);
-                $('#select-debit3').change();
-                $('#select-credit3').find("option[value=\'" + value3 + "\']").attr('selected', true);
-                $('#select-credit3').change();
-            }
-        }
+        valueDebit2 = $("#select-creditAccountDW").find(":selected").val();
+        textDebit2 = $("#select-creditAccountDW").find(":selected").text();
+        $("#select-debitAccount2DW").empty();
+        $("#select-debitAccount2DW").append($('<option></option>').attr("value", valueDebit2).text(textDebit2));
+        $("#select-debitAccount2DW").find("option[value=\'" + valueDebit2 + "\']").attr('selected',true);
+    }else{
+        $("#select-creditAccount2DW").empty();
+        $("#select-creditAccount2DW").append($('<option></option>').attr("value", "").text());
+        $("#select-debitAccount2DW").empty();
+        $("#select-debitAccount2DW").append($('<option></option>').attr("value", "").text());
+        ("#select-creditAccount2DW").find("option[value=\'" + valueCredit2 + "\']").attr('selected',false);
+        $("#select-debitAccount2DW").find("option[value=\'" + valueDebit2 + "\']").attr('selected',false);
     }
+    $('#select-creditAccount2DW').selectpicker('refresh');
+    $('#select-creditAccount2DW').selectpicker('render');
+    $('#select-debitAccount2DW').selectpicker('refresh');
+    $('#select-debitAccount2DW').selectpicker('render');
 }
 
-function creditaccount(index) {
-    if (index !== '3') {
-        $("#select-debit3").empty();
-        $("#select-credit3").empty();
-        if ($("#notExchanging").is(":checked")) {
-            if (index == '2b') {
-                var value1 = $("#select-debit1b").find(":selected").val();
-                var text1 = $("#select-debit1b").find(":selected").text();
-                $("#select-credit3").append($('<option></option>').attr("value", value1).text(text1));
-                $("#select-debit3").append($('<option></option>').attr("value", value1).text(text1));
-                var value2 = $("#select-credit2b").find(":selected").val();
-                var text2 = $("#select-credit2b").find(":selected").text();
-                $("#select-debit3").append($('<option></option>').attr("value", value2).text(text2));
-                $("#select-credit3").append($('<option></option>').attr("value", value2).text(text2));
-            } else {
-                if (index == '1b') {
-                    var value1 = $("#select-debit2b").find(":selected").val();
-                    var text1 = $("#select-debit2b").find(":selected").text();
-                    $("#select-credit3").append($('<option></option>').attr("value", value1).text(text1));
-                    $("#select-debit3").append($('<option></option>').attr("value", value1).text(text1));
-                    var value2 = $("#select-credit1b").find(":selected").val();
-                    var text2 = $("#select-credit1b").find(":selected").text();
-                    $("#select-debit3").append($('<option></option>').attr("value", value2).text(text2));
-                    $("#select-credit3").append($('<option></option>').attr("value", value2).text(text2));
-                }
-            }
-            var value3 = 'account-1';
-            var text3 = 'WENZEL';
-            $("#select-debit3").append($('<option></option>').attr("value", value3).text(text3));
-            $("#select-credit3").append($('<option></option>').attr("value", value3).text(text3));
-        }
-        $('#select-debit3').selectpicker('refresh');
-        $('#select-debit3').selectpicker('render');
-        $('#select-credit3').selectpicker('refresh');
-        $('#select-credit3').selectpicker('render');
+function displayFieldsTypeNormal(typeChecked) {
+    console.log(typeChecked);
+    var valueWenzel = 'account-1';
+    var textWenzel = 'WENZEL';
 
-        if ($("#palletsNumber").val() !== 0 && $("#palletsNumber2").val() == 0 && $("#notExchanging").is(":checked")) {
-            $('#select-debit3').find("option[value=\'" + value3 + "\']").attr('selected', true);
-            $('#select-debit3').change();
-            $('#select-credit3').find("option[value=\'" + value2 + "\']").attr('selected', true);
-            $('#select-credit3').change();
-        } else {
-            if ($("#palletsNumber").val() == 0 && $("#palletsNumber2").val() !== 0 && $("#notExchanging").is(":checked")) {
-                $('#select-debit3').find("option[value=\'" + value2 + "\']").attr('selected', true);
-                $('#select-debit3').change();
-                $('#select-credit3').find("option[value=\'" + value3 + "\']").attr('selected', true);
-                $('#select-credit3').change();
-            }
-        }
-    }
-}
+    var truckAssociatedId = $('input[id=truckAssociatedId]').val();
+    var truckAssociatedName = $('input[id=truckAssociatedName]').val();
+    var truckAssociatedLicensePlate = $('input[id=truckAssociatedLicensePlate]').val();
 
-function displayFieldsTypeNormal(typeSelected) {
-    console.log(typeSelected);
-    if (typeSelected) {
-        if (document.getElementById("Deposit-WithdrawalOptionL").value == typeSelected.value) {
-            document.getElementById("creditAccount0").style.display = "none";
-            document.getElementById("creditAccount1").style.display = "none";
-            document.getElementById("creditAccount2").style.display = "block";
-            document.getElementById("creditAccount3").style.display = "none";
-            document.getElementById("debitAccount0").style.display = "none";
-            document.getElementById("debitAccount1").style.display = "block";
-            document.getElementById("debitAccount2").style.display = "none";
-            document.getElementById("debitAccount3").style.display = "none";
-            document.getElementById("debitAccount4").style.display = "none";
+    if (typeChecked) {
+        if (document.getElementById("typeWonly").value === typeChecked.value) {
+            document.getElementById("debitAccountDWD").style.display = "none";
+            document.getElementById("debitAccountW").style.display = "block";
+            document.getElementById("creditAccountDW").style.display = "none";
+            document.getElementById("creditAccountD").style.display = "none";
+            document.getElementById("creditAccountW").style.display = "block";
 
-            document.getElementById("deposit-withdrawal1L").style.display = "block";
-            document.getElementById("deposit-withdrawal2L").style.display = "block";
-            document.getElementById("withdrawal-deposit1L").style.display = "none";
-            document.getElementById("withdrawal-deposit2L").style.display = "none";
-            document.getElementById("DWL").style.display = "block";
-            document.getElementById("exchangingL").style.display = "block";
-            // $('#select-debit1b').find("option[value='account-1']").attr('selected',true);
-            // $('#select-debit1b').change();
-            // $('#select-credit1b').find("option[value='account-1']").attr('selected',false);
-            // $('#select-credit1b').change();
+            document.getElementById("palletsTaken").style.display = "block";
+            document.getElementById("palletsGiven").style.display = "none";
+
+            document.getElementById("deposit-withdrawal1").style.display = "none";
+            document.getElementById("deposit-withdrawal2").style.display = "none";
+            document.getElementById("DW").style.display = "none";
+
+            document.getElementById("exchanging").style.display = "block";
+
             if ($("#notExchanging").is(":checked")) {
-                if ($("#palletsNumber").val() == 0 || $("#palletsNumber2").val() == 0) {
+                $("#select-creditAccountW").empty();
+
+                $("#select-creditAccountW").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
+                document.getElementById("debt").style.display = "block";
+                document.getElementById("debt1").style.display = "block";
+                document.getElementById("debt2").style.display = "none";
+                $("#palletsNumber3a").val($("#palletsNumber").val());
+            } else {
+                $("#select-creditAccountW").empty();
+                $("#select-creditAccountW").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
+                document.getElementById("debt").style.display = "none";
+                document.getElementById("debt1").style.display = "none";
+                document.getElementById("debt2").style.display = "none";
+                $("#palletsNumber3a").val();
+            }
+        } else {
+            if (document.getElementById("typeDonly").value === typeChecked.value) {
+                document.getElementById("debitAccountDWD").style.display = "block";
+                document.getElementById("debitAccountW").style.display = "none";
+                document.getElementById("creditAccountDW").style.display = "none";
+                document.getElementById("creditAccountD").style.display = "block";
+                document.getElementById("creditAccountW").style.display = "none";
+
+                document.getElementById("palletsTaken").style.display = "none";
+                document.getElementById("palletsGiven").style.display = "block";
+
+                document.getElementById("deposit-withdrawal1").style.display = "none";
+                document.getElementById("deposit-withdrawal2").style.display = "none";
+                document.getElementById("DW").style.display = "none";
+
+                document.getElementById("exchanging").style.display = "block";
+
+                if ($("#notExchanging").is(":checked")) {
+                    $("#select-debitAccountDWD").empty();
+                    $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
                     document.getElementById("debt").style.display = "block";
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "block";
+                    $("#palletsNumber3b").val($("#palletsNumber").val());
                 } else {
-                    document.getElementById("debt").style.display = "none";
+                    $("#select-debitAccountDWD").empty();
+                    $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
+                    document.getElementById("debt").style.display = "block";
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "none";
+                    $("#palletsNumber3b").val();
                 }
             } else {
-                document.getElementById("debt").style.display = "none";
-            }
-        }
-        else {
-            if (document.getElementById("Withdrawal-DepositOptionL").value == typeSelected.value) {
-                document.getElementById("creditAccount0").style.display = "none";
-                document.getElementById("creditAccount1").style.display = "block";
-                document.getElementById("creditAccount2").style.display = "none";
-                document.getElementById("creditAccount3").style.display = "none";
-                document.getElementById("debitAccount0").style.display = "none";
-                document.getElementById("debitAccount1").style.display = "none";
-                document.getElementById("debitAccount2").style.display = "block";
-                document.getElementById("debitAccount3").style.display = "none";
+                document.getElementById("debitAccountDWD").style.display = "block";
+                document.getElementById("debitAccountW").style.display = "none";
+                document.getElementById("creditAccountDW").style.display = "block";
+                document.getElementById("creditAccountD").style.display = "none";
+                document.getElementById("creditAccountW").style.display = "none";
 
-                document.getElementById("deposit-withdrawal1L").style.display = "none";
-                document.getElementById("deposit-withdrawal2L").style.display = "none";
-                document.getElementById("withdrawal-deposit1L").style.display = "block";
-                document.getElementById("withdrawal-deposit2L").style.display = "block";
-                document.getElementById("DWL").style.display = "block";
-                document.getElementById("exchangingL").style.display = "block";
+                document.getElementById("palletsTaken").style.display = "none";
+                document.getElementById("palletsGiven").style.display = "block";
+
+                document.getElementById("deposit-withdrawal1").style.display = "block";
+                document.getElementById("deposit-withdrawal2").style.display = "block";
+                document.getElementById("DW").style.display = "block";
+
+                document.getElementById("exchanging").style.display = "block";
+
                 if ($("#notExchanging").is(":checked")) {
-                    if ($("#palletsNumber").val() == 0 || $("#palletsNumber2").val() == 0) {
+                    $("#select-debitAccountDWD").empty();
+                    $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
+                    var valueAnz = $("#anz").val();
+                    var valueNumb = $("#palletsNumber").val();
+                    var valueNumb2 = $("#palletsNumber2").val();
+                    if (valueNumb < valueAnz) {
                         document.getElementById("debt").style.display = "block";
+                        document.getElementById("debt1").style.display = "block";
+                        document.getElementById("debt2").style.display = "none";
+                        $("#palletsNumber3a").val(valueAnz - valueNumb);
                     } else {
-                        document.getElementById("debt").style.display = "none";
+                        if (valueNumb2 < valueAnz) {
+                            document.getElementById("debt").style.display = "block";
+                            document.getElementById("debt1").style.display = "none";
+                            document.getElementById("debt2").style.display = "block";
+                            $("#palletsNumber3b").val(valueAnz - valueNumb2);
+                        } else {
+                            document.getElementById("debt").style.display = "none";
+                            document.getElementById("debt1").style.display = "none";
+                            document.getElementById("debt2").style.display = "none";
+                            $("#palletsNumber3a").val();
+                            $("#palletsNumber3b").val();
+                        }
                     }
                 } else {
+                    $("#select-debitAccountDWD").empty();
+                    $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
                     document.getElementById("debt").style.display = "none";
-                }
-            }
-            else {
-                if (document.getElementById("Withdrawal_OnlyOptionL").value == typeSelected.value) {
-                    document.getElementById("creditAccount0").style.display = "none";
-                    document.getElementById("creditAccount1").style.display = "block";
-                    document.getElementById("creditAccount2").style.display = "none";
-                    document.getElementById("creditAccount3").style.display = "none";
-                    document.getElementById("debitAccount0").style.display = "none";
-                    document.getElementById("debitAccount1").style.display = "none";
-                    document.getElementById("debitAccount2").style.display = "none";
-                    document.getElementById("debitAccount3").style.display = "block";
-
-                    document.getElementById("deposit-withdrawal1L").style.display = "none";
-                    document.getElementById("deposit-withdrawal2L").style.display = "none";
-                    document.getElementById("withdrawal-deposit1L").style.display = "none";
-                    document.getElementById("withdrawal-deposit2L").style.display = "none";
-                    document.getElementById("DWL").style.display = "none";
-                    document.getElementById("exchangingL").style.display = "none";
-                    document.getElementById("debt").style.display = "none";
-                } else {
-                    if (document.getElementById("Deposit_OnlyOptionL").value == typeSelected.value) {
-                        document.getElementById("creditAccount0").style.display = "none";
-                        document.getElementById("creditAccount1").style.display = "none";
-                        document.getElementById("creditAccount2").style.display = "none";
-                        document.getElementById("creditAccount3").style.display = "block";
-                        document.getElementById("debitAccount0").style.display = "none";
-                        document.getElementById("debitAccount1").style.display = "block";
-                        document.getElementById("debitAccount2").style.display = "none";
-                        document.getElementById("debitAccount3").style.display = "none";
-
-                        document.getElementById("deposit-withdrawal1L").style.display = "none";
-                        document.getElementById("deposit-withdrawal2L").style.display = "none";
-                        document.getElementById("withdrawal-deposit1L").style.display = "none";
-                        document.getElementById("withdrawal-deposit2L").style.display = "none";
-                        document.getElementById("DWL").style.display = "none";
-                        document.getElementById("exchangingL").style.display = "none";
-                        document.getElementById("debt").style.display = "none";
-                    } else {
-                        document.getElementById("creditAccount0").style.display = "block";
-                        document.getElementById("creditAccount1").style.display = "none";
-                        document.getElementById("creditAccount2").style.display = "none";
-                        document.getElementById("creditAccount3").style.display = "none";
-                        document.getElementById("debitAccount0").style.display = "block";
-                        document.getElementById("debitAccount1").style.display = "none";
-                        document.getElementById("debitAccount2").style.display = "none";
-                        document.getElementById("debitAccount3").style.display = "none";
-
-                        document.getElementById("deposit-withdrawal1L").style.display = "none";
-                        document.getElementById("deposit-withdrawal2L").style.display = "none";
-                        document.getElementById("withdrawal-deposit1L").style.display = "none";
-                        document.getElementById("withdrawal-deposit2L").style.display = "none";
-                        document.getElementById("DWL").style.display = "none";
-                        document.getElementById("exchangingL").style.display = "none";
-                        document.getElementById("debt").style.display = "none";
-                    }
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "none";
                 }
             }
         }
     }
     else {
-        document.getElementById("creditAccount0").style.display = "block";
-        document.getElementById("creditAccount1").style.display = "none";
-        document.getElementById("creditAccount2").style.display = "none";
-        document.getElementById("creditAccount3").style.display = "none";
-        document.getElementById("debitAccount0").style.display = "block";
-        document.getElementById("debitAccount1").style.display = "none";
-        document.getElementById("debitAccount2").style.display = "none";
-        document.getElementById("debitAccount3").style.display = "none";
-        document.getElementById("deposit-withdrawal1L").style.display = "none";
-        document.getElementById("deposit-withdrawal2L").style.display = "none";
-        document.getElementById("withdrawal-deposit1L").style.display = "none";
-        document.getElementById("withdrawal-deposit2L").style.display = "none";
-        document.getElementById("DWL").style.display = "none";
-        document.getElementById("exchangingL").style.display = "none";
-        document.getElementById("debt").style.display = "none";
+        document.getElementById("debitAccountDWD").style.display = "block";
+        document.getElementById("debitAccountW").style.display = "none";
+        document.getElementById("creditAccountDW").style.display = "block";
+        document.getElementById("creditAccountD").style.display = "none";
+        document.getElementById("creditAccountW").style.display = "none";
+
+        document.getElementById("palletsTaken").style.display = "none";
+        document.getElementById("palletsGiven").style.display = "block";
+
+        document.getElementById("deposit-withdrawal1").style.display = "block";
+        document.getElementById("deposit-withdrawal2").style.display = "block";
+        document.getElementById("DW").style.display = "block";
+
+        document.getElementById("exchanging").style.display = "block";
+        if ($("#notExchanging").is(":checked")) {
+            $("#select-debitAccountDWD").empty();
+            $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
+            var valueAnz = $("#anz").val();
+            var valueNumb = $("#palletsNumber").val();
+            var valueNumb2 = $("#palletsNumber2").val();
+            if (valueNumb < valueAnz) {
+                document.getElementById("debt").style.display = "block";
+                document.getElementById("debt1").style.display = "block";
+                document.getElementById("debt2").style.display = "none";
+                $("#palletsNumber3a").val(valueAnz - valueNumb);
+            } else {
+                if (valueNumb2 < valueAnz) {
+                    document.getElementById("debt").style.display = "block";
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "block";
+                    $("#palletsNumber3b").val(valueAnz - valueNumb2);
+                } else {
+                    document.getElementById("debt").style.display = "none";
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "none";
+                    $("#palletsNumber3a").val();
+                    $("#palletsNumber3b").val();
+                }
+            }
+        } else {
+            $("#select-debitAccountDWD").empty();
+            $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
+            document.getElementById("debt").style.display = "none";
+            document.getElementById("debt1").style.display = "none";
+            document.getElementById("debt2").style.display = "none";
+        }
     }
+    $('#select-creditAccountW').selectpicker('refresh');
+    $('#select-creditAccountW').selectpicker('render');
+    $('#select-debitAccountDWD').selectpicker('refresh');
+    $('#select-debitAccountDWD').selectpicker('render');
 }
 
 function displayFieldsTypeCorrecting(typeSelected) {
@@ -487,34 +455,124 @@ function displayFieldsTypeCorrecting(typeSelected) {
     }
 }
 
-function displayFieldsDebt(notExchangingChecked) {
+function displayFieldsNotExchanging() {
     if ($("#notExchanging").is(":checked")) {
-        document.getElementById("debt").style.display = "block";
-        $("#palletsNumber3").val($("#palletsNumber").val());
-    } else {
-        document.getElementById("debt").style.display = "none";
-        $("#palletsNumber3").val();
-    }
-}
+        $("#select-debitAccountDWD").empty();
+        var valueWenzel = 'account-1';
+        var textWenzel = 'WENZEL';
+        $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
+        var valueAnz = $("#anz").val();
+        var valueNumb=$("#palletsNumber").val();
+        var valueNumb2 = $("#palletsNumber2").val();
 
-function updateFieldsPalletsNumber(palNumber) {
-    if ($("#notExchanging").is(":checked")) {
-        //     $("#palletsNumber3").val($("#palletsNumber").val());
-        //     $("#palletsNumber2").val($("#palletsNumber").val());
-        //     document.getElementById("debt").style.display = "none";
-        // }else {
-        if ($("#palletsNumber").val() == 0) {
-            document.getElementById("debt").style.display = "block";
-            $("#palletsNumber3").val($("#palletsNumber2").val());
-        } else {
-            if ($("#palletsNumber2").val() == 0) {
+        if ($("#typeDW").is(":checked")) {
+            if (valueNumb < valueAnz) {
                 document.getElementById("debt").style.display = "block";
-                $("#palletsNumber3").val($("#palletsNumber").val());
+                document.getElementById("debt1").style.display = "block";
+                document.getElementById("debt2").style.display = "none";
+                $("#palletsNumber3a").val(valueAnz - valueNumb);
             } else {
-                document.getElementById("debt").style.display = "none";
-                $("#palletsNumber3").val();
+                if (valueNumb2 < valueAnz) {
+                    document.getElementById("debt").style.display = "block";
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "block";
+                    $("#palletsNumber3b").val(valueAnz - valueNumb2);
+                } else {
+                    document.getElementById("debt").style.display = "none";
+                    document.getElementById("debt1").style.display = "none";
+                    document.getElementById("debt2").style.display = "none";
+                    $("#palletsNumber3a").val();
+                    $("#palletsNumber3b").val();
+                }
+            }
+        }else {
+            if($("#typeDonly").is(":checked")){
+                document.getElementById("debt").style.display = "block";
+                document.getElementById("debt1").style.display = "none";
+                document.getElementById("debt2").style.display = "block";
+                $("#palletsNumber3b").val(valueNumb);
+            }else{
+                if($("#typeWonly").is(":checked")){
+                    document.getElementById("debt").style.display = "block";
+                    document.getElementById("debt1").style.display = "block";
+                    document.getElementById("debt2").style.display = "none";
+                    $("#palletsNumber3a").val(valueNumb);
+                }
             }
         }
+
+
+    } else {
+        var truckAssociatedId = $('input[id=truckAssociatedId]').val();
+        var truckAssociatedName = $('input[id=truckAssociatedName]').val();
+        var truckAssociatedLicensePlate = $('input[id=truckAssociatedLicensePlate]').val();
+        $("#select-debitAccountDWD").empty();
+        $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
+        document.getElementById("debt").style.display = "none";
+        document.getElementById("debt1").style.display = "none";
+        document.getElementById("debt2").style.display = "none";
+    }
+    $('#select-creditAccountW').selectpicker('refresh');
+    $('#select-creditAccountW').selectpicker('render');
+    $('#select-debitAccountDWD').selectpicker('refresh');
+    $('#select-debitAccountDWD').selectpicker('render');
+}
+
+function updateFieldsPalletsNumber() {
+    if ($("#notExchanging").is(":checked")) {
+        document.getElementById("debt").style.display = "block";
+        if ($("#typeW").is(":checked")) {
+            document.getElementById("debt1").style.display = "block";
+            document.getElementById("debt2").style.display = "none";
+        } else {
+            if ($("#typeD").is(":checked")) {
+                document.getElementById("debt1").style.display = "none";
+                document.getElementById("debt2").style.display = "none";
+            } else {
+                var valueAnz = $("#anz").val();
+                var valueNumb = $("#palletsNumber").val();
+                var valueNumb2 = $("#palletsNumber2").val();
+                if ($("#typeDW").is(":checked")) {
+                    if (valueNumb < valueAnz) {
+                        document.getElementById("debt").style.display = "block";
+                        document.getElementById("debt1").style.display = "block";
+                        document.getElementById("debt2").style.display = "none";
+                        $("#palletsNumber3a").val(valueAnz - valueNumb);
+                    } else {
+                        if (valueNumb2 < valueAnz) {
+                            document.getElementById("debt").style.display = "block";
+                            document.getElementById("debt1").style.display = "none";
+                            document.getElementById("debt2").style.display = "block";
+                            $("#palletsNumber3b").val(valueAnz - valueNumb2);
+                        } else {
+                            document.getElementById("debt").style.display = "none";
+                            document.getElementById("debt1").style.display = "none";
+                            document.getElementById("debt2").style.display = "none";
+                            $("#palletsNumber3a").val();
+                            $("#palletsNumber3b").val();
+                        }
+                    }
+                }else {
+                    if($("#typeDonly").is(":checked")){
+                        document.getElementById("debt").style.display = "block";
+                        document.getElementById("debt1").style.display = "none";
+                        document.getElementById("debt2").style.display = "block";
+                        $("#palletsNumber3b").val(valueNumb);
+                    }else {
+                        if($("#typeWonly").is(":checked")){
+                            document.getElementById("debt").style.display = "block";
+                            document.getElementById("debt1").style.display = "block";
+                            document.getElementById("debt2").style.display = "none";
+                            $("#palletsNumber3a").val(valueNumb);
+                        }
+                    }
+                }
+            }
+        }
+        $('#select-creditAccountW').selectpicker('refresh');
+        $('#select-creditAccountW').selectpicker('render');
+        $('#select-debitAccountDWD').selectpicker('refresh');
+        $('#select-debitAccountDWD').selectpicker('render');
     }
 }
 
