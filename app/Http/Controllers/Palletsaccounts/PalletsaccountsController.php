@@ -6,6 +6,7 @@ use App\Loading;
 use App\Palletsaccount;
 use App\Palletstransfer;
 use App\Truck;
+use App\User;
 use App\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -34,11 +35,11 @@ class PalletsaccountsController extends Controller
         if (Auth::check()) {
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
 
-            if($nb=='all'){
+            if ($nb == 'all') {
                 $query = DB::table('palletsaccounts');
-            }elseif($nb=='part'){
-                $query = DB::table('palletsaccounts')->where(function ($q){
-                    $q->where('realNumberPallets','<>', 0)->orWhere('theoricalNumberPallets','<>', 0);
+            } elseif ($nb == 'part') {
+                $query = DB::table('palletsaccounts')->where(function ($q) {
+                    $q->where('realNumberPallets', '<>', 0)->orWhere('theoricalNumberPallets', '<>', 0);
                 });
             }
 
@@ -72,7 +73,7 @@ class PalletsaccountsController extends Controller
                 }
                 $count = count($query->get());
                 $listPalletsaccounts = $query->orderBy($sortby, $order)->paginate(20);
-                $links = $listPalletsaccounts->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                $links = $listPalletsaccounts->appends(['sortby' => $sortby, 'order' => $order, 'search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
             } else {
                 //only searching
                 if (isset($searchQuery) && $searchQuery <> '') {
@@ -96,15 +97,15 @@ class PalletsaccountsController extends Controller
                     }
                     $count = count($query->get());
                     $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
-                    $links =$listPalletsaccounts->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
-                }else{
+                    $links = $listPalletsaccounts->appends(['search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
+                } else {
                     //not sorting nor searching
                     $count = count($query->get());
                     $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
                     $links = '';
                 }
             }
-            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts','nb', 'totalpallets', 'sortby', 'order','count','links', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
+            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'nb', 'totalpallets', 'sortby', 'order', 'count', 'links', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }
@@ -113,12 +114,12 @@ class PalletsaccountsController extends Controller
     /** show the form to add a new pallets account
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAdd()
+    public function showAdd($originalPage)
     {
         if (Auth::check()) {
             //list of the warehouses if the account created is a Network
             $listWarehouses = DB::table('warehouses')->get();
-            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses'));
+            return view('palletsaccounts.addPalletsaccount', compact('listWarehouses', 'originalPage'));
         } else {
             return view('auth.login');
         }
@@ -135,6 +136,7 @@ class PalletsaccountsController extends Controller
         $type = Input::get('type');
         $realNumberPallets = Input::get('realNumberPallets');
         $theoricalNumberPallets = $realNumberPallets;
+        $originalPage = Input::get('originalPage');
 
         //get the warehouses associated if the account is a Network
         $warehousesAssociatedName = Input::get('warehousesAssociated');
@@ -166,10 +168,12 @@ class PalletsaccountsController extends Controller
         $validator = Validator::make(Input::all(), $rules);
 //if the rules are not respected
         if ($validator->fails()) {
+
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
+
             //pallets account creation
             if ($type == 'Network') {
                 Palletsaccount::create(
@@ -181,7 +185,7 @@ class PalletsaccountsController extends Controller
                 )->warehouses()->sync($idwarehouses);
             } elseif ($type == 'Carrier') {
                 Palletsaccount::create(
-                    ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => 0, 'theoricalNumberPallets' => 0, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
+                    ['name' => $name, 'nickname' => $nickname, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
                 );
             } elseif ($type == 'Other') {
                 Palletsaccount::create(
@@ -190,7 +194,20 @@ class PalletsaccountsController extends Controller
             }
 //redirect
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
-            return redirect('/allPalletsaccounts');
+            if ($originalPage == 'allPalletsaccounts-all') {
+                return redirect('/allPalletsaccounts/all');
+            } elseif (explode('-', $originalPage)[0] == 'detailsLoading') {
+                return redirect('/detailsLoading/' . explode('-', $originalPage)[1]);
+            } elseif ($originalPage == 'addWarehouse') {
+                return redirect('/addWarehouse');
+            } elseif (explode('-', $originalPage)[0] == 'detailsWarehouse') {
+                return redirect('/detailsWarehouse/' . explode('-', $originalPage)[1]);
+            } elseif ($originalPage == 'addTruck') {
+                return redirect('/addTruck');
+            } elseif (explode('-', $originalPage)[0] == 'detailsTruck') {
+                return redirect('/detailsTruck/' . explode('-', $originalPage)[1]);
+            }
+
         }
     }
 
@@ -211,7 +228,7 @@ class PalletsaccountsController extends Controller
             //according to the type of account, get the right entities associated
             if ($account->type == 'Network') {
                 $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
-                if(!$warehousesAssociated->isEmpty()){
+                if (!$warehousesAssociated->isEmpty()) {
                     foreach ($warehousesAssociated as $warehouse) {
                         $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('name');
                     }
@@ -233,7 +250,7 @@ class PalletsaccountsController extends Controller
             }
 
             $query = Palletstransfer::where(function ($q) use ($name) {
-                $q->where('creditAccount',  'LIKE',  $name. '-' .'%')->orWhere('debitAccount', 'LIKE',$name. '-' .'%');
+                $q->where('creditAccount', 'LIKE', $name . '-' . '%')->orWhere('debitAccount', 'LIKE', $name . '-' . '%');
             });
 
             //if the user is sorting the table
@@ -311,10 +328,9 @@ class PalletsaccountsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd('stop');
-        $actionClearForm=$request->actionClearForm;
+        $actionClearForm = $request->actionClearForm;
 
-        if (isset($actionClearForm) && $actionClearForm=='Clear trucks') {
+        if (isset($actionClearForm) && $actionClearForm == 'Clear trucks') {
             //CARRIER ONLY : this button will clear every pallets number for ervery truck and put the sum in the "truck" STOCK that is the stock of the carrier
             $palletsaccount_name = Palletsaccount::where('id', $id)->first()->name;
             $listTrucks = Truck::where('palletsaccount_name', $palletsaccount_name)->get();
@@ -373,11 +389,10 @@ class PalletsaccountsController extends Controller
      */
     public function delete($id)
     {
-        dd('stop');
         DB::table('palletsaccounts')->where('id', $id)->delete();
         // redirect
         session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
-        return redirect('/allPalletsaccounts');
+        return redirect('/allPalletsaccounts/all');
     }
 
 }

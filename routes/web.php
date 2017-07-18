@@ -36,7 +36,7 @@ Route::get('/detailsWarehouse/{id}', 'WarehousesController@showDetails')->name('
 Route::post('/detailsWarehouse/{id}', 'WarehousesController@update')->name('updateWarehouse');
 Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
 Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
-Route::get('/addWarehouse', 'WarehousesController@showAdd')->name('showAddWarehouse');
+Route::get('/addWarehouse/{originalPage}', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
 //TRUCKS
 Route::get('/allTrucks/{refresh}', 'TrucksController@showAll')->name('showAllTrucks');
@@ -44,7 +44,7 @@ Route::get('/detailsTruck/{id}', 'TrucksController@showDetails')->name('showDeta
 Route::post('/detailsTruck/{id}', 'TrucksController@update')->name('updateTruck');
 Route::delete('/detailsTruck/{id}', 'TrucksController@delete')->name('deleteTruck');
 Route::post('/addTruck', 'TrucksController@add')->name('addTruck');
-Route::get('/addTruck', 'TrucksController@showAdd')->name('showAddTruck');
+Route::get('/addTruck/{originalPage}', 'TrucksController@showAdd')->name('showAddTruck');
 
 //PALLETS ACCOUNTS
 Route::get('/allPalletsaccounts/{nb}', 'PalletsaccountsController@showAll')->name('showAllPalletsaccounts');
@@ -52,7 +52,7 @@ Route::get('/detailsPalletsaccount/{id}', 'PalletsaccountsController@showDetails
 Route::post('/detailsPalletsaccount/{id}', 'PalletsaccountsController@update')->name('updatePalletsaccount');
 Route::delete('/detailsPalletsaccount/{id}', 'PalletsaccountsController@delete')->name('deletePalletsaccount');
 Route::post('/addPalletsaccount', 'PalletsaccountsController@add')->name('addPalletsaccount');
-Route::get('/addPalletsaccount', 'PalletsaccountsController@showAdd')->name('showAddPalletsaccount');
+Route::get('/addPalletsaccount/{originalPage}', 'PalletsaccountsController@showAdd')->name('showAddPalletsaccount');
 
 //PALLETS TRANSFERS
 Route::get('/allPalletstransfers', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');

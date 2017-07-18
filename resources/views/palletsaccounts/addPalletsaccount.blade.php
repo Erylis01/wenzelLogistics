@@ -48,6 +48,7 @@
                               action="{{route('addPalletsaccount')}}" id="formAddPalletsaccount">
                             {{ csrf_field() }}
                             <input type="hidden" name="actionAddForm" id="actionAddForm"/>
+                            <input type="hidden" name="originalPage" id="originalPage" @if(isset($originalPage))value="{{$originalPage}}" @endif/>
                             <p class="text-center legend-auth">* required field</p>
                             <div class="form-group">
                                 <!--name-->
@@ -165,7 +166,7 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-3 text-left">
-                                        <a href="{{route('showAddWarehouse')}}" class="link">
+                                        <a href="{{route('showAddWarehouse', ['originalPage'=>'addPalletsaccount'])}}" class="link">
                                             <span class="glyphicon glyphicon-plus-sign"></span> Add warehouse</a>
                                     </div>
                                 </div>

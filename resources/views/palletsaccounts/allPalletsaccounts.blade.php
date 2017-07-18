@@ -90,7 +90,7 @@
                             </span>
                                 </span>
                                 <span class="col-lg-offset-3">
-                                <a href="{{route('showAddPalletsaccount')}}" class=" btn btn-add"><span
+                                <a href="{{route('showAddPalletsaccount', ['originalPage'=>'allPalletsaccounts-all'])}}" class=" btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Account</a>
                             </span>
                             </div>

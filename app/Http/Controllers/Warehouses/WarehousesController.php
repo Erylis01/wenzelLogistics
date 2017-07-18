@@ -122,6 +122,7 @@ class WarehousesController extends Controller
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
         $namepalletsaccounts = Input::get('namepalletsaccounts');
+$originalPage=Input::get('originalPage');
 
         foreach ($namepalletsaccounts as $namePA) {
             $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
@@ -178,7 +179,16 @@ class WarehousesController extends Controller
                 )->palletsaccounts()->sync($idpalletsaccounts);
 
                 session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
-                return redirect('/allWarehouses');
+
+
+                if($originalPage=='addPalletsaccount'){
+                    return redirect('/addPalletsaccount');
+                }elseif(explode('-', $originalPage)[0]=='detailsPalletsaccount'){
+                    return redirect('/detailsPalletsaccount/'.explode('-', $originalPage)[1]);
+                }else{
+                    return redirect('/allWarehouses/false');
+                }
+
             }
         }
     }
@@ -187,12 +197,12 @@ class WarehousesController extends Controller
      * show the add form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAdd()
+    public function showAdd($originalPage)
     {
         if (Auth::check()) {
-            $listPalletsAccounts = DB::table('palletsaccounts')->get();
-            return view('warehouses.addWarehouse', compact('listPalletsAccounts'));
-        } else {
+                $listPalletsAccounts = DB::table('palletsaccounts')->get();
+                return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'originalPage'));
+                   } else {
             return view('auth.login');
         }
     }
@@ -207,7 +217,7 @@ class WarehousesController extends Controller
     {
         if (Auth::check()) {
             $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
-            $listPalletsAccounts = DB::table('palletsaccounts')->get();
+            $listPalletsAccounts = DB::table('palletsaccounts')->orderBy('name', 'asc')->get();
 
             //get warehouse data to display on the view
             $name = $warehouse->name;
@@ -319,7 +329,7 @@ class WarehousesController extends Controller
         DB::table('warehouses')->where('id', $id)->delete();
         // redirect
         session()->flash('messageDeleteWarehouse', 'Successfully deleted the warehouse!');
-        return redirect('/allWarehouses');
+        return redirect('/allWarehouses/false');
     }
 
     /**

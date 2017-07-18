@@ -64,7 +64,7 @@
 
                             <div class="form-group">
                                 <!--name-->
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <label for="name" class="control-label">*Name :</label>
                                 </div>
                                 <div class="col-lg-8">
@@ -79,7 +79,7 @@
                             </div>
                             <div class="form-group">
                                 <!--license plate-->
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <label for="licensePlate" class="control-label">License Plate :</label>
                                 </div>
                                 <div class="col-lg-8">
@@ -94,7 +94,7 @@
                             </div>
                             <div class="form-group">
                                 <!--pallet account associated-->
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <label for="palletsaccount_name" class="control-label">*Pallets Account :</label>
                                 </div>
                                 <div class="col-lg-6">
@@ -112,23 +112,22 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-lg-2 text-left">
+                                    <a class="link"
+                                       href="{{route('showDetailsPalletsaccount',$palletsaccount->id)}}">
+                                        <span class="glyphicon glyphicon-user"> </span>
+                                        <span class="glyphicon glyphicon-envelope"> </span>
+                                        <span class="glyphicon glyphicon-phone"> </span>
+                                    </a>
+                                </div>
 
-                                <div class="col-lg-3 text-left">
-                                    <a href="{{route('showAddPalletsaccount')}}" class="link">
+                                <div class="col-lg-2 text-left">
+                                    <a href="{{route('showAddPalletsaccount', ['originalPage'=>'detailsTruck-'.$truck->id])}}"
+                                       class="link">
                                         <span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <!---->
-                                <div class="col-lg-6">
-                                    <label for="info" class="control-label">
-                                        <a class="link"
-                                           href="{{route('showDetailsPalletsaccount',$palletsaccount->id)}}">
-                                            <span class="glyphicon glyphicon-info-sign"></span>
-                                            Contact information</a>
-                                    </label>
-                                </div>
-                            </div>
+
                             <div class="form-group">
                                 <div class="col-lg-6 col-lg-offset-3 table-responsive">
                                     <table class="table table-hover table-bordered table-truck">
@@ -161,23 +160,23 @@
                                 </div>
                             </div>
                         </form>
-                            <div class="form-group">
-                                <div class="col-lg-2 addTransfer">
-                                    <a href="{{route('showAddPalletstransfer')}}" class="link">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>
-                                        Add transfer</a>
-                                </div>
-                                <!-- search bar-->
-                                <form role="form" method="GET"
-                                      action="{{route('showDetailsTruck', $truck->id)}}">
-                                    {{ csrf_field() }}
-                                    <div class="input-group col-lg-offset-3 col-lg-7">
+                        <div class="form-group">
+                            <div class="col-lg-2 addTransfer">
+                                <a href="{{route('showAddPalletstransfer')}}" class="link">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                    Add transfer</a>
+                            </div>
+                            <!-- search bar-->
+                            <form role="form" method="GET"
+                                  action="{{route('showDetailsTruck', $truck->id)}}">
+                                {{ csrf_field() }}
+                                <div class="input-group col-lg-offset-3 col-lg-7">
                             <span class="input-group-btn searchInput">
                                 <input type="text" class="form-control searchBar" name="search"
                                        @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
                                        @endif placeholder="search"/>
                             </span>
-                                        <span class="input-group-btn">
+                                    <span class="input-group-btn">
                                     <select class="selectpicker show-tick form-control searchSelect searchBar"
                                             data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
@@ -215,114 +214,114 @@
                                         @endforeach
                                         </select>
                                      </span>
-                                        <span class="input-group-btn">
+                                    <span class="input-group-btn">
                                 <button class="btn glyphicon glyphicon-search searchBar" type="submit"
                                         name="searchSubmit"></button>
                             </span>
-                                    </div>
-                                </form>
-                                <br>
-                            </div>
+                                </div>
+                            </form>
+                            <br>
+                        </div>
 
-                            <!--table list transfers associated-->
-                            <div class="table-responsive table-transfers">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-center colID">ID<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=id&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=id&order=desc')}}"
-                                                    @endif></a>
-                                        </th>
-                                        <th class="text-center colType">Type<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=type&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=type&order=desc')}}"
-                                                    @endif></a>
-                                        </th>
-                                        <th class="text-center colNumber">Pal. nbr<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=palletsNumber&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=palletsNumber&order=desc')}}"
-                                                    @endif></a>
-                                        </th>
-                                        <th class="text-center colAtrnr">Atrnr<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=loading_atrnr&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=loading_atrnr&order=desc')}}"
-                                                    @endif></a>
-                                        </th>
-                                        <th class="text-center colDate">Date<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"
-                                               @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=desc')}}"
-                                                    @endif></a>
-                                        </th>
-                                        <th class="text-center colDanger2"></th>
+                        <!--table list transfers associated-->
+                        <div class="table-responsive table-transfers">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr>
+                                    <th class="text-center colID">ID<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=asc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=id&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=id&order=desc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=id&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colType">Type<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=asc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=type&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=type&order=desc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=type&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colNumber">Pal. nbr<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=palletsNumber&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=desc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=palletsNumber&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colAtrnr">Atrnr<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=asc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=loading_atrnr&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=loading_atrnr&order=desc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=loading_atrnr&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colDate">Date<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=asc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=date&order=desc')}}"
+                                           @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colDanger2"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listTransfers as $transfer)
+                                    <tr @if($transfer->state=="Untreated") class="untreated"
+                                        @elseif ($transfer->state=="Waiting documents") class="waitingdocuments"
+                                        @elseif ($transfer->state=="Complete") class="complete"
+                                        @else class="completevalidated" @endif>
+                                        <td class="text-center colID"><a class="link"
+                                                                         href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
+                                        </td>
+                                        <td class="text-center colType">{{$transfer->type}}</td>
+                                        <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
+                                        <td class="text-center colAtrnr"><a class="link"
+                                                                            href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
+                                        </td>
+                                        <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
+                                        <td class="colDanger2">
+                                            {{--@php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->orWhere('debitAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->get())--}}
+                                            @php($k=0)
+                                            @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                            @if(!empty($errorsTransfer)&&$k<2)
+                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                            @elseif(!empty($errorsTransfer) && $k==2)
+                                                <span class="text-danger">...</span>
+                                            @endif
+                                            @php($k=$k+1)
+
+                                            {{--@foreach($listPalletstransfers as $transfer)--}}
+                                            {{--@php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))--}}
+                                            {{--@if(!empty($errorsTransfer)&& $k<2)--}}
+                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>--}}
+                                            {{--@elseif(!empty($errorsTransfer)&& $k==2)--}}
+                                            {{--<span class="text-danger">...</span>--}}
+                                            {{--@endif--}}
+                                            {{--@php($k=$k+1)--}}
+                                            {{--@endforeach--}}
+                                        </td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($listTransfers as $transfer)
-                                        <tr @if($transfer->state=="Untreated") class="untreated"
-                                            @elseif ($transfer->state=="Waiting documents") class="waitingdocuments"
-                                            @elseif ($transfer->state=="Complete") class="complete"
-                                            @else class="completevalidated" @endif>
-                                            <td class="text-center colID"><a class="link"
-                                                                             href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
-                                            </td>
-                                            <td class="text-center colType">{{$transfer->type}}</td>
-                                            <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
-                                            <td class="text-center colAtrnr"><a class="link"
-                                                                                href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
-                                            </td>
-                                            <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
-                                            <td class="colDanger2">
-                                                {{--@php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->orWhere('debitAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->get())--}}
-                                                @php($k=0)
-                                                @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
-                                                @if(!empty($errorsTransfer)&&$k<2)
-                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                @elseif(!empty($errorsTransfer) && $k==2)
-                                                    <span class="text-danger">...</span>
-                                                @endif
-                                                @php($k=$k+1)
-
-                                                {{--@foreach($listPalletstransfers as $transfer)--}}
-                                                {{--@php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))--}}
-                                                {{--@if(!empty($errorsTransfer)&& $k<2)--}}
-                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>--}}
-                                                {{--@elseif(!empty($errorsTransfer)&& $k==2)--}}
-                                                {{--<span class="text-danger">...</span>--}}
-                                                {{--@endif--}}
-                                                {{--@php($k=$k+1)--}}
-                                                {{--@endforeach--}}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
 
 
                         <!-- Modal Delete -->
@@ -334,15 +333,19 @@
                                         <h4 class="modal-title text-center">Are you sure to delete this truck ?</h4>
                                     </div>
                                     <div class="modal-body center">
-                                        <form method="post" action="{{route('deleteTruck',$truck->id)}}" id="formDeleteTruck">
+                                        <form method="post" action="{{route('deleteTruck',$truck->id)}}"
+                                              id="formDeleteTruck">
                                             <input type="hidden" name="_method" value="delete">
                                             {{ csrf_field() }}
-                                            <input type="hidden" name="actionDeleteForm" id="actionDeleteForm" />
+                                            <input type="hidden" name="actionDeleteForm" id="actionDeleteForm"/>
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-danger btn-modal" value="deleteTruck" name="deleteTruck" id="deleteTruck" onclick="formDeleteSubmitBlock(this);">
+                                                <button type="submit" class="btn btn-danger btn-modal"
+                                                        value="deleteTruck" name="deleteTruck" id="deleteTruck"
+                                                        onclick="formDeleteSubmitBlock(this);">
                                                     Yes
                                                 </button>
-                                                <button type="button" class="btn btn-success btn-modal" data-dismiss="modal">
+                                                <button type="button" class="btn btn-success btn-modal"
+                                                        data-dismiss="modal">
                                                     No
                                                 </button>
                                             </div>

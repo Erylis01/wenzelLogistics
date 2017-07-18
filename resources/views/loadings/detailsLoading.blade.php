@@ -528,7 +528,7 @@
                                                                 </div>
                                                         <!--add pallet account-->
                                                             <div class="col-lg-2 text-left">
-                                                                <a href="{{route('showAddPalletsaccount')}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                                                <a href="{{route('showAddPalletsaccount', ['originalPage'=>'detailsLoading-'.$loading->atrnr])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                                             </div>
                                                         </div>
                                                         <!--errors messages-->

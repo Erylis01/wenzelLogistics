@@ -169,6 +169,7 @@ class TrucksController extends Controller
         //get data
         $name = Input::get('name');
         $realNumberPallets = Input::get('realNumberPallets');
+        $originalPage = Input::get('originalPage');
 
         $licensePlate = Input::get('licensePlate');
         if (!isset($licensePlate)) {
@@ -190,7 +191,12 @@ class TrucksController extends Controller
             //update the pallets account confirmed pallets number with the sum of all trucks of this account
             Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
             session()->flash('messageAddTruck', 'Successfully added new truck');
-            return redirect('/allTrucks');
+
+            if(explode('-',$originalPage)[0]=='detailsPalletsaccount'){
+                return redirect('/detailsPalletsaccount/'.explode('-',$originalPage)[1]);
+            }else{
+                return redirect('/allTrucks/false');
+            }
         }
     }
 
@@ -198,12 +204,11 @@ class TrucksController extends Controller
      * show the add form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public
-    function showAdd()
+    public function showAdd($originalPage)
     {
         if (Auth::check()) {
-            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
-            return view('trucks.addTruck', compact('listPalletsAccounts'));
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('name', 'asc')->get();
+            return view('trucks.addTruck', compact('listPalletsAccounts','originalPage'));
         } else {
             return view('auth.login');
         }
@@ -224,7 +229,7 @@ class TrucksController extends Controller
 
         if (Auth::check()) {
             $truck = DB::table('trucks')->where('id', '=', $id)->first();
-            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('name', 'asc')->get();
             $palletsaccount = Palletsaccount::where('name', $truck->palletsaccount_name)->first();
             $name = $truck->name;
             $licensePlate = $truck->licensePlate;
@@ -333,6 +338,6 @@ class TrucksController extends Controller
 
         // redirect
         session()->flash('messageDeleteTruck', 'Successfully deleted the truck!');
-        return redirect('/allTrucks');
+        return redirect('/allTrucks/false');
     }
 }

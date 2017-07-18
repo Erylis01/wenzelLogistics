@@ -91,7 +91,7 @@
                                                 class="glyphicon glyphicon-refresh"></span></a>
                             </span>
                             <span class="col-lg-offset-1">
-                                <a href="{{route('showAddWarehouse')}}" class="btn btn-add"><span
+                                <a href="{{route('showAddWarehouse', ['originalPage'=>'allWarehouses'])}}" class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Add</a>
                             </span>
 

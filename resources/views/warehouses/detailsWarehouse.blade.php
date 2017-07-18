@@ -235,7 +235,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-3 text-left">
-                                    <a href="{{route('showAddPalletsaccount')}}" class="link"><span
+                                    <a href="{{route('showAddPalletsaccount', ['originalPage'=>'detailsWarehouse-'.$id])}}" class="link"><span
                                                 class="glyphicon glyphicon-plus-sign"></span> Add account</a>
                                 </div>
                             </div>

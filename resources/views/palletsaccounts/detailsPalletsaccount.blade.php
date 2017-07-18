@@ -184,7 +184,7 @@
 
                                     </div>
                                     <div class="col-lg-2 text-left">
-                                        <a href="{{route('showAddWarehouse')}}" class="link">
+                                        <a href="{{route('showAddWarehouse', ['originalPage'=>'detailsPalletsaccount-'.$account->id])}}" class="link">
                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                             Add warehouse</a>
                                     </div>
@@ -212,7 +212,7 @@
                                         </ul>
                                     </div>
                                     <div class="col-lg-2 text-left">
-                                        <a href="{{route('showAddTruck')}}" class="link">
+                                        <a href="{{route('showAddTruck', ['originalPage'=>'detailsPalletsaccount-'.$account->id])}}" class="link">
                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                             Add truck</a>
                                     </div>
