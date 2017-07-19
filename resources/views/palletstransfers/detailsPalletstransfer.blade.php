@@ -292,7 +292,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-2  text-left">
-                                    <a href="{{route('showAddPalletsaccount')}}"
+                                    <a href="{{route('showAddPalletsaccount', ['originalPage', 'details...'])}}"
                                        class="link"><span class="glyphicon glyphicon-plus-sign"></span>
                                         Add account</a>
                                 </div>

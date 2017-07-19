@@ -26,6 +26,7 @@ class CreatePalletstransfersTable extends Migration
             $table->string('type');
             $table->integer('normalTransferAssociated')->nullable();
             $table->string('details')->nullable();
+            $table->boolean('notExchange')->nullable();
 //            $table->date('dateLastReminder')->nullable();
 //            $table->integer('remindersNumber')->nullable();
 //            $table->string('reminderWarehouse')->nullable();

@@ -76,14 +76,12 @@
                             </div>
                             <!--username-->
                             <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
-                                <label for="username" class="col-lg-4 control-label">
-                                    <div data-toggle="modal" data-target="#username_modal"
-                                         class="glyphicon glyphicon-info-sign link"></div>
+                                <label for="username" class="col-lg-4 control-label" data-toggle="tooltip" data-placement="top" title="Used when you sign in">
                                     * Username :</label>
 
                                 <div class="col-lg-6">
                                     <input id="username" type="text" class="form-control" name="username"
-                                           value="{{ $username }}" placeholder="Username" required autofocus>
+                                           value="{{ $username }}" placeholder="Username" required autofocus data-toggle="tooltip" data-placement="top" title="Used when you sign in">
 
                                     @if ($errors->has('username'))
                                         <span class="help-block">
@@ -93,20 +91,20 @@
                                 </div>
                             </div>
 
-                            <!-- Modal username -->
-                            <div class="modal fade" id="username_modal" role="dialog">
-                                <div class="modal-dialog modal-sm">
-                                    <div class="modal-content">
-                                        <div class="modal-body center">
-                                            <h4 class="modal-title">Used when you sign in</h4>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {{--<!-- Modal username -->--}}
+                            {{--<div class="modal fade" id="username_modal" role="dialog">--}}
+                                {{--<div class="modal-dialog modal-sm">--}}
+                                    {{--<div class="modal-content">--}}
+                                        {{--<div class="modal-body center">--}}
+                                            {{--<h4 class="modal-title">Used when you sign in</h4>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="modal-footer">--}}
+                                            {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close--}}
+                                            {{--</button>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
 
                             <!--email-->
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

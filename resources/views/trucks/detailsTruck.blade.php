@@ -60,6 +60,8 @@
                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpdateTruck') }}</div>
                             @elseif (Session::has('messageUpdateTruck'))
                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateTruck') }}</div>
+                            @elseif (Session::has('messageDeleteTruck'))
+                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageDeleteTruck') }}</div>
                             @endif
 
                             <div class="form-group">

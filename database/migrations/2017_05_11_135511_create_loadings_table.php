@@ -46,13 +46,13 @@ class CreateLoadingsTable extends Migration
 
             $table->string('state')->default('Untreated');
             $table->string('reasonUpdatePT')->nullable();
-
-            $table->string('truckAccount')->nullable();
+            $table->boolean('notExchange')->default(false);
+//            $table->string('truckAccount')->nullable();
 
             $table->timestamps();
         });
 
-        }
+    }
 
 
     /**

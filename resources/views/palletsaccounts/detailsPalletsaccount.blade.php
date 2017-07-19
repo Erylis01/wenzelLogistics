@@ -192,6 +192,11 @@
                             </div>
 
                             <div id="trucksAssociated" @if($account->type=='Carrier') style="display: block" @endif>
+                                @if($account->notExchange==1)
+                                <div class="col-lg-6 col-lg-offset-3 form-group text-center">
+                                    <p>Agreed without exchange pallets</p>
+                                </div>
+                                @endif
                                 <div class="form-group">
                                     <!--trucks associated-->
                                     <div class="col-lg-3">
@@ -301,6 +306,8 @@
                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
                             @elseif (Session::has('messageClearTrucks'))
                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageClearTrucks') }}</div>
+                            @elseif (Session::has('messageDeletePalletsaccount'))
+                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageDeletePalletsaccount') }}</div>
                             @endif
                         </form>
                         <!-- Modal Delete -->

@@ -331,13 +331,23 @@ class TrucksController extends Controller
      */
     public function delete($id)
     {
-        $palletsaccount_name=Truck::where('id', $id)->first()->palletsaccount_name;
-        DB::table('trucks')->where('id', $id)->delete();
-        //update the pallets account confirmed pallets number with the sum of all trucks of this account
-        Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+        $nameTruck=Truck::where('id', $id)->first()->name;
+        $licensePlateTruck=Truck::where('id', $id)->first()->licensePlate;
+        $transfers = Palletstransfer::where(function ($q) use ($nameTruck, $licensePlateTruck) {
+            $q->where('creditAccount', 'LIKE', $nameTruck . '-' . $licensePlateTruck . '-' . '%')->orWhere('debitAccount', 'LIKE',  $nameTruck . '-' . $licensePlateTruck . '-' . '%');
+        })->get();
+        if(!$transfers->isEmpty()){
+            session()->flash('messageDeleteTruck', 'Error ! You cant delete this truck because transfers are associated to.');
+            return redirect()->back();
+        }else {
+            $palletsaccount_name = Truck::where('id', $id)->first()->palletsaccount_name;
+            DB::table('trucks')->where('id', $id)->delete();
+            //update the pallets account confirmed pallets number with the sum of all trucks of this account
+            Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets' => Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
 
-        // redirect
-        session()->flash('messageDeleteTruck', 'Successfully deleted the truck!');
-        return redirect('/allTrucks/false');
+            // redirect
+            session()->flash('messageDeleteTruck', 'Successfully deleted the truck!');
+            return redirect('/allTrucks/false');
+        }
     }
 }

@@ -97,11 +97,13 @@ class PalletsaccountsController extends Controller
                     }
                     $count = count($query->get());
                     $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
+//                    $listPalletsaccounts = $query->orderBy('nickname', 'asc')->paginate(20);
                     $links = $listPalletsaccounts->appends(['search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
                 } else {
                     //not sorting nor searching
                     $count = count($query->get());
                     $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
+//                    $listPalletsaccounts = $query->orderBy('nickname', 'asc')->paginate(20);
                     $links = '';
                 }
             }
@@ -137,7 +139,9 @@ class PalletsaccountsController extends Controller
         $realNumberPallets = Input::get('realNumberPallets');
         $theoricalNumberPallets = $realNumberPallets;
         $originalPage = Input::get('originalPage');
-
+        if(!isset($nickname)){
+            $nickname=$name;
+        }
         //get the warehouses associated if the account is a Network
         $warehousesAssociatedName = Input::get('warehousesAssociated');
         if (isset($warehousesAssociatedName)) {
@@ -155,6 +159,7 @@ class PalletsaccountsController extends Controller
         //validation
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
+//            'nickname', 'string|max:15|unique:palletsaccounts',
         );
         if (isset($email)) {
             $rules = array_add($rules, 'email', 'string|email');
@@ -162,18 +167,14 @@ class PalletsaccountsController extends Controller
         if (isset($phone)) {
             $rules = array_add($rules, 'phone', 'string|max:15');
         }
-        if (isset($nickname)) {
-            $rules = array_add($rules, 'nickname', 'string|max:15|unique:palletsaccounts');
-        }
+
         $validator = Validator::make(Input::all(), $rules);
 //if the rules are not respected
         if ($validator->fails()) {
-
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             //pallets account creation
             if ($type == 'Network') {
                 Palletsaccount::create(
@@ -224,6 +225,7 @@ class PalletsaccountsController extends Controller
             $listWarehouses = DB::table('warehouses')->orderBy('name', 'asc')->get();
             $account = Palletsaccount::where('id', $id)->first();
             $name = $account->name;
+//            $nickname = $account->nickname;
 
             //according to the type of account, get the right entities associated
             if ($account->type == 'Network') {
@@ -236,6 +238,7 @@ class PalletsaccountsController extends Controller
                 }
             } elseif ($account->type == 'Carrier') {
                 $trucksAssociated = Truck::where('palletsaccount_name', $name)->orderBy('licensePlate', 'asc')->get();
+//                $trucksAssociated = Truck::where('palletsaccount_name', $nickname)->orderBy('licensePlate', 'asc')->get();
             }
 
             //table data transfers
@@ -251,6 +254,7 @@ class PalletsaccountsController extends Controller
 
             $query = Palletstransfer::where(function ($q) use ($name) {
                 $q->where('creditAccount', 'LIKE', $name . '-' . '%')->orWhere('debitAccount', 'LIKE', $name . '-' . '%');
+//                $q->where('creditAccount', 'LIKE', $nickname . '-' . '%')->orWhere('debitAccount', 'LIKE', $nickname . '-' . '%');
             });
 
             //if the user is sorting the table
@@ -389,10 +393,19 @@ class PalletsaccountsController extends Controller
      */
     public function delete($id)
     {
-        DB::table('palletsaccounts')->where('id', $id)->delete();
-        // redirect
-        session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
-        return redirect('/allPalletsaccounts/all');
+        $nameAccount=Palletsaccount::where('id', $id)->first()->name;
+        $transfers = Palletstransfer::where(function ($q) use ($nameAccount) {
+            $q->where('creditAccount', 'LIKE', $nameAccount . '-' . '%')->orWhere('debitAccount', 'LIKE', $nameAccount . '-' . '%');
+        })->get();
+        if(!$transfers->isEmpty()){
+            session()->flash('messageDeletePalletsaccount', 'Error ! You cant delete this account because transfers are associated to.');
+            return redirect()->back();
+        }else{
+            DB::table('palletsaccounts')->where('id', $id)->delete();
+            // redirect
+            session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
+            return redirect('/allPalletsaccounts/all');
+        }
     }
 
 }

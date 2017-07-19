@@ -18,6 +18,7 @@ class TruckTableSeeder extends Seeder
 
     public function importData()
     {
+//        DB::table('trucks')->delete();
         $path = 'resources/assets/excel/Hypertrans';
         $files = File::allFiles($path);
 
@@ -50,17 +51,20 @@ class TruckTableSeeder extends Seeder
                                     if ($testAccount == null) {
                                         Palletsaccount::firstOrCreate([
                                             'name' => $name,
+//                                            'nickname' => $name,
                                             'adress' => $adress,
                                             'type' => 'Carrier',
                                         ]);
                                         Truck::firstOrCreate([
                                             'name' => $name,
+//                                            'nickname' => $name,
                                             'licensePlate' => 'STOCK',
                                             'palletsaccount_name' => $name,
                                         ]);
                                     }
                                     Truck::firstOrCreate([
                                         'name' => $name,
+//                                        'nickname' => $name,
                                         'licensePlate' => $licensePlate,
                                         'palletsaccount_name' => $name,
                                     ]);

@@ -97,7 +97,7 @@ class ListLoadingsController extends Controller
                 } else {
                     //if not sorting and not search
                     $count = count($query->get());
-                    $listLoadings = $query->orderBy('ladedatum', 'asc')->paginate(10);
+                    $listLoadings = $query->orderBy('ladedatum', 'desc')->paginate(10);
                     $links = '';
                 }
             }
