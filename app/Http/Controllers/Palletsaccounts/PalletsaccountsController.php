@@ -397,6 +397,7 @@ class PalletsaccountsController extends Controller
         $transfers = Palletstransfer::where(function ($q) use ($nameAccount) {
             $q->where('creditAccount', 'LIKE', $nameAccount . '-' . '%')->orWhere('debitAccount', 'LIKE', $nameAccount . '-' . '%');
         })->get();
+//        dd($transfers);
         if(!$transfers->isEmpty()){
             session()->flash('messageDeletePalletsaccount', 'Error ! You cant delete this account because transfers are associated to.');
             return redirect()->back();

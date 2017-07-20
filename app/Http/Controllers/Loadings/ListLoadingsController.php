@@ -167,39 +167,47 @@ class ListLoadingsController extends Controller
                                     'zusladestellen' => trim($sheet[$r][27]),
                                 ]);
                             }
-                            $testLicense = DB::table('trucks')->where('licensePlate', '=', trim($sheet[$r][26]))->first();
+                            if (trim($sheet[$r][26]) <> '') {
+                                $licensePlate = trim($sheet[$r][26]);
+                            } else {
+                                $licensePlate = 'OTHER';
+                            }
+                            if ($sheet[$r][25] <> null) {
+                                $name = trim(explode(',', $sheet[$r][25])[0]);
+                                $adress = trim(explode(',', $sheet[$r][25])[1]);
 
-                            if ($testLicense == null) {
-                                //not double
-                                $nameAdress = explode(',', $sheet[$r][25]);
-                                $testTruck = DB::table('palletsaccounts')->where('type', 'Truck')->where('name', trim($nameAdress[0]))->first();
-
-                                if ($testTruck == null) {
+                                $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
+                                if ($testAccount == null) {
                                     Palletsaccount::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'adress' => trim($nameAdress[1]),
+                                        'name' => $name,
+//                                            'nickname' => $name,
+                                        'adress' => $adress,
                                         'type' => 'Carrier',
                                     ]);
+                                }
+
+                                $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
+
+                                if ($testTruckStock == null) {
                                     Truck::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
+                                        'name' => $name,
+//                                        'nickname' => $name,
                                         'licensePlate' => 'STOCK',
-                                        'palletsaccount_name' => trim($nameAdress[0]),
+                                        'palletsaccount_name' => $name,
+                                    ]);
+                                }
+                                $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
+
+                                if ($testTruck == null) {
+                                    //not double
+                                    Truck::firstOrCreate([
+                                        'name' => $name,
+//                                        'nickname' => $name,
+                                        'licensePlate' => $licensePlate,
+                                        'palletsaccount_name' => $name,
                                     ]);
                                 }
 
-                                if (trim($sheet[$r][26]) == null) {
-                                    Truck::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'licensePlate' => 'OTHER',
-                                        'palletsaccount_name' => trim($nameAdress[0]),
-                                    ]);
-                                } else {
-                                    Truck::firstOrCreate([
-                                        'name' => trim($nameAdress[0]),
-                                        'licensePlate' => trim($sheet[$r][26]),
-                                        'palletsaccount_name' => trim($nameAdress[0]),
-                                    ]);
-                                }
                             }
                         }
                     }

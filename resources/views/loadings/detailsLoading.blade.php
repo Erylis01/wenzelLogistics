@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-lg-9 text-center">
                                     @php($carrier=explode(',', $loading->subfrachter)[0])
-                                    <p><span class="glyphicon glyphicon-road"></span> {{$carrier}} - {{$loading->plzb}} {{$loading->ortb}} {{$loading->landb}} <span class="glyphicon glyphicon-arrow-right"></span> {{$loading->plze}} {{$loading->orte}} {{$loading->lande}} - {{$loading->anz}} {{$loading->art}}</p>
+                                    <p><span class="glyphicon glyphicon-road"></span> {{$carrier}} - {{$loading->landb}} {{$loading->plzb}} {{$loading->ortb}} <span class="glyphicon glyphicon-arrow-right"></span> {{$loading->lande}} {{$loading->plze}} {{$loading->orte}} - {{$loading->anz}} {{$loading->art}}</p>
                                 </div>
                                 <br>
                             </div>
@@ -92,104 +92,95 @@
                                     <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdateLoading') }}</div>
                                 @endif
                                 <div class="panel-body">
-                                        <!-- subpanel general-->
-                                        <div class="panel subpanel">
-                                            <div class="panel-heading">
-                                                <a data-toggle="collapse" href="#PanSub1collapse" onclick="openClosePanelSub1();"><span id="generalPanelLogo" @if (Session::has('openPanelInformation')) class="glyphicon glyphicon-menu-up" @else class="glyphicon glyphicon-menu-down" @endif></span> General</a>
+                                    <div class="form-group">
+                                        <!--referenz-->
+                                        <div class="col-lg-6">
+                                            <div class="input-group details-loading">
+                                                <label for="referenz" class="input-group-addon">Referenz :</label>
+                                                <input type="text" name="referenz" class="form-control" value="{{ $loading->referenz }}" placeholder="referenz" required />
                                             </div>
-                                            <div id="PanSub1collapse" class="panel-collapse @if(Session::has('openPanelInformation'))in @endif collapse">
-                                                <div class="panel-body">
-                                                    <div class="form-group">
-                                                        <!--referenz-->
-                                                        <div class="col-lg-6">
-                                                            <div class="input-group details-loading">
-                                                                <label for="referenz" class="input-group-addon">Referenz :</label>
-                                                                <input type="text" name="referenz" class="form-control" value="{{ $loading->referenz }}" placeholder="referenz" required />
-                                                            </div>
-                                                        </div>
-                                                    @if(substr_count($loading->atrnr, '-')==0)
-                                                        <!--disp-->
-                                                            <div class="col-lg-4">
-                                                                <div class="input-group details-loading">
-                                                                    <label for="disp" class="input-group-addon">Disp :</label>
-                                                                    <input type="text" name="disp" class="form-control" value="{{ $disp }}" placeholder="disp" required />
-                                                                    @if ($errors->has('disp'))
-                                                                        <span class="help-block"><strong>{{ $errors->first('disp') }}</strong></span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <!--pt change pt-->
-                                                            @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='CamilleS'||Auth::user()->username=='Admin' )
-                                                                <div class="col-lg-2">
-                                                                    <div class="input-group details-loading">
-                                                                        <label for="pt" class="input-group-addon">PT :</label>
-                                                                        <input type="text" readonly name="pt" class="form-control link" data-toggle="modal" data-target="#updatePT_modal" value="{{ $loading->pt }}" />
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        @endif
+                                        </div>
+                                    @if(substr_count($loading->atrnr, '-')==0)
+                                        <!--disp-->
+                                            <div class="col-lg-4">
+                                                <div class="input-group details-loading">
+                                                    <label for="disp" class="input-group-addon">Disp :</label>
+                                                    <input type="text" name="disp" class="form-control" value="{{ $disp }}" placeholder="disp" required />
+                                                    @if ($errors->has('disp'))
+                                                        <span class="help-block"><strong>{{ $errors->first('disp') }}</strong></span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <!--pt change pt-->
+                                            @if(Auth::user()->lastname=='Gundogan'&& Auth::user()->firstname=='Adrien' ||Auth::user()->username=='CamilleS'||Auth::user()->username=='Admin' )
+                                                <div class="col-lg-2">
+                                                    <div class="input-group details-loading">
+                                                        <label for="pt" class="input-group-addon">PT :</label>
+                                                        <input type="text" readonly name="pt" class="form-control link" data-toggle="modal" data-target="#updatePT_modal" value="{{ $loading->pt }}" />
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-lg-12">
-                                                            <!--auftraggeber-->
-                                                            <div class="input-group details-loading">
-                                                                <label for="auftraggeber" class="input-group-addon">Auftraggeber :</label>
-                                                                <input type="text" name="auftraggeber" class="form-control" value="{{ $loading->auftraggeber }}" placeholder="auftraggeber" required />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <!--subfrachter-->
-                                                        <div class="col-lg-8">
-                                                            <div class="input-group details-loading">
-                                                                <label for="subfrachter" class="input-group-addon">Subfrachter :</label>
-                                                                <input type="text" name="subfrachter" class="form-control" value="{{ $loading->subfrachter }}" placeholder="subfrachter" required />
-                                                            </div>
-                                                        </div>
-                                                        <!--kennzeichen-->
-                                                        <div class="col-lg-4">
-                                                            <div class="input-group details-loading">
-                                                                <label for="kennzeichen" class="input-group-addon">Kennzeichen :</label>
-                                                                <input type="text" name="kennzeichen" class="form-control" value="{{ $loading->kennzeichen }}" placeholder="kennzeichen" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <!--anz-->
-                                                        <div class="col-lg-2 details-loading">
-                                                            <div class="input-group">
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-12">
+                                            <!--auftraggeber-->
+                                            <div class="input-group details-loading">
+                                                <label for="auftraggeber" class="input-group-addon">Auftraggeber :</label>
+                                                <input type="text" name="auftraggeber" class="form-control" value="{{ $loading->auftraggeber }}" placeholder="auftraggeber" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <!--subfrachter-->
+                                        <div class="col-lg-8">
+                                            <div class="input-group details-loading">
+                                                <label for="subfrachter" class="input-group-addon">Subfrachter :</label>
+                                                <input type="text" name="subfrachter" class="form-control" value="{{ $loading->subfrachter }}" placeholder="subfrachter" required />
+                                            </div>
+                                        </div>
+                                        <!--kennzeichen-->
+                                        <div class="col-lg-4">
+                                            <div class="input-group details-loading">
+                                                <label for="kennzeichen" class="input-group-addon">Kennzeichen :</label>
+                                                <input type="text" name="kennzeichen" class="form-control" value="{{ $loading->kennzeichen }}" placeholder="kennzeichen" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <!--anz-->
+                                        <div class="col-lg-2 details-loading">
+                                            <div class="input-group">
                                                                 <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="anz">
                                                                         <span class="glyphicon glyphicon-minus"></span>
                                                                     </button>
                                                                 </span>
-                                                                <input type="number" name="anz" id="anz" class="form-control input-number" value="{{ $loading->anz }}" min="0" max="999999" placeholder="anz." required data-toggle="tooltip" data-placement="top" title="Anzahl">
-                                                                <span class="input-group-btn">
+                                                <input type="number" name="anz" id="anz" class="form-control input-number" value="{{ $loading->anz }}" min="0" max="999999" placeholder="anz." required data-toggle="tooltip" data-placement="top" title="Anzahl">
+                                                <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="anz">
                                                                         <span class="glyphicon glyphicon-plus"></span>
                                                                     </button>
                                                                 </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-1 details-loading text-center"><p>-</p></div>
-                                                        <!--art-->
-                                                        <div class="col-lg-3 details-loading">
-                                                            <input type="text" name="art" class="form-control" value="{{ $loading->art }}" placeholder="art" required data-toggle="tooltip" data-placement="top" title="Art" />
-                                                        </div>
-                                                        <div class="col-lg-1 details-loading text-center"><p>-</p></div>
-                                                        <!--ware-->
-                                                        <div class="col-lg-5 details-loading">
-                                                            <input type="text" name="ware" class="form-control" value="{{ $loading->ware }}" placeholder="ware" required data-toggle="tooltip" data-placement="top" title="Ware" />
-                                                        </div>
-                                                    </div>
-                                                    @if (Session::has('messageUpdatePTLoading'))
-                                                        <div class="form-group">
-                                                            <p class="alert alert-warning text-alert text-center">{{ Session::get('messageUpdatePTLoading') }}</p>
-                                                        </div>
-                                                    @endif
-                                                </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-1 details-loading text-center"><p>-</p></div>
+                                        <!--art-->
+                                        <div class="col-lg-3 details-loading">
+                                            <input type="text" name="art" class="form-control" value="{{ $loading->art }}" placeholder="art" required data-toggle="tooltip" data-placement="top" title="Art" />
+                                        </div>
+                                        <div class="col-lg-1 details-loading text-center"><p>-</p></div>
+                                        <!--ware-->
+                                        <div class="col-lg-5 details-loading">
+                                            <input type="text" name="ware" class="form-control" value="{{ $loading->ware }}" placeholder="ware" required data-toggle="tooltip" data-placement="top" title="Ware" />
+                                        </div>
+                                    </div>
+                                    @if (Session::has('messageUpdatePTLoading'))
+                                        <div class="form-group">
+                                            <p class="alert alert-warning text-alert text-center">{{ Session::get('messageUpdatePTLoading') }}</p>
+                                        </div>
+                                @endif
+
                                         <!-- subpanel loading-->
                                         <div class="panel subpanel col-lg-6">
                                             <div class="panel-heading">
@@ -354,7 +345,7 @@
                                     <p>truck : {{$theoricalNumberPalletsTruck}} (planned) - {{$realNumberPalletsTruck}} (confirmed)</p>
                                 </div>
                             </div>
-                            <div id="Pan2collapse" class="panel-collapse @if(Session::has('openPanelPallets')) in @endif collapse">
+                            <div id="Pan2collapse" class="panel-collapse in collapse">
                                 <div class="panel-body">
                                     <!--msg-->
                                     <div class="row">
@@ -474,7 +465,7 @@
                                                         <!--exchanging ?-->
                                                             <div class="col-lg-3 checkbox">
                                                                 @php($notExchanging=\App\Palletsaccount::where('name', $truckAssociated->name)->first()->notExchange)
-                                                                <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($loading->notExchange==1 || (isset($notExchanging) && $notExchanging==1)) checked @endif onchange="displayFieldsNotExchanging();"/>Agreed w/o exchange</label>
+                                                                <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($loading->notExchange==1 || (isset($notExchanging) && $notExchanging==1)) checked @endif onchange="updateFieldsNormal();"/>Agreed w/o exchange</label>
                                                             </div>
                                                         @endif
                                                         <!--add pallet account-->
@@ -498,7 +489,7 @@
                                                     <div class="form-group">
                                                         <!--number of pallets-->
                                                         <div class="col-lg-2">
-                                                            <div class="input-group">
+                                                            <div class="input-group requiredField">
                                                                 <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber">
                                                                         <span class="glyphicon glyphicon-minus"></span>
@@ -507,7 +498,7 @@
                                                                     <input id="palletsNumber" type="number" name="palletsNumber"
                                                                            class="form-control input-number text-center"  @if(isset($palletsNumber)) value="{{$palletsNumber}}"
                                                                            @elseif(Illuminate\Support\Facades\Input::old('palletsNumber')) value="{{ old('palletsNumber') }}"
-                                                                           @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber();">
+                                                                           @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsNormal();">
                                                                     <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber">
                                                                         <span class="glyphicon glyphicon-plus"></span>
@@ -538,7 +529,8 @@
                                                         @endif
                                                         <!-- deposit withdrawal or deposit only : truck or wenzel -->
                                                         <div class="col-lg-3" id="debitAccountDWD"  @if((isset($type) && ($type<>'Deposit-Withdrawal' || $type<>'Deposit_Only'))||(!isset($type) && !(isset($showAddCorrectingTransfer) || (isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer')))) style="display: block;" @else style="display:none;" @endif>
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccountDWD" id="select-debitAccountDWD" onchange="selectAccount()">
+                                                            <input type="hidden" name="debitAccountDWD" id="input-debitAccountDWD" value=""/>
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="select-debitAccountDWD" id="select-debitAccountDWD" disabled="true">
                                                                 @if($loading->notExchange==1)
                                                                     <option value="account-1" selected>WENZEL</option>
                                                                 @elseif(isset($truckAssociated))
@@ -550,7 +542,7 @@
                                                         </div>
                                                         <!-- withdrawal only : all accounts possible OR debt OR other-->
                                                         <div class="col-lg-3" id="debitAccountWDebtOther"  @if(isset($type) && ($type == 'Withdrawal_Only' || $type=='Debt' || $type=='Other')) style="display: block" @else style="display:none;" @endif >
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccountW" id="select-debitAccountW" onchange="selectAccount();" >
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccountWDebtOther" id="select-debitAccountWDebtOther" onchange="updateFieldsNormal();" data-style="requiredField">
                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                     @if((Illuminate\Support\Facades\Input::old('debitAccountWDebtOther') && (strpos(old('debitAccountWDebtOther'), '-') == 7 && explode('-', old('debitAccountWDebtOther'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccountWDebtOther'))[1]))||(isset($debitAccount) && (strpos($debitAccount, '-') == 7 && explode('-', $debitAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount)[1])))
                                                                         <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
@@ -571,7 +563,7 @@
                                                         </div>
                                                         <!-- purchase-sale : only accounts that were on the normal transfer associated -->
                                                         <div class="col-lg-3" id="debitAccountPS" @if((isset($type) && ($type=='Purchase-Sale'))|| (!isset($type) && (isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer')))) style="display: block;" @else style="display: none;" @endif>
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debitAccountPS" title="Account (sales pallets)" name="debitAccountPS" onchange="selectAccount();">
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-debitAccountPS" title="Account (sales pallets)" name="debitAccountPS" onchange="selectAccount();" data-style="requiredField">
                                                                 @if(isset($debitAccountCorr)&& isset($creditAccountCorr))
                                                                     @php($partsDebitAccount=explode('-',$debitAccountCorr))
                                                                     @php($idDC=$partsDebitAccount[count($partsDebitAccount)-1])
@@ -589,8 +581,6 @@
                                                                     @else
                                                                         @php($creditAccountC=implode( ' - ', array_diff ($partsCreditAccount, [$idCC, $typeCC])))
                                                                     @endif
-                                                                {{--@if(!isset($normalTransferAssociated))--}}
-                                                                    {{--@php($transfNorm=\App\Palletstransfer::where('id', explode('-', $actionForm)[1])->first())--}}
                                                                     <option value="account-1">WENZEL</option>
                                                                     @if($typeDC=='truck')
                                                                         <option value="truck-{{$idDC}}">{{$debitAccountC}}</option>
@@ -623,7 +613,7 @@
                                                         </div>
                                                         <!-- deposit withdrawal : only network and other accounts -->
                                                         <div class="col-lg-3" id="creditAccountDW"  @if((isset($type) && ($type<>'Deposit-Withdrawal'))||(!isset($type) && !(isset($showAddCorrectingTransfer) || (isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer')))) style="display: block;" @else style="display:none;" @endif >
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccountDW" id="select-creditAccountDW" onchange="selectAccount();">
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccountDW" id="select-creditAccountDW" onchange="updateFieldsNormal();" data-style="requiredField">
                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                     @if((Illuminate\Support\Facades\Input::old('creditAccountDW') && (strpos(old('creditAccountDW'), '-') == 7 && explode('-', old('creditAccountDW'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccountDW'))[1]))||(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1])))
                                                                         <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
@@ -635,7 +625,7 @@
                                                         </div>
                                                         <!-- deposit only : all accounts possible OR debt OR other-->
                                                         <div class="col-lg-3" id="creditAccountDDebtOther"  @if(isset($type) && ($type == 'Deposit_Only' || $type == 'Debt' || $type =='Other')) style="display: block;" @else style="display:none;" @endif>
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-creditAccountDDebtOther" title="Account (takes pallets)" name="creditAccountDDebtOther" >
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" id="select-creditAccountDDebtOther" title="Account (takes pallets)" name="creditAccountDDebtOther" data-style="requiredField" onchange="updateFieldsNormal();">
                                                                 @foreach($listPalletsAccounts as $palletsAccount )
                                                                     @if((Illuminate\Support\Facades\Input::old('creditAccountDDebtOther') && (strpos(old('creditAccountDDebtOther'), '-') == 7 && explode('-', old('creditAccountDDebtOther'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccountDDebtOther'))[1]))||(isset($creditAccount) && (strpos($creditAccount, '-') == 7 && explode('-', $creditAccount)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount)[1])))
                                                                         <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
@@ -654,9 +644,10 @@
                                                                     @endforeach
                                                             </select>
                                                         </div>
-                                                        <!-- withdrawal only : truck -->
+                                                        <!-- withdrawal only : truck or wenzel -->
                                                         <div class="col-lg-3" id="creditAccountW"  @if(isset($type) && ($type == 'Withdrawal_Only')) style="display: block;" @else style="display:none;" @endif >
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccountW" id="select-creditAccountW">
+                                                            <input type="hidden" name="creditAccountW" id="input-creditAccountW" value=""/>
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccountW" id="select-creditAccountW" disabled="true">
                                                                 @if($loading->notExchange==1)
                                                                     <option value="account-1" selected>WENZEL</option>
                                                                 @elseif(isset($truckAssociated))
@@ -668,7 +659,7 @@
                                                         </div>
                                                         <!-- purchase-sale : only accounts that were on the normal transfer associated -->
                                                         <div class="col-lg-3" id="creditAccountPS" @if((isset($type) && ($type=='Purchase-Sale'))|| (!isset($type) && (isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer')))) style="display: block;" @else style="display: none;" @endif>
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (purchases pallets)" name="creditAccountPS" id="select-creditAccountPS">
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (purchases pallets)" name="creditAccountPS" id="select-creditAccountPS" data-style="requiredField">
                                                                 @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                     <option value="account-1"> WENZEL </option>
                                                                     @if($typeDC=='truck')
@@ -712,7 +703,7 @@
                                                         <div class="form-group">
                                                             <!--number of pallets 2-->
                                                             <div class="col-lg-2">
-                                                                <div class="input-group">
+                                                                <div class="input-group requiredField">
                                                                     <span class="input-group-btn">
                                                                         <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber2DW">
                                                                             <span class="glyphicon glyphicon-minus"></span>
@@ -721,7 +712,7 @@
                                                                     <input id="palletsNumber2DW" type="number" name="palletsNumber2DW"
                                                                                class="form-control input-number text-center"  @if(isset($palletsNumber2)) value="{{$palletsNumber2}}"
                                                                                @elseif(Illuminate\Support\Facades\Input::old('palletsNumber2DW')) value="{{ old('palletsNumber2DW') }}"
-                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsPalletsNumber();">
+                                                                               @else value="0" @endif placeholder="Nbr" min="0" max="999999" autofocus onchange="updateFieldsNormal();">
                                                                     <span class="input-group-btn">
                                                                         <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="palletsNumber2DW">
                                                                             <span class="glyphicon glyphicon-plus"></span>
@@ -776,7 +767,7 @@
                                                         <div class="form-group">
                                                             <!--number of pallets 2-->
                                                             <div class="col-lg-2">
-                                                                <div class="input-group">
+                                                                <div class="input-group requiredField">
                                                                     <span class="input-group-btn">
                                                                         <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="palletsNumber2PS">
                                                                             <span class="glyphicon glyphicon-minus"></span>
@@ -801,7 +792,7 @@
                                                                 <label for="debitAccount2PS" class="control-label">from</label>
                                                             </div>
                                                             <div class="col-lg-3">
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (sales pallets)" name="debitAccount2PS" id="select-debitAccount2PS" >
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (sales pallets)" name="debitAccount2PS" id="select-debitAccount2PS" data-style="requiredField">
                                                                     @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                         <option value="account-1">WENZEL</option>
                                                                         @if($typeDC=='truck')
@@ -837,7 +828,7 @@
                                                                 {{--@endif--}}
                                                             </div>
                                                             <div class="col-lg-3">
-                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (purchase pallets)" name="creditAccount2PS" id="select-creditAccount2PS">
+                                                                <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (purchase pallets)" name="creditAccount2PS" id="select-creditAccount2PS" data-style="requiredField">
                                                                     @if(isset($debitAccountCorr) && isset($creditAccountCorr))
                                                                         <option value="account-1">WENZEL</option>
                                                                         @if($typeDC=='truck')
@@ -890,7 +881,7 @@
                                                                 <p class="text-center"> pallets toward</p>
                                                             </div>
                                                             <div class="col-lg-3">
-                                                                <select class="selectpicker show-tick form-control text-center" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccount3a" id="creditAccount3a">
+                                                                <select class="selectpicker show-tick form-control text-center" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (takes pallets)" name="creditAccount3a" id="creditAccount3a" data-style="requiredField">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                         @if((Illuminate\Support\Facades\Input::old('creditAccount3a') && (strpos(old('creditAccount3a'), '-') == 7 && explode('-', old('creditAccount3a'))[0] == 'account') && ($palletsAccount->id==explode('-', old('creditAccount3a'))[1]))||(isset($creditAccount3) && (strpos($creditAccount3, '-') == 7 && explode('-', $creditAccount3)[0] == 'account') && ($palletsAccount->id==explode('-', $creditAccount3)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
@@ -903,7 +894,7 @@
                                                         </div>
                                                         <div class="form-group" id="debt2" @if(isset($type) &&(($type=='Deposit-Withdrawal' && isset($palletsNumber2) && $palletsNumber2 < $loading->anz)|| ($type=='Deposit_Only')) && $loading->notExchange==1 ) style="display:block;" @else  style="display:none;" @endif>
                                                             <div class="col-lg-3">
-                                                                <select class="selectpicker show-tick form-control text-center" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccount3b" id="debitAccount3b">
+                                                                <select class="selectpicker show-tick form-control text-center" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="debitAccount3b" id="debitAccount3b" data-style="requiredField">
                                                                     @foreach($listPalletsAccounts as $palletsAccount )
                                                                         @if((Illuminate\Support\Facades\Input::old('debitAccount3b') && (strpos(old('debitAccount3b'), '-') == 7 && explode('-', old('debitAccount3b'))[0] == 'account') && ($palletsAccount->id==explode('-', old('debitAccount3b'))[1]))||(isset($debitAccount3) && (strpos($debitAccount3, '-') == 7 && explode('-', $debitAccount3)[0] == 'account') && ($palletsAccount->id==explode('-', $debitAccount3)[1])))
                                                                             <option value="account-{{$palletsAccount->id}}" selected>{{$palletsAccount->name}}</option>
@@ -1070,6 +1061,61 @@
 
                                     <!---TABLE ALL TRANSFERS-->
                                     <div class="row">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    @foreach($listAccountsTransfers as  $accountTransfer)
+                                                        @php($partsAccount=explode('-', $accountTransfer))
+                                                        @php($typeAccount=$partsAccount[count($partsAccount)-2])
+                                                        @php($idAccount=$partsAccount[count($partsAccount)-1])
+                                                        @if($typeAccount=='account')
+                                                            @php($nameAccount=\App\Palletsaccount::where('id', $idAccount)->first()->name)
+                                                            <th colspan="3" class="text-center">
+                                                                <a class="link"
+                                                                   href="{{route('showDetailsPalletsaccount',$idAccount)}}">{{$nameAccount}}</a>
+                                                            </th>
+                                                            @elseif($typeAccount=='truck')
+                                                            @php($nameAccount=\App\Truck::where('id', $idAccount)->first()->name)
+                                                            @php($licensePlateAccount=\App\Truck::where('id', $idAccount)->first()->licensePlate)
+                                                            <th colspan="3">
+                                                            <a class="link"
+                                                               href="{{route('showDetailsTruck',$idAccount)}}">{{$nameAccount}}
+                                                                - {{$licensePlateAccount}}</a>
+                                                            </th>
+                                                        @endif
+                                                    @endforeach
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    @foreach($listAccountsTransfers as  $accountTransfer)
+                                                    <td class="text-center">Confirmed</td>
+                                                    <td class="text-center">Planned</td>
+                                                    <td class="text-center">Rest</td>
+                                                    @endforeach
+                                                </tr>
+                                                <tr>
+                                                    @foreach($listAccountsTransfers as  $accountTransfer)
+                                                        @php($partsAccount=explode('-', $accountTransfer))
+                                                        @php($typeAccount=$partsAccount[count($partsAccount)-2])
+                                                        @php($idAccount=$partsAccount[count($partsAccount)-1])
+                                                        @if($typeAccount=='account')
+                                                            @php($confirmed=\App\Palletsaccount::where('id', $idAccount)->first()->realNumberPallets)
+                                                            @php($planned=\App\Palletsaccount::where('id', $idAccount)->first()->theoricalNumberPallets)
+                                                        @elseif($typeAccount=='truck')
+                                                            @php($confirmed=\App\Truck::where('id', $idAccount)->first()->realNumberPallets)
+                                                            @php($planned=\App\Truck::where('id', $idAccount)->first()->theoricalNumberPallets)
+                                                        @endif
+                                                        <td class="text-center"><span @if($confirmed <0) class="text-inf0" @elseif($confirmed >0) class="text-sup0" @else class="text-egal0" @endif >{{$confirmed}}</span></td>
+                                                        <td class="text-center"><span @if($planned <0) class="text-inf0" @elseif($planned >0) class="text-sup0" @else class="text-egal0" @endif>{{$planned}}</span></td>
+                                                        <td class="text-center"><span @if($planned - $confirmed <0) class="text-inf0" @elseif($planned - $confirmed >0) class="text-sup0" @else class="text-egal0" @endif>{{$planned - $confirmed}}</span></td>
+                                                    @endforeach
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                         <div class="table-responsive table-transfers">
                                             <table class="table table-hover table-bordered">
                                                 <thead>

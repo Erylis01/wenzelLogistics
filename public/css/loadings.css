@@ -171,3 +171,21 @@
     color:black;
     font-style: italic;
 }
+
+/* table recap accounts */
+.text-inf0{
+    color:rgba(255,0,0,0.8);
+}
+.text-egal0{
+    color:rgba(255, 112, 0, 0.8);
+}
+.text-sup0{
+    color: rgba(0, 160, 0, 0.8);
+}
+
+.requiredField{
+    border-color:black ;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+}

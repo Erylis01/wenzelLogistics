@@ -41,27 +41,30 @@ class TruckTableSeeder extends Seeder
                                 $name = trim(explode(',', $sheet[$r][25])[0]);
                                 $adress = trim(explode(',', $sheet[$r][25])[1]);
 
+                                $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
+                                if ($testAccount == null) {
+                                    Palletsaccount::firstOrCreate([
+                                        'name' => $name,
+//                                            'nickname' => $name,
+                                        'adress' => $adress,
+                                        'type' => 'Carrier',
+                                    ]);
+                                }
+
+                                $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
+
+                                if ($testTruckStock == null) {
+                                    Truck::firstOrCreate([
+                                        'name' => $name,
+//                                        'nickname' => $name,
+                                        'licensePlate' => 'STOCK',
+                                        'palletsaccount_name' => $name,
+                                    ]);
+                                }
                                 $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
 
                                 if ($testTruck == null) {
                                     //not double
-
-                                    $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
-
-                                    if ($testAccount == null) {
-                                        Palletsaccount::firstOrCreate([
-                                            'name' => $name,
-//                                            'nickname' => $name,
-                                            'adress' => $adress,
-                                            'type' => 'Carrier',
-                                        ]);
-                                        Truck::firstOrCreate([
-                                            'name' => $name,
-//                                            'nickname' => $name,
-                                            'licensePlate' => 'STOCK',
-                                            'palletsaccount_name' => $name,
-                                        ]);
-                                    }
                                     Truck::firstOrCreate([
                                         'name' => $name,
 //                                        'nickname' => $name,
@@ -69,6 +72,7 @@ class TruckTableSeeder extends Seeder
                                         'palletsaccount_name' => $name,
                                     ]);
                                 }
+
                             }
                         }
                     }
@@ -76,4 +80,5 @@ class TruckTableSeeder extends Seeder
             }
         }
     }
+
 }

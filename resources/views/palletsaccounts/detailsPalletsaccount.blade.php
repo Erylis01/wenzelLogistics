@@ -62,7 +62,9 @@
                               action="{{route('updatePalletsaccount', $account->id)}}" id="formUpdatePalletsaccount">
                             {{ csrf_field() }}
                             <input type="hidden" name="actionUpdateForm" id="actionUpdateForm"/>
-
+                            @if (Session::has('messageDeletePalletsaccount'))
+                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageDeletePalletsaccount') }}</div>
+                            @endif
                             <div class="form-group">
                                 <!--nickname-->
                                 <div class="col-lg-3">
@@ -306,8 +308,6 @@
                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageUpdatePalletsaccount') }}</div>
                             @elseif (Session::has('messageClearTrucks'))
                                 <div class="alert alert-success text-alert text-center">{{ Session::get('messageClearTrucks') }}</div>
-                            @elseif (Session::has('messageDeletePalletsaccount'))
-                                <div class="alert alert-danger text-alert text-center">{{ Session::get('messageDeletePalletsaccount') }}</div>
                             @endif
                         </form>
                         <!-- Modal Delete -->
