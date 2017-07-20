@@ -531,7 +531,7 @@
                                                         <div class="col-lg-3" id="debitAccountDWD"  @if((isset($type) && ($type<>'Deposit-Withdrawal' || $type<>'Deposit_Only'))||(!isset($type) && !(isset($showAddCorrectingTransfer) || (isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer')))) style="display: block;" @else style="display:none;" @endif>
                                                             <input type="hidden" name="debitAccountDWD" id="input-debitAccountDWD" value=""/>
                                                             <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (gives pallets)" name="select-debitAccountDWD" id="select-debitAccountDWD" disabled="true">
-                                                                @if($loading->notExchange==1)
+                                                                @if($loading->notExchange==1 || (isset($notExchanging) && $notExchanging==1))
                                                                     <option value="account-1" selected>WENZEL</option>
                                                                 @elseif(isset($truckAssociated))
                                                                     <option value="truck-{{$truckAssociated->id}}" selected>{{$truckAssociated->name}} - {{$truckAssociated->licensePlate}}</option>

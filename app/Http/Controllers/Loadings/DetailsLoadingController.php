@@ -299,7 +299,7 @@ class DetailsLoadingController extends Controller
                 $debitAccount3 = Input::get('debitAccount3b');
             }
 
-
+dd($request->all());
             $addTransferForm = $this->addPalletsTransfer($loading, $notExchanging, $truckAssociated, $type, $debitAccount, $creditAccount, $debitAccount2, $creditAccount2, $palletsNumber, $palletsNumber2, $creditAccount3, $debitAccount3, $palletsNumber3, $normalTransferAssociated);
 
             if ($addTransferForm == 'error') {
