@@ -355,7 +355,7 @@ class DetailsLoadingController extends Controller
             } else {
                 $debitAccount = null;
             }
-//dd($request->all());
+
             $palletsNumber = Input::get('palletsNumber');
             $creditAccount2 = null;
             $debitAccount2 = null;
