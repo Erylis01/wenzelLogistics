@@ -4,6 +4,24 @@ function formSubmitBlock(button) {
     $("#formSubmitUpdateUpload").submit();
 }
 
+function formSubmitBlockUpdateCarrier(button) {
+    $('input[id=actionForm]').val(button.value);
+    var optionSelected = $("#select-accountPossible").find(":selected").text();
+    $('input[id=subfrachter]').val(optionSelected);
+    $('input[id=subfrachter]').text(optionSelected);
+    $("#" + button.id).attr('disabled', 'disabled');
+    $("#formSubmitUpdateUpload").submit();
+}
+
+function formSubmitBlockUpdateTruck(button) {
+    $('input[id=actionForm]').val(button.value);
+    var optionSelected = $("#select-trucksPossible").find(":selected").text();
+    $('input[id=kennzeichen]').val(optionSelected);
+    $('input[id=kennzeichen]').text(optionSelected);
+    $("#" + button.id).attr('disabled', 'disabled');
+    $("#formSubmitUpdateUpload").submit();
+}
+
 function openClosePanel1() {
     if ($('#Pan1collapse').hasClass('in')) {
         $("#infoPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
@@ -210,11 +228,13 @@ function updateFieldsNormal() {
                         $("#select-creditAccount3b").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
                         $("#debitAccount3a").val('');
                         $("#creditAccount3a").find("option:selected").removeAttr("selected");
+                        $("#palletsNumber3a").val();
                     } else if (calcul > 0) {
                         document.getElementById("debt").style.display = "block";
                         document.getElementById("debt1").style.display = "block";
                         document.getElementById("debt2").style.display = "none";
                         $("#palletsNumber3a").val(calcul);
+                        $("#palletsNumber3b").val();
                         if (valueCredit !== '') {
                             $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                         }
@@ -231,6 +251,7 @@ function updateFieldsNormal() {
                     document.getElementById("debt1").style.display = "block";
                     document.getElementById("debt2").style.display = "none";
                     $("#palletsNumber3a").val(calcul);
+                    $("#palletsNumber3b").val();
                     if (valueCredit !== '') {
                         $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                     }
@@ -246,6 +267,7 @@ function updateFieldsNormal() {
                     document.getElementById("debt1").style.display = "block";
                     document.getElementById("debt2").style.display = "none";
                     $("#palletsNumber3a").val(calcul);
+                    $("#palletsNumber3b").val();
                     if (valueCredit !== '') {
                         $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                     }
@@ -263,6 +285,7 @@ function updateFieldsNormal() {
                     document.getElementById("debt1").style.display = "none";
                     document.getElementById("debt2").style.display = "block";
                     $("#palletsNumber3b").val(calcul);
+                    $("#palletsNumber3a").val();
                     if (valueCredit !== '') {
                         $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                     }
@@ -280,6 +303,7 @@ function updateFieldsNormal() {
                         document.getElementById("debt1").style.display = "none";
                         document.getElementById("debt2").style.display = "block";
                         $("#palletsNumber3b").val(-calcul);
+                        $("#palletsNumber3a").val();
                         if (valueCredit !== '') {
                             $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                         }
@@ -293,6 +317,7 @@ function updateFieldsNormal() {
                         document.getElementById("debt1").style.display = "block";
                         document.getElementById("debt2").style.display = "none";
                         $("#palletsNumber3a").val(calcul);
+                        $("#palletsNumber3b").val();
                         if (valueCredit !== '') {
                             $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                         }
@@ -309,6 +334,7 @@ function updateFieldsNormal() {
                     document.getElementById("debt1").style.display = "none";
                     document.getElementById("debt2").style.display = "block";
                     $("#palletsNumber3b").val(calcul);
+                    $("#palletsNumber3a").val();
                     if (valueCredit !== '') {
                         $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                     }
@@ -326,6 +352,7 @@ function updateFieldsNormal() {
                     document.getElementById("debt1").style.display = "none";
                     document.getElementById("debt2").style.display = "block";
                     $("#palletsNumber3b").val(calcul);
+                    $("#palletsNumber3a").val();
                     if (valueCredit !== '') {
                         $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                     }
@@ -341,6 +368,7 @@ function updateFieldsNormal() {
                     document.getElementById("debt1").style.display = "block";
                     document.getElementById("debt2").style.display = "none";
                     $("#palletsNumber3a").val(calcul);
+                    $("#palletsNumber3b").val();
                     if (valueCredit !== '') {
                         $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                     }
@@ -704,6 +732,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                     document.getElementById("debt1").style.display = "none";
                                     document.getElementById("debt2").style.display = "block";
                                     $("#palletsNumber3b").val(-calcul);
+                                    $("#palletsNumber3a").val();
                                     // if (valueCredit !== '') {
                                     //     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                     // }
@@ -717,6 +746,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                     document.getElementById("debt1").style.display = "block";
                                     document.getElementById("debt2").style.display = "none";
                                     $("#palletsNumber3a").val(calcul);
+                                    $("#palletsNumber3b").val();
                                     // if (valueCredit !== '') {
                                     //     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                     // }
@@ -733,6 +763,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                 document.getElementById("debt1").style.display = "block";
                                 document.getElementById("debt2").style.display = "none";
                                 $("#palletsNumber3a").val(calcul);
+                                $("#palletsNumber3b").val();
                                 // if (valueCredit !== '') {
                                 //     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                 // }
@@ -748,6 +779,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                 document.getElementById("debt1").style.display = "block";
                                 document.getElementById("debt2").style.display = "none";
                                 $("#palletsNumber3a").val(calcul);
+                                $("#palletsNumber3b").val();
                                 // if (valueCredit !== '') {
                                 //     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                 // }
@@ -765,6 +797,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                 document.getElementById("debt1").style.display = "none";
                                 document.getElementById("debt2").style.display = "block";
                                 $("#palletsNumber3b").val(calcul);
+                                $("#palletsNumber3a").val();
                                 // if (valueCredit !== '') {
                                 //     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                 // }
@@ -781,6 +814,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                     document.getElementById("debt1").style.display = "none";
                                     document.getElementById("debt2").style.display = "block";
                                     $("#palletsNumber3b").val(-calcul);
+                                    $("#palletsNumber3a").val();
                                     // if (valueCredit !== '') {
                                     //     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                     // }
@@ -794,6 +828,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                     document.getElementById("debt1").style.display = "block";
                                     document.getElementById("debt2").style.display = "none";
                                     $("#palletsNumber3a").val(calcul);
+                                    $("#palletsNumber3b").val();
                                     // if (valueCredit !== '') {
                                     //     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                     // }
@@ -810,6 +845,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                 document.getElementById("debt1").style.display = "none";
                                 document.getElementById("debt2").style.display = "block";
                                 $("#palletsNumber3b").val(calcul);
+                                $("#palletsNumber3a").val();
                                 // if (valueCredit !== '') {
                                 //     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                 // }
@@ -827,6 +863,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                 document.getElementById("debt1").style.display = "none";
                                 document.getElementById("debt2").style.display = "block";
                                 $("#palletsNumber3b").val(calcul);
+                                $("#palletsNumber3a").val();
                                 // if (valueCredit !== '') {
                                 //     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                 // }
@@ -842,6 +879,7 @@ function displayFieldsTypeNormal(typeChecked) {
                                 document.getElementById("debt1").style.display = "block";
                                 document.getElementById("debt2").style.display = "none";
                                 $("#palletsNumber3a").val(calcul);
+                                $("#palletsNumber3b").val();
                                 // if (valueCredit !== '') {
                                 //     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
                                 // }
@@ -888,218 +926,6 @@ function displayFieldsTypeNormal(typeChecked) {
                 }
             }
         }
-    // } else {
-    //     document.getElementById("debitAccountDWD").style.display = "block";
-    //     document.getElementById("debitAccountWDebtOther").style.display = "none";
-    //     document.getElementById("creditAccountDW").style.display = "block";
-    //     document.getElementById("creditAccountDDebtOther").style.display = "none";
-    //     document.getElementById("creditAccountW").style.display = "none";
-    //
-    //     document.getElementById("palletsTaken").style.display = "none";
-    //     document.getElementById("palletsGiven").style.display = "block";
-    //
-    //     document.getElementById("deposit-withdrawal1").style.display = "block";
-    //     document.getElementById("deposit-withdrawal2").style.display = "block";
-    //     document.getElementById("DW").style.display = "block";
-    //
-    //     var valueCredit = null;
-    //     var textCredit = null;
-    //     var valueAnz = $("#anz").val();
-    //     var valueNumb2 = $("#palletsNumber2DW").val();
-    //
-    //     if ($("#notExchanging").is(":checked")) {
-    //         //update fields 1
-    //         $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //         $("#select-debitAccountDWD").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //         $("#input-debitAccountDWD").val(valueWenzel);
-    //         $("#input-debitAccountDWD").change();
-    //         //update fields 2
-    //         $("#input-creditAccount2DW").val(valueWenzel);
-    //         $("#input-creditAccount2DW").change();
-    //         $("#select-creditAccount2DW").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //         $("#select-creditAccount2DW").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //         valueCredit = $("#select-creditAccountDW").find(":selected").val();
-    //         textCredit = $("#select-creditAccountDW").find(":selected").text();
-    //         $("#input-debitAccount2DW").val(valueCredit);
-    //         $("#input-debitAccount2DW").change();
-    //         $("#select-debitAccount2DW").append($('<option></option>').attr("value", valueCredit).text(textCredit));
-    //         $("#select-debitAccount2DW").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //
-    //         var calcul = null;
-    //         if (valueNumb < valueAnz) {
-    //             if (valueNumb2 < valueAnz) {
-    //                 //we don't know who has a debt
-    //                 calcul = valueNumb2 - valueNumb;
-    //                 if (calcul < 0) {
-    //                     document.getElementById("debt").style.display = "block";
-    //                     document.getElementById("debt1").style.display = "none";
-    //                     document.getElementById("debt2").style.display = "block";
-    //                     $("#palletsNumber3b").val(-calcul);
-    //                     if (valueCredit !== '') {
-    //                         $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                     }
-    //                     $("#creditAccount3b").val(valueWenzel);
-    //                     $("#creditAccount3b").change();
-    //                     $("#select-creditAccount3b").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                     $("#select-creditAccount3b").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //                 } else if (calcul > 0) {
-    //                     document.getElementById("debt").style.display = "block";
-    //                     document.getElementById("debt1").style.display = "block";
-    //                     document.getElementById("debt2").style.display = "none";
-    //                     $("#palletsNumber3a").val(calcul);
-    //                     if (valueCredit !== '') {
-    //                         $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                     }
-    //                     $("#debitAccount3a").val(valueWenzel);
-    //                     $("#debitAccount3a").change();
-    //                     $("#select-debitAccount3a").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                     $("#select-debitAccount3a").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //                 }
-    //             } else if (valueNumb2 > valueAnz) {
-    //                 //wenzel has a debt
-    //                 calcul = valueNumb2 - valueNumb;
-    //                 document.getElementById("debt").style.display = "block";
-    //                 document.getElementById("debt1").style.display = "block";
-    //                 document.getElementById("debt2").style.display = "none";
-    //                 $("#palletsNumber3a").val(calcul);
-    //                 if (valueCredit !== '') {
-    //                     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                 }
-    //                 $("#debitAccount3a").val(valueWenzel);
-    //                 $("#debitAccount3a").change();
-    //                 $("#select-debitAccount3a").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                 $("#select-debitAccount3a").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //
-    //             } else if (valueNumb2 === valueAnz) {
-    //                 //wenzel has debt
-    //                 calcul = valueAnz - valueNumb;
-    //                 document.getElementById("debt").style.display = "block";
-    //                 document.getElementById("debt1").style.display = "block";
-    //                 document.getElementById("debt2").style.display = "none";
-    //                 $("#palletsNumber3a").val(calcul);
-    //                 if (valueCredit !== '') {
-    //                     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                 }
-    //                 $("#debitAccount3a").val(valueWenzel);
-    //                 $("#debitAccount3a").change();
-    //                 $("#select-debitAccount3a").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                 $("#select-debitAccount3a").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //             }
-    //         } else if (valueNumb > valueAnz) {
-    //             if (valueNumb2 < valueAnz) {
-    //                 //other account has a debt
-    //                 calcul = valueNumb - valueNumb2;
-    //
-    //                 document.getElementById("debt").style.display = "block";
-    //                 document.getElementById("debt1").style.display = "none";
-    //                 document.getElementById("debt2").style.display = "block";
-    //                 $("#palletsNumber3b").val(calcul);
-    //                 if (valueCredit !== '') {
-    //                     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                 }
-    //                 $("#creditAccount3b").val(valueWenzel);
-    //                 $("#creditAccount3b").change();
-    //                 $("#select-creditAccount3b").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                 $("#select-creditAccount3b").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //
-    //             } else if (valueNumb2 > valueAnz) {
-    //                 //we don't know who has a debt
-    //                 calcul = valueNumb - valueNumb;
-    //                 if (calcul < 0) {
-    //                     document.getElementById("debt").style.display = "block";
-    //                     document.getElementById("debt1").style.display = "none";
-    //                     document.getElementById("debt2").style.display = "block";
-    //                     $("#palletsNumber3b").val(-calcul);
-    //                     if (valueCredit !== '') {
-    //                         $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                     }
-    //                     $("#creditAccount3b").val(valueWenzel);
-    //                     $("#creditAccount3b").change();
-    //                     $("#select-creditAccount3b").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                     $("#select-creditAccount3b").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //                 } else if (calcul > 0) {
-    //                     document.getElementById("debt").style.display = "block";
-    //                     document.getElementById("debt1").style.display = "block";
-    //                     document.getElementById("debt2").style.display = "none";
-    //                     $("#palletsNumber3a").val(calcul);
-    //                     if (valueCredit !== '') {
-    //                         $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                     }
-    //                     $("#debitAccount3a").val(valueWenzel);
-    //                     $("#debitAccount3a").change();
-    //                     $("#select-debitAccount3a").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                     $("#select-debitAccount3a").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //                 }
-    //             } else if (valueNumb2 === valueAnz) {
-    //                 //other has a debt
-    //                 calcul = valueNumb - valueAnz;
-    //                 document.getElementById("debt").style.display = "block";
-    //                 document.getElementById("debt1").style.display = "none";
-    //                 document.getElementById("debt2").style.display = "block";
-    //                 $("#palletsNumber3b").val(calcul);
-    //                 if (valueCredit !== '') {
-    //                     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                 }
-    //                 $("#creditAccount3b").val(valueWenzel);
-    //                 $("#creditAccount3b").change();
-    //                 $("#select-creditAccount3b").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                 $("#select-creditAccount3b").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //             }
-    //         } else if (valueNumb == valueAnz) {
-    //             if (valueNumb2 < valueAnz) {
-    //                 //other has a debt
-    //                 calcul = valueAnz - valueNumb2;
-    //                 document.getElementById("debt").style.display = "block";
-    //                 document.getElementById("debt1").style.display = "none";
-    //                 document.getElementById("debt2").style.display = "block";
-    //                 $("#palletsNumber3b").val(calcul);
-    //                 if (valueCredit !== '') {
-    //                     $("#debitAccount3b").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                 }
-    //                 $("#creditAccount3b").val(valueWenzel);
-    //                 $("#creditAccount3b").change();
-    //                 $("#select-creditAccount3b").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                 $("#select-creditAccount3b").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //             } else if (valueNumb2 > valueAnz) {
-    //                 //wenzel has debt
-    //                 calcul = valueNumb2 - valueAnz;
-    //                 document.getElementById("debt").style.display = "block";
-    //                 document.getElementById("debt1").style.display = "block";
-    //                 document.getElementById("debt2").style.display = "none";
-    //                 $("#palletsNumber3a").val(calcul);
-    //                 if (valueCredit !== '') {
-    //                     $("#creditAccount3a").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //                 }
-    //                 $("#debitAccount3a").val(valueWenzel);
-    //                 $("#debitAccount3a").change();
-    //                 $("#select-debitAccount3a").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
-    //                 $("#select-debitAccount3a").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-    //             }
-    //         }
-    //     } else {
-    //         document.getElementById("debt").style.display = "none";
-    //         document.getElementById("debt1").style.display = "none";
-    //         document.getElementById("debt2").style.display = "none";
-    //         $("#palletsNumber3b").val();
-    //         $("#palletsNumber3a").val();
-    //         //update fields 1
-    //         $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
-    //         $("#select-debitAccountDWD").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
-    //         $("#input-debitAccountDWD").val('truck-' + truckAssociatedId);
-    //         $("#input-debitAccountDWD").change();
-    //         //update fields 2
-    //         $("#input-creditAccount2DW").val('truck-' + truckAssociatedId);
-    //         $("#input-creditAccount2DW").change();
-    //         $("#select-creditAccount2DW").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
-    //         $("#select-creditAccount2DW").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
-    //         valueCredit = $("#select-creditAccountDW").find(":selected").val();
-    //         textCredit = $("#select-creditAccountDW").find(":selected").text();
-    //         $("#input-debitAccount2DW").val(valueCredit);
-    //         $("#input-debitAccount2DW").change();
-    //         $("#select-debitAccount2DW").empty();
-    //         $("#select-debitAccount2DW").append($('<option></option>').attr("value", valueCredit).text(textCredit));
-    //         $("#select-debitAccount2DW").find("option[value=\'" + valueCredit + "\']").attr('selected', true);
-    //     }
     }
     $("#select-debitAccountDWD").selectpicker('refresh');
     $("#select-debitAccountDWD").selectpicker('render');
@@ -1140,6 +966,7 @@ function displayFieldsTypeCorrecting(typeChecked) {
 
             document.getElementById("palletsBought").style.display = "block";
             document.getElementById("pallets").style.display = "none";
+            // document.getElementById("$normalTransferAssociated2").style.display = "none";
         } else {
             if (document.getElementById("typeDebt").value === typeChecked.value || document.getElementById("typeOther").value === typeChecked.value) {
                 //other and debt
@@ -1153,22 +980,47 @@ function displayFieldsTypeCorrecting(typeChecked) {
                 document.getElementById("purchase-sale2").style.display = "none";
                 document.getElementById("PS").style.display = "none";
                 document.getElementById("palletsBought").style.display = "none";
+                $("#palletsNumber2PS").val();
+                $("#palletsNumber2PS").change();
+                $("#select-debitAccount2PS").removeAttr('selected');
+                $("#select-debitAccount2PS").selectpicker('refresh');
+                $("#select-debitAccount2PS").selectpicker('render');
+                // if(document.getElementById("typeDebt").value === typeChecked.value){
+                //     document.getElementById("$normalTransferAssociated2").style.display = "block";
+                // }else{
+                //     document.getElementById("$normalTransferAssociated2").style.display = "none";
+                // }
             }
         }
     }
-    else {
-        document.getElementById("creditAccountPS").style.display = "block";
-        document.getElementById("debitAccountPS").style.display = "block";
-        document.getElementById("creditAccountDDebtOther").style.display = "none";
-        document.getElementById("debitAccountWDebtOther").style.display = "none";
+    // else {
+    //     document.getElementById("creditAccountPS").style.display = "block";
+    //     document.getElementById("debitAccountPS").style.display = "block";
+    //     document.getElementById("creditAccountDDebtOther").style.display = "none";
+    //     document.getElementById("debitAccountWDebtOther").style.display = "none";
+    //
+    //     document.getElementById("purchase-sale1").style.display = "block";
+    //     document.getElementById("purchase-sale2").style.display = "block";
+    //     document.getElementById("PS").style.display = "block";
+    //
+    //     document.getElementById("palletsBought").style.display = "block";
+    //     document.getElementById("pallets").style.display = "none";
+    //
+    //     });
+    // }
 
-        document.getElementById("purchase-sale1").style.display = "block";
-        document.getElementById("purchase-sale2").style.display = "block";
-        document.getElementById("PS").style.display = "block";
+}
 
-        document.getElementById("palletsBought").style.display = "block";
-        document.getElementById("pallets").style.display = "none";
-    }
+function selectAccountCorrecting(){
+    var notSelectedValue = null;
+    $("#select-creditAccountPS > option").each(function() {
+        if($(this).prop('selected') !== true && $(this).val() !== 'Account (purchases pallets)'){
+            notSelectedValue=this.value;
+        }
+    });
+    $("#select-debitAccount2PS").find("option[value=\'" + notSelectedValue + "\']").attr('selected', true);
+    $('#select-debitAccount2PS').selectpicker('refresh');
+    $('#select-debitAccount2PS').selectpicker('render');
 }
 
 // function inverseAccounts(numberTransfer){

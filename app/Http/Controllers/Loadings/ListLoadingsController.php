@@ -180,7 +180,7 @@ class ListLoadingsController extends Controller
                                 if ($testAccount == null) {
                                     Palletsaccount::firstOrCreate([
                                         'name' => $name,
-//                                            'nickname' => $name,
+                                            'nickname' => $name,
                                         'adress' => $adress,
                                         'type' => 'Carrier',
                                     ]);
@@ -191,7 +191,7 @@ class ListLoadingsController extends Controller
                                 if ($testTruckStock == null) {
                                     Truck::firstOrCreate([
                                         'name' => $name,
-//                                        'nickname' => $name,
+                                        'nickname' => $name,
                                         'licensePlate' => 'STOCK',
                                         'palletsaccount_name' => $name,
                                     ]);
@@ -202,7 +202,7 @@ class ListLoadingsController extends Controller
                                     //not double
                                     Truck::firstOrCreate([
                                         'name' => $name,
-//                                        'nickname' => $name,
+                                        'nickname' => $name,
                                         'licensePlate' => $licensePlate,
                                         'palletsaccount_name' => $name,
                                     ]);

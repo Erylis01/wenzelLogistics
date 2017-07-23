@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Loading;
 use App\Palletstransfer;
 use App\Truck;
 use App\Palletsaccount;
@@ -133,7 +134,7 @@ class TrucksController extends Controller
                                 if ($testAccount == null) {
                                     Palletsaccount::firstOrCreate([
                                         'name' => $name,
-//                                            'nickname' => $name,
+                                            'nickname' => $name,
                                         'adress' => $adress,
                                         'type' => 'Carrier',
                                     ]);
@@ -144,7 +145,7 @@ class TrucksController extends Controller
                                 if ($testTruckStock == null) {
                                     Truck::firstOrCreate([
                                         'name' => $name,
-//                                        'nickname' => $name,
+                                        'nickname' => $name,
                                         'licensePlate' => 'STOCK',
                                         'palletsaccount_name' => $name,
                                     ]);
@@ -155,7 +156,7 @@ class TrucksController extends Controller
                                     //not double
                                     Truck::firstOrCreate([
                                         'name' => $name,
-//                                        'nickname' => $name,
+                                        'nickname' => $name,
                                         'licensePlate' => $licensePlate,
                                         'palletsaccount_name' => $name,
                                     ]);
@@ -175,9 +176,16 @@ class TrucksController extends Controller
     {
         //get data
         $name = Input::get('name');
+        $nickname=$name;
         $realNumberPallets = Input::get('realNumberPallets');
         $originalPage = Input::get('originalPage');
-
+        $atrnr=Input::get('atrnr');
+        $activate=Input::get('activate');
+        if($activate=='false'){
+           $activate=false;
+        }elseif($activate=='true'){
+            $activate=true;
+        }
         $licensePlate = Input::get('licensePlate');
         if (!isset($licensePlate)) {
             $licensePlate = 'OTHER';
@@ -193,7 +201,7 @@ class TrucksController extends Controller
         } else {
             //if the truck doesn't already exists -> create
             Truck::create(
-                ['name' => $name, 'realNumberPallets' => $realNumberPallets,'theorcialNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]
+                ['nickname'=>$nickname,'name' => $name, 'realNumberPallets' => $realNumberPallets,'theorcialNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name, 'activate'=>$activate]
             );
             //update the pallets account confirmed pallets number with the sum of all trucks of this account
             Palletsaccount::where('name', $palletsaccount_name)->update(['realNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets'=>Palletsaccount::where('name', $palletsaccount_name)->sum('theoricalNumberPallets')]);
@@ -201,6 +209,12 @@ class TrucksController extends Controller
 
             if(explode('-',$originalPage)[0]=='detailsPalletsaccount'){
                 return redirect('/detailsPalletsaccount/'.explode('-',$originalPage)[1]);
+            }elseif(explode('-',$originalPage)[0]=='detailsLoading'){
+                if(isset($atrnr)){
+                    Loading::where('atrnr', $atrnr)->update(['kennzeichen'=>$licensePlate]);
+                }
+                session()->flash('openPanelInformation', 'openPanelInformation');
+                return redirect('/detailsLoading/'.explode('-',$originalPage)[1]);
             }else{
                 return redirect('/allTrucks/false');
             }
@@ -310,6 +324,12 @@ class TrucksController extends Controller
     {
         //get data
         $name = Input::get('name');
+        $activate=Input::get('activate');
+        if($activate=='true'){
+            $activate=true;
+        }elseif($activate=='false'){
+            $activate=false;
+        }
         $licensePlate = Input::get('licensePlate');
         if (!isset($licensePlate)) {
             $licensePlate = 'OTHER';
@@ -323,8 +343,7 @@ class TrucksController extends Controller
             return redirect()->back();
         } else {
             //if not, update the truck
-            Truck::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name]);
-
+            Truck::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name, 'activate'=>$activate]);
             session()->flash('messageUpdateTruck', 'Successfully updated truck');
             return redirect()->back();
         }

@@ -277,8 +277,8 @@
                                                 @if(!empty($errorsTransfer))
                                                     @if($k<4)
                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                        @php($k=$k+1)
                                                     @endif
-                                                    @php($k=$k+1)
                                                 @endif
                                             @endforeach
                                         </td>

@@ -304,10 +304,12 @@
                                             @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
                                             @if(!empty($errorsTransfer)&&$k<2)
                                                 <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                @php($k=$k+1)
                                             @elseif(!empty($errorsTransfer) && $k==2)
                                                 <span class="text-danger">...</span>
+                                                @php($k=$k+1)
                                             @endif
-                                            @php($k=$k+1)
+
 
                                             {{--@foreach($listPalletstransfers as $transfer)--}}
                                             {{--@php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))--}}

@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <input id="name" type="text" class="form-control" name="name"
-                                           value="{{old('name')}}" placeholder="Name" required autofocus>
+                                           @if(isset($name)) value="{{$name}}" @else value="{{old('name')}}" @endif placeholder="Name" required autofocus>
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <input id="nickname" type="text" class="form-control" name="nickname"
-                                           value="{{old('nickname')}}" placeholder="Nickname" autofocus>
+                                           @if(isset($nickname)) value="{{$nickname}}" @else value="{{old('nickname')}}" @endif placeholder="Nickname" autofocus>
                                     @if ($errors->has('nickname'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('nickname') }}</strong>
@@ -91,14 +91,14 @@
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Type" name="type" id="type" onchange="displayFields(this);"
                                             required>
-                                        @if(Illuminate\Support\Facades\Input::old('type'))
-                                            <option @if(old('type') == 'Carrier') selected @endif value="Carrier"
+                                        @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
+                                            <option @if(old('type') == 'Carrier' || $type=='Carrier') selected @endif value="Carrier"
                                                     id="carrierOption">Carrier
                                             </option>
-                                            <option @if(old('type') == 'Network') selected @endif value="Network"
+                                            <option @if(old('type') == 'Network' || $type=='Network') selected @endif value="Network"
                                                     id="networkOption">Network
                                             </option>
-                                            <option @if(old('type') == 'Other') selected @endif value="Other"
+                                            <option @if(old('type') == 'Other' || $type=='Other') selected @endif value="Other"
                                                     id="otherOption">Other
                                             </option>
                                         @else
@@ -172,7 +172,8 @@
                                 </div>
                             </div>
 
-                            <div id="trucksAssociated">
+                            <div id="trucksAssociated" @if(isset($type) && $type=='Carrier') style="display:block;" @endif>
+                                <input type="hidden" @if(isset($atrnr)) value="{{$atrnr}}" @endif name="atrnr">
                                 <div class="form-group">
                                     <!--adress-->
                                     <div class="col-lg-3">
@@ -180,7 +181,7 @@
                                     </div>
                                     <div class="col-lg-7">
                                         <input id="adress" type="text" class="form-control" name="adress"
-                                               value="{{old('adress')}}" placeholder="Adress" autofocus/>
+                                               @if(isset($adress)) value="{{$adress}}" @else value="{{old('adress')}}" @endif placeholder="Adress" autofocus/>
                                         @if ($errors->has('adress'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('adress') }}</strong>

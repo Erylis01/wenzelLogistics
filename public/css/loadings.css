@@ -172,6 +172,13 @@
     font-style: italic;
 }
 
+.requiredField{
+    border-color:black ;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+}
+
 /* table recap accounts */
 .text-inf0{
     color:rgba(255,0,0,0.8);
@@ -183,9 +190,34 @@
     color: rgba(0, 160, 0, 0.8);
 }
 
-.requiredField{
-    border-color:black ;
+.table-accounts > table > thead > tr > th{
+border-width:3px;
     border-style: solid;
-    border-width: 1px;
-    background-color: white;
+    border-color: #dddddd;
+}
+
+.table-accounts > table > tbody > tr > td {
+    font-size : 16px;
+    min-width:30px;
+    width:30px;
+}
+
+.table-accounts > table{
+    border-width:3px;
+    border : solid #dddddd;
+}
+
+.table-accountsColBegin{
+    border-left-width:3px;
+    border-left-style: solid;
+    border-left-color: #dddddd;
+    border-right-width:1px;
+    border-right-style: solid;
+    border-right-color: #dddddd;
+}
+
+.table-accountsColEnd{
+    border-right-width:3px;
+    border-right-style: solid;
+    border-right-color: #dddddd;
 }

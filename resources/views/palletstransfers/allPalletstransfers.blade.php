@@ -203,10 +203,11 @@
                                                 @foreach($errorsTransfer as $errorTrans)
                                                     @if(!empty($errorTrans)&& $k<2)
                                                         <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>
+                                                        @php($k=$k+1)
                                                     @elseif(!empty($errorTrans)&& $k==2)
                                                         <span class="text-danger">...</span>
+                                                        @php($k=$k+1)
                                                     @endif
-                                                    @php($k=$k+1)
                                                     @endforeach
                                             @endif
                                         </td>

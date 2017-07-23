@@ -551,10 +551,11 @@
                                                             <span class="glyphicon glyphicon-warning-sign text-danger"
                                                                   data-toggle="tooltip"
                                                                   title="{{$errorT->name}}"></span>
+                                                            @php($k=$k+1)
                                                         @elseif(!empty($errorT)&& $k==2)
                                                             <span class="text-danger">...</span>
+                                                            @php($k=$k+1)
                                                         @endif
-                                                        @php($k=$k+1)
                                                     @endforeach
                                                 @endforeach
                                             </td>

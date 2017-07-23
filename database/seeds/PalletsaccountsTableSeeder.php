@@ -17,146 +17,153 @@ class PalletsaccountsTableSeeder extends Seeder
         Palletsaccount::firstOrCreate(array(
             'id' => 1,
             'name' => 'WENZEL',
-//            'nickname'=>'WENZEL',
+            'nickname'=>'WENZEL',
             'type' => 'Other',
         ));
         Palletsaccount::firstOrCreate(array(
             'id' => 2,
             'name' => 'LOADING',
-//            'nickname' => 'LOADING',
+            'nickname' => 'LOADING',
             'type' => 'Other',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 3,
             'name' => 'UNLOADING',
-//            'nickname' => 'UNLOADING',
+            'nickname' => 'UNLOADING',
             'type' => 'Other',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 4,
             'name' => 'ALDI DAG',
-//            'nickname' => 'ALDI DAG',
+            'nickname' => 'ALDI DAG',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 5,
             'name' => 'ALDI DOM',
-//            'nickname' => 'ALDI DOM',
+            'nickname' => 'ALDI DOM',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 6,
             'name' => 'ALDI SWB',
-//            'nickname' => 'ALDI SWB',
+            'nickname' => 'ALDI SWB',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 7,
             'name' => 'Arinthod',
-//            'nickname' => 'Arinthod',
+            'nickname' => 'Arinthod',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 8,
             'name' => 'Benoit & Valerie',
-//            'nickname' => 'Benoit & Valerie',
+            'nickname' => 'Benoit & Valerie',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 9,
             'name' => 'Bonduelle F80',
-//            'nickname' => 'Bonduelle F80',
+            'nickname' => 'Bonduelle F80',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 10,
             'name' => 'Dachser F51',
-//            'nickname' => 'Dachser F51',
+            'nickname' => 'Dachser F51',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 11,
             'name' => 'DPL',
-//            'nickname' => 'DPL',
+            'nickname' => 'DPL',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 12,
             'name' => 'ECL Wolfurt',
-//            'nickname' => 'ECL Wolfurt',
+            'nickname' => 'ECL Wolfurt',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 13,
-            'name' => 'Impex-EUX',
-//            'nickame' => 'Impex-EUX',
+            'name' => 'HOFER Trumau',
+            'nickname' => 'HOFER Trumau',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 14,
-            'name' => 'Impex-EUY',
-//            'nickname' => 'Impex-EUY',
+            'name' => 'Impex-EUX',
+            'nickname' => 'Impex-EUX',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 15,
-            'name' => 'PFM - FR',
-//            'nickname' => 'PFM - FR',
+            'name' => 'Impex-EUY',
+            'nickname' => 'Impex-EUY',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 16,
-            'name' => 'Schefknecht',
-//            'nickname' => 'Schefknecht',
+            'name' => 'PFM - FR',
+            'nickname' => 'PFM - FR',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 17,
-            'name' => 'SPAR Wels',
-//            'nickname' => 'SPAR Wels',
+            'name' => 'Schefknecht',
+            'nickname' => 'Schefknecht',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 18,
-            'name' => 'Systempo AT',
-//            'nickname' => 'Systempo AT',
+            'name' => 'SPAR Wels',
+            'nickname' => 'SPAR Wels',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 19,
-            'name' => 'Team Tex',
-//            'nickname' => 'Team Tex',
+            'name' => 'Systempo AT',
+            'nickname' => 'Systempo AT',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 20,
-            'name' => 'TO-MA',
-//            'nickname' => 'TO-MA',
+            'name' => 'Team Tex',
+            'nickname' => 'Team Tex',
             'type' => 'Network',
         ));
 
         Palletsaccount::firstOrCreate(array(
             'id' => 21,
+            'name' => 'TO-MA',
+            'nickname' => 'TO-MA',
+            'type' => 'Network',
+        ));
+
+        Palletsaccount::firstOrCreate(array(
+            'id' => 22,
             'name' => 'Wildenhofer Salzburg',
-//            'nickname' => 'Wildenhofer Salzburg',
+            'nickname' => 'Wildenhofer Salzburg',
             'type' => 'Network',
         ));
 

@@ -155,17 +155,20 @@ class PalletsaccountsController extends Controller
         $phone = Input::get('phone');
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
+        $atrnr=Input::get('atrnr');
 
         //validation
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
-//            'nickname', 'string|max:15|unique:palletsaccounts',
         );
         if (isset($email)) {
             $rules = array_add($rules, 'email', 'string|email');
         }
         if (isset($phone)) {
             $rules = array_add($rules, 'phone', 'string|max:15');
+        }
+        if(isset($nickname)){
+            $rules = array_add($rules,'nickname', 'string|max:15|unique:palletsaccounts');
         }
 
         $validator = Validator::make(Input::all(), $rules);
@@ -188,6 +191,8 @@ class PalletsaccountsController extends Controller
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
                 );
+                Truck::create(['name' => $name, 'nickname' => $nickname, 'licensePlate' => 'STOCK', 'palletsaccount_name' =>$name]);
+                Truck::create(['name' => $name, 'nickname' => $nickname, 'licensePlate' => 'OTHER', 'palletsaccount_name' =>$name]);
             } elseif ($type == 'Other') {
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
@@ -198,6 +203,10 @@ class PalletsaccountsController extends Controller
             if ($originalPage == 'allPalletsaccounts-all') {
                 return redirect('/allPalletsaccounts/all');
             } elseif (explode('-', $originalPage)[0] == 'detailsLoading') {
+                if(isset($atrnr)){
+                    Loading::where('atrnr', $atrnr)->update(['subfrachter'=>$name . ', ' . $adress]);
+                }
+                session()->flash('openPanelInformation', 'openPanelInformation');
                 return redirect('/detailsLoading/' . explode('-', $originalPage)[1]);
             } elseif ($originalPage == 'addWarehouse') {
                 return redirect('/addWarehouse');

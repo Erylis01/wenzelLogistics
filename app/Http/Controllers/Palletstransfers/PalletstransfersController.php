@@ -1023,7 +1023,6 @@ class PalletstransfersController extends Controller
 
         if (isset($loading_atrnr)) {
             $this->state(Loading::where('atrnr', $loading_atrnr)->where('pt', 'JA')->first(), Palletstransfer::where('loading_atrnr', $loading_atrnr)->get());
-            session()->flash('openPanelPallets', 'openPanelPallets');
             return redirect('/detailsLoading/' . $loading_atrnr);
 
         } else {
