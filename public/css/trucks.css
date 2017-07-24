@@ -6,10 +6,26 @@
 
 /*TABLE*/
 
-.colID{
-    min-width:65px;
-    width:65px;
-    max-width:65px;
+.text-inf0{
+    color:rgba(255,0,0,0.8);
+}
+.text-egal0{
+    color:rgba(255, 112, 0, 0.8);
+}
+.text-sup0{
+    color: rgba(0, 160, 0, 0.8);
+}
+
+/*.colID{*/
+    /*min-width:65px;*/
+    /*width:65px;*/
+    /*max-width:65px;*/
+/*}*/
+
+.col1{
+    width:25px;
+    min-width:25px;
+    max-width:25px;
 }
 
 .colName{
@@ -29,6 +45,13 @@
     width:100px;
     max-width:100px;
 }
+
+.colNumber2{
+    min-width:70px;
+    width:70px;
+    max-width:70px;
+}
+
 .colDate{
     max-width: 90px;
     min-width:90px;
@@ -50,6 +73,12 @@
 /*DETAILS TRUCK*/
 .addTransfer{
     margin-top:5px;
+}
+
+btn-eye{
+    color:rgba(0, 160, 0, 0.8);
+    background-color: white;
+    font-size: 20px;
 }
 
 .table-truck{

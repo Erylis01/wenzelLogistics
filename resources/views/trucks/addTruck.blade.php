@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="active"
+    active
 @endsection
 @section('classPalletsAccounts')
     nonActive
@@ -144,28 +144,10 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-lg-2 col-lg-offset-1">
-                                    <label for="activate" class="control-label">Activated ? </label>
-                                </div>
-                                <div class="col-lg-2 text-left">
-                                    @if(isset($activate))
-                                        @if($activate==1)
-                                            <label class="radio-inline"><input type="radio" name="activate" value="true" checked id="activateYes"/>Yes</label>
-                                            <label class="radio-inline"><input type="radio" name="activate" value="false" id="activateNo"/>No</label>
-                                        @elseif($activate==0)
-                                            <label class="radio-inline"><input type="radio" name="activate" value="true" id="activateYes"/>Yes</label>
-                                            <label class="radio-inline"><input type="radio" name="activate" value="false" checked id="activateNo"/>No</label>
-                                        @endif
-                                    @else
-                                        <label class="radio-inline"><input type="radio" name="activate" value="true" checked id="activateYes">Yes</label>
-                                        <label class="radio-inline"><input type="radio" name="activate" value="false"  id="activateNo"/>No</label>
-                                    @endif
+                                <div class="col-lg-2 col-lg-offset-1 checkbox">
+                                    <label><input type="checkbox" name="activate" value="activate" @if((isset($activate) && $activate==1) || !(isset($activate))) checked @endif/>Activate</label>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <div class="col-lg-8 col-lg-offset-3">
                                     <button type="submit" class="btn btn-primary btn-block btn-form" name="addTruck"

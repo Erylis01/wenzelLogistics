@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="active"
+    active
 @endsection
 @section('classPalletsAccounts')
     nonActive
@@ -41,12 +41,17 @@
 
                 <div class="panel panel-general">
                     <div class="panel-heading">
-                        <div class="col-lg-11 text-left">Details of the truck : {{$truck->id}} - {{ $truck->name }}
+                        <div class="col-lg-11 text-left">Details of the truck : {{ $truck->name }} - {{$truck->licensePlate}}
                         </div>
                         <div>
-                            <button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-remove"
-                                    data-toggle="modal" data-target="#deleteTruck_modal" value="{{$truck->id}}"
-                                    name="deleteTruck_modal"></button>
+                            @if($truck->activated==1)
+                                <span name="desactivateEye" class="glyphicon glyphicon-eye-open"></span>
+                            @elseif($truck->activated==0)
+                                <span name="activateEye" class="glyphicon glyphicon-eye-close"></span>
+                            @endif
+                            {{--<button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-remove"--}}
+                                    {{--data-toggle="modal" data-target="#deleteTruck_modal" value="{{$truck->id}}"--}}
+                                    {{--name="deleteTruck_modal"></button>--}}
                         </div>
                     </div>
                     <div class="panel-body panel-body-general">
@@ -67,16 +72,11 @@
                             <div class="form-group">
                                 <!--name-->
                                 <div class="col-lg-2">
-                                    <label for="name" class="control-label">*Name :</label>
+                                    <label for="nickname" class="control-label">*Nickname :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="name" type="text" class="form-control" name="name"
-                                           value="{{ $truck->name }}" placeholder="Name" required autofocus>
-                                    @if ($errors->has('name'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                    @endif
+                                    <input id="nickname" type="text" class="form-control" name="nickname"
+                                           value="{{ $truck->nickname }}" placeholder="Nickname" required autofocus>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -84,13 +84,17 @@
                                 <div class="col-lg-2">
                                     <label for="licensePlate" class="control-label">License Plate :</label>
                                 </div>
-                                <div class="col-lg-8">
+                                <div class="col-lg-4">
                                     <input id="licensePlate" type="text" class="form-control" name="licensePlate"
                                            value="{{$truck->licensePlate}}" placeholder="License Plate" autofocus>
-                                    @if ($errors->has('licensePlate'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('licensePlate') }}</strong>
-                                    </span>
+                                </div>
+                                <div class="col-lg-2 text-center checkbox">
+                                    <label><input type="checkbox" name="activate" value="activate" @if($truck->activated==1) checked @endif/>Activate</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    @php($exchange=\App\Palletsaccount::where('name', $truck->palletsaccount_name)->first()->notExchange)
+                                    @if($exchange==1)
+                                        <p>Agreed w/o exchange</p>
                                     @endif
                                 </div>
                             </div>
@@ -99,7 +103,7 @@
                                 <div class="col-lg-2">
                                     <label for="palletsaccount_name" class="control-label">*Pallets Account :</label>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-7">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
@@ -114,7 +118,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-lg-2 text-left">
+                                <div class="col-lg-1 text-left">
                                     <a class="link"
                                        href="{{route('showDetailsPalletsaccount',$palletsaccount->id)}}">
                                         <span class="glyphicon glyphicon-user"> </span>
@@ -122,11 +126,10 @@
                                         <span class="glyphicon glyphicon-phone"> </span>
                                     </a>
                                 </div>
-
-                                <div class="col-lg-2 text-left">
+                                <div class="col-lg-2 text-right">
                                     <a href="{{route('showAddPalletsaccount', ['originalPage'=>'detailsTruck-'.$truck->id])}}"
                                        class="link">
-                                        <span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Account</a>
                                 </div>
                             </div>
 
@@ -139,6 +142,7 @@
                                             </th>
                                             <th class="text-center">Planned<br> pallets nbr</th>
                                             <th class="text-center">Rest<br> to confirm</th>
+                                            <th class="text-center">Debt<br></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -148,6 +152,7 @@
                                             <td class="text-center ">
                                                 <strong>{{$truck->theoricalNumberPallets-$truck->realNumberPallets}}</strong>
                                             </td>
+                                            <td class="text-center"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -162,28 +167,27 @@
                                 </div>
                             </div>
                         </form>
+                        <br>
                         <div class="form-group">
                             <div class="col-lg-2 addTransfer">
                                 <a href="{{route('showAddPalletstransfer')}}" class="link">
                                     <span class="glyphicon glyphicon-plus-sign"></span>
-                                    Add transfer</a>
+                                    Transfer</a>
                             </div>
                             <!-- search bar-->
-                            <form role="form" method="GET"
+                            <form class="form-horizontal" role="form" method="GET"
                                   action="{{route('showDetailsTruck', $truck->id)}}">
                                 {{ csrf_field() }}
-                                <div class="input-group col-lg-offset-3 col-lg-7">
-                            <span class="input-group-btn searchInput">
-                                <input type="text" class="form-control searchBar" name="search"
-                                       @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
-                                       @endif placeholder="search"/>
-                            </span>
-                                    <span class="input-group-btn">
-                                    <select class="selectpicker show-tick form-control searchSelect searchBar"
-                                            data-size="5"
+                                <div class="form-group col-lg-5">
+                                    <input type="text" class="form-control" name="search"
+                                           @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
+                                           @endif placeholder="search"/>
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
-                                      @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                        @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
                                             <option>ALL</option>
@@ -214,12 +218,11 @@
                                                 <option>{{$column}}</option>
                                             @endif
                                         @endforeach
-                                        </select>
-                                     </span>
-                                    <span class="input-group-btn">
-                                <button class="btn glyphicon glyphicon-search searchBar" type="submit"
-                                        name="searchSubmit"></button>
-                            </span>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-1">
+                                    <button class="btn" type="submit" name="searchSubmit"><span
+                                                class="glyphicon glyphicon-search"></span></button>
                                 </div>
                             </form>
                             <br>
@@ -309,17 +312,6 @@
                                                 <span class="text-danger">...</span>
                                                 @php($k=$k+1)
                                             @endif
-
-
-                                            {{--@foreach($listPalletstransfers as $transfer)--}}
-                                            {{--@php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))--}}
-                                            {{--@if(!empty($errorsTransfer)&& $k<2)--}}
-                                            {{--<span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip" title="{{$errorTrans->name}}"></span>--}}
-                                            {{--@elseif(!empty($errorsTransfer)&& $k==2)--}}
-                                            {{--<span class="text-danger">...</span>--}}
-                                            {{--@endif--}}
-                                            {{--@php($k=$k+1)--}}
-                                            {{--@endforeach--}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -329,40 +321,40 @@
 
 
                         <!-- Modal Delete -->
-                        <div class="modal fade" id="deleteTruck_modal" role="dialog">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title text-center">Are you sure to delete this truck ?</h4>
-                                    </div>
-                                    <div class="modal-body center">
-                                        <form method="post" action="{{route('deleteTruck',$truck->id)}}"
-                                              id="formDeleteTruck">
-                                            <input type="hidden" name="_method" value="delete">
-                                            {{ csrf_field() }}
-                                            <input type="hidden" name="actionDeleteForm" id="actionDeleteForm"/>
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-danger btn-modal"
-                                                        value="deleteTruck" name="deleteTruck" id="deleteTruck"
-                                                        onclick="formDeleteSubmitBlock(this);">
-                                                    Yes
-                                                </button>
-                                                <button type="button" class="btn btn-success btn-modal"
-                                                        data-dismiss="modal">
-                                                    No
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">
-                                            Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {{--<div class="modal fade" id="deleteTruck_modal" role="dialog">--}}
+                            {{--<div class="modal-dialog modal-sm">--}}
+                                {{--<div class="modal-content">--}}
+                                    {{--<div class="modal-header">--}}
+                                        {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+                                        {{--<h4 class="modal-title text-center">Are you sure to delete this truck ?</h4>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="modal-body center">--}}
+                                        {{--<form method="post" action="{{route('deleteTruck',$truck->id)}}"--}}
+                                              {{--id="formDeleteTruck">--}}
+                                            {{--<input type="hidden" name="_method" value="delete">--}}
+                                            {{--{{ csrf_field() }}--}}
+                                            {{--<input type="hidden" name="actionDeleteForm" id="actionDeleteForm"/>--}}
+                                            {{--<div class="text-center">--}}
+                                                {{--<button type="submit" class="btn btn-danger btn-modal"--}}
+                                                        {{--value="deleteTruck" name="deleteTruck" id="deleteTruck"--}}
+                                                        {{--onclick="formDeleteSubmitBlock(this);">--}}
+                                                    {{--Yes--}}
+                                                {{--</button>--}}
+                                                {{--<button type="button" class="btn btn-success btn-modal"--}}
+                                                        {{--data-dismiss="modal">--}}
+                                                    {{--No--}}
+                                                {{--</button>--}}
+                                            {{--</div>--}}
+                                        {{--</form>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="modal-footer">--}}
+                                        {{--<button type="button" class="btn btn-default btn-modal" data-dismiss="modal">--}}
+                                            {{--Close--}}
+                                        {{--</button>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
                     </div>
                 </div>

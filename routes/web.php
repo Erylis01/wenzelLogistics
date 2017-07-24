@@ -39,7 +39,7 @@ Route::post('/addWarehouse', 'WarehousesController@add')->name('addWarehouse');
 Route::get('/addWarehouse/{originalPage}', 'WarehousesController@showAdd')->name('showAddWarehouse');
 
 //TRUCKS
-Route::get('/allTrucks/{refresh}', 'TrucksController@showAll')->name('showAllTrucks');
+Route::get('/allTrucks/{refresh}/{nb}', 'TrucksController@showAll')->name('showAllTrucks');
 Route::get('/detailsTruck/{id}', 'TrucksController@showDetails')->name('showDetailsTruck');
 Route::post('/detailsTruck/{id}', 'TrucksController@update')->name('updateTruck');
 Route::delete('/detailsTruck/{id}', 'TrucksController@delete')->name('deleteTruck');

@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsAccounts')
     active
@@ -352,22 +352,21 @@
 
                         <!--search bar-->
                         <br>
-                        <div class="row">
-                            <form role="form" method="GET"
-                                  action="{{route('showDetailsPalletsaccount', $account->id)}}">
-                                {{ csrf_field() }}
-                                <div class="input-group col-lg-offset-3 col-lg-7">
-                            <span class="input-group-btn searchInput">
-                                    <input type="text" class="form-control searchBar" name="search"
+                        <form class="form-horizontal" role="form" method="GET"
+                              action="{{route('showDetailsPalletsaccount', $account->id)}}">
+                            {{ csrf_field() }}
+                            <div class="col-lg-3">
+                            </div>
+                                <div class="form-group col-lg-5">
+                                    <input type="text" class="form-control" name="search"
                                            @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
-                                           @endif placeholder="search">
-                            </span>
-                                    <span class="input-group-btn">
-                                    <select class="selectpicker show-tick form-control searchSelect searchBar"
-                                            data-size="5"
+                                           @endif placeholder="search"/>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
-                                      @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                        @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
                                             <option>ALL</option>
@@ -398,15 +397,13 @@
                                                 <option>{{$column}}</option>
                                             @endif
                                         @endforeach
-                                        </select>
-                                     </span>
-                                    <span class="input-group-btn">
-                                <button class="btn glyphicon glyphicon-search searchBar" type="submit"
-                                        name="searchSubmit"></button>
-                            </span>
+                                    </select>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="form-group col-lg-1">
+                                    <button class="btn" type="submit" name="searchSubmit"><span
+                                                class="glyphicon glyphicon-search"></span></button>
+                                </div>
+                        </form>
                         <br>
                         <div class=" row">
                             <form class="form-horizontal text-right" role="form" method="POST"

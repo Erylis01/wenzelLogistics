@@ -54,14 +54,18 @@
                 <div class="col-lg-2 text-center navbar-warehouse navbar-title-link">
                     <a @yield('classWarehouses') href="{{ route('showAllWarehouses', 'false') }}">Warehouses</a>
                 </div>
-                <div class="col-lg-2 text-center navbar-truck navbar-title-link">
-                    <a @yield('classTrucks') href="{{ route('showAllTrucks', ['refresh'=>'false']) }}">Trucks</a>
+                <div class="col-lg-2 text-center navbar-truck  navbar-title-link dropdown">
+                    <a class="dropdown-toggle @yield('classTrucks')" data-toggle="dropdown">Trucks <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('showAllTrucks', ['refresh'=>'false','nb'=>'all']) }}">All</a></li>
+                        <li><a  href="{{ route('showAllTrucks', ['refresh'=>'false', 'nb'=>'debt only']) }}">Debt only</a></li>
+                    </ul>
                 </div>
                 <div class="col-lg-2 text-center navbar-accounts navbar-title-link dropdown">
                     <a class="dropdown-toggle @yield('classPalletsAccounts')" data-toggle="dropdown">Pallets Accounts <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('showAllPalletsaccounts', ['nb'=>'all']) }}">All</a></li>
-                        <li><a  href="{{ route('showAllPalletsaccounts', ['nb'=>'part']) }}">Part</a></li>
+                        <li><a  href="{{ route('showAllPalletsaccounts', ['nb'=>'debt only']) }}">Debt only</a></li>
                     </ul>
                 </div>
 

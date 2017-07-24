@@ -37,7 +37,7 @@ class PalletsaccountsController extends Controller
 
             if ($nb == 'all') {
                 $query = DB::table('palletsaccounts');
-            } elseif ($nb == 'part') {
+            } elseif ($nb == 'debt only') {
                 $query = DB::table('palletsaccounts')->where(function ($q) {
                     $q->where('realNumberPallets', '<>', 0)->orWhere('theoricalNumberPallets', '<>', 0);
                 });

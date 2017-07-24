@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsAccounts')
     nonActive
@@ -36,68 +36,61 @@
             <div class="col-lg-14">
                 <div class="panel panel-general panel-warehouses">
                     <div class="panel-heading">
-                        <div class="col-lg-6">List of all loadings
-                        </div>
-                        <form role="form" method="GET" action="{{route('showAllLoadings', ['refresh'=>'false'])}}">
+                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllLoadings', ['refresh'=>'false'])}}">
                             {{ csrf_field() }}
-
-                            <div class="col-lg-5 input-group searchBar">
-                                <span class="input-group-btn searchInput">
-                                @if(isset($searchQuery))
-                                        <input type="text" class="form-control" name="search" value="{{$searchQuery}}"
-                                               placeholder="search">
+                        <div class="col-lg-4">List of all loadings
+                        </div>
+                            <div class="form-group col-lg-4">
+                                <input type="text" class="form-control" name="search"
+                                       @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
+                                       @endif placeholder="search"/>
+                            </div>
+                            <div class="form-group col-lg-2">
+                                <select class="selectpicker show-tick form-control searchSelect" data-size="5"
+                                        data-live-search="true" data-live-search-style="startsWith"
+                                        title="columns" name="searchColumns[]" multiple required>
+                                    @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                        <option selected>ALL</option>
                                     @else
-                                        <input type="text" class="form-control" name="search" value=""
-                                               placeholder="search">
+                                        <option>ALL</option>
                                     @endif
-                                </span>
-                                <span class="input-group-btn">
-                                    <select class="selectpicker show-tick form-control searchSelect" data-size="5"
-                                            data-live-search="true" data-live-search-style="startsWith"
-                                            title="columns" name="searchColumns[]" multiple required>
-                                        @if(!isset($searchQuery) || (isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
-                                            <option selected>ALL</option>
-                                        @else
-                                            <option>ALL</option>
-                                        @endif
-                                        @foreach($listColumns as $column)
-                                            @php($list[]=null)
-                                            @if(isset($searchColumns))
-                                                @foreach($searchColumns as $searchC)
-                                                    @if($column==$searchC)
-                                                        <option selected>{{$column}}</option>
-                                                        @php($list[]=$column)
-                                                    @endif
-                                                @endforeach
-                                                @if(!in_array($column, $list))
-                                                    <option>{{$column}}</option>
+                                    @foreach($listColumns as $column)
+                                        @php($list[]=null)
+                                        @if(isset($searchColumns))
+                                            @foreach($searchColumns as $searchC)
+                                                @if($column==$searchC)
+                                                    <option selected>{{$column}}</option>
+                                                    @php($list[]=$column)
                                                 @endif
-                                            @elseif(Illuminate\Support\Facades\Input::old('searchColumns'))
-                                                @foreach(old('searchColumns') as $searchC)
-                                                    @if($column==$searchC)
-                                                        <option selected>{{$column}}</option>
-                                                        @php($list[]=$column)
-                                                    @endif
-                                                @endforeach
-                                                @if(!in_array($column, $list))
-                                                    <option>{{$column}}</option>
-                                                @endif
-                                            @else
+                                            @endforeach
+                                            @if(!in_array($column, $list))
                                                 <option>{{$column}}</option>
                                             @endif
-                                        @endforeach
-                                    </select>
-                                </span>
-                                <span class="input-group-btn">
-                                <button class="btn glyphicon glyphicon-search" type="submit"
-                                        name="searchSubmit"></button>
-                            </span>
-                                <span class="col-lg-offset-6">
-                                    <a href="{{route('showAllLoadings', ['refresh'=>'true'])}}"
-                                       class="btn btn-add"><span
-                                                class="glyphicon glyphicon-refresh"></span></a>
-                            </span>
+                                        @elseif(Illuminate\Support\Facades\Input::old('searchColumns'))
+                                            @foreach(old('searchColumns') as $searchC)
+                                                @if($column==$searchC)
+                                                    <option selected>{{$column}}</option>
+                                                    @php($list[]=$column)
+                                                @endif
+                                            @endforeach
+                                            @if(!in_array($column, $list))
+                                                <option>{{$column}}</option>
+                                            @endif
+                                        @else
+                                            <option>{{$column}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
+                            <div class="form-group col-lg-2">
+                                <button class="btn" type="submit" name="searchSubmit"><span
+                                            class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                                <div class="form-group">
+                                    <a href="{{route('showAllLoadings', ['refresh'=>'true'])}}"
+                                       class="btn btn-add"><span class="glyphicon glyphicon-refresh"></span></a>
+                            </div>
+
                         </form>
                     </div>
 

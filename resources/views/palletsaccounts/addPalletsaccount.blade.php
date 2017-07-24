@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsAccounts')
     active

@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="active"
+    active
 @endsection
 @section('classPalletsAccounts')
     nonActive
@@ -35,67 +35,70 @@
         @else
             <div class="col-lg-14">
                 <div class="panel panel-general panel-trucks">
-                    <div class="panel-heading">
-                        <div class="col-lg-4">List of all trucks
-                        </div>
-                        <form role="form" method="GET" action="{{route('showAllTrucks', ['refresh'=>'false'])}}">
-                            {{ csrf_field() }}
-                            <div class="col-lg-8 input-group searchBar">
-                            <span class="input-group-btn searchInput">
-                                <input type="text" class="form-control" name="search" @if(isset($searchQuery)) value="{{$searchQuery}}" @else value="" @endif placeholder="search">
-                            </span>
-                                <span class="input-group-btn">
-                                    <select class="selectpicker show-tick form-control searchSelect" data-size="5"
-                                            data-live-search="true" data-live-search-style="startsWith"
-                                            title="columns" name="searchColumns[]" multiple required>
-                                      @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
-                                            <option selected>ALL</option>
-                                        @else
-                                            <option>ALL</option>
-                                        @endif
-                                        @foreach($listColumns as $column)
-                                            @php($list[]=null)
-                                            @if(isset($searchColumns))
-                                                @foreach($searchColumns as $searchC)
-                                                    @if($column==$searchC)
-                                                        <option selected>{{$column}}</option>
-                                                        @php($list[]=$column)
-                                                    @endif
-                                                @endforeach
-                                                @if(!in_array($column, $list))
-                                                    <option>{{$column}}</option>
+                        <div class="panel-heading">
+                            <form class="form-horizontal" role="form" method="GET"
+                                  action="{{route('showAllTrucks', ['refresh'=>$refresh, 'nb'=>$nb])}}">
+                                {{ csrf_field() }}
+                            <div class="col-lg-4">List of @if($nb=='all')all trucks @elseif($nb=='debt only') trucks - debt only @endif</div>
+                            <div class="form-group col-lg-4">
+                                <input type="text" class="form-control" name="search"
+                                       @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
+                                       @endif placeholder="search"/>
+                            </div>
+                            <div class="form-group col-lg-2">
+                                <select class="selectpicker show-tick form-control searchSelect" data-size="5"
+                                        data-live-search="true" data-live-search-style="startsWith"
+                                        title="columns" name="searchColumns[]" multiple required>
+                                    @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                        <option selected>ALL</option>
+                                    @else
+                                        <option>ALL</option>
+                                    @endif
+                                    @foreach($listColumns as $column)
+                                        @php($list[]=null)
+                                        @if(isset($searchColumns))
+                                            @foreach($searchColumns as $searchC)
+                                                @if($column==$searchC)
+                                                    <option selected>{{$column}}</option>
+                                                    @php($list[]=$column)
                                                 @endif
-                                            @elseif(Illuminate\Support\Facades\Input::old('searchColumns'))
-                                                @foreach(old('searchColumns') as $searchC)
-                                                    @if($column==$searchC)
-                                                        <option selected>{{$column}}</option>
-                                                        @php($list[]=$column)
-                                                    @endif
-                                                @endforeach
-                                                @if(!in_array($column, $list))
-                                                    <option>{{$column}}</option>
-                                                @endif
-                                            @else
+                                            @endforeach
+                                            @if(!in_array($column, $list))
                                                 <option>{{$column}}</option>
                                             @endif
-                                        @endforeach
-                                        </select>
-                                     </span>
-                                <span class="input-group-btn">
-                                <button class="btn glyphicon glyphicon-search" type="submit"
-                                        name="searchSubmit"></button>
-                            </span>
-                                <span class="col-lg-offset-4">
-                                    <a href="{{route('showAllTrucks', ['refresh'=>'true'])}}" class="btn btn-add"><span
-                                                class="glyphicon glyphicon-refresh"></span></a>
-                            </span>
-                                <span class="col-lg-offset-1">
-                                <a href="{{route('showAddTruck', ['originalPage'=>'allTrucks'])}}" class="btn btn-add"><span
-                                            class="glyphicon glyphicon-plus-sign"></span> Truck</a>
-                            </span>
+                                        @elseif(Illuminate\Support\Facades\Input::old('searchColumns'))
+                                            @foreach(old('searchColumns') as $searchC)
+                                                @if($column==$searchC)
+                                                    <option selected>{{$column}}</option>
+                                                    @php($list[]=$column)
+                                                @endif
+                                            @endforeach
+                                            @if(!in_array($column, $list))
+                                                <option>{{$column}}</option>
+                                            @endif
+                                        @else
+                                            <option>{{$column}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
-                        </form>
-                    </div>
+                            <div class="form-group col-lg-1">
+                                <button class="btn" type="submit" name="searchSubmit"><span
+                                            class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                            <div class="form-group col-lg-1">
+                                <a href="{{route('showAllTrucks', ['refresh'=>'true', 'nb'=>$nb])}}"
+                                   class="btn btn-add"><span
+                                            class="glyphicon glyphicon-refresh"></span></a>
+                            </div>
+                            <div class="form-group">
+                                <a href="{{route('showAddTruck', ['originalPage'=>'allTrucks'])}}"
+                                   class="btn btn-add"><span
+                                            class="glyphicon glyphicon-plus-sign"></span> Truck</a>
+                            </div>
+                            </form>
+                        </div>
+
                     <div class="panel-body panel-body-general">
                         @if(Session::has('messageDeleteTruck'))
                             <p class="alert alert-success text-alert text-center">{{ Session::get('messageDeleteTruck') }}</p>
@@ -108,73 +111,92 @@
                             <table class="table table-hover table-bordered table-trucks">
                                 <thead>
                                 <tr>
-                                    <th class="text-center colID">ID<br>
-                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"
-                                                @endif></a>
-                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"
-                                                @endif></a>
-                                    </th>
+                                    {{--<th class="text-center colID">ID<br>--}}
+                                    {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                    {{--@if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"--}}
+                                    {{--@else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=id&order=asc')}}"--}}
+                                    {{--@endif></a>--}}
+                                    {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                    {{--@if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"--}}
+                                    {{--@else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=id&order=desc')}}"--}}
+                                    {{--@endif></a>--}}
+                                    {{--</th>--}}
+                                    <th class="col1"></th>
                                     <th class="text-center colName">Name<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"
                                                 @endif></a>
                                         <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=name&order=desc')}}"
                                                 @endif></a>
                                     </th>
                                     <th class="text-center colLicense">License Plate<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=asc')}}"
                                                 @endif></a>
                                         <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=licensePlate&order=desc')}}"
                                                 @endif></a>
                                     </th>
                                     <th class="text-center colNumber">Confirmed<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=asc')}}"
                                                 @endif></a>
                                         <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=realNumberPallets&order=desc')}}"
                                                 @endif></a>
                                     </th>
                                     <th class="text-center colNumber">Planned<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
                                                 @endif></a>
                                         <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
-                                           @else href="{{url('/allTrucks/'.$refresh.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="text-center colNumber">Rest<br><br></th>
+                                    <th class="text-center colNumber2">Rest<br><br></th>
+                                    <th class="text-center colNumber2">Debt<br><br></th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listTrucks as $trucks)
                                     <tr class="text-center">
-                                        <td class="colID"><a class="link"
-                                                             href="{{route('showDetailsTruck',$trucks->id)}}">{{$trucks->id}}</a>
+                                        {{--<td class="colID"><a class="link"--}}
+                                        {{--href="{{route('showDetailsTruck',$trucks->id)}}">{{$trucks->id}}</a>--}}
+                                        {{--</td>--}}
+                                        <td class="text-center col1"><a class="link"
+                                                                        href="{{route('showDetailsTruck',$trucks->id)}}">
+                                                <span @if($trucks->activated == 1) class="glyphicon glyphicon-eye-open"
+                                                      @else class="glyphicon glyphicon-eye-close" @endif></span></a>
                                         </td>
                                         <td class="colName"><a class="link"
                                                                href="{{route('showDetailsPalletsaccount',\App\Palletsaccount::where('name',$trucks->palletsaccount_name)->first()->id)}}">{{$trucks->name}}</a>
                                         </td>
                                         <td class="colLicense">{{$trucks->licensePlate}}</td>
-                                        <td class="colNumber">{{$trucks->realNumberPallets}}</td>
-                                        <td class="colNumber">{{$trucks->theoricalNumberPallets}}</td>
-                                        <td class="colNumber">{{$trucks->theoricalNumberPallets - $trucks->realNumberPallets}}</td>
+                                        <td class="colNumber"><span @if($trucks->realNumberPallets<0) class="text-inf0"
+                                                                    @elseif($trucks->realNumberPallets>0) class="text-sup0"
+                                                                    @else class="text-egal0" @endif>{{$trucks->realNumberPallets}}</span>
+                                        </td>
+                                        <td class="colNumber"><span
+                                                    @if($trucks->theoricalNumberPallets<0) class="text-inf0"
+                                                    @elseif($trucks->theoricalNumberPallets>0) class="text-sup0"
+                                                    @else class="text-egal0" @endif>{{$trucks->theoricalNumberPallets}}</span>
+                                        </td>
+                                        <td class="colNumber2">{{$trucks->theoricalNumberPallets - $trucks->realNumberPallets}}</td>
+                                        @php($debt=\App\Palletstransfer::where('creditAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber') - \App\Palletstransfer::where('debitAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber'))
+                                        <td class="colNumber2"><span @if($debt<0) class="text-inf0"
+                                                                     @elseif($debt>0) class="text-sup0"
+                                                                     @else class="text-egal0" @endif>{{$debt}}</span>
+                                        </td>
                                         <td class="colDanger">
                                             @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->orWhere('debitAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->get())
                                             @php($k=0)

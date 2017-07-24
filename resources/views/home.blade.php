@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsAccounts')
     nonActive
@@ -64,7 +64,7 @@
                     </a>
 
                     <!-- All trucks -->
-                    <a href="{{ route('showAllTrucks', ['refresh'=>'false']) }}">
+                    <a href="{{ route('showAllTrucks', ['refresh'=>'false', 'nb'=>'all']) }}">
                         <div class="col-lg-2 text-center home">
                             <div class="service-box">
                                 <h3 class="menu-title">Trucks</h3>

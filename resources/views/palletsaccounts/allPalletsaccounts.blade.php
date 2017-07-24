@@ -15,7 +15,7 @@
     class="nonActive"
 @endsection
 @section('classTrucks')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classPalletsAccounts')
     active
@@ -36,22 +36,23 @@
             <div class="col-lg-14">
                 <div class="panel panel-general">
                     <div class="panel-heading">
-                        <div class="col-lg-4">Total of pallets by account </div>
-                        <form role="form" method="GET" action="{{route('showAllPalletsaccounts', ['nb'=> $nb])}}">
+                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllPalletsaccounts', ['nb'=> $nb])}}">
                             {{ csrf_field() }}
-                            <div class="col-lg-8 input-group searchBar">
-                                <p ><a href="{{route('showAllPalletstransfers')}}"
-                                                       class="link">TOTAL : {{$totalpallets}}</a>
-                            </p>
-                            <span class="input-group-btn searchInput">
-                                    <input type="text" class="form-control" name="search" @if(isset($searchQuery)) value="{{$searchQuery}}" @else value="" @endif
-                                    placeholder="search"/>
-                            </span>
-                                <span class="input-group-btn">
+                        <div class="col-lg-4">List of pallets account - @if($nb=='all') all @elseif($nb=='debt only') debt only @endif</div>
+                            <div class="col-lg-1">
+                             <a href="{{route('showAllPalletstransfers')}}"
+                                        class="link total">{{$totalpallets}} pal</a>
+                            </div>
+                                <div class="form-group col-lg-3">
+                                    <input type="text" class="form-control" name="search"
+                                           @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
+                                           @endif placeholder="search"/>
+                                </div>
+                                <div class="form-group col-lg-2">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
-                                      @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
+                                        @if(!isset($searchQuery) ||(isset($searchColumns)&& in_array('ALL',$searchColumns))||(Illuminate\Support\Facades\Input::old('searchColumns') && in_array('ALL', Illuminate\Support\Facades\Input::old('searchColumns'))))
                                             <option selected>ALL</option>
                                         @else
                                             <option>ALL</option>
@@ -82,18 +83,18 @@
                                                 <option>{{$column}}</option>
                                             @endif
                                         @endforeach
-                                        </select>
-                                     </span>
-                                <span class="input-group-btn">
-                                <button class="btn glyphicon glyphicon-search" type="submit"
-                                        name="searchSubmit"></button>
-                            </span>
-                                </span>
-                                <span class="col-lg-offset-3">
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-1">
+                                    <button class="btn" type="submit" name="searchSubmit"><span
+                                                class="glyphicon glyphicon-search"></span></button>
+                                </div>
+
+                                <div class="form-group">
                                 <a href="{{route('showAddPalletsaccount', ['originalPage'=>'allPalletsaccounts-all'])}}" class=" btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Account</a>
-                            </span>
                             </div>
+
                         </form>
                     </div>
                     <div class="panel-body panel-body-general">
