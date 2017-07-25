@@ -113,7 +113,7 @@ class WarehousesController extends Controller
         $zipcodeWarehouses = DB::table('warehouses')->where('zipcode', '=', $zipcode)->get();
         $actionAddForm=$request->actionAddForm;
         $name = Input::get('name');
-        $nickname = $name;
+        $nickname = Input::get('nickname');
         $adress = Input::get('adress');
         $town = Input::get('town');
         $country = Input::get('country');
@@ -125,31 +125,36 @@ class WarehousesController extends Controller
 $originalPage=Input::get('originalPage');
 
         foreach ($namepalletsaccounts as $namePA) {
-            $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
+            $idpalletsaccounts[] = Palletsaccount::where('nickname', $namePA)->value('id');
         }
 
         //validation
         $rules = array(
             'zipcode' => 'required',
             'name' => 'required|string|max:255|unique:warehouses',
-            'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
+            'nickname'=> 'string|max:255|unique:warehouses',
         );
         if (isset($email)) {
             $rules = array_add($rules, 'email', 'string|email');
         }
         if (isset($phone)) {
-            $rules = array_add($rules, 'phone', 'string|max:15');
+            $rules = array_add($rules, 'phone', 'string|max:20');
         }
         if (isset($fax)) {
-            $rules = array_add($rules, 'fax', 'string|max:15');
+            $rules = array_add($rules, 'fax', 'string|max:20');
         }
+
         $validator = Validator::make(Input::all(), $rules);
         //if the rules haven't been respected
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
+                ->withInput();
+        }elseif (Warehouse::where('name', $nickname)->orWhere('nickname', $name)->first() <> null) {
+            session()->flash('messageAddWarehouse', 'Error ! This name or nickname is already used as nickname or name for an other warehouse');
+            return redirect()->back()
                 ->withInput();
         } else {
             //if there is an other warehouse in this city : be careful
@@ -165,12 +170,12 @@ $originalPage=Input::get('originalPage');
                     //if after the warning message you refuse to add this warehouse : redirect with filled field to change them
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
-                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name','nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 } else {
                     //redirect to the add form with a pop up warning about the zipcode
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
-                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name','nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
                 }
             } else {
                 //if no other warehouse in the city
@@ -217,7 +222,7 @@ $originalPage=Input::get('originalPage');
     {
         if (Auth::check()) {
             $warehouse = DB::table('warehouses')->where('id', '=', $id)->first();
-            $listPalletsAccounts = DB::table('palletsaccounts')->orderBy('name', 'asc')->get();
+            $listPalletsAccounts = DB::table('palletsaccounts')->orderBy('nickname', 'asc')->get();
 
             //get warehouse data to display on the view
             $name = $warehouse->name;
@@ -233,7 +238,7 @@ $originalPage=Input::get('originalPage');
 
             $palletsaccounts = DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get();
             foreach ($palletsaccounts as $palletsaccount) {
-                $namepalletsaccounts[] = Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('name');
+                $namepalletsaccounts[] = Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('nickname');
             }
 
             return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
@@ -254,7 +259,7 @@ $originalPage=Input::get('originalPage');
         $actionUpdateForm=$request->actionUpdateForm;
         $namepalletsaccounts = Input::get('namepalletsaccounts');
         foreach ($namepalletsaccounts as $namePA) {
-            $idpalletsaccounts[] = Palletsaccount::where('name', $namePA)->value('id');
+            $idpalletsaccounts[] = Palletsaccount::where('nickname', $namePA)->value('id');
         }
         $nickname = Input::get('nickname');
         $adress = Input::get('adress');
@@ -274,7 +279,6 @@ $originalPage=Input::get('originalPage');
         $rules = array(
             'zipcode' => 'required',
             'nickname' => 'required|string|max:255|unique:warehouses,nickname,' . $id,
-            'adress' => 'required|string|max:255',
             'town' => 'required|string|max:255',
             'country' => 'required|string|max:255',
         );
@@ -282,15 +286,19 @@ $originalPage=Input::get('originalPage');
             $rules = array_add($rules, 'email', 'string|email');
         }
         if (isset($phone)) {
-            $rules = array_add($rules, 'phone', 'string|max:15');
+            $rules = array_add($rules, 'phone', 'string|max:20');
         }
         if (isset($fax)) {
-            $rules = array_add($rules, 'fax', 'string|max:15');
+            $rules = array_add($rules, 'fax', 'string|max:20');
         }
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
+                ->withInput();
+        }elseif (Warehouse::where('name', $nickname)->first() <> null) {
+            session()->flash('messageUpdateWarehouse', 'Error ! This nickname is already used as name for an other warehouse');
+            return redirect()->back()
                 ->withInput();
         } else {
             //same warning as in the add form when there is already an other warehouse in the same city
@@ -361,7 +369,7 @@ $originalPage=Input::get('originalPage');
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
                                 //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
@@ -421,7 +429,7 @@ $originalPage=Input::get('originalPage');
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                 //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
@@ -463,7 +471,7 @@ $originalPage=Input::get('originalPage');
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
                                 //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;
@@ -505,7 +513,7 @@ $originalPage=Input::get('originalPage');
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                 //if the warehouse doesn't exist yet
                                 $k = count(Warehouse::get()) + 1;

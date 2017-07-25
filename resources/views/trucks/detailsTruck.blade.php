@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -70,35 +70,6 @@
                             @endif
 
                             <div class="form-group">
-                                <!--name-->
-                                <div class="col-lg-2">
-                                    <label for="nickname" class="control-label">*Nickname :</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input id="nickname" type="text" class="form-control" name="nickname"
-                                           value="{{ $truck->nickname }}" placeholder="Nickname" required autofocus>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <!--license plate-->
-                                <div class="col-lg-2">
-                                    <label for="licensePlate" class="control-label">License Plate :</label>
-                                </div>
-                                <div class="col-lg-4">
-                                    <input id="licensePlate" type="text" class="form-control" name="licensePlate"
-                                           value="{{$truck->licensePlate}}" placeholder="License Plate" autofocus>
-                                </div>
-                                <div class="col-lg-2 text-center checkbox">
-                                    <label><input type="checkbox" name="activate" value="activate" @if($truck->activated==1) checked @endif/>Activate</label>
-                                </div>
-                                <div class="col-lg-3">
-                                    @php($exchange=\App\Palletsaccount::where('name', $truck->palletsaccount_name)->first()->notExchange)
-                                    @if($exchange==1)
-                                        <p>Agreed w/o exchange</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-2">
                                     <label for="palletsaccount_name" class="control-label">*Pallets Account :</label>
@@ -110,10 +81,10 @@
                                             title="Pallets Account" name="palletsaccount_name"
                                             required>
                                         @foreach($listPalletsAccounts as $palletsA )
-                                            @if((Illuminate\Support\Facades\Input::old('palletsaccount_name') && $palletsA->name==old('palletsaccount_name'))||($palletsA->name==$truck->palletsaccount_name))
-                                                <option selected>{{$palletsA->name}}</option>
+                                            @if((Illuminate\Support\Facades\Input::old('palletsaccount_name') && $palletsA->nickname==old('palletsaccount_name'))||($palletsA->nickname==$truck->palletsaccount_name))
+                                                <option selected>{{$palletsA->nickname}}</option>
                                             @else
-                                                <option>{{$palletsA->name}}</option>
+                                                <option>{{$palletsA->nickname}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -132,9 +103,27 @@
                                         <span class="glyphicon glyphicon-plus-sign"></span> Account</a>
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <div class="col-lg-6 col-lg-offset-3 table-responsive">
+                                <!--license plate-->
+                                <div class="col-lg-2">
+                                    <label for="licensePlate" class="control-label">License Plate :</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input id="licensePlate" type="text" class="form-control" name="licensePlate"
+                                           value="{{$truck->licensePlate}}" placeholder="License Plate" autofocus>
+                                </div>
+                                <div class="col-lg-2 text-center checkbox">
+                                    <label><input type="checkbox" name="activate" value="activate" @if($truck->activated==1) checked @endif/>Activate</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    @php($exchange=\App\Palletsaccount::where('nickname', $truck->palletsaccount_name)->first()->notExchange)
+                                    @if($exchange==1)
+                                        <p>Agreed w/o exchange</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-7 col-lg-offset-2 table-responsive">
                                     <table class="table table-hover table-bordered table-truck">
                                         <thead>
                                         <tr>
@@ -152,7 +141,7 @@
                                             <td class="text-center ">
                                                 <strong>{{$truck->theoricalNumberPallets-$truck->realNumberPallets}}</strong>
                                             </td>
-                                            <td class="text-center"></td>
+                                            <td class="text-center">{{$truck->palletsDebt}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -168,22 +157,21 @@
                             </div>
                         </form>
                         <br>
-                        <div class="form-group">
-                            <div class="col-lg-2 addTransfer">
-                                <a href="{{route('showAddPalletstransfer')}}" class="link">
-                                    <span class="glyphicon glyphicon-plus-sign"></span>
-                                    Transfer</a>
+                        <div class="row">
+                            <div class="col-lg-3 text-center checkbox">
+                                <label><input type="checkbox" name="debt" value="debt" id="debt" checked onchange="displayRowsTable();"/>With debt transfers</label>
                             </div>
+
                             <!-- search bar-->
                             <form class="form-horizontal" role="form" method="GET"
                                   action="{{route('showDetailsTruck', $truck->id)}}">
                                 {{ csrf_field() }}
-                                <div class="form-group col-lg-5">
+                                <div class="form-group col-lg-4">
                                     <input type="text" class="form-control" name="search"
                                            @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
                                            @endif placeholder="search"/>
                                 </div>
-                                <div class="form-group col-lg-3">
+                                <div class="form-group col-lg-2">
                                     <select class="selectpicker show-tick form-control searchSelect" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="columns" name="searchColumns[]" multiple required>
@@ -225,6 +213,11 @@
                                                 class="glyphicon glyphicon-search"></span></button>
                                 </div>
                             </form>
+                            <div class="col-lg-2 text-right addTransfer">
+                                <a href="{{route('showAddPalletstransfer')}}" class="link">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                    Transfer</a>
+                            </div>
                             <br>
                         </div>
 
@@ -283,14 +276,18 @@
                                            @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="text-center colDanger2"></th>
+                                    <th class="text-center colDanger2">Errors</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listTransfers as $transfer)
-                                    <tr @if($transfer->state=="Untreated") class="untreated"
-                                        @elseif ($transfer->state=="Waiting documents") class="waitingdocuments"
+                                    <tr @if($transfer->state=="Untreated"&& $transfer->type=='Debt') class="untreated debt"
+                                        @elseif($transfer->state=="Untreated" )class="untreated"
+                                        @elseif($transfer->state=="Waiting documents" && $transfer->type=='Debt') class="waitingdocuments debt"
+                                        @elseif($transfer->state=="Waiting documents" ) class="waitingdocuments"
+                                        @elseif ($transfer->state=="Complete" && $transfer->type=='Debt') class="complete debt"
                                         @elseif ($transfer->state=="Complete") class="complete"
+                                        @elseif ($transfer->state=="Complete Validated") class="completevalidated debt"
                                         @else class="completevalidated" @endif>
                                         <td class="text-center colID"><a class="link"
                                                                          href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>

@@ -10,11 +10,25 @@ function formUpdateSubmitBlock(button) {
     $("#formUpdateTruck").submit();
 }
 
-function formDeleteSubmitBlock(button) {
-    $('input[id=actionDeleteForm]').val(button.value);
-    $("#"+button.id).attr('disabled','disabled');
-    $("#formDeleteTruck").submit();
+function writeName(){
+    var accountSelected = $("#select-palletsaccount_name").find(':selected').text();
+    $('input[id=name]').val(accountSelected);
+    $('input[id=name]').change();
 }
+
+function displayRowsTable() {
+    if ($("#debt").is(":checked")) {
+        $('.debt').show();
+    } else {
+        $('.debt').hide();
+    }
+}
+
+// function formDeleteSubmitBlock(button) {
+//     $('input[id=actionDeleteForm]').val(button.value);
+//     $("#"+button.id).attr('disabled','disabled');
+//     $("#formDeleteTruck").submit();
+// }
 
 //plugin bootstrap minus and plus
 $('.btn-number').click(function(e){

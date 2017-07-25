@@ -15,3 +15,8 @@ function formDeleteSubmitBlock(button) {
     $("#"+button.id).attr('disabled','disabled');
     $("#formDeleteWarehouse").submit();
 }
+
+function writeNickname(nameWritten){
+    $('input[id=nickname]').val(nameWritten.value);
+    $('input[id=nickname]').change();
+}

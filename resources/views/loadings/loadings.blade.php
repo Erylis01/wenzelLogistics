@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -36,10 +36,11 @@
             <div class="col-lg-14">
                 <div class="panel panel-general panel-warehouses">
                     <div class="panel-heading">
-                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllLoadings', ['refresh'=>'false'])}}">
+                        <form class="form-horizontal" role="form" method="GET"
+                              action="{{route('showAllLoadings', ['refresh'=>$refresh])}}">
                             {{ csrf_field() }}
-                        <div class="col-lg-4">List of all loadings
-                        </div>
+                            <div class="col-lg-4">List of all loadings
+                            </div>
                             <div class="form-group col-lg-4">
                                 <input type="text" class="form-control" name="search"
                                        @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
@@ -86,16 +87,62 @@
                                 <button class="btn" type="submit" name="searchSubmit"><span
                                             class="glyphicon glyphicon-search"></span></button>
                             </div>
-                                <div class="form-group">
-                                    <a href="{{route('showAllLoadings', ['refresh'=>'true'])}}"
-                                       class="btn btn-add"><span class="glyphicon glyphicon-refresh"></span></a>
+                            <div>
+                                <a data-toggle="modal" data-target="#refresh_modal" data-backdrop="static" data-keyboard="false" href=""
+                                   class="btn btn-add"><span class="glyphicon glyphicon-refresh"></span></a>
                             </div>
 
                         </form>
                     </div>
+                    <!-- Modal refresh -->
+                    <div class="modal fade" id="refresh_modal" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        &times;
+                                    </button>
+                                    <h3 class="modal-title text-center">Import new files</h3>
+                                </div>
+                                <div class="modal-body center">
+                                    <h4 class="text-center">This operation will take time (5min). Do you really want to do it
+                                        now ?</h4>
+                                    <div class="text-center">
+                                        <a id="refreshLink" href="{{route('showAllLoadings', ['refresh'=>'true'])}}"
+                                           class="btn btn-add" onclick="disabledRefresh()">Yes, continue</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="panel-body panel-body-general">
-                        <!-- Table -->
+                        <!--panel errors-->
+                        @if(isset($errorsColImport) && isset($errorsAtrnrImport))
+                            <div class="row">
+                                <div class="panel panel-errors">
+                                    <div class="panel-heading text-left">
+                                        <a data-toggle="collapse" href="#errors"
+                                           onclick="openClosePanelErrors();"><span id="errorsPanelLogo"
+                                                                                   class="glyphicon glyphicon-menu-down"></span>
+                                            Errors on import</a>
+                                    </div>
+                                    <div id="errors" class="panel-collapse in collapse">
+                                        <div class="panel-body-general panel-body">
+                                            <div class="displayColErrors">
+                                                @for($k=0; $k< count($errorsColImport); $k++)
+                                                    <ul>
+                                                        <li><strong>Loading :</strong> {{$errorsAtrnrImport[$k]}} - <strong>Column
+                                                                :</strong> {{$errorsColImport[$k]}}</li>
+                                                    </ul>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    @endif
+                    <!-- Table -->
                         <div class="table-responsive loadings-wrapper">
                             <table class="table table-hover table-bordered table-loadings">
                                 <thead>
@@ -299,6 +346,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <!--pagination-->
                         <div class="row">
                             <div class="general-pagination text-left">{!! $listLoadings->render() !!}</div>
                             @if ($listLoadings->currentPage()==$listLoadings->lastPage())

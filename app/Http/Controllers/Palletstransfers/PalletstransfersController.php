@@ -24,7 +24,7 @@ class PalletstransfersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showAll(Request $request)
+    public function showAll(Request $request, $type)
     {
         //data search query
         $searchQuery = $request->get('search');
@@ -33,7 +33,11 @@ class PalletstransfersController extends Controller
         $listColumns = ['id', 'date', 'type', 'creditAccount', 'debitAccount', 'palletsNumber', 'state'];
 
         if (Auth::check()) {
-            $query = DB::table('Palletstransfers');
+            if($type=='all'){
+                $query = DB::table('Palletstransfers');
+            }elseif($type=='debt'){
+                $query = DB::table('Palletstransfers')->where('type', 'Debt');
+            }
 
             if (request()->has('sortby') && request()->has('order')) {
                 $sortby = $request->get('sortby'); // Order by what column?
@@ -91,8 +95,8 @@ class PalletstransfersController extends Controller
                     $links = '';
                 }
             }
-
-            return view('palletstransfers.allPalletstransfers', compact('listPalletstransfers', 'sortby', 'order', 'links', 'count', 'searchColumns', 'searchQuery', 'searchQueryArray', 'listColumns', 'searchColumnsString'));
+//dd($type);
+            return view('palletstransfers.allPalletstransfers', compact('type','listPalletstransfers', 'sortby', 'order', 'links', 'count', 'searchColumns', 'searchQuery', 'searchQueryArray', 'listColumns', 'searchColumnsString'));
         } else {
             return view('auth.login');
         }
@@ -959,10 +963,6 @@ class PalletstransfersController extends Controller
             $partsCreditAccount = explode('-', $transfer->creditAccount);
             $typeCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 2];
             $idCreditAccount = $partsCreditAccount[count($partsCreditAccount) - 1];
-            $partsDebitAccount = explode('-', $transfer->debitAccount);
-            $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
-            $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
-
             if ($typeCreditAccount == 'truck') {
                 $actualPalletsNumberCreditAccount = Truck::where('id', $idCreditAccount)->first()->theoricalNumberPallets;
                 Truck::where('id', $idCreditAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberCreditAccount - $transfer->palletsNumber]);
@@ -974,6 +974,9 @@ class PalletstransfersController extends Controller
             }
         }
         if (isset($transfer->debitAccount)) {
+            $partsDebitAccount = explode('-', $transfer->debitAccount);
+            $typeDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 2];
+            $idDebitAccount = $partsDebitAccount[count($partsDebitAccount) - 1];
             if ($typeDebitAccount == 'truck') {
                 $actualPalletsNumberDebitAccount = Truck::where('id', $idDebitAccount)->first()->theoricalNumberPallets;
                 Truck::where('id', $idDebitAccount)->update(['theoricalNumberPallets' => $actualPalletsNumberDebitAccount + $transfer->palletsNumber]);

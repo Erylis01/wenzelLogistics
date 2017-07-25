@@ -21,7 +21,7 @@
     active
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -38,10 +38,15 @@
                     <div class="panel-heading">
                         <form class="form-horizontal" role="form" method="GET" action="{{route('showAllPalletsaccounts', ['nb'=> $nb])}}">
                             {{ csrf_field() }}
-                        <div class="col-lg-4">List of pallets account - @if($nb=='all') all @elseif($nb=='debt only') debt only @endif</div>
+                        <div class="col-lg-4">List of pallets account - @if($nb=='all') all @elseif($nb=='debt only') debt @endif</div>
                             <div class="col-lg-1">
-                             <a href="{{route('showAllPalletstransfers')}}"
+                                @if($nb=='all')
+                             <a href="{{route('showAllPalletstransfers', ['type'=>'all'])}}"
                                         class="link total">{{$totalpallets}} pal</a>
+                                    @elseif($nb=='debt only')
+                                    <a href="{{route('showAllPalletstransfers', ['type'=>'debt'])}}"
+                                       class="link total">{{$totalDebtpallets}} pal</a>
+                                    @endif
                             </div>
                                 <div class="form-group col-lg-3">
                                     <input type="text" class="form-control" name="search"
@@ -90,7 +95,7 @@
                                                 class="glyphicon glyphicon-search"></span></button>
                                 </div>
 
-                                <div class="form-group">
+                                <div>
                                 <a href="{{route('showAddPalletsaccount', ['originalPage'=>'allPalletsaccounts-all'])}}" class=" btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Account</a>
                             </div>
@@ -111,12 +116,12 @@
                                 <tr>
                                         <th class="text-center colName1">Name<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=name&order=asc')}}"
-                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=name&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"
+                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"
                                                 @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=name&order=desc')}}"
-                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=name&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"
+                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"
                                                 @endif></a>
                                         </th>
                                         <th class="text-center colType1">Type<br>
@@ -149,7 +154,7 @@
                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="text-center colNbr1">Rest<br><br>
+                                    <th class="text-center colNbr2">Rest<br><br>
                                         {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
                                            {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=theoricalNumberPallets&order=asc')}}"--}}
                                            {{--@else href="{{url('/allPalletsaccounts?sortby=theoricalNumberPallets&order=asc')}}"--}}
@@ -159,19 +164,30 @@
                                            {{--@else href="{{url('/allPalletsaccounts?sortby=theoricalNumberPallets&order=desc')}}"--}}
                                                 {{--@endif></a>--}}
                                     </th>
+                                    <th class="text-center colNbr2">Debt<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=asc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=desc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=desc')}}"
+                                                @endif></a>
+                                    </th>
                                     <th class="colDanger"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($listPalletsaccounts as $palletsaccount)
                                     <tr>
-                                        <td class="text-center colName1"><a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}" class="link">{{$palletsaccount->name}}</a></td>
+                                        <td class="text-center colName1"><a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}" class="link">{{$palletsaccount->nickname}}</a></td>
                                         <td class="text-center colType1">{{$palletsaccount->type}}</td>
-                                        <td class="text-center colTotal1"><span  @if($palletsaccount->realNumberPallets<0) class="text-inf0" @elseif($palletsaccount->realNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->realNumberPallets}}</span></td>
-                                        <td class="text-center colTotal1"><span  @if($palletsaccount->theoricalNumberPallets<0) class="text-inf0" @elseif($palletsaccount->theoricalNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->theoricalNumberPallets}}</span></td>
-                                        <td class="text-center colTotal1">{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</td>
+                                        <td class="text-center colNbr1"><span  @if($palletsaccount->realNumberPallets<0) class="text-inf0" @elseif($palletsaccount->realNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->realNumberPallets}}</span></td>
+                                        <td class="text-center colNbr1"><span  @if($palletsaccount->theoricalNumberPallets<0) class="text-inf0" @elseif($palletsaccount->theoricalNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->theoricalNumberPallets}}</span></td>
+                                        <td class="text-center colNbr2">{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</td>
+                                        <td class="text-center colNbr2"><span  @if($palletsaccount->palletsDebt<0) class="text-inf0" @elseif($palletsaccount->palletsDebt>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->palletsDebt}}</span></td>
                                         <td class="colDanger">
-                                            @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $palletsaccount->name.'-'.'%')->orWhere('debitAccount','LIKE', $palletsaccount->name.'-'.'%')->get())
+                                            @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $palletsaccount->nickname.'-'.'%')->orWhere('debitAccount','LIKE', $palletsaccount->nickname.'-'.'%')->get())
                                             @php($k=0)
                                             @foreach($listPalletstransfers as $transfer)
                                                 @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))

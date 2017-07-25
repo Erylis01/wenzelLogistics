@@ -1,11 +1,15 @@
-
-.panel-palletsaccounts-details{
-    font-size:18px;
+.btn-activated, .btn-activated:focus, .btn-activated:active{
+    font-size:15px;
+    padding:0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(0, 160, 0);
+    color:white;
+    background-color: rgba(0, 160, 0, 0.8);
 }
-
-.info-palletsaccounts{
-    font-size:16px;
-    vertical-align: middle;
+.btn-activated:hover{
+    color:rgb(0, 160, 0);
+    background-color: white;
 }
 
 /*PANELS*/
@@ -25,11 +29,35 @@
     margin-left: 60px;
 }
 
+/*panel contact infos & trucks activated/inactivated */
+.panel-carrierAccount  {
+    border-color: rgb(0, 160, 0);
+    font-size: 18px;
+    color:black;
+    width:90%;
+    margin-left:5%;
+}
+
+.panel-carrierAccount > .panel-heading  {
+    border-color: rgb(0, 160, 0);
+}
+ .panel-carrierAccount > .panel-heading > a  {
+    color:black;
+}
+
 .total{
     font-size:18px;
 }
 
 /*TABLE*/
+
+.table-truckActivated{
+    font-size: 16px;
+}
+
+.table-truckActivated>tbody>tr>td, .table-truckActivated>thead>tr>th{
+    padding:3px;
+}
 
 .table-palletsaccounts>tbody>tr>td{
     font-size:16px;
@@ -63,6 +91,11 @@
     min-width:100px;
     max-width:100px;
     width:100px;
+}
+.colNbr1{
+    min-width:70px;
+    max-width:700px;
+    width:70px;
 }
 
 
@@ -135,11 +168,6 @@
     margin-left:25%;
     min-width :636px;
     width:636px;
-}
-
-/*HIDDEN DIV*/
-#warehousesAssociated, #trucksAssociated, #realNumberPallets1, #realNumberPallets2{
-    display: none;
 }
 
 

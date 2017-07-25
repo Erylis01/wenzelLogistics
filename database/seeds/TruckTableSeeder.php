@@ -38,15 +38,32 @@ class TruckTableSeeder extends Seeder
                                 $licensePlate = 'OTHER';
                             }
                             if ($sheet[$r][25] <> null) {
-                                $name = trim(explode(',', $sheet[$r][25])[0]);
-                                $adress = trim(explode(',', $sheet[$r][25])[1]);
+                                if(count(explode(',', $sheet[$r][25]))>2){
+                                    $adress = trim(explode(',', $sheet[$r][25])[count(explode(',', $sheet[$r][25]))-1]);
+                                    $name = trim(str_replace($adress, '', $sheet[$r][25]));
+                                    $country = null;
+                                    $zipcode = null;
+                                    $town = null;
+                                }else{
+                                    $name = trim(explode(',', $sheet[$r][25])[0]);
+                                    $adress = trim(explode(',', $sheet[$r][25])[1]);
+                                    $country = trim(explode('-', $adress)[0]);
+                                    $zipTown = trim(explode('-', $adress)[1]);
+                                    $zipcode = trim(explode(' ', $zipTown)[0]);
+                                    $town = str_replace($zipcode, '', $zipTown);
+                                }
 
-                                $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
+                                $testAccount = Palletsaccount::where('type', 'Carrier')->where(function ($q) use($name){
+                                    $q->where('name', $name)->orWhere('nickname', $name);
+                                })->first();
                                 if ($testAccount == null) {
                                     Palletsaccount::firstOrCreate([
                                         'name' => $name,
                                         'nickname' => $name,
                                         'adress' => $adress,
+                                        'country' => $country,
+                                        'zipcode' => $zipcode,
+                                        'town' => $town,
                                         'type' => 'Carrier',
                                     ]);
                                 }
@@ -56,7 +73,6 @@ class TruckTableSeeder extends Seeder
                                 if ($testTruckStock == null) {
                                     Truck::firstOrCreate([
                                         'name' => $name,
-                                        'nickname' => $name,
                                         'licensePlate' => 'STOCK',
                                         'palletsaccount_name' => $name,
                                     ]);
@@ -67,7 +83,6 @@ class TruckTableSeeder extends Seeder
                                     //not double
                                     Truck::firstOrCreate([
                                         'name' => $name,
-                                        'nickname' => $name,
                                         'licensePlate' => $licensePlate,
                                         'palletsaccount_name' => $name,
                                     ]);

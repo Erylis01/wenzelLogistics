@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Palletsaccount extends Model
 {
     protected $fillable = [
-        'name','nickname', 'realNumberPallets', 'theoricalNumberPallets', 'type','adress', 'phone', 'email', 'namecontact', 'notExchange'
+        'name','nickname', 'realNumberPallets', 'theoricalNumberPallets','palletsDebt', 'type','adress', 'phone', 'email', 'namecontact', 'notExchange'
     ];
 
     public function warehouses(){
@@ -15,7 +15,7 @@ class Palletsaccount extends Model
     }
 
     public function trucks(){
-        return $this->hasMany('App\Truck','palletsaccount_name', 'name');
+        return $this->hasMany('App\Truck','palletsaccount_name', 'nickname');
     }
 
 

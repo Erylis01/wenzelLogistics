@@ -68,12 +68,13 @@
                         <li><a  href="{{ route('showAllPalletsaccounts', ['nb'=>'debt only']) }}">Debt only</a></li>
                     </ul>
                 </div>
-
-                <div class="col-lg-2 text-center navbar-transfers navbar-title-link">
-                    <a @yield('classPalletsTransfers') href="{{ route('showAllPalletstransfers') }}" >Pallets
-                        Transfers</a>
+                <div class="col-lg-2 text-center navbar-transfers navbar-title-link dropdown">
+                    <a class="dropdown-toggle @yield('classPalletsTransfers')" data-toggle="dropdown">Pallets Transfers <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('showAllPalletstransfers', ['nb'=>'all']) }}">All</a></li>
+                        <li><a  href="{{ route('showAllPalletstransfers', ['nb'=>'debt']) }}">Debt</a></li>
+                    </ul>
                 </div>
-
                 <div class="col-lg-2 col-lg-offset-1 text-center dropdown">
                     <a href="#" class="dropdown-toggle navbar-title-link @yield('classProfile') " data-toggle="dropdown"
                        role="button"

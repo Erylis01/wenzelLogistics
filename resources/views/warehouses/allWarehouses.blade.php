@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -36,7 +36,7 @@
             <div class="col-lg-14">
                 <div class="panel panel-general panel-warehouses">
                     <div class="panel-heading">
-                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllWarehouses', 'false')}}">
+                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllWarehouses',$refresh)}}">
                             {{ csrf_field() }}
                         <div class="col-lg-4">List of all warehouses </div>
                             <!--search bar-->
@@ -90,7 +90,7 @@
                                     <a href="{{route('showAllWarehouses', ['refresh'=>'true'])}}" class="btn btn-add"><span
                                                 class="glyphicon glyphicon-refresh"></span></a>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <a href="{{route('showAddWarehouse', ['originalPage'=>'allWarehouses'])}}" class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Add</a>
                             </div>

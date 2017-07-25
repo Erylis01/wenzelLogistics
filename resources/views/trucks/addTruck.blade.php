@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -39,7 +39,7 @@
         @else
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="panel panel-general">
-                    <div class="panel-heading"><span class="glyphicon glyphicon-plus-sign"></span> Truck
+                    <div class="panel-heading"><span class="glyphicon glyphicon-plus-sign"></span> Add truck
                     </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal text-right" role="form" method="POST"
@@ -54,6 +54,35 @@
                             @if(Session::has('messageErrorAddTruck'))
                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorAddTruck') }}</div>
                             @endif
+
+
+                            <div class="form-group">
+                                <!--pallet account associated-->
+                                <div class="col-lg-3">
+                                    <label for="palletsaccount_name" class="control-label">*Carrier Account :</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <!-- if mistake in the adding form you are redirected with field already filled-->
+                                    <select class="selectpicker show-tick form-control" data-size="5"
+                                            data-live-search="true" data-live-search-style="startsWith"
+                                            title="Pallets Account" name="palletsaccount_name" id="select-palletsaccount_name"
+                                            required onchange="writeName();">
+                                        @foreach($listPalletsAccounts as $palletsAccount )
+                                            @if(Illuminate\Support\Facades\Input::old('palletsaccount_name') && $palletsAccount->nickname==old('palletsaccount_name'))
+                                                <option selected>{{$palletsAccount->nickname}}</option>
+                                            @elseif(isset($palletsaccount_name)&& $palletsAccount->nickname==$palletsaccount_name)
+                                                <option selected>{{$palletsAccount->nickname}}</option>
+                                            @else
+                                                <option>{{$palletsAccount->nickname}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 text-left">
+                                    <a href="{{route('showAddPalletsaccount', ['originalPage'=>'addTruck'])}}" class="link">
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Account</a>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <!--name-->
                                 <div class="col-lg-3">
@@ -62,15 +91,9 @@
                                 <div class="col-lg-8">
                                     <input id="name" type="text" class="form-control" name="name"
                                            @if(isset($name)) value="{{$name}}" @else value="{{ old('name') }}"
-                                           @endif placeholder="Name" required autofocus>
-                                    @if ($errors->has('name'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                    @endif
+                                           @endif placeholder="Name" required autofocus readonly >
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <!--license plate-->
                                 <div class="col-lg-3">
@@ -81,42 +104,8 @@
                                            @if(isset($licensePlate)) value="{{$licensePlate}}"
                                            @else value="{{old('licensePlate')}}" @endif placeholder="License Plate"
                                            autofocus>
-                                    @if ($errors->has('licensePlate'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('licensePlate') }}</strong>
-                                    </span>
-                                    @endif
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <!--pallet account associated-->
-                                <div class="col-lg-3">
-                                    <label for="palletsaccount_name" class="control-label">*Pallets Account :</label>
-                                </div>
-                                <div class="col-lg-6">
-                                    <!-- if mistake in the adding form you are redirected with field already filled-->
-                                    <select class="selectpicker show-tick form-control" data-size="5"
-                                            data-live-search="true" data-live-search-style="startsWith"
-                                            title="Pallets Account" name="palletsaccount_name"
-                                            required>
-                                        @foreach($listPalletsAccounts as $palletsAccount )
-                                            @if(Illuminate\Support\Facades\Input::old('palletsaccount_name') && $palletsAccount->name==old('palletsaccount_name'))
-                                                <option selected>{{$palletsAccount->name}}</option>
-                                            @elseif(isset($palletsaccount_name)&& $palletsAccount->name==$palletsaccount_name)
-                                                <option selected>{{$palletsAccount->name}}</option>
-                                            @else
-                                                <option>{{$palletsAccount->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-3 text-left">
-                                    <a href="{{route('showAddPalletsaccount', ['originalPage'=>'addTruck'])}}" class="link">
-                                        <span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <!--pallets number-->
                                 <div class="col-lg-3">

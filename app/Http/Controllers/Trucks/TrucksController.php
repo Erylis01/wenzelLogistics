@@ -26,19 +26,19 @@ class TrucksController extends Controller
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
-        $listColumns = ['id', 'nickname', 'licensePlate', 'realNumberPallets', 'theoricalNumberPallets'];
+        $listColumns = ['id', 'name', 'licensePlate', 'realNumberPallets', 'theoricalNumberPallets', 'palletsDebt'];
 
         if (Auth::check()) {
             //import new trucks and create pallets account associated
-            if($refresh=='true'){
+            if ($refresh == 'true') {
                 $this->importData();
-                $refresh='false';
+                $refresh = 'false';
             }
 
-            if($nb=='all'){
+            if ($nb == 'all') {
                 $query = DB::table('trucks');
-            }elseif($nb == 'debt only'){
-                $query = DB::table('trucks');
+            } elseif ($nb == 'debt only') {
+                $query = DB::table('trucks')->where('palletsDebt', '<>', 0);
             }
 
 
@@ -70,7 +70,7 @@ class TrucksController extends Controller
                 }
                 $count = count($query->get());
                 $listTrucks = $query->orderBy($sortby, $order)->paginate(20);
-                $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order, 'search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
+                $links = $listTrucks->appends(['sortby' => $sortby, 'order' => $order, 'search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
             } else {
                 //not sorting but searching
                 if (isset($searchQuery) && $searchQuery <> '') {
@@ -95,16 +95,16 @@ class TrucksController extends Controller
                         });
                     }
                     $count = count($query->get());
-                    $listTrucks = $query->orderBy('nickname', 'asc')->paginate(20);
-                    $links =$listTrucks->appends(['search'=>$searchQuery, 'searchColumns'=>$searchColumns])->render();
-                }else{
+                    $listTrucks = $query->orderBy('name', 'asc')->paginate(20);
+                    $links = $listTrucks->appends(['search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
+                } else {
                     //not sorting nor searching
                     $count = count($query->get());
-                    $listTrucks = $query->orderBy('nickname', 'asc')->paginate(20);
+                    $listTrucks = $query->orderBy('name', 'asc')->paginate(20);
                     $links = '';
                 }
             }
-            return view('trucks.allTrucks', compact('nb','listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns','refresh'));
+            return view('trucks.allTrucks', compact('nb', 'listTrucks', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumnsString', 'searchColumns', 'listColumns', 'refresh'));
         } else {
             return view('auth.login');
         }
@@ -132,15 +132,32 @@ class TrucksController extends Controller
                                 $licensePlate = 'OTHER';
                             }
                             if ($sheet[$r][25] <> null) {
-                                $name = trim(explode(',', $sheet[$r][25])[0]);
-                                $adress = trim(explode(',', $sheet[$r][25])[1]);
+                                if(count(explode(',', $sheet[$r][25]))>2){
+                                    $adress = trim(explode(',', $sheet[$r][25])[count(explode(',', $sheet[$r][25]))-1]);
+                                    $name = trim(str_replace($adress, '', $sheet[$r][25]));
+                                    $country = null;
+                                    $zipcode = null;
+                                    $town = null;
+                                }else{
+                                    $name = trim(explode(',', $sheet[$r][25])[0]);
+                                    $adress = trim(explode(',', $sheet[$r][25])[1]);
+                                    $country = trim(explode('-', $adress)[0]);
+                                    $zipTown = trim(explode('-', $adress)[1]);
+                                    $zipcode = trim(explode(' ', $zipTown)[0]);
+                                    $town = str_replace($zipcode, '', $zipTown);
+                                }
 
-                                $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
+                                $testAccount = Palletsaccount::where('type', 'Carrier')->where(function ($q) use($name){
+                                    $q->where('name', $name)->orWhere('nickname', $name);
+                                })->first();
                                 if ($testAccount == null) {
                                     Palletsaccount::firstOrCreate([
                                         'name' => $name,
                                         'nickname' => $name,
                                         'adress' => $adress,
+                                        'country' => $country,
+                                        'zipcode' => $zipcode,
+                                        'town' => $town,
                                         'type' => 'Carrier',
                                     ]);
                                 }
@@ -150,7 +167,6 @@ class TrucksController extends Controller
                                 if ($testTruckStock == null) {
                                     Truck::firstOrCreate([
                                         'name' => $name,
-                                        'nickname' => $name,
                                         'licensePlate' => 'STOCK',
                                         'palletsaccount_name' => $name,
                                     ]);
@@ -161,7 +177,6 @@ class TrucksController extends Controller
                                     //not double
                                     Truck::firstOrCreate([
                                         'name' => $name,
-                                        'nickname' => $name,
                                         'licensePlate' => $licensePlate,
                                         'palletsaccount_name' => $name,
                                     ]);
@@ -181,11 +196,10 @@ class TrucksController extends Controller
     {
         //get data
         $name = Input::get('name');
-        $nickname=$name;
         $realNumberPallets = Input::get('realNumberPallets');
         $originalPage = Input::get('originalPage');
-        $atrnr=Input::get('atrnr');
-        $activate=Input::get('activate');
+        $atrnr = Input::get('atrnr');
+        $activate = Input::get('activate');
 
         $licensePlate = Input::get('licensePlate');
         if (!isset($licensePlate)) {
@@ -197,42 +211,36 @@ class TrucksController extends Controller
         //if the truck already exists -> error !
         if ($truckTest <> null) {
             session()->flash('messageErrorAddTruck', 'Error ! This truck already exists');
-            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
-            return view('trucks.addTruck', compact('name','nickname','activate', 'realNumberPallets', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('nickname', 'asc')->get();
+            return view('trucks.addTruck', compact('name', 'nickname', 'activate', 'realNumberPallets', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
         } else {
-            if(Truck::where('nickname', $nickname)->first() <> null){
-                session()->flash('messageErrorAddTruck', 'Error ! This nickname is already taken.');
-                $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->get();
-                return view('trucks.addTruck', compact('name','nickname','activate', 'realNumberPallets', 'licensePlate', 'palletsaccount_name', 'listPalletsAccounts'));
+            if (isset($activate)) {
+                $activate = true;
+            } else {
+                $activate = false;
+            }
+            //if the truck doesn't already exists -> create
+            Truck::create(
+                ['name' => $name, 'realNumberPallets' => $realNumberPallets, 'theorcialNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name, 'activated' => $activate]
+            );
+            //update the pallets account confirmed pallets number with the sum of all trucks of this account
+            Palletsaccount::where('nickname', $palletsaccount_name)->update(['realNumberPallets' => Palletsaccount::where('nickname', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets' => Palletsaccount::where('nickname', $palletsaccount_name)->sum('theoricalNumberPallets')]);
+            session()->flash('messageAddTruck', 'Successfully added new truck');
 
-            }else{
-                if(isset($activate)){
-                    $activate=true;
-                }else{
-                    $activate=false;
+            if (explode('-', $originalPage)[0] == 'detailsPalletsaccount') {
+                return redirect('/detailsPalletsaccount/' . explode('-', $originalPage)[1]);
+            } elseif (explode('-', $originalPage)[0] == 'detailsLoading') {
+                if (isset($atrnr)) {
+                    Loading::where('atrnr', $atrnr)->update(['kennzeichen' => $licensePlate]);
                 }
-                //if the truck doesn't already exists -> create
-                Truck::create(
-                    ['nickname'=>$nickname,'name' => $name, 'realNumberPallets' => $realNumberPallets,'theorcialNumberPallets' => $realNumberPallets, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name, 'activated'=>$activate]
-                );
-                //update the pallets account confirmed pallets number with the sum of all trucks of this account
-                Palletsaccount::where('nickname', $palletsaccount_name)->update(['realNumberPallets'=>Palletsaccount::where('nickname', $palletsaccount_name)->sum('realNumberPallets'), 'theoricalNumberPallets'=>Palletsaccount::where('nickname', $palletsaccount_name)->sum('theoricalNumberPallets')]);
-                session()->flash('messageAddTruck', 'Successfully added new truck');
-
-                if(explode('-',$originalPage)[0]=='detailsPalletsaccount'){
-                    return redirect('/detailsPalletsaccount/'.explode('-',$originalPage)[1]);
-                }elseif(explode('-',$originalPage)[0]=='detailsLoading'){
-                    if(isset($atrnr)){
-                        Loading::where('atrnr', $atrnr)->update(['kennzeichen'=>$licensePlate]);
-                    }
-                    session()->flash('openPanelInformation', 'openPanelInformation');
-                    return redirect('/detailsLoading/'.explode('-',$originalPage)[1]);
-                }else{
-                    return redirect('/allTrucks/false');
-                }
+                session()->flash('openPanelInformation', 'openPanelInformation');
+                return redirect('/detailsLoading/' . explode('-', $originalPage)[1]);
+            } else {
+                return redirect('/allTrucks/false');
             }
         }
     }
+
 
     /**
      * show the add form
@@ -242,7 +250,7 @@ class TrucksController extends Controller
     {
         if (Auth::check()) {
             $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('nickname', 'asc')->get();
-            return view('trucks.addTruck', compact('listPalletsAccounts','originalPage'));
+            return view('trucks.addTruck', compact('listPalletsAccounts', 'originalPage'));
         } else {
             return view('auth.login');
         }
@@ -265,11 +273,11 @@ class TrucksController extends Controller
             $truck = DB::table('trucks')->where('id', '=', $id)->first();
             $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('nickname', 'asc')->get();
             $palletsaccount = Palletsaccount::where('nickname', $truck->palletsaccount_name)->first();
-            $nickname = $truck->nickname;
+            $name = $truck->name;
             $licensePlate = $truck->licensePlate;
 
-            $query = Palletstransfer::where(function ($q) use ($nickname, $licensePlate) {
-                $q->where('creditAccount', 'LIKE',  $nickname . '-' . $licensePlate.'%')->orWhere('debitAccount', 'LIKE',  $nickname . '-' . $licensePlate.'%');
+            $query = Palletstransfer::where(function ($q) use ($name, $licensePlate) {
+                $q->where('creditAccount', 'LIKE', $name . '-' . $licensePlate . '%')->orWhere('debitAccount', 'LIKE', $name . '-' . $licensePlate . '%');
             });
             //transfers table : sorting and searching possible
             if (request()->has('sortby') && request()->has('order')) {
@@ -336,27 +344,27 @@ class TrucksController extends Controller
     public function update(Request $request, $id)
     {
         //get data
-        $nickname = Input::get('nickname');
-        $activate=Input::get('activate');
-        if(isset($activate)){
-            $activate=true;
-        }else{
-            $activate=false;
+        $activate = Input::get('activate');
+        if (isset($activate)) {
+            $activate = true;
+        } else {
+            $activate = false;
         }
         $licensePlate = Input::get('licensePlate');
         if (!isset($licensePlate)) {
             $licensePlate = 'OTHER';
         }
         $palletsaccount_name = Input::get('palletsaccount_name');
-        $truckTest = Truck::where([['nickname', $nickname], ['licensePlate', $licensePlate]])->get();
+        $name = $palletsaccount_name;
+        $truckTest = Truck::where([['name', $name], ['licensePlate', $licensePlate]])->get();
 
-        //check if there is already one truck ith same nickname and same license plate
+        //check if there is already one truck ith same name and same license plate
         if (count($truckTest) > 1) {
             session()->flash('messageErrorUpdateTruck', 'Error ! This truck already exists');
             return redirect()->back();
         } else {
             //if not, update the truck
-            Truck::where('id', $id)->update(['nickname' => $nickname, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name, 'activated'=>$activate]);
+            Truck::where('id', $id)->update(['name' => $name, 'licensePlate' => $licensePlate, 'palletsaccount_name' => $palletsaccount_name, 'activated' => $activate]);
             session()->flash('messageUpdateTruck', 'Successfully updated truck');
             return redirect()->back();
         }

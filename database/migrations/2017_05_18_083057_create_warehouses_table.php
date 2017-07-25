@@ -17,7 +17,7 @@ class CreateWarehousesTable extends Migration
             $table->increments('id')->unique()->index();
             $table->string('name')->unique();
             $table->string('nickname')->unique()->nullable();
-            $table->string('adress');
+            $table->string('adress')->nullable();
             $table->string('zipcode', 10);
             $table->string('town');
             $table->string('country');

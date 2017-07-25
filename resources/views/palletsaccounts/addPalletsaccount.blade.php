@@ -21,7 +21,7 @@
     active
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -37,9 +37,7 @@
             <h4>You need to login to see the content</h4>
         @else
             <div class="col-lg-14">
-
                 <div class="panel panel-general">
-
                     <div class="panel-heading"><span class="glyphicon glyphicon-plus-sign"></span> Add a new pallets
                         account
                     </div>
@@ -57,7 +55,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <input id="name" type="text" class="form-control" name="name"
-                                           @if(isset($name)) value="{{$name}}" @else value="{{old('name')}}" @endif placeholder="Name" required autofocus>
+                                           @if(isset($name)) value="{{$name}}" @else value="{{old('name')}}" @endif placeholder="Name" required autofocus onchange="writeNickname(this);">
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -92,13 +90,13 @@
                                             title="Type" name="type" id="type" onchange="displayFields(this);"
                                             required>
                                         @if(Illuminate\Support\Facades\Input::old('type') || isset($type))
-                                            <option @if(old('type') == 'Carrier' || $type=='Carrier') selected @endif value="Carrier"
+                                            <option @if((Illuminate\Support\Facades\Input::old('type') && old('type') == 'Carrier') || (isset($type) && $type=='Carrier')) selected @endif value="Carrier"
                                                     id="carrierOption">Carrier
                                             </option>
-                                            <option @if(old('type') == 'Network' || $type=='Network') selected @endif value="Network"
+                                            <option @if((Illuminate\Support\Facades\Input::old('type') && old('type') == 'Network') || (isset($type) && $type=='Network')) selected @endif value="Network"
                                                     id="networkOption">Network
                                             </option>
-                                            <option @if(old('type') == 'Other' || $type=='Other') selected @endif value="Other"
+                                            <option @if((Illuminate\Support\Facades\Input::old('type') && old('type') == 'Other') || (isset($type) && $type=='Other')) selected @endif value="Other"
                                                     id="otherOption">Other
                                             </option>
                                         @else
@@ -108,35 +106,43 @@
                                         @endif
                                     </select>
                                 </div>
-                                <!--number of pallets-->
-                                <div class="col-lg-2" id="realNumberPallets1">
-                                    <label for="realNumberPallets" class="control-label">Pallets Number :</label>
+
+                                <div id="createWarehouse" @if((isset($type) && $type=='Network') || (Illuminate\Support\Facades\Input::old('type') && old('type') == 'Network'))style="display: block;" @else style="display: none;" @endif>
+                                    <div class="col-lg-2 col-lg-offset-1 checkbox">
+                                        <label><input type="checkbox" name="oneWarehouse" value="oneWarehouse" id="oneWarehouse" onchange="hideWarehousesAssociated();" @if(Illuminate\Support\Facades\Input::old('oneWarehouse')) checked @endif/>1 warehouse only</label>
+                                    </div>
                                 </div>
-                                <div class="col-lg-2" id="realNumberPallets2">
-                                    <div class="input-group">
+                            </div>
+
+                            <div id="warehouse" @if((isset($type) && $type=='Network') || (Illuminate\Support\Facades\Input::old('type') && old('type') == 'Network'))style="display: block;" @else style="display: none;" @endif>
+                                <div class="form-group">
+                                    <!--number of pallets-->
+                                    <div class="col-lg-2 col-lg-offset-1">
+                                        <label for="realNumberPallets" class="control-label">Pallets Number :</label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="input-group">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-number"
                                                     data-type="minus" data-field="realNumberPallets">
                                                 <span class="glyphicon glyphicon-minus"></span>
                                             </button>
                                         </span>
-                                        <input id="realNumberPallets" type="number" name="realNumberPallets"
-                                               class="form-control input-number"
-                                               value="{{old('realNumberPallets')}}"
-                                               min="-999999" max="999999" autofocus
-                                                required data-toggle="tooltip" data-placement="top" title="pallets number">
-                                        <span class="input-group-btn">
+                                            <input id="realNumberPallets" type="number" name="realNumberPallets"
+                                                   class="form-control input-number"
+                                                   value="{{old('realNumberPallets')}}"
+                                                   min="-999999" max="999999" autofocus
+                                                   required data-toggle="tooltip" data-placement="top" title="pallets number">
+                                            <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-number"
                                                     data-type="plus" data-field="realNumberPallets">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </button>
                                         </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div id="warehousesAssociated">
-                                <div class="form-group">
+                                <div class="form-group" id="warehousesAssociated" @if(Illuminate\Support\Facades\Input::old('oneWarehouse')) style="display:none;" @endif>
                                     <!--warehouses associated-->
                                     <div class="col-lg-3">
                                         <label for="warehousesAssociated" class="control-label">Warehouses associated
@@ -146,21 +152,22 @@
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Warehouses Associated" name="warehousesAssociated[]"
-                                                multiple>
+                                                multiple id="select-warehousesAssociated">
+                                            <option value="none" disabled>None</option>
                                             @foreach($listWarehouses as $warehouse )
                                                 @php($list[]=null)
                                                 @if(Illuminate\Support\Facades\Input::old('warehousesAssociated'))
                                                     @foreach(old('warehousesAssociated') as $warehouseA)
-                                                        @if($warehouseA == $warehouse->name)
-                                                            <option selected>{{$warehouse->name}}</option>
+                                                        @if($warehouseA == $warehouse->nickname)
+                                                            <option selected>{{$warehouse->nickname}}</option>
                                                             @php($list[]=$warehouse)
                                                         @endif
                                                     @endforeach
                                                     @if(!in_array($warehouse, $list))
-                                                        <option>{{$warehouse->name}}</option>
+                                                        <option>{{$warehouse->nickname}}</option>
                                                     @endif
                                                 @else
-                                                    <option>{{$warehouse->name}}</option>
+                                                    <option>{{$warehouse->nickname}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -172,7 +179,7 @@
                                 </div>
                             </div>
 
-                            <div id="trucksAssociated" @if(isset($type) && $type=='Carrier') style="display:block;" @endif>
+                            <div id="contactInfos" @if((isset($type) && ($type=='Carrier'))|| (isset($type) && ($type=='Network') && isset($oneWarehouse)) || (Illuminate\Support\Facades\Input::old('type') && (old('type')=='Carrier'))|| (Illuminate\Support\Facades\Input::old('type') && (old('type')=='Network') && Illuminate\Support\Facades\Input::old('oneWarehouse'))) style="display: block;" @else style="display: none;" @endif>
                                 <input type="hidden" @if(isset($atrnr)) value="{{$atrnr}}" @endif name="atrnr">
                                 <div class="form-group">
                                     <!--adress-->
@@ -182,12 +189,43 @@
                                     <div class="col-lg-7">
                                         <input id="adress" type="text" class="form-control" name="adress"
                                                @if(isset($adress)) value="{{$adress}}" @else value="{{old('adress')}}" @endif placeholder="Adress" autofocus/>
-                                        @if ($errors->has('adress'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('adress') }}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3">
+                                        <label for="adress*" class="control-label" id="adress*" @if((isset($type) && ($type=='Network'))|| (Illuminate\Support\Facades\Input::old('type') && (old('type')=='Network'))) style="display:block;" @else style="display:none;" @endif>*</label>
+                                    </div>
+                                    <!--country-->
+                                    <div class="col-lg-2">
+                                        <input id="country" type="text" class="form-control" name="country" @if(isset($country)) value="{{$country}}" @else value="{{old('country')}}" @endif placeholder="Country" data-toggle="tooltip" data-placement="top" title="Country" autofocus/>
+                                    </div>
+                                    <!--zipcode-->
+                                    <div class="col-lg-2">
+                                       <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
+                                                 @if(isset($zipcode)) value="{{$zipcode}}" @else value="{{old('zipcode')}}" @endif placeholder="Zipcode" data-toggle="tooltip" data-placement="top" title="Zipcode" autofocus/>
+                                    </div>
+                                    <!--town-->
+                                    <div class="col-lg-3">
+                                        <input id="town" type="text" class="form-control" name="town"
+                                                 @if(isset($town)) value="{{$town}}" @else value="{{old('town')}}" @endif placeholder="Town" data-toggle="tooltip" data-placement="top" title="Town" autofocus/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @if ($errors->has('country'))
+                                        <span class="help-block text-center">
+                                    <strong>{{ $errors->first('country') }}</strong>
+                                    </span>
+                                    @endif
+                                    @if ($errors->has('zipcode'))
+                                        <span class="help-block text-center">
+                                    <strong>{{ $errors->first('zipcode') }}</strong>
+                                    </span>
+                                    @endif
+                                        @if ($errors->has('town'))
+                                            <span class="help-block text-center">
+                                    <strong>{{ $errors->first('town') }}</strong>
                                     </span>
                                         @endif
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <!--phone-->
@@ -203,13 +241,28 @@
                                     </span>
                                         @endif
                                     </div>
-                                    <!--name contact-->
-                                    <div class="col-lg-2">
-                                        <label for="namecontact" class="control-label">Contact :</label>
-                                    </div>
+                                    <!--fax-->
                                     <div class="col-lg-3">
-                                        <input id="namecontact" type="text" class="form-control" name="namecontact"
-                                               value="{{old('namecontact')}}" placeholder="Contact name" autofocus/>
+                                        <label for="fax" class="control-label">Fax/Mobile :</label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input id="fax" type="text" class="form-control" name="fax"
+                                               value="{{old('fax')}}" placeholder="Fax/Mobile" autofocus/>
+                                        @if ($errors->has('fax'))
+                                            <span class="help-block">
+                                    <strong>{{ $errors->first('fax') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <!--contact infos-->
+                                    <div class="col-lg-3">
+                                        <label for="namecontact" class="control-label">Contact infos :</label>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <textarea rows="1" id="namecontact" type="text" class="form-control" name="namecontact"
+                                                   placeholder="Contact information" autofocus>{{old('namecontact')}}</textarea>
                                         @if ($errors->has('namecontact'))
                                             <span class="help-block">
                                     <strong>{{ $errors->first('namecontact') }}</strong>

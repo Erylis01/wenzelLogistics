@@ -19,9 +19,14 @@ class CreatePalletsaccountsTable extends Migration
             $table->string('nickname')->unique()->nullable();
             $table->integer('realNumberPallets')->nullable();
             $table->integer('theoricalNumberPallets')->nullable();
+            $table->integer('palletsDebt')->nullable();
             $table->string('type');
             $table->string('adress')->nullable();
-            $table->string('phone', 15)->nullable();
+            $table->string('zipcode')->nullable();
+            $table->string('town')->nullable();
+            $table->string('country')->nullable();
+            $table->string('phone', 20)->nullable();
+            $table->string('fax', 20)->nullable();
             $table->string('email')->nullable();
             $table->string('namecontact')->nullable();
             $table->boolean('notExchange')->default(false);

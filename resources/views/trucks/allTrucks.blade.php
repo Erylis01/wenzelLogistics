@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -91,7 +91,7 @@
                                    class="btn btn-add"><span
                                             class="glyphicon glyphicon-refresh"></span></a>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <a href="{{route('showAddTruck', ['originalPage'=>'allTrucks'])}}"
                                    class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Truck</a>
@@ -122,7 +122,7 @@
                                     {{--@endif></a>--}}
                                     {{--</th>--}}
                                     <th class="col1"></th>
-                                    <th class="text-center colName">Name<br>
+                                    <th class="text-center colName">Name / Carrier<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
                                            @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"
                                            @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=name&order=asc')}}"
@@ -163,7 +163,16 @@
                                                 @endif></a>
                                     </th>
                                     <th class="text-center colNumber2">Rest<br><br></th>
-                                    <th class="text-center colNumber2">Debt<br><br></th>
+                                    <th class="text-center colNumber2">Debt<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=palletsDebt&order=asc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=palletsDebt&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listTrucks->currentPage().'&sortby=palletsDebt&order=desc')}}"
+                                           @else href="{{url('/allTrucks/'.$refresh.'/'.$nb.'?page='.$listTrucks->currentPage().'&sortby=palletsDebt&order=desc')}}"
+                                                @endif></a>
+                                        </th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -179,7 +188,7 @@
                                                       @else class="glyphicon glyphicon-eye-close" @endif></span></a>
                                         </td>
                                         <td class="colName"><a class="link"
-                                                               href="{{route('showDetailsPalletsaccount',\App\Palletsaccount::where('name',$trucks->palletsaccount_name)->first()->id)}}">{{$trucks->name}}</a>
+                                                               href="{{route('showDetailsPalletsaccount',\App\Palletsaccount::where('nickname',$trucks->palletsaccount_name)->first()->id)}}">{{$trucks->name}}</a>
                                         </td>
                                         <td class="colLicense">{{$trucks->licensePlate}}</td>
                                         <td class="colNumber"><span @if($trucks->realNumberPallets<0) class="text-inf0"
@@ -192,10 +201,10 @@
                                                     @else class="text-egal0" @endif>{{$trucks->theoricalNumberPallets}}</span>
                                         </td>
                                         <td class="colNumber2">{{$trucks->theoricalNumberPallets - $trucks->realNumberPallets}}</td>
-                                        @php($debt=\App\Palletstransfer::where('creditAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber') - \App\Palletstransfer::where('debitAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber'))
-                                        <td class="colNumber2"><span @if($debt<0) class="text-inf0"
-                                                                     @elseif($debt>0) class="text-sup0"
-                                                                     @else class="text-egal0" @endif>{{$debt}}</span>
+                                        {{--@php($debt=\App\Palletstransfer::where('creditAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber') - \App\Palletstransfer::where('debitAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber'))--}}
+                                        <td class="colNumber2"><span @if($trucks->palletsDebt<0) class="text-inf0"
+                                                                     @elseif($trucks->palletsDebt>0) class="text-sup0"
+                                                                     @else class="text-egal0" @endif>{{$trucks->palletsDebt}}</span>
                                         </td>
                                         <td class="colDanger">
                                             @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->orWhere('debitAccount','LIKE', $trucks->name.'-'.$trucks->licensePlate.'%')->get())

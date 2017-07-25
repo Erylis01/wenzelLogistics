@@ -31,16 +31,15 @@ class PalletsaccountsController extends Controller
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
-        $listColumns = ['name', 'type', 'realNumberPallets'];
+        $listColumns = ['nickname', 'type', 'realNumberPallets', 'theoricalNumberPallets', 'palletsDebt'];
         if (Auth::check()) {
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
+            $totalDebtpallets = DB::table('palletsaccounts')->sum('palletsDebt');
 
             if ($nb == 'all') {
                 $query = DB::table('palletsaccounts');
             } elseif ($nb == 'debt only') {
-                $query = DB::table('palletsaccounts')->where(function ($q) {
-                    $q->where('realNumberPallets', '<>', 0)->orWhere('theoricalNumberPallets', '<>', 0);
-                });
+                $query = DB::table('palletsaccounts')->where('palletsDebt', '<>', 0);
             }
 
             //if the user is sorting the table
@@ -96,18 +95,16 @@ class PalletsaccountsController extends Controller
                         });
                     }
                     $count = count($query->get());
-                    $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
-//                    $listPalletsaccounts = $query->orderBy('nickname', 'asc')->paginate(20);
+                    $listPalletsaccounts = $query->orderBy('nickname', 'asc')->paginate(20);
                     $links = $listPalletsaccounts->appends(['search' => $searchQuery, 'searchColumns' => $searchColumns])->render();
                 } else {
                     //not sorting nor searching
                     $count = count($query->get());
-                    $listPalletsaccounts = $query->orderBy('name', 'asc')->paginate(20);
-//                    $listPalletsaccounts = $query->orderBy('nickname', 'asc')->paginate(20);
+                    $listPalletsaccounts = $query->orderBy('nickname', 'asc')->paginate(20);
                     $links = '';
                 }
             }
-            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'nb', 'totalpallets', 'sortby', 'order', 'count', 'links', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
+            return view('palletsaccounts.allPalletsaccounts', compact('listPalletsaccounts', 'nb', 'totalpallets', 'totalDebtpallets', 'sortby', 'order', 'count', 'links', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }
@@ -139,36 +136,46 @@ class PalletsaccountsController extends Controller
         $realNumberPallets = Input::get('realNumberPallets');
         $theoricalNumberPallets = $realNumberPallets;
         $originalPage = Input::get('originalPage');
-        if(!isset($nickname)){
-            $nickname=$name;
-        }
+
         //get the warehouses associated if the account is a Network
         $warehousesAssociatedName = Input::get('warehousesAssociated');
         if (isset($warehousesAssociatedName)) {
             foreach ($warehousesAssociatedName as $nameWarehouse) {
-                $idwarehouses[] = Warehouse::where('name', $nameWarehouse)->value('id');
+                $idwarehouses[] = Warehouse::where('nickname', $nameWarehouse)->value('id');
             }
         }
+        $oneWarehouse = Input::get('oneWarehouse');
 
-        //get carrier account special information
+        //oneWarehouse or carrier
         $adress = Input::get('adress');
+        $country = Input::get('country');
+        $town = Input::get('town');
+        $zipcode = Input::get('zipcode');
         $phone = Input::get('phone');
+        $fax = Input::get('fax');
         $email = Input::get('email');
         $namecontact = Input::get('namecontact');
-        $atrnr=Input::get('atrnr');
+
+        $atrnr = Input::get('atrnr');
 
         //validation
         $rules = array(
             'name' => 'required|string|max:255|unique:palletsaccounts',
+            'nickname' => 'string|max:255|unique:palletsaccounts',
         );
+        if (isset($oneWarehouse)) {
+            $rules = array_add($rules, 'country', 'required|string|max:255');
+            $rules = array_add($rules, 'town', 'required|string|max:255');
+            $rules = array_add($rules, 'zipcode', 'required|string|max:10');
+        }
         if (isset($email)) {
             $rules = array_add($rules, 'email', 'string|email');
         }
         if (isset($phone)) {
-            $rules = array_add($rules, 'phone', 'string|max:15');
+            $rules = array_add($rules, 'phone', 'string|max:20');
         }
-        if(isset($nickname)){
-            $rules = array_add($rules,'nickname', 'string|max:15|unique:palletsaccounts');
+        if (isset($fax)) {
+            $rules = array_add($rules, 'fax', 'string|max:20');
         }
 
         $validator = Validator::make(Input::all(), $rules);
@@ -177,22 +184,30 @@ class PalletsaccountsController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
-        } else {
+        }elseif (Palletsaccount::where('name', $nickname)->orWhere('nickname', $name)->first() <> null) {
+            session()->flash('messageAddPalletsaccount', 'Error ! This nickname or name is already as a nickname or name for an other account');
+        return redirect()->back()
+            ->withInput();
+    } else {
             //pallets account creation
-            if ($type == 'Network') {
-                Palletsaccount::create(
-                    ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
-                );
-            } elseif ($type == 'Network' && isset($warehousesAssociatedName)) {
+            if ($type == 'Network' && isset($warehousesAssociatedName) && !(isset($oneWarehouse))) {
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
                 )->warehouses()->sync($idwarehouses);
+
+            } elseif ($type == 'Network') {
+                Palletsaccount::create(
+                    ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
+                );
+                if (isset($oneWarehouse)) {
+                    Warehouse::create(['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                }
             } elseif ($type == 'Carrier') {
                 Palletsaccount::create(
-                    ['name' => $name, 'nickname' => $nickname, 'type' => $type, 'adress' => $adress, 'email' => $email, 'phone' => $phone, 'namecontact' => $namecontact]
+                    ['name' => $name, 'nickname' => $nickname, 'type' => $type, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'email' => $email, 'phone' => $phone, 'fax' => $fax, 'namecontact' => $namecontact]
                 );
-                Truck::create(['name' => $name, 'nickname' => $nickname, 'licensePlate' => 'STOCK', 'palletsaccount_name' =>$name]);
-                Truck::create(['name' => $name, 'nickname' => $nickname, 'licensePlate' => 'OTHER', 'palletsaccount_name' =>$name]);
+                Truck::create(['name' => $nickname, 'licensePlate' => 'STOCK', 'palletsaccount_name' => $nickname]);
+                Truck::create(['name' => $nickname, 'licensePlate' => 'OTHER', 'palletsaccount_name' => $nickname]);
             } elseif ($type == 'Other') {
                 Palletsaccount::create(
                     ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
@@ -203,8 +218,8 @@ class PalletsaccountsController extends Controller
             if ($originalPage == 'allPalletsaccounts-all') {
                 return redirect('/allPalletsaccounts/all');
             } elseif (explode('-', $originalPage)[0] == 'detailsLoading') {
-                if(isset($atrnr)){
-                    Loading::where('atrnr', $atrnr)->update(['subfrachter'=>$name . ', ' . $adress]);
+                if (isset($atrnr)) {
+                    Loading::where('atrnr', $atrnr)->update(['subfrachter' => $nickname . ', ' . $country.'-'.$zipcode.' '.$town]);
                 }
                 session()->flash('openPanelInformation', 'openPanelInformation');
                 return redirect('/detailsLoading/' . explode('-', $originalPage)[1]);
@@ -217,7 +232,6 @@ class PalletsaccountsController extends Controller
             } elseif (explode('-', $originalPage)[0] == 'detailsTruck') {
                 return redirect('/detailsTruck/' . explode('-', $originalPage)[1]);
             }
-
         }
     }
 
@@ -231,23 +245,22 @@ class PalletsaccountsController extends Controller
     {
         if (Auth::check()) {
             //general data
-            $listWarehouses = DB::table('warehouses')->orderBy('name', 'asc')->get();
+            $listWarehouses = DB::table('warehouses')->orderBy('nickname', 'asc')->get();
             $account = Palletsaccount::where('id', $id)->first();
-            $name = $account->name;
-//            $nickname = $account->nickname;
+            $nickname = $account->nickname;
 
             //according to the type of account, get the right entities associated
             if ($account->type == 'Network') {
                 $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
                 if (!$warehousesAssociated->isEmpty()) {
                     foreach ($warehousesAssociated as $warehouse) {
-                        $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('name');
+                        $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('nickname');
                     }
                     asort($namewarehouses);
                 }
             } elseif ($account->type == 'Carrier') {
-                $trucksAssociated = Truck::where('palletsaccount_name', $name)->orderBy('licensePlate', 'asc')->get();
-//                $trucksAssociated = Truck::where('palletsaccount_name', $nickname)->orderBy('licensePlate', 'asc')->get();
+                $trucksActivated = Truck::where('palletsaccount_name', $nickname)->where('activated',1)->orderBy('licensePlate', 'asc')->get();
+                $trucksInactivated = Truck::where('palletsaccount_name', $nickname)->where('activated',0)->orderBy('licensePlate', 'asc')->get();
             }
 
             //table data transfers
@@ -261,9 +274,8 @@ class PalletsaccountsController extends Controller
                 $listColumns = ['id', 'type', 'palletsNumber', 'loading_atrnr', 'date', 'state'];
             }
 
-            $query = Palletstransfer::where(function ($q) use ($name) {
-                $q->where('creditAccount', 'LIKE', $name . '-' . '%')->orWhere('debitAccount', 'LIKE', $name . '-' . '%');
-//                $q->where('creditAccount', 'LIKE', $nickname . '-' . '%')->orWhere('debitAccount', 'LIKE', $nickname . '-' . '%');
+            $query = Palletstransfer::where(function ($q) use ($nickname) {
+                $q->where('creditAccount', 'LIKE', $nickname . '-' . '%')->orWhere('debitAccount', 'LIKE', $nickname . '-' . '%');
             });
 
             //if the user is sorting the table
@@ -327,7 +339,7 @@ class PalletsaccountsController extends Controller
                 $listTransfers = $query->orderBy('id', 'asc')->get();
             }
 
-            return view('palletsaccounts.detailsPalletsaccount', compact('searchQuery', 'listColumns', 'searchColumnsString', 'searchColumns', 'listTransfers', 'listWarehouses', 'account', 'namewarehouses', 'trucksAssociated'));
+            return view('palletsaccounts.detailsPalletsaccount', compact('searchQuery', 'listColumns', 'searchColumnsString', 'searchColumns', 'listTransfers', 'listWarehouses', 'account', 'namewarehouses', 'trucksActivated', 'trucksInactivated'));
         } else {
             return view('auth.login');
         }
@@ -342,56 +354,89 @@ class PalletsaccountsController extends Controller
     public function update(Request $request, $id)
     {
         $actionClearForm = $request->actionClearForm;
+        $actualNickname=Palletsaccount::where('id', $id)->first()->nickname;
+        $listTrucks = Truck::where('palletsaccount_name', $actualNickname)->get();
+
+        $desactivate=$request->desactivate;
+        $activate=$request->activate;
 
         if (isset($actionClearForm) && $actionClearForm == 'Clear trucks') {
             //CARRIER ONLY : this button will clear every pallets number for ervery truck and put the sum in the "truck" STOCK that is the stock of the carrier
-            $palletsaccount_name = Palletsaccount::where('id', $id)->first()->name;
-            $listTrucks = Truck::where('palletsaccount_name', $palletsaccount_name)->get();
             foreach ($listTrucks as $truck) {
                 if ($truck->licensePlate <> 'STOCK') {
                     $realNumberPallets = $truck->realNumberPallets;
                     $theoricalNumberPallets = $truck->theoricalNumberPallets;
-                    Truck::where('palletsaccount_name', $palletsaccount_name)->where('licensePlate', $truck->licensePlate)->update(['realNumberPallets' => 0, 'theoricalNumberPallets' => 0]);
-                    $realNumberPalletsStock = Truck::where('palletsaccount_name', $palletsaccount_name)->where('licensePlate', 'STOCK')->first()->realNumberPallets;
-                    $theoricalNumberPalletsStock = Truck::where('palletsaccount_name', $palletsaccount_name)->where('licensePlate', 'STOCK')->first()->theoricalNumberPallets;
-                    Truck::where('palletsaccount_name', $palletsaccount_name)->where('licensePlate', 'STOCK')->update(['realNumberPallets' => $realNumberPalletsStock + $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPalletsStock + $theoricalNumberPallets]);
+                    $palletsDebt=$truck->palletsDebt;
+                    Truck::where('palletsaccount_name', $actualNickname)->where('licensePlate', $truck->licensePlate)->update(['realNumberPallets' => 0, 'theoricalNumberPallets' => 0, 'palletsDebt'=>0]);
+                    $realNumberPalletsStock = Truck::where('palletsaccount_name', $actualNickname)->where('licensePlate', 'STOCK')->first()->realNumberPallets;
+                    $theoricalNumberPalletsStock = Truck::where('palletsaccount_name', $actualNickname)->where('licensePlate', 'STOCK')->first()->theoricalNumberPallets;
+                    $palletsDebtStock = Truck::where('palletsaccount_name', $actualNickname)->where('licensePlate', 'STOCK')->first()->palletsDebt;
+                    Truck::where('palletsaccount_name', $actualNickname)->where('licensePlate', 'STOCK')->update(['palletsDebt' => $palletsDebtStock + $palletsDebt,'realNumberPallets' => $realNumberPalletsStock + $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPalletsStock + $theoricalNumberPallets]);
                 }
             }
             session()->flash('messageClearTrucks', 'Successfully cleared trucks');
-        } else {
+        } elseif(isset($desactivate)){
+            Truck::where('id', $desactivate)->update(['activated'=> false]);
+        }elseif(isset($activate)){
+            Truck::where('id', $activate)->update(['activated'=> true]);
+        }else {
             //update data
             $nickname = Input::get('nickname');
-            Palletsaccount::where('id', $id)->update(['nickname' => $nickname]);
-            $type = Input::get('type');
-            Palletsaccount::where('id', $id)->update(['type' => $type]);
-            if (isset($type) && $type == 'Network') {
-                $warehousesAssociatedName = Input::get('namewarehouses');
-                if (isset($warehousesAssociatedName)) {
-                    foreach ($warehousesAssociatedName as $warehouseAName) {
-                        $idwarehouses[] = Warehouse::where('name', $warehouseAName)->value('id');
+            if(Palletsaccount::where('id', '<>', $id)->where(function($q) use($nickname){
+                $q->where('nickname', $nickname)->orWhere('name', $nickname);})->first() <> null){
+                session()->flash('messageUpdatePalletsaccount', 'Error ! This nickname is already taken');
+            }else{
+                foreach($listTrucks as $truck){
+                    Truck::where('id', $truck->id)->update(['name'=>$nickname, 'palletsaccount_name'=>$nickname]);
+                }
+                Palletsaccount::where('id', $id)->update(['nickname' => $nickname]);
+                $type = Input::get('type');
+                Palletsaccount::where('id', $id)->update(['type' => $type]);
+                if (isset($type) && $type == 'Network') {
+                    $warehousesAssociatedName = Input::get('namewarehouses');
+                    if (isset($warehousesAssociatedName)) {
+                        foreach ($warehousesAssociatedName as $warehouseAName) {
+                            $idwarehouses[] = Warehouse::where('nickname', $warehouseAName)->value('id');
+                        }
+                        Palletsaccount::where('id', $id)->first()->warehouses()->sync($idwarehouses);
                     }
-                    Palletsaccount::where('id', $id)->first()->warehouses()->sync($idwarehouses);
-                }
-            } elseif (isset($type) && $type == 'Carrier') {
-                $adress = Input::get('adress');
-                $phone = Input::get('phone');
-                $email = Input::get('email');
-                $namecontact = Input::get('namecontact');
+                } elseif (isset($type) && $type == 'Carrier') {
+                    $adress = Input::get('adress');
+                    $zipcode = Input::get('zipcode');
+                    $country=Input::get('country');
+                    $town=Input::get('town');
+                    $phone = Input::get('phone');
+                    $fax=Input::get('fax');
+                    $email = Input::get('email');
+                    $namecontact = Input::get('namecontact');
 
-                if (isset($adress)) {
-                    Palletsaccount::where('id', $id)->update(['adress' => $adress]);
+                    if (isset($adress)) {
+                        Palletsaccount::where('id', $id)->update(['adress' => $adress]);
+                    }
+                    if (isset($phone)) {
+                        Palletsaccount::where('id', $id)->update(['phone' => $phone]);
+                    }
+                    if (isset($fax)) {
+                        Palletsaccount::where('id', $id)->update(['fax' => $fax]);
+                    }
+                    if (isset($email)) {
+                        Palletsaccount::where('id', $id)->update(['email' => $email]);
+                    }
+                    if (isset($namecontact)) {
+                        Palletsaccount::where('id', $id)->update(['namecontact' => $namecontact]);
+                    }
+                    if (isset($country)) {
+                        Palletsaccount::where('id', $id)->update(['country' => $country]);
+                    }
+                    if (isset($town)) {
+                        Palletsaccount::where('id', $id)->update(['town' => $town]);
+                    }
+                    if (isset($zipcode)) {
+                        Palletsaccount::where('id', $id)->update(['zipcode' => $zipcode]);
+                    }
                 }
-                if (isset($phone)) {
-                    Palletsaccount::where('id', $id)->update(['phone' => $phone]);
-                }
-                if (isset($email)) {
-                    Palletsaccount::where('id', $id)->update(['email' => $email]);
-                }
-                if (isset($namecontact)) {
-                    Palletsaccount::where('id', $id)->update(['namecontact' => $namecontact]);
-                }
+                session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
             }
-            session()->flash('messageUpdatePalletsaccount', 'Successfully updated pallets account');
         }
         return redirect()->back();
     }
@@ -400,22 +445,22 @@ class PalletsaccountsController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function delete($id)
-    {
-        $nameAccount=Palletsaccount::where('id', $id)->first()->name;
-        $transfers = Palletstransfer::where(function ($q) use ($nameAccount) {
-            $q->where('creditAccount', 'LIKE', $nameAccount . '-' . '%')->orWhere('debitAccount', 'LIKE', $nameAccount . '-' . '%');
-        })->get();
-//        dd($transfers);
-        if(!$transfers->isEmpty()){
-            session()->flash('messageDeletePalletsaccount', 'Error ! You cant delete this account because transfers are associated to.');
-            return redirect()->back();
-        }else{
-            DB::table('palletsaccounts')->where('id', $id)->delete();
-            // redirect
-            session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
-            return redirect('/allPalletsaccounts/all');
-        }
-    }
+//    public function delete($id)
+//    {
+//        $nameAccount = Palletsaccount::where('id', $id)->first()->name;
+//        $transfers = Palletstransfer::where(function ($q) use ($nameAccount) {
+//            $q->where('creditAccount', 'LIKE', $nameAccount . '-' . '%')->orWhere('debitAccount', 'LIKE', $nameAccount . '-' . '%');
+//        })->get();
+////        dd($transfers);
+//        if (!$transfers->isEmpty()) {
+//            session()->flash('messageDeletePalletsaccount', 'Error ! You cant delete this account because transfers are associated to.');
+//            return redirect()->back();
+//        } else {
+//            DB::table('palletsaccounts')->where('id', $id)->delete();
+//            // redirect
+//            session()->flash('messageDeletePalletsaccount', 'Successfully deleted the pallets account!');
+//            return redirect('/allPalletsaccounts/all');
+//        }
+//    }
 
 }

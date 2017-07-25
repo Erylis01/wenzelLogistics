@@ -1,3 +1,16 @@
+//all loadings
+function openClosePanelErrors() {
+    if ($('#errors').hasClass('in')) {
+        $("#errorsPanelLogoPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#errorsPanelLogoPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+function disabledRefresh(){
+    $('#refreshLink').addClass('disabled');
+}
+
+//details loading
 function formSubmitBlock(button) {
     $('input[id=actionForm]').val(button.value);
     $("#" + button.id).attr('disabled', 'disabled');

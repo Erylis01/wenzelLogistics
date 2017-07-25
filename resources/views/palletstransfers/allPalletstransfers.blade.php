@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="active"
+    active
 @endsection
 @section('classProfile')
     nonActive
@@ -36,10 +36,9 @@
             <div class="col-lg-14">
                 <div class="panel panel-general">
                     <div class="panel-heading">
-                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllPalletstransfers')}}">
+                        <form class="form-horizontal" role="form" method="GET" action="{{route('showAllPalletstransfers', ['type'=>$type])}}">
                             {{ csrf_field() }}
-                        <div class="col-lg-4">List of all pallets transfers</div>
-
+                        <div class="col-lg-4">List of pallets transfers - @if($type=='all') All @elseif($type=='debt') Debt @endif</div>
                             <div class="form-group col-lg-4">
                                 <input type="text" class="form-control" name="search"
                                        @if(isset($searchQuery)) value="{{$searchQuery}}" @else value=""
@@ -86,7 +85,7 @@
                                 <button class="btn" type="submit" name="searchSubmit"><span
                                             class="glyphicon glyphicon-search"></span></button>
                             </div>
-                                <div class="form-group">
+                                <div>
                                 <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Transfers</a>
                         </div>
@@ -107,84 +106,84 @@
                                     <tr>
                                         <th class="text-center col1 colHeightTitle">ID<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"
-                                            @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"
+                                            @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=asc')}}"
                                                 @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"
-                                            @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"
+                                            @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=id&order=desc')}}"
                                                 @endif></a>
                                         </th>
                                         <th class="col1b colHeightTitle"></th>
-                                        <th class="colHeightTitle col8"></th>
+                                        <th class="colHeightTitle col8">Errors</th>
                                         <th class="text-center col2 colHeightTitle">Date<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=date&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                         <th class="text-center col3 colHeightTitle">Type<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=type&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=type&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                         <th class="text-center col4 colHeightTitle">Debit Account<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=debitAccount&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                         <th class="text-center col4 colHeightTitle">Credit Account<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=creditAccount&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                         <th class="text-center col5 colHeightTitle">Pal.<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=palletsNumber&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                         <th class="text-center col6 colHeightTitle">Loading<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=loading_atrnr&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                         <th class="text-center col7 colHeightTitle">State<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=state&order=asc')}}"
                                                     @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"
-                                               @else href="{{url('/allPalletstransfers?page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletstransfers/'.$type.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"
+                                               @else href="{{url('/allPalletstransfers/'.$type.'?page='.$listPalletstransfers->currentPage().'&sortby=state&order=desc')}}"
                                                     @endif></a>
                                             </th>
                                     </tr>

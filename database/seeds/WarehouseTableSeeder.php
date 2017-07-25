@@ -36,7 +36,7 @@ class WarehouseTableSeeder extends Seeder
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
                                 //not double
                                 $k = count(Warehouse::get()) + 1;
@@ -95,7 +95,7 @@ class WarehouseTableSeeder extends Seeder
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                 //not double
                                 $k = count(Warehouse::get()) + 1;
@@ -134,7 +134,7 @@ class WarehouseTableSeeder extends Seeder
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
                                 //not double
                                 $k = count(Warehouse::get()) + 1;
@@ -172,7 +172,7 @@ class WarehouseTableSeeder extends Seeder
                         $nbrows = count($sheet);
 
                         for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->first();
+                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
                             if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                 //not double
                                 $k = count(Warehouse::get()) + 1;

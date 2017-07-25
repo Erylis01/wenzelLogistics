@@ -24,12 +24,6 @@ class ListLoadingsController extends Controller
     public function show(Request $request, $refresh)
     {
         if (Auth::check()) {
-            //to import all new loadings in excel files
-            if ($refresh == 'true') {
-                $this->importData();
-                $refresh = 'false';
-            }
-
             //search key and search columns
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
@@ -101,7 +95,23 @@ class ListLoadingsController extends Controller
                     $links = '';
                 }
             }
-            return view('loadings.loadings', compact('refresh', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
+            $view = 'ok';
+            //to import all new loadings in excel files
+            if ($refresh == 'true') {
+                $data = $this->importData();
+                if (count($data[0]) > 0) {
+                    $errorsAtrnrImport = $data[0];
+                    $errorsColImport = $data[1];
+                    $view = 'error';
+                }
+                $refresh = 'false';
+            }
+
+            if ($view == 'ok') {
+                return view('loadings.loadings', compact('refresh', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
+            } elseif ($view == 'error') {
+                return view('loadings.loadings', compact('errorsAtrnrImport', 'errorsColImport', 'refresh', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
+            }
         } else {
             return view('auth.login');
         }
@@ -114,106 +124,394 @@ class ListLoadingsController extends Controller
     {
         $path = '../resources/assets/excel/Hypertrans';
         $files = File::allFiles($path);
+        $errorsAtrnrImport = [];
+        $errorsColImport = [];
+
+        ini_set('memory_limit', '-1');
+        set_time_limit(500);
         foreach ($files as $file) {
             if (strpos((string)$file, '.xls') !== false) {
+                $data = Excel::load($file, function ($reader) {
+                });
+                $sheet = $data->getSheet(0)->toArray();
+                $nbrows = count($sheet);
 
-                Excel::load($file, function ($reader) {
-                    if (!empty($reader)) {
-                        $reader->noHeading();
-                        $sheet = $reader->getSheet(0)->toArray();
-                        $nbrows = count($sheet);
+                for ($r = 4; $r < $nbrows; $r++) {
+                    if (trim($sheet[$r][26]) <> '') {
+                        $licensePlate = trim($sheet[$r][26]);
+                    } else {
+                        $licensePlate = 'OTHER';
+                    }
+                    if ($sheet[$r][25] <> null) {
+                        if (count(explode(',', $sheet[$r][25])) > 2) {
+                            $adress = trim(explode(',', $sheet[$r][25])[count(explode(',', $sheet[$r][25])) - 1]);
+                            $name = trim(str_replace($adress, '', $sheet[$r][25]));
+                            $country = null;
+                            $zipcode = null;
+                            $town = null;
+                        } else {
+                            $name = trim(explode(',', $sheet[$r][25])[0]);
+                            $adress = trim(explode(',', $sheet[$r][25])[1]);
+                            $country = trim(explode('-', $adress)[0]);
+                            $zipTown = trim(explode('-', $adress)[1]);
+                            $zipcode = trim(explode(' ', $zipTown)[0]);
+                            $town = str_replace($zipcode, '', $zipTown);
+                        }
 
-                        for ($r = 4; $r < $nbrows; $r++) {
-                            $loadingsTest = DB::table('loadings')->where('atrnr', '=', trim($sheet[$r][3]))->first();
-                            if ($loadingsTest == null) {
-                                //not double
-                                $datel_parse = date_parse_from_format('m-d-y', trim($sheet[$r][0]));
-                                $datel = new DateTime();
-                                $datel->setDate($datel_parse['year'], $datel_parse['month'], $datel_parse['day']);
+                        $testAccount = Palletsaccount::where('type', 'Carrier')->where(function ($q) use ($name) {
+                            $q->where('name', $name)->orWhere('nickname', $name);
+                        })->first();
+                        if ($testAccount == null) {
+                            Palletsaccount::firstOrCreate([
+                                'name' => $name,
+                                'nickname' => $name,
+                                'adress' => $adress,
+                                'country' => $country,
+                                'zipcode' => $zipcode,
+                                'town' => $town,
+                                'type' => 'Carrier',
+                            ]);
+                        }
 
-                                $datee_parse = date_parse_from_format('m-d-y', trim($sheet[$r][1]));
-                                $datee = new DateTime();
-                                $datee->setDate($datee_parse['year'], $datee_parse['month'], $datee_parse['day']);
+                        $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
 
-                                $k = count(Loading::get()) + 1;
-                                Loading::firstOrCreate([
-                                    'id' => $k,
-                                    'entladedatum' => $datee,
-                                    'disp' => trim($sheet[$r][2]),
-                                    'atrnr' => trim($sheet[$r][3]),
-                                    'referenz' => trim($sheet[$r][4]),
-                                    'auftraggeber' => trim($sheet[$r][5]),
-                                    'beladestelle' => trim($sheet[$r][6]),
-                                    'landb' => trim($sheet[$r][7]),
-                                    'plzb' => trim($sheet[$r][8]),
-                                    'ortb' => trim($sheet[$r][9]),
-                                    'entladestelle' => trim($sheet[$r][10]),
-                                    'lande' => trim($sheet[$r][11]),
-                                    'plze' => trim($sheet[$r][12]),
-                                    'orte' => trim($sheet[$r][13]),
-                                    'anz' => trim($sheet[$r][14]),
-                                    'art' => trim($sheet[$r][15]),
-                                    'ware' => trim($sheet[$r][16]),
-                                    'gewicht' => trim($sheet[$r][17]),
-                                    'vol' => trim($sheet[$r][18]),
-                                    'ldm' => trim($sheet[$r][19]),
-                                    'umsatz' => trim($sheet[$r][20]),
-                                    'aufwand' => trim($sheet[$r][21]),
-                                    'db' => trim($sheet[$r][22]),
-                                    'trp' => trim($sheet[$r][23]),
-                                    'pt' => trim($sheet[$r][24]),
-                                    'subfrachter' => trim($sheet[$r][25]),
-                                    'kennzeichen' => trim($sheet[$r][26]),
-                                    'zusladestellen' => trim($sheet[$r][27]),
-                                ]);
-                            }
-                            if (trim($sheet[$r][26]) <> '') {
-                                $licensePlate = trim($sheet[$r][26]);
-                            } else {
-                                $licensePlate = 'OTHER';
-                            }
-                            if ($sheet[$r][25] <> null) {
-                                $name = trim(explode(',', $sheet[$r][25])[0]);
-                                $adress = trim(explode(',', $sheet[$r][25])[1]);
+                        if ($testTruckStock == null) {
+                            Truck::firstOrCreate([
+                                'name' => $name,
+                                'licensePlate' => 'STOCK',
+                                'palletsaccount_name' => $name,
+                            ]);
+                        }
+                        $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
 
-                                $testAccount = Palletsaccount::where('type', 'Carrier')->where('name', $name)->first();
-                                if ($testAccount == null) {
-                                    Palletsaccount::firstOrCreate([
-                                        'name' => $name,
-                                            'nickname' => $name,
-                                        'adress' => $adress,
-                                        'type' => 'Carrier',
-                                    ]);
-                                }
+                        if ($testTruck == null) {
+                            //not double
+                            Truck::firstOrCreate([
+                                'name' => $name,
+                                'licensePlate' => $licensePlate,
+                                'palletsaccount_name' => $name,
+                            ]);
+                        }
 
-                                $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
+                    }
 
-                                if ($testTruckStock == null) {
-                                    Truck::firstOrCreate([
-                                        'name' => $name,
-                                        'nickname' => $name,
-                                        'licensePlate' => 'STOCK',
-                                        'palletsaccount_name' => $name,
-                                    ]);
-                                }
-                                $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
+                    //check if importation is possible or not
+                    $loadingTest = DB::table('loadings')->where('atrnr', '=', trim($sheet[$r][3]))->first();
+                    if ($loadingTest == null) {
+                        //not double
+                        $datel_parse = date_parse_from_format('m-d-y', trim($sheet[$r][0]));
+                        $datel = new DateTime();
+                        $datel->setDate($datel_parse['year'], $datel_parse['month'], $datel_parse['day']);
 
-                                if ($testTruck == null) {
-                                    //not double
-                                    Truck::firstOrCreate([
-                                        'name' => $name,
-                                        'nickname' => $name,
-                                        'licensePlate' => $licensePlate,
-                                        'palletsaccount_name' => $name,
-                                    ]);
-                                }
-
-                            }
+                        $datee_parse = date_parse_from_format('m-d-y', trim($sheet[$r][1]));
+                        $datee = new DateTime();
+                        $datee->setDate($datee_parse['year'], $datee_parse['month'], $datee_parse['day']);
+                        $k = count(Loading::get()) + 1;
+                        Loading::firstOrCreate([
+                            'id' => $k,
+                            'ladedatum' => $datel,
+                            'entladedatum' => $datee,
+                            'disp' => trim($sheet[$r][2]),
+                            'atrnr' => trim($sheet[$r][3]),
+                            'referenz' => trim($sheet[$r][4]),
+                            'auftraggeber' => trim($sheet[$r][5]),
+                            'beladestelle' => trim($sheet[$r][6]),
+                            'landb' => trim($sheet[$r][7]),
+                            'plzb' => trim(intval(str_replace('-', '', $sheet[$r][8]))),
+                            'ortb' => trim($sheet[$r][9]),
+                            'entladestelle' => trim($sheet[$r][10]),
+                            'lande' => trim($sheet[$r][11]),
+                            'plze' => trim(intval(str_replace('-', '', $sheet[$r][12]))),
+                            'orte' => trim($sheet[$r][13]),
+                            'anz' => trim($sheet[$r][14]),
+                            'art' => trim($sheet[$r][15]),
+                            'ware' => trim($sheet[$r][16]),
+                            'gewicht' => trim($sheet[$r][17]),
+                            'vol' => trim($sheet[$r][18]),
+                            'ldm' => trim($sheet[$r][19]),
+                            'umsatz' => trim($sheet[$r][20]),
+                            'aufwand' => trim($sheet[$r][21]),
+                            'db' => trim($sheet[$r][22]),
+                            'trp' => trim($sheet[$r][23]),
+                            'pt' => trim($sheet[$r][24]),
+                            'subfrachter' => trim($sheet[$r][25]),
+                            'kennzeichen' => trim($sheet[$r][26]),
+                            'zusladestellen' => trim($sheet[$r][27]),
+                        ]);
+                    } else {
+                        if (date("m-d-y", strtotime($loadingTest->ladedatum)) <> trim($sheet[$r][0])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Ladedatum';
+                        }
+                        if (date("m-d-y", strtotime($loadingTest->entladedatum)) <> trim($sheet[$r][1])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Entladedatum';
+                        }
+                        if ($loadingTest->referenz <> trim($sheet[$r][4])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Referenz';
+                        }
+                        if ($loadingTest->auftraggeber <> trim($sheet[$r][5])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Auftraggeber';
+                        }
+                        if ($loadingTest->beladestelle <> trim($sheet[$r][6])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Beladestelle';
+                        }
+                        if ($loadingTest->landb <> trim($sheet[$r][7])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Land beladestelle';
+                        }
+                        if ($loadingTest->ortb <> trim($sheet[$r][9])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Ort beladestelle';
+                        }
+                        if ($loadingTest->plzb <> trim(intval(str_replace('-', '', $sheet[$r][8])))) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Plz beladestelle';
+                        }
+                        if ($loadingTest->entladestelle <> trim($sheet[$r][10])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Entladestelle';
+                        }
+                        if ($loadingTest->lande <> trim($sheet[$r][11])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Land entladestelle';
+                        }
+                        if ($loadingTest->orte <> trim($sheet[$r][13])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Ort entladestelle';
+                        }
+                        if ($loadingTest->plze <> trim(intval(str_replace('-', '', $sheet[$r][12])))) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Plz entladestelle';
+                        }
+                        if ($loadingTest->anz <> trim($sheet[$r][14])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Anz';
+                        }
+                        if ($loadingTest->art <> trim($sheet[$r][15])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Art';
+                        }
+                        if ($loadingTest->ware <> trim($sheet[$r][16])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Ware';
+                        }
+                        if ($loadingTest->subfrachter <> trim($sheet[$r][25])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Subfrachter';
+                        }
+                        if (trim($sheet[$r][26]) == '' && ($loadingTest->kennzeichen <> 'OTHER' && $loadingTest->kennzeichen <> '')) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Kennzeichen';
+                        } elseif (trim($sheet[$r][26]) <> '' && trim($sheet[$r][26]) <> $loadingTest->kennzeichen) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'kennzeichen';
+                        }
+                        if ($loadingTest->zusladestellen <> trim($sheet[$r][27])) {
+                            $errorsAtrnrImport[] = trim($sheet[$r][3]);
+                            $errorsColImport[] = 'Zus ladestellen';
                         }
                     }
-                });
+                }
             }
         }
+//        dd([$errorsAtrnrImport, $errorsColImport]);
+        return [$errorsAtrnrImport, $errorsColImport];
     }
-
 }
+
+//                $data = Excel::load($file, function ($reader) use($errorsAtrnrImport, $errorsColImport) {
+//                    if (!empty($reader)) {
+//                        $reader->noHeading();
+//                        $sheet = $reader->getSheet(0)->toArray();
+//                        $nbrows = count($sheet);
+//
+//                        for ($r = 4; $r < $nbrows; $r++) {
+//                            if (trim($sheet[$r][26]) <> '') {
+//                                $licensePlate = trim($sheet[$r][26]);
+//                            } else {
+//                                $licensePlate = 'OTHER';
+//                            }
+//                            if ($sheet[$r][25] <> null) {
+//                                if (count(explode(',', $sheet[$r][25])) > 2) {
+//                                    $adress = trim(explode(',', $sheet[$r][25])[count(explode(',', $sheet[$r][25])) - 1]);
+//                                    $name = trim(str_replace($adress, '', $sheet[$r][25]));
+//                                    $country = null;
+//                                    $zipcode = null;
+//                                    $town = null;
+//                                } else {
+//                                    $name = trim(explode(',', $sheet[$r][25])[0]);
+//                                    $adress = trim(explode(',', $sheet[$r][25])[1]);
+//                                    $country = trim(explode('-', $adress)[0]);
+//                                    $zipTown = trim(explode('-', $adress)[1]);
+//                                    $zipcode = trim(explode(' ', $zipTown)[0]);
+//                                    $town = str_replace($zipcode, '', $zipTown);
+//                                }
+//
+//                                $testAccount = Palletsaccount::where('type', 'Carrier')->where(function ($q) use ($name) {
+//                                    $q->where('name', $name)->orWhere('nickname', $name);
+//                                })->first();
+//                                if ($testAccount == null) {
+//                                    Palletsaccount::firstOrCreate([
+//                                        'name' => $name,
+//                                        'nickname' => $name,
+//                                        'adress' => $adress,
+//                                        'country' => $country,
+//                                        'zipcode' => $zipcode,
+//                                        'town' => $town,
+//                                        'type' => 'Carrier',
+//                                    ]);
+//                                }
+//
+//                                $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
+//
+//                                if ($testTruckStock == null) {
+//                                    Truck::firstOrCreate([
+//                                        'name' => $name,
+//                                        'licensePlate' => 'STOCK',
+//                                        'palletsaccount_name' => $name,
+//                                    ]);
+//                                }
+//                                $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
+//
+//                                if ($testTruck == null) {
+//                                    //not double
+//                                    Truck::firstOrCreate([
+//                                        'name' => $name,
+//                                        'licensePlate' => $licensePlate,
+//                                        'palletsaccount_name' => $name,
+//                                    ]);
+//                                }
+//
+//                            }
+//
+//                            //check if importation is possible or not
+//                            $loadingTest = DB::table('loadings')->where('atrnr', '=', trim($sheet[$r][3]))->first();
+//                            if ($loadingTest == null) {
+//                                //not double
+//                                $datel_parse = date_parse_from_format('m-d-y', trim($sheet[$r][0]));
+//                                $datel = new DateTime();
+//                                $datel->setDate($datel_parse['year'], $datel_parse['month'], $datel_parse['day']);
+//
+//                                $datee_parse = date_parse_from_format('m-d-y', trim($sheet[$r][1]));
+//                                $datee = new DateTime();
+//                                $datee->setDate($datee_parse['year'], $datee_parse['month'], $datee_parse['day']);
+//                                $k = count(Loading::get()) + 1;
+//                                Loading::firstOrCreate([
+//                                    'id' => $k,
+//                                    'ladedatum' => $datel,
+//                                    'entladedatum' => $datee,
+//                                    'disp' => trim($sheet[$r][2]),
+//                                    'atrnr' => trim($sheet[$r][3]),
+//                                    'referenz' => trim($sheet[$r][4]),
+//                                    'auftraggeber' => trim($sheet[$r][5]),
+//                                    'beladestelle' => trim($sheet[$r][6]),
+//                                    'landb' => trim($sheet[$r][7]),
+//                                    'plzb' => trim(intval(str_replace('-', '', $sheet[$r][8]))),
+//                                    'ortb' => trim($sheet[$r][9]),
+//                                    'entladestelle' => trim($sheet[$r][10]),
+//                                    'lande' => trim($sheet[$r][11]),
+//                                    'plze' => trim(intval(str_replace('-', '', $sheet[$r][12]))),
+//                                    'orte' => trim($sheet[$r][13]),
+//                                    'anz' => trim($sheet[$r][14]),
+//                                    'art' => trim($sheet[$r][15]),
+//                                    'ware' => trim($sheet[$r][16]),
+//                                    'gewicht' => trim($sheet[$r][17]),
+//                                    'vol' => trim($sheet[$r][18]),
+//                                    'ldm' => trim($sheet[$r][19]),
+//                                    'umsatz' => trim($sheet[$r][20]),
+//                                    'aufwand' => trim($sheet[$r][21]),
+//                                    'db' => trim($sheet[$r][22]),
+//                                    'trp' => trim($sheet[$r][23]),
+//                                    'pt' => trim($sheet[$r][24]),
+//                                    'subfrachter' => trim($sheet[$r][25]),
+//                                    'kennzeichen' => trim($sheet[$r][26]),
+//                                    'zusladestellen' => trim($sheet[$r][27]),
+//                                ]);
+//                            } else {
+//                                if (date("m-d-y", strtotime($loadingTest->ladedatum)) <> trim($sheet[$r][0])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'ladedatum';
+//                                }
+//                                if (date("m-d-y", strtotime($loadingTest->entladedatum)) <> trim($sheet[$r][1])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'entladedatum';
+//                                }
+//                                if ($loadingTest->referenz <> trim($sheet[$r][4])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'referenz';
+//                                }
+//                                if ($loadingTest->auftraggeber <> trim($sheet[$r][5])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'auftraggeber';
+//                                }
+//                                if ($loadingTest->beladestelle <> trim($sheet[$r][6])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'beladestelle';
+//                                }
+//                                if ($loadingTest->landb <> trim($sheet[$r][7])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'land beladestelle';
+//                                }
+//                                if ($loadingTest->ortb <> trim($sheet[$r][9])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'ort beladestelle';
+//                                }
+//                                if ($loadingTest->plzb <> trim(intval(str_replace('-', '', $sheet[$r][8])))) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'plz beladestelle';
+//                                }
+//                                if ($loadingTest->entladestelle <> trim($sheet[$r][10])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'entladestelle';
+//                                }
+//                                if ($loadingTest->lande <> trim($sheet[$r][11])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'land entladestelle';
+//                                }
+//                                if ($loadingTest->orte <> trim($sheet[$r][13])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'ort entladestelle';
+//                                }
+//                                if ($loadingTest->plze <> trim(intval(str_replace('-', '', $sheet[$r][12])))) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'plz entladestelle';
+//                                }
+//                                if ($loadingTest->anz <> trim($sheet[$r][14])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'anz';
+//                                }
+//                                if ($loadingTest->art <> trim($sheet[$r][15])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'art';
+//                                }
+//                                if ($loadingTest->ware <> trim($sheet[$r][16])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'ware';
+//                                }
+//                                if ($loadingTest->subfrachter <> trim($sheet[$r][25])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'subfrachter';
+//                                }
+//
+//                                if (trim($sheet[$r][26]) == '' && ($loadingTest->kennzeichen <> 'OTHER' && $loadingTest->kennzeichen <> '')) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'kennzeichen';
+//                                } elseif (trim($sheet[$r][26]) <> '' && trim($sheet[$r][26]) <> $loadingTest->kennzeichen) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'kennzeichen';
+//                                }
+//                                if ($loadingTest->zusladestellen <> trim($sheet[$r][27])) {
+//                                    $errorsAtrnrImport[] = trim($sheet[$r][3]);
+//                                    $errorsColImport[] = 'zus ladestellen';
+//                                }
+//                            }
+//                        }
+//                    }
+////                    return [$errorsAtrnrImport, $errorsColImport];
+//                });
+//                dd($data->getSheet(0)->toArray());
+

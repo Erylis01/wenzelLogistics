@@ -21,7 +21,7 @@
     nonActive
 @endsection
 @section('classPalletsTransfers')
-    class="nonActive"
+    nonActive
 @endsection
 @section('classProfile')
     nonActive
@@ -44,7 +44,7 @@
                         <div class="col-lg-11 text-left">Details of the warehouse : {{$id}} - {{ $name }}
                         </div>
                         <div>
-                            <button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-remove"
+                            <button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-trash"
                                     data-toggle="modal" data-target="#deleteWarehouse_modal" value="{{$id}}"
                                     name="deleteWarehouse_modal"></button>
                         </div>
@@ -65,7 +65,7 @@
                             <div class="form-group">
                                 <!--nickname-->
                                 <div class="col-lg-3">
-                                    <label for="nickname" class="control-label"><span>*</span> Nickname :</label>
+                                    <label for="nickname" class="control-label">*Nickname :</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <input id="nickname" type="text" class="form-control" name="nickname"
@@ -81,61 +81,48 @@
                             <div class="form-group">
                                 <!--adress-->
                                 <div class="col-lg-3">
-                                    <label for="adress" class="control-label"><span>*</span> Adress :</label>
+                                    <label for="adress" class="control-label">Adress :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="adress" type="text" class="form-control" name="adress" value="{{ $adress }}" placeholder="Adress" required autofocus>
-                                    @if ($errors->has('adress'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('adress') }}</strong>
-                                    </span>
-                                    @endif
+                                    <input id="adress" type="text" class="form-control" name="adress" value="{{ $adress }}" placeholder="Adress" autofocus>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <!--zipcode-->
                                 <div class="col-lg-3">
-                                    <label for="zipcode" class="control-label"><span>*</span> Zip Code :</label>
+                                    <label for="adress*" class="control-label" id="adress*">*</label>
                                 </div>
-                                <div class="col-lg-3">
+                                <!--country-->
+                                <div class="col-lg-2">
+                                    <input id="country" type="text" class="form-control" name="country" @if(isset($country)) value="{{$country}}" @else value="{{old('country')}}" @endif placeholder="Country" data-toggle="tooltip" data-placement="top" title="Country" required autofocus/>
+                                </div>
+                                <!--zipcode-->
+                                <div class="col-lg-2">
                                     <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
-                                           value="{{ $zipcode }}" placeholder="Zip Code" required autofocus>
-                                    @if ($errors->has('zipcode'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('zipcode') }}</strong>
-                                    </span>
-                                    @endif
+                                           @if(isset($zipcode)) value="{{$zipcode}}" @else value="{{old('zipcode')}}" @endif placeholder="Zipcode" data-toggle="tooltip" data-placement="top" title="Zipcode" required autofocus/>
                                 </div>
                                 <!--town-->
-                                <div class="col-lg-2">
-                                    <label for="town" class="control-label"><span>*</span> Town :</label>
-                                </div>
                                 <div class="col-lg-3">
                                     <input id="town" type="text" class="form-control" name="town"
-                                           value="{{ $town }}" placeholder="Town" required autofocus>
-                                    @if ($errors->has('town'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('town') }}</strong>
-                                    </span>
-                                    @endif
+                                           @if(isset($town)) value="{{$town}}" @else value="{{old('town')}}" @endif placeholder="Town" data-toggle="tooltip" data-placement="top" title="Town" required autofocus/>
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <!--country-->
-                                <div class="col-lg-3">
-                                    <label for="country" class="control-label"><span>*</span> Country :</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input id="country" type="text" class="form-control" name="country"
-                                           value="{{ $country }}" placeholder="country" required autofocus>
-                                    @if ($errors->has('country'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('country') }}</strong>
+                                @if ($errors->has('country'))
+                                    <span class="help-block text-center">
+                                    <strong>{{ $errors->first('country') }}</strong>
                                     </span>
-                                    @endif
-                                </div>
+                                @endif
+                                @if ($errors->has('zipcode'))
+                                    <span class="help-block text-center">
+                                    <strong>{{ $errors->first('zipcode') }}</strong>
+                                    </span>
+                                @endif
+                                @if ($errors->has('town'))
+                                    <span class="help-block text-center">
+                                    <strong>{{ $errors->first('town') }}</strong>
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="form-group">
@@ -210,26 +197,26 @@
                                             @php($list[]=null)
                                             @if(Illuminate\Support\Facades\Input::old('namepalletsaccounts'))
                                                 @foreach(old('namepalletsaccounts') as $namePA)
-                                                    @if($palletsAccount->name==$namePA)
-                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                    @if($palletsAccount->nickname==$namePA)
+                                                        <option selected>{{$palletsAccount->nickname}}</option>
                                                         @php($list[]=$palletsAccount)
                                                     @endif
                                                 @endforeach
                                                 @if(!in_array($palletsAccount, $list))
-                                                    <option>{{$palletsAccount->name}}</option>
+                                                    <option>{{$palletsAccount->nickname}}</option>
                                                 @endif
                                             @elseif(isset($namepalletsaccounts))
                                                 @foreach($namepalletsaccounts as $namePA)
-                                                    @if($palletsAccount->name==$namePA)
-                                                        <option selected>{{$palletsAccount->name}}</option>
+                                                    @if($palletsAccount->nickname==$namePA)
+                                                        <option selected>{{$palletsAccount->nickname}}</option>
                                                         @php($list[]=$palletsAccount)
                                                     @endif
                                                 @endforeach
                                                 @if(!in_array($palletsAccount, $list))
-                                                    <option>{{$palletsAccount->name}}</option>
+                                                    <option>{{$palletsAccount->nickname}}</option>
                                                 @endif
                                             @else
-                                                <option>{{$palletsAccount->name}}</option>
+                                                <option>{{$palletsAccount->nickname}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -264,7 +251,7 @@
                                             <div class="modal-body center">
                                                     @if(count($zipcodeWarehouses)==1)
                                                         <p class="text-left">
-                                                            An other warehouse ({{$zipcodeWarehouses[0]->name}}) already
+                                                            An other warehouse ({{$zipcodeWarehouses[0]->nickname}}) already
                                                             exists in this town. Are you
                                                             sure to create a new one ?
                                                         </p>
@@ -272,7 +259,7 @@
                                                         <p class="text-left"> Others warehouses already exist in this town : </p>
                                                         <ul>
                                                             @foreach($zipcodeWarehouses as $warehouse)
-                                                                <li class="text-left">{{$warehouse->name}}</li>
+                                                                <li class="text-left">{{$warehouse->nickname}}</li>
                                                             @endforeach
                                                         </ul>
                                                         <p class="text-left"> Are you sure to create a new one ? </p>
