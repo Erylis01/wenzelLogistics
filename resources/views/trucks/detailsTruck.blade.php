@@ -299,7 +299,6 @@
                                         </td>
                                         <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
                                         <td class="colDanger2">
-                                            {{--@php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->orWhere('debitAccount','LIKE', $truck->name.'-'.$truck->licensePlate.'%')->get())--}}
                                             @php($k=0)
                                             @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
                                             @if(!empty($errorsTransfer)&&$k<2)

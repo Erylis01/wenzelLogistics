@@ -116,7 +116,7 @@
                                 <tr>
                                         <th class="text-center colName1">Name<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"
+                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=name&order=asc')}}"
                                             @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"
                                                 @endif></a>
                                             <a class="glyphicon glyphicon-chevron-down general-sorting"

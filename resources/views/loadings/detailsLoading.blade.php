@@ -350,6 +350,7 @@
                                             </div>
                                             <div class="modal-body center">
                                                 @if(Session::has('testCarrier'))
+                                                    <div class="row">
                                                 <p class="text-center"><strong>Option 1 :</strong></p>
                                                 <p class="text-center">You have made a mistake.</p>
                                                 <p class="text-center">Please check in the carriers list below if you mean one of them</p>
@@ -361,14 +362,18 @@
                                                 <div class="col-lg-offset-4 col-lg-4">
                                                     <button class="btn btn-add btn-block" type="submit" value="Update" name="updateCarrier" id="updateCarrier" onclick="formSubmitBlockUpdateCarrier(this);">Select</button>
                                                 </div>
-                                                            <br>
-
+                                                    </div>
+                                                    <br>
+                                                <br>
+                                                <div class="row">
                                                 <p class="text-center"><strong>Option 2 :</strong></p>
                                                 <p class="text-center">Create the new carrier</p>
                                                 <div class="col-lg-offset-4 col-lg-4">
                                                     <button class="btn btn-add btn-block" type="submit" value="updateCreateCarrier" name="createCarrier" id="createCarrier" onclick="formSubmitBlock(this);">Create</button>
                                                 </div>
+                                                </div>
                                                 @elseif(Session::has('testTruck'))
+                                                    <div clas="row">
                                                     <p class="text-center"><strong>Option 1 :</strong></p>
                                                     <p class="text-center">You have made a mistake.</p>
                                                     <p class="text-center">Please check in the trucks list below if you mean one of them</p>
@@ -380,13 +385,18 @@
                                                     <div class="col-lg-offset-4 col-lg-4">
                                                         <button class="btn btn-add btn-block" type="submit" value="Update" name="updateTruck" id="updateTruck" onclick="formSubmitBlockUpdateTruck(this);">Select</button>
                                                     </div>
+                                                    </div>
                                                     <br>
+                                                <br>
+                                                <div class="row">
                                                     <p class="text-center"><strong>Option 2 :</strong></p>
                                                     <p class="text-center">Create the new truck</p>
                                                     <div class="col-lg-offset-4 col-lg-4">
                                                         <button class="btn btn-add btn-block" type="submit" value="updateCreateTruck" name="createTruck" id="createTruck" onclick="formSubmitBlock(this);">Create</button>
                                                     </div>
+                                            </div>
                                                 @endif
+
                                             </div>
                                         </div>
                                     </div>
@@ -437,10 +447,10 @@
                                     </div>
                                     @endif
                                     <!--show add form-->
-                                    @if(!(Session::has('openAddForm')|| (isset($actionForm) && ($actionForm== 'addTransferForm'||$actionForm=='addPalletstransfer'||explode('-', $actionForm)[0]=='showAddCorrectingTransfer')) || isset($showAddCorrectingTransfer)))
                                     <div class="row">
                                         <div class="from-group">
-                                            <div class="col-lg-3 col-lg-offset-2">
+                                            @if(!(Session::has('openAddForm')|| (isset($actionForm) && ($actionForm== 'addTransferForm'||$actionForm=='addPalletstransfer'||explode('-', $actionForm)[0]=='showAddCorrectingTransfer')) || isset($showAddCorrectingTransfer)))
+                                                <div class="col-lg-3 col-lg-offset-2">
                                                 <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" id="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="formSubmitBlock(this);">
                                                     Add transfer
                                                 </button>
@@ -448,28 +458,35 @@
                                             @if(count($listPalletstransfers)>0)
                                             <div class="col-lg-3 col-lg-offset-2">
                                                 <input type="button" class="btn btn-primary btn-block btn-form"
-                                                        data-toggle="modal" data-target="#clear_modal" />
+                                                        data-toggle="modal" data-target="#clear_modal" value="Delete all transfers" />
                                             </div>
+                                            @endif
+                                            @else
+                                                @if(count($listPalletstransfers)>0)
+                                                    <div class="col-lg-3 col-lg-offset-7">
+                                                        <input type="button" class="btn btn-primary btn-block btn-form"
+                                                               data-toggle="modal" data-target="#clear_modal" value="Delete all transfers" />
+                                                    </div>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
-                                    @endif
+
 
                                 <!-- Modal Delete -->
                                     <div class="modal fade" id="clear_modal" role="dialog">
-                                        <div class="modal-dialog modal-sm">
+                                        <div class="modal-dialog modal-md">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     <h4 class="modal-title text-center">BE CAREFUL !</h4>
                                                 </div>
                                                 <div class="modal-body center">
-                                                    <p class="text-center">BE CAREFUL !</p>
-                                                    <p class="text-center">You are going to delete all the transfers associated to this loading (deposit-withdrawal, withdrawal-deposit, deposit only, withdrawal only, purchase-sale, sale-purchase, other, debt)</p>
+                                                    <p class="text-center">You are going to <strong>delete all the transfers associated</strong> to this loading (deposit-withdrawal, withdrawal-deposit, deposit only, withdrawal only, purchase-sale, sale-purchase, other, debt)</p>
                                                     <p class="text-center">Are you sure ?</p>
                                                     <div class="text-center">
                                                         <button type="submit" class="btn btn-danger btn-modal"
-                                                                value="Delete all transfers" name="clearTransfers" id="clearTransfers"
+                                                                value="clearTransfers" name="clearTransfers" id="clearTransfers"
                                                                 onclick="formSubmitBlock(this);"> Yes </button>
                                                         <button type="button" class="btn btn-success btn-modal"
                                                                 data-dismiss="modal">No </button>
@@ -592,7 +609,7 @@
                                                         @else
                                                         <!--exchanging ?-->
                                                             <div class="col-lg-3 checkbox">
-                                                                @php($notExchanging=\App\Palletsaccount::where('nickname', $truckAssociated->nickname)->first()->notExchange)
+                                                                @php($notExchanging=\App\Palletsaccount::where('nickname', $truckAssociated->name)->first()->notExchange)
                                                                 <label><input type="checkbox" value="notExchanging" name="notExchanging" id="notExchanging" @if($loading->notExchange==1 || (isset($notExchanging) && $notExchanging==1)) checked @endif onchange="updateFieldsNormal();"/>Agreed w/o exchange</label>
                                                             </div>
                                                         @endif
@@ -751,10 +768,10 @@
                                                         </div>
                                                         <!-- purchase-sale : only accounts that were on the normal transfer associated -->
                                                         <div class="col-lg-3" id="creditAccountPS" @if((isset($type) && ($type=='Purchase-Sale'))|| (!isset($type) && (isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer')))) style="display: block;" @else style="display: none;" @endif>
-                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (purchases pallets)" name="creditAccountPS" id="select-creditAccountPS" data-style="requiredField" onchange="selectAccountCorrecting();">
+                                                            <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (needs pallets)" name="creditAccountPS" id="select-creditAccountPS" data-style="requiredField" onchange="selectAccountCorrecting();">
                                                                 @if(isset($creditAccount) && isset($type) && $type=='Purchase-Sale')
                                                                     @if (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck')
-                                                                        @php($nameTruckAccount = App\Truck::where('id', explode('-', $creditAccount)[1])->value('nickname'))
+                                                                        @php($nameTruckAccount = App\Truck::where('id', explode('-', $creditAccount)[1])->value('name'))
                                                                         @php($licensePlate = App\Truck::where('id', explode('-', $creditAccount)[1])->value('licensePlate'))
                                                                         <option selected value="truck-{{explode('-', $creditAccount)[1]}}">{{$nameTruckAccount}}
                                                                             - {{$licensePlate}}</option>
@@ -839,7 +856,7 @@
                                                                 <input type="hidden" name="debitAccount2DW" id="input-debitAccount2DW" @if(isset($debitAccount2) && (isset($type) && $type =='Deposit-Withdrawal')) value="{{$debitAccount2}}" @endif readonly/>
                                                                 <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (pallets giver)" name="select-debitAccount2DW" id="select-debitAccount2DW" disabled="true">
                                                                     @if (isset($debitAccount2) && isset($type) && $type=='Deposit-Withdrawal' && strpos($debitAccount2, '-') == 5 && explode('-', $debitAccount2)[0] == 'truck')
-                                                                        @php($nameTruckAccount = App\Truck::where('id', explode('-', $debitAccount2)[1])->value('nickname'))
+                                                                        @php($nameTruckAccount = App\Truck::where('id', explode('-', $debitAccount2)[1])->value('name'))
                                                                         @php($licensePlate = App\Truck::where('id', explode('-', $debitAccount2)[1])->value('licensePlate'))
                                                                         <option selected value="truck-{{explode('-', $debitAccount2)[1]}}">{{$nameTruckAccount}} - {{$licensePlate}}</option>
                                                                     @elseif (isset($debitAccount2)&& isset($type) && $type=='Deposit-Withdrawal' && strpos($debitAccount2, '-') == 7 && explode('-', $debitAccount2)[0] == 'account')
@@ -857,7 +874,7 @@
                                                                 <input type="hidden" name="creditAccount2DW" id="input-creditAccount2DW" @if(isset($creditAccount2)&& (isset($type) && $type =='Deposit-Withdrawal')) value="{{$creditAccount2}}" @endif readonly/>
                                                                 <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (pallets taker)" name="select-creditAccount2DW" id="select-creditAccount2DW" disabled="true">
                                                                     @if (isset($creditAccount2)&& isset($type) && $type=='Deposit-Withdrawal' && strpos($creditAccount2, '-') == 5 && explode('-', $creditAccount2)[0] == 'truck')
-                                                                        @php($nameTruckAccount = App\Truck::where('id', explode('-', $creditAccount2)[1])->value('nickname'))
+                                                                        @php($nameTruckAccount = App\Truck::where('id', explode('-', $creditAccount2)[1])->value('name'))
                                                                         @php($licensePlate = App\Truck::where('id', explode('-', $creditAccount2)[1])->value('licensePlate'))
                                                                         <option selected value="truck-{{explode('-', $creditAccount2)[1]}}">{{$nameTruckAccount}} - {{$licensePlate}}</option>
                                                                     @elseif (isset($creditAccount2)&& isset($type) && $type=='Deposit-Withdrawal' && strpos($creditAccount2, '-') == 7 && explode('-', $creditAccount2)[0] == 'account')
@@ -902,7 +919,7 @@
                                                                 <select class="selectpicker show-tick form-control" data-size="10" data-live-search="true" data-live-search-style="startsWith" title="Account (sales pallets)" name="debitAccount2PS" id="select-debitAccount2PS" data-style="requiredField">
                                                                     @if(isset($debitAccount2) && (isset($type) && $type=='Purchase-Sale'))
                                                                         @if (strpos($debitAccount2, '-') == 5 && explode('-', $debitAccount2)[0] == 'truck')
-                                                                            @php($nameTruckAccount = App\Truck::where('id', explode('-', $debitAccount2)[1])->value('nickname'))
+                                                                            @php($nameTruckAccount = App\Truck::where('id', explode('-', $debitAccount2)[1])->value('name'))
                                                                             @php($licensePlate = App\Truck::where('id', explode('-', $debitAccount2)[1])->value('licensePlate'))
                                                                             <option selected
                                                                                     value="truck-{{explode('-', $debitAccount2)[1]}}">{{$nameTruckAccount}}
@@ -1016,7 +1033,7 @@
                                                     <!--btn submit add-->
                                                     <div class="form-group">
                                                         <div class="col-lg-4 col-lg-offset-4">
-                                                            <button type="submit" class="btn btn-add btn-block" value="addPalletstransfer" name="addPalletstransfer"  id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" onclick="formSubmitBlock(this);">
+                                                            <button type="submit" class="btn btn-add btn-block" value="addPalletstransfer" name="addPalletstransfer"  id="addPalletstransfer" data-toggle="modal" data-target="#submitAdd_modal" data-backdrop="static" data-keyboard="false" onclick="formSubmitBlock(this);">
                                                                 Add
                                                             </button>
                                                         </div>
@@ -1058,7 +1075,7 @@
                                                                 <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
                                                                 <td class="text-center">{{$palletsNumber}}</td>
                                                             </tr>
-                                                            @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2'))
+                                                            @if(Session::has('creditAccount2')&&Session::has('debitAccount2')&&isset($palletsNumber2))
                                                                 <tr>
                                                                    @if($type == 'Deposit-Withdrawal')
                                                                        <td class="text-center">Withdrawal-Deposit</td>
@@ -1070,7 +1087,7 @@
                                                                        <td class="text-center">{{$palletsNumber2}}</td>
                                                                </tr>
                                                             @endif
-                                                            @if(Session::has('creditAccount3')&&Session::has('debitAccount3')&&Session::has('palletsNumber3'))
+                                                            @if(Session::has('creditAccount3')&&Session::has('debitAccount3')&&isset($palletsNumber3))
                                                                 <tr>
                                                                     <td class="text-center">Debt</td>
                                                                     <td class="text-center">{{request()->session()->get('debitAccount3')}}</td>
@@ -1080,7 +1097,22 @@
                                                             @endif
                                                             </tbody>
                                                         </table>
-
+                                                        <div class="text-center">
+                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            @if(isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)
+                                                                <p class="text-center">INFORMATION : Pallets number 1 and pallets number 2 are different</p>
+                                                                @elseif(isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)
+                                                                    <p class="text-center">INFORMATION : Pallets number 2 doesn't match the loading order</p>
+                                                                @elseif($palletsNumber <> $loading->anz)
+                                                                <p class="text-center">INFORMATION : Pallets number 1 doesn't match the loading order</p>
+                                                                @else
+                                                                <p class="text-center">GOOD ! no errors</p>
+                                                            @endif
+                                                        </div>
                                                             {{--@if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))--}}
                                                                 {{--<div class="text-center">--}}
                                                                     {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
@@ -1105,15 +1137,16 @@
                                                             {{--@endif--}}
                                                     </div>
                                                     <div class="modal-footer">
-                                                            {{--@if((($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))||(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit')&&((Session::has('palletsNumber')&&(request()->session()->get('palletsNumber')<>$loading->anz))||(Session::has('palletsNumber2')&&(request()->session()->get('palletsNumber2')<>$loading->anz))))||(Session::has('sumTransfersDepositOnly') && Session::has('sumTransfersWithdrawalOnly') && request()->session()->get('sumTransfersDepositOnly')<>request()->session()->get('sumTransfersWithdrawalOnly')))--}}
-                                                                {{--<button type="submit" class="btn btn-danger btn-modal" value="yes" name="okSubmitAddModal">--}}
-                                                                    {{--Confirm--}}
-                                                                {{--</button>--}}
-                                                            {{--@else--}}
-                                                        <button type="submit" class="btn btn-default btn-form btn-modal" value="okSubmitAddModal" name="okSubmitAddModal" id="okSubmitAddModal" onclick="formSubmitBlock(this);">
-                                                            Confirm
-                                                        </button>
-                                                            {{--@endif--}}
+                                                        <div class="text-center">
+                                                            <div class="col-lg-7">
+                                                                <h5>(Confirm will only affect PLANNED pallets number)</h5>
+                                                            </div>
+                                                            <div class="col-lg-4 col-lg-offset-1">
+                                                                <button type="submit" class="btn btn-block btn-form btn-modal" value="okSubmitAddModal" name="okSubmitAddModal" id="okSubmitAddModal" onclick="formSubmitBlock(this);">
+                                                                Confirm
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1176,7 +1209,7 @@
 
                                                         <td class="text-center table-accountsColBegin"><span @if($total <0) class="text-inf0" @elseif($total >0) class="text-sup0" @else class="text-egal0" @endif >{{$total}}</span></td>
                                                         <td class="text-center"><span @if($confirmedTransfer <0) class="text-inf0" @elseif($confirmedTransfer >0) class="text-sup0" @else class="text-egal0" @endif>{{$confirmedTransfer}}</span></td>
-                                                        <td class="text-center" @if(strpos($accountTransfer, 'account-1')<>true) class="text-center table-accountsColEnd" @endif><span @if($plannedTransfer - $confirmedTransfer <0) class="text-inf0" @elseif($plannedTransfer - $confirmedTransfer >0) class="text-sup0" @else class="text-egal0" @endif>{{$plannedTransfer - $confirmedTransfer}}</span></td>
+                                                        <td class="text-center" @if(strpos($accountTransfer, 'account-1')<>true) class="text-center table-accountsColEnd" @endif><span @if($plannedTransfer<0) class="text-inf0" @elseif($plannedTransfer>0) class="text-sup0" @else class="text-egal0" @endif>{{$plannedTransfer}}</span></td>
                                                         @if(strpos($accountTransfer, 'account-1')<>true)
                                                             <td class="text-center table-accountsColEnd"><span @if($debtTransfer <0) class="text-inf0" @elseif($debtTransfer >0) class="text-sup0" @else class="text-egal0" @endif>{{$debtTransfer}}</span></td>
                                                         @endif
@@ -1287,7 +1320,7 @@
                                         </div>
                                     </div>
                                     <br>
-
+{{--@php(dd(request()->session()))--}}
                                     <!--PANEL FOR EACH TRANSFER-->
                                     <div class="row">
                                         <!--msg error-->
@@ -1350,7 +1383,7 @@
                                                             <button type="submit" class="btn btn-primary btn-form glyphicon glyphicon-remove" value="delete-{{$transferNormal->id}}" name="delete" id="delete" onclick="formSubmitBlock(this);"></button>
                                                         </div>
                                                     </div>
-                                                    <div id="PanSubcollapse{{$transferNormal->id}}" class="panel-collapse collapse panel-body">
+                                                    <div id="PanSubcollapse{{$transferNormal->id}}" @if(Session::has ('openPanelDetails') && request()->session()->get('openPanelDetails')== $transferNormal->id) class="panel-collapse in collapse panel-body" @else class="panel-collapse collapse panel-body" @endif>
                                                         <div class="form-group">
                                                             <!--type-->
                                                             <div class="col-lg-1">
@@ -1379,7 +1412,7 @@
                                                             </div>
                                                             <!--add account-->
                                                             <div class="col-lg-2 col-lg-offset-1">
-                                                                <a href="{{route('showAddPalletsaccount', ['originalPage' => 'detailsLoading-'.$loading->anz])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                                                <a href="{{route('showAddPalletsaccount', ['originalPage' => 'detailsLoading-'.$loading->anz])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Account</a>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -1392,18 +1425,18 @@
                                                             </div>
 
                                                             <!--debit account-->
-                                                            <div class="col-lg-2" id="debitAccount1{{$transferNormal->id}}">
-                                                                <label for="debitAccount{{$transferNormal->id}}" class="control-label">*Debit account :</label>
+                                                            <div class="col-lg-2 text-right" id="debitAccount1{{$transferNormal->id}}">
+                                                                <label for="debitAccount{{$transferNormal->id}}" class="control-label">*From :</label>
                                                             </div>
                                                             <div class="col-lg-3" id="debitAccount2{{$transferNormal->id}}" >
                                                                 <input type="text" name="debitAccount{{$transferNormal->id}}" id="debitAccount{{$transferNormal->id}}" class="form-control" value="{{$debitAccountValidate}}" readonly/>
                                                             </div>
 
                                                             <!--credit account-->
-                                                            <div class="col-lg-2" id="creditAccount1{{$transferNormal->id}}">
-                                                                <label for="creditAccount{{$transferNormal->id}}" class="control-label">*Credit account :</label>
+                                                            <div class="col-lg-1" id="creditAccount1{{$transferNormal->id}}">
+                                                                <label for="creditAccount{{$transferNormal->id}}" class="control-label">*To :</label>
                                                             </div>
-                                                            <div class="col-lg-3" id="creditAccount2{{$transferNormal->id}}" >
+                                                            <div class="col-lg-4" id="creditAccount2{{$transferNormal->id}}" >
                                                                 <input type="text" name="creditAccount{{$transferNormal->id}}"  id="creditAccount{{$transferNormal->id}}" class="form-control" value="{{$creditAccountValidate}}" readonly/>
                                                             </div>
                                                         </div>
@@ -1461,7 +1494,7 @@
                                                             @endif
                                                         <!--submit-->
                                                             <div @if(!empty($filesNames)&&isset($transferNormal->palletsNumber)&&isset($transferNormal->creditAccount)&&isset($transferNormal->debitAccount)) class="col-lg-2 col-lg-offset-2" @else class="col-lg-2 col-lg-offset-6"  @endif>
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferNormal->id}}" name="submitPallets" id="submitPallets" data-toggle="modal" data-target="#submitPallets_modal" onclick="formSubmitBlock(this);">
+                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferNormal->id}}" name="submitPallets" id="submitPallets" data-toggle="modal" data-target="#submitPallets_modal" data-backdrop="static" data-keyboard="false" onclick="formSubmitBlock(this);">
                                                                     Update
                                                                 </button>
                                                             </div>
@@ -1492,92 +1525,77 @@
                                                                             name="closeSubmitPalletsModal" id="closeSubmitPalletsModal" onclick="formSubmitBlock(this);">
                                                                         &times;
                                                                     </button>
-                                                                    <h4 class="modal-title text-center ">
-                                                                        INFORMATION
-                                                                    </h4>
+                                                                    <h4 class="modal-title text-center">TRANSFERS RECAP</h4>
                                                                 </div>
                                                                 <div class="modal-body center modalBodyTransfer">
-                                                                    <p class="text-center">
-                                                                        Here, PLANNED pallets number</p>
-                                                                    @if(count(array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')]))==1)
-                                                                        @php($actualCreditAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualCreditAccount=implode(' - ', array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])))
-                                                                    @endif
-
-                                                                    @if(count(array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')]))==1)
-                                                                        @php($actualDebitAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualDebitAccount=implode( ' - ', array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')])))
+                                                                    <p class="text-center">Date : {{$transferNormal->date}}</p>
+                                                                    <p class="text-center">Type : {{$transferNormal->type}} </p>
+                                                                    @if(isset($transferNormal->details))
+                                                                        <p class="text-center">Details : {{$transferNormal->details}}</p>
                                                                     @endif
                                                                     <table class="table table-hover table-bordered">
                                                                         <thead>
                                                                         <tr>
-                                                                            <th></th>
-                                                                                <th class="text-center">
-                                                                                    DEBIT
-                                                                                </th>
-                                                                                <th class="text-center">
-                                                                                    CREDIT
-                                                                                </th>
+                                                                            <th class="text-center">Type</th>
+                                                                            <th class="text-center">From</th>
+                                                                            <th class="text-center">To</th>
+                                                                            <th class="text-center">Nbr</th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                        <!-- name account -->
                                                                         <tr>
-                                                                            <td></td>
-                                                                                <td class="text-center">{{$actualDebitAccount}}</td>
-                                                                                <td class="text-center">{{$actualCreditAccount}}</td>
-                                                                        </tr>
-                                                                        <!-- actual -->
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Actual
-                                                                            </td>
-                                                                                <td class="text-center">{{request()->session()->get('actualPalletsNumberDebitAccount')}}</td>
-                                                                                <td class="text-center">{{request()->session()->get('actualPalletsNumberCreditAccount')}}</td>
+                                                                            <td class="text-center">{{$transferNormal->type}}</td>
+                                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                            <td class="text-center">{{$transferNormal->palletsNumber}}</td>
                                                                         </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                    <!--display errors signs-->
-                                                                    @foreach($errorsTransfer as $errorTrans)
-                                                                        @if($errorTrans->name=='DW-WD_atLeastOne')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                    <div class="text-center">
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                        @foreach($errorsTransfer as $errorTrans)
+                                                                            @if($errorTrans->name=='DW-WD_atLeastOne')
                                                                                 <p class="text-danger"> A with-dep transfer or dep-with transfer is missing</p>
-                                                                            </div>
-                                                                        @endif
-                                                                            @if($errorTrans->name=='DW-WD_notNumberLoadingOrder')
-                                                                                <div class="text-center">
-                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                    <p class="text-danger"> The pallets numbers sum of with-dep transfers or dep-with transfers does NOT MATCH the number in the loading order ({{$loading->anz}})</p>
-                                                                                </div>
                                                                             @endif
-                                                                        @if($errorTrans->name=='Donly-Wonly_notSameNumber')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span><p
-                                                                                        class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </p>
-                                                                            </div>
-                                                                        @endif
-                                                                    @endforeach
+                                                                            @if($errorTrans->name=='DW-WD_notNumberLoadingOrder')
+                                                                                    <p class="text-danger"> The pallets numbers sum of with-dep transfers or dep-with transfers does NOT MATCH the number in the loading order ({{$loading->anz}})</p>
+                                                                                    @endif
+                                                                                @if($errorTrans->name=='Donly-Wonly_notSameNumber')
+                                                                                    <p class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </p>
+                                                                                @endif
+                                                                        @endforeach
+                                                                            @if(empty($errorsTransfer))
+                                                                                <p class="text-center">GOOD ! no errors</p>
+                                                                            @endif
+                                                                                    {{--@if(isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)--}}
+                                                                            {{--<p class="text-center">INFORMATION : Pallets number 1 and pallets number 2 are different</p>--}}
+                                                                        {{--@elseif(isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)--}}
+                                                                            {{--<p class="text-center">INFORMATION : Pallets number 2 doesn't match the loading order</p>--}}
+                                                                        {{--@elseif($palletsNumber <> $loading->anz)--}}
+                                                                            {{--<p class="text-center">INFORMATION : Pallets number 1 doesn't match the loading order</p>--}}
+                                                                        {{--@else--}}
+                                                                            {{--<p class="text-center">GOOD ! no errors</p>--}}
+                                                                        {{--@endif--}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="submit"
-                                                                            @if(!empty($errorsTransfer))
-                                                                            class="btn btn-danger btn-modal"
-                                                                            @else
-                                                                            class="btn btn-default btn-form btn-modal"
-                                                                            @endif
-                                                                            value="okSubmitPalletsModal-{{$transferNormal->id}}"
-                                                                            name="okSubmitPalletsModal"
-                                                                            id="okSubmitPalletsModal"
-                                                                            data-toggle="modal"
-                                                                            data-target="#submitPalletsValidate_modal" onclick="formSubmitBlock(this);">
-                                                                        Ok
-                                                                    </button>
+                                                                    <div class="text-center">
+                                                                        <div class="col-lg-7">
+                                                                            <h5>(Confirm will only affect CONFIRMED pallets number)</h5>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-lg-offset-1">
+                                                                            <button type="submit"
+                                                                                    @if(!empty($errorsTransfer)) class="btn btn-danger btn-modal"
+                                                                                    @else class="btn btn-default btn-form btn-modal"
+                                                                                    @endif value="okSubmitPalletsModal-{{$transferNormal->id}}" name="okSubmitPalletsModal" id="okSubmitPalletsModal" onclick="formSubmitBlock(this);">
+                                                                                Confirm
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1585,134 +1603,134 @@
                                                 @endif
 
                                             <!-- Modal update validate -->
-                                                @if((isset($okSubmitPalletsModalNormal) && $okSubmitPalletsModalNormal==$transferNormal->id && $transferNormal->state=='Complete Validated'))
-                                                    <div class="modal show"
-                                                         id="submitPalletsValidate_modal"
-                                                         role="dialog">
-                                                        <div class="modal-dialog modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header modalHeaderTransfer">
-                                                                    <button value="closeSubmitPalletsModal-{{$transferNormal->id}}"
-                                                                            class="close"
-                                                                            type="submit"
-                                                                            name="closeSubmitPalletsModal" id="closeSubmitPalletsModalb" onclick="formSubmitBlock(this);">
-                                                                        &times;
-                                                                    </button>
-                                                                    <h4 class="modal-title text-center">
-                                                                        INFORMATION
-                                                                    </h4>
-                                                                </div>
-                                                                <div class="modal-body center modalBodyTransfer">
-                                                                    <p class="text-center">
-                                                                        Here, CONFIRMED pallets number</p>
-                                                                    @if(count(array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')]))==1)
-                                                                        @php($actualCreditAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualCreditAccount=implode(' - ', array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])))
-                                                                    @endif
+                                                {{--@if((isset($okSubmitPalletsModalNormal) && $okSubmitPalletsModalNormal==$transferNormal->id && $transferNormal->state=='Complete Validated'))--}}
+                                                    {{--<div class="modal show"--}}
+                                                         {{--id="submitPalletsValidate_modal"--}}
+                                                         {{--role="dialog">--}}
+                                                        {{--<div class="modal-dialog modal-lg">--}}
+                                                            {{--<div class="modal-content">--}}
+                                                                {{--<div class="modal-header modalHeaderTransfer">--}}
+                                                                    {{--<button value="closeSubmitPalletsModal-{{$transferNormal->id}}"--}}
+                                                                            {{--class="close"--}}
+                                                                            {{--type="submit"--}}
+                                                                            {{--name="closeSubmitPalletsModal" id="closeSubmitPalletsModalb" onclick="formSubmitBlock(this);">--}}
+                                                                        {{--&times;--}}
+                                                                    {{--</button>--}}
+                                                                    {{--<h4 class="modal-title text-center">--}}
+                                                                        {{--INFORMATION--}}
+                                                                    {{--</h4>--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="modal-body center modalBodyTransfer">--}}
+                                                                    {{--<p class="text-center">--}}
+                                                                        {{--Here, CONFIRMED pallets number</p>--}}
+                                                                    {{--@if(count(array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')]))==1)--}}
+                                                                        {{--@php($actualCreditAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])--}}
+                                                                    {{--@else--}}
+                                                                        {{--@php($actualCreditAccount=implode(' - ', array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])))--}}
+                                                                    {{--@endif--}}
 
-                                                                    @if(count(array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')]))==1)
-                                                                        @php($actualDebitAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualDebitAccount=implode( ' - ', array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')])))
-                                                                    @endif
-                                                                    <table class="table table-hover table-bordered">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th></th>
-                                                                            <th class="text-center">
-                                                                                DEBIT
-                                                                            </th>
-                                                                            <th class="text-center">
-                                                                                CREDIT
-                                                                            </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <!-- name account -->
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td class="text-center">{{$actualDebitAccount}}</td>
-                                                                            <td class="text-center">{{$actualCreditAccount}}</td>
-                                                                        </tr>
-                                                                        <!-- actual -->
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Actual
-                                                                            </td>
-                                                                            <td class="text-center">{{request()->session()->get('actualRealPalletsNumberDebitAccount')}}</td>
-                                                                            <td class="text-center">{{request()->session()->get('actualRealPalletsNumberCreditAccount')}}</td>
-                                                                        </tr>
-                                                                        @if(Session::has('notUpdateRealPalletsNumber'))
-                                                                            <tr><td class="text-center">
-                                                                                    Transfer
-                                                                                </td>
-                                                                                <td class="text-center">
-                                                                                   no update</td>
-                                                                                <td class="text-center">
-                                                                                   no update</td></tr>
-                                                                        @else
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Transfer
-                                                                            </td>
-                                                                                <td class="text-center">
-                                                                                    - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                <td class="text-center">
-                                                                                    + {{request()->session()->get('palletsNumber')}}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Total
-                                                                            </td>
-                                                                                <td class="text-center">
-                                                                                    = {{request()->session()->get('actualRealPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
-                                                                                <td class="text-center">
-                                                                                    = {{request()->session()->get('actualRealPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
-                                                                        </tr>
-                                                                        @endif
-                                                                        </tbody>
-                                                                    </table>
-                                                                    @foreach($errorsTransfer as $errorTrans)
-                                                                        @if($errorTrans->name=='DW-WD_atLeastOne')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <p class="text-danger"> A with-dep transfer or dep-with transfer is missing</p>
-                                                                            </div>
-                                                                        @endif
-                                                                        @if($errorTrans->name=='DW-WD_notNumberLoadingOrder')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <p class="text-danger"> The pallets numbers sum of with-dep transfers or dep-with transfers does NOT MATCH the number in the loading order ({{$loading->anz}})</p>
-                                                                            </div>
-                                                                        @endif
-                                                                        @if($errorTrans->name=='Donly-Wonly_notSameNumber')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span><p
-                                                                                        class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </p>
-                                                                            </div>
-                                                                        @endif
-                                                                    @endforeach
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit"
-                                                                            @if(!empty($errorsTransfer))
-                                                                            class="btn btn-danger btn-modal"
-                                                                            @else
-                                                                            class="btn btn-default btn-form btn-modal"
-                                                                            @endif
-                                                                            value="okSubmitPalletsValidateModal-{{$transferNormal->id}}"
-                                                                            name="okSubmitPalletsValidateModal" id="okSubmitPalletsValidateModal" onclick="formSubmitBlock(this);">
-                                                                        Confirm
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                                    {{--@if(count(array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')]))==1)--}}
+                                                                        {{--@php($actualDebitAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])--}}
+                                                                    {{--@else--}}
+                                                                        {{--@php($actualDebitAccount=implode( ' - ', array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')])))--}}
+                                                                    {{--@endif--}}
+                                                                    {{--<table class="table table-hover table-bordered">--}}
+                                                                        {{--<thead>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<th></th>--}}
+                                                                            {{--<th class="text-center">--}}
+                                                                                {{--DEBIT--}}
+                                                                            {{--</th>--}}
+                                                                            {{--<th class="text-center">--}}
+                                                                                {{--CREDIT--}}
+                                                                            {{--</th>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--</thead>--}}
+                                                                        {{--<tbody>--}}
+                                                                        {{--<!-- name account -->--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td></td>--}}
+                                                                            {{--<td class="text-center">{{$actualDebitAccount}}</td>--}}
+                                                                            {{--<td class="text-center">{{$actualCreditAccount}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--<!-- actual -->--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td class="text-center">--}}
+                                                                                {{--Actual--}}
+                                                                            {{--</td>--}}
+                                                                            {{--<td class="text-center">{{request()->session()->get('actualRealPalletsNumberDebitAccount')}}</td>--}}
+                                                                            {{--<td class="text-center">{{request()->session()->get('actualRealPalletsNumberCreditAccount')}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--@if(Session::has('notUpdateRealPalletsNumber'))--}}
+                                                                            {{--<tr><td class="text-center">--}}
+                                                                                    {{--Transfer--}}
+                                                                                {{--</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                   {{--no update</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                   {{--no update</td></tr>--}}
+                                                                        {{--@else--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td class="text-center">--}}
+                                                                                {{--Transfer--}}
+                                                                            {{--</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--- {{request()->session()->get('palletsNumber')}}</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--+ {{request()->session()->get('palletsNumber')}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td class="text-center">--}}
+                                                                                {{--Total--}}
+                                                                            {{--</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--= {{request()->session()->get('actualRealPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--= {{request()->session()->get('actualRealPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--</tbody>--}}
+                                                                    {{--</table>--}}
+                                                                    {{--@foreach($errorsTransfer as $errorTrans)--}}
+                                                                        {{--@if($errorTrans->name=='DW-WD_atLeastOne')--}}
+                                                                            {{--<div class="text-center">--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<p class="text-danger"> A with-dep transfer or dep-with transfer is missing</p>--}}
+                                                                            {{--</div>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@if($errorTrans->name=='DW-WD_notNumberLoadingOrder')--}}
+                                                                            {{--<div class="text-center">--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<p class="text-danger"> The pallets numbers sum of with-dep transfers or dep-with transfers does NOT MATCH the number in the loading order ({{$loading->anz}})</p>--}}
+                                                                            {{--</div>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@if($errorTrans->name=='Donly-Wonly_notSameNumber')--}}
+                                                                            {{--<div class="text-center">--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span><p--}}
+                                                                                        {{--class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </p>--}}
+                                                                            {{--</div>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="modal-footer">--}}
+                                                                    {{--<button type="submit"--}}
+                                                                            {{--@if(!empty($errorsTransfer))--}}
+                                                                            {{--class="btn btn-danger btn-modal"--}}
+                                                                            {{--@else--}}
+                                                                            {{--class="btn btn-default btn-form btn-modal"--}}
+                                                                            {{--@endif--}}
+                                                                            {{--value="okSubmitPalletsValidateModal-{{$transferNormal->id}}"--}}
+                                                                            {{--name="okSubmitPalletsValidateModal" id="okSubmitPalletsValidateModal" onclick="formSubmitBlock(this);">--}}
+                                                                        {{--Confirm--}}
+                                                                    {{--</button>--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--@endif--}}
 
                                             {{--<!-- Modal Send Email -->--}}
                                                 {{--<div class="modal fade" id="sendEmailTransfer_modal"--}}
@@ -1808,7 +1826,7 @@
                                                         </div>
                                                     </div>
                                                     <div id="PanSubcollapse{{$transferCorrecting->id}}"
-                                                         class="panel-collapse collapse panel-body">
+                                                         @if(Session::has ('openPanelDetails') && request()->session()->get('openPanelDetails')== $transferCorrecting->id) class="panel-collapse in collapse panel-body" @else class="panel-collapse collapse panel-body" @endif>
                                                         <div class="form-group">
                                                             <!--type-->
                                                             <div class="col-lg-1">
@@ -1857,18 +1875,18 @@
                                                             </div>
 
                                                             <!--debit account-->
-                                                            <div class="col-lg-2" id="debitAccount1{{$transferCorrecting->id}}">
-                                                                <label for="debitAccount{{$transferCorrecting->id}}" class="control-label">*Debit account :</label>
+                                                            <div class="col-lg-2 text-right" id="debitAccount1{{$transferCorrecting->id}}" >
+                                                                <label for="debitAccount{{$transferCorrecting->id}}" class="control-label">*From :</label>
                                                             </div>
                                                             <div class="col-lg-3" id="debitAccount2{{$transferCorrecting->id}}" >
                                                                 <input type="text" name="debitAccount{{$transferCorrecting->id}}" class="form-control" value="{{$debitAccountValidate}}" readonly/>
                                                             </div>
 
                                                             <!--credit account-->
-                                                            <div class="col-lg-2" id="creditAccount1{{$transferCorrecting->id}}">
-                                                                <label for="creditAccount{{$transferCorrecting->id}}" class="control-label">*Credit account :</label>
+                                                            <div class="col-lg-1" id="creditAccount1{{$transferCorrecting->id}}">
+                                                                <label for="creditAccount{{$transferCorrecting->id}}" class="control-label">*To :</label>
                                                             </div>
-                                                            <div class="col-lg-3" id="creditAccount2{{$transferCorrecting->id}}" >
+                                                            <div class="col-lg-4" id="creditAccount2{{$transferCorrecting->id}}" >
                                                                 <input type="text" name="creditAccount{{$transferCorrecting->id}}" class="form-control" value="{{$creditAccountValidate}}" readonly/>
                                                             </div>
                                                         </div>
@@ -1926,7 +1944,7 @@
                                                             @endif
                                                         <!--submit-->
                                                             <div @if(!empty($filesNames)&&isset($transferCorrecting->palletsNumber)&&isset($transferCorrecting->creditAccount)&&isset($transferCorrecting->debitAccount)) class="col-lg-2 col-lg-offset-2" @else class="col-lg-2 col-lg-offset-6"  @endif>
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferCorrecting->id}}" name="submitPallets" id="submitPalletsb" data-toggle="modal" data-target="#submitPallets_modal" onclick="formSubmitBlock(this);">
+                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferCorrecting->id}}" name="submitPallets" id="submitPalletsb" data-toggle="modal" data-target="#submitPallets_modal" data-backdrop="static" data-keyboard="false" onclick="formSubmitBlock(this);">
                                                                     Update
                                                                 </button>
                                                             </div>
@@ -1957,307 +1975,201 @@
                                                                             name="closeSubmitPalletsModal" id="closeSubmitPalletsModalbb" onclick="formSubmitBlock(this);">
                                                                         &times;
                                                                     </button>
-                                                                    <h4 class="modal-title text-center ">
-                                                                        INFORMATION
-                                                                    </h4>
+                                                                    <h4 class="modal-title text-center">TRANSFERS RECAP</h4>
                                                                 </div>
                                                                 <div class="modal-body center modalBodyTransfer">
-                                                                    <p class="text-center">
-                                                                        Here, PLANNED pallets number</p>
-                                                                    @if(count(array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')]))==1)
-                                                                        @php($actualCreditAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualCreditAccount=implode(' - ', array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])))
-                                                                    @endif
-
-                                                                    @if(count(array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')]))==1)
-                                                                        @php($actualDebitAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualDebitAccount=implode( ' - ', array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')])))
+                                                                    <p class="text-center">Date : {{$transferCorrecting->date}}</p>
+                                                                    <p class="text-center">Type : {{$transferCorrecting->type}} </p>
+                                                                    @if(isset($transferCorrecting->details))
+                                                                        <p class="text-center">Details : {{$transferCorrecting->details}}</p>
                                                                     @endif
                                                                     <table class="table table-hover table-bordered">
                                                                         <thead>
                                                                         <tr>
-                                                                            <th></th>
-                                                                                <th class="text-center">
-                                                                                    DEBIT
-                                                                                </th>
-                                                                                <th class="text-center">
-                                                                                    CREDIT
-                                                                                </th>
+                                                                            <th class="text-center">Type</th>
+                                                                            <th class="text-center">From</th>
+                                                                            <th class="text-center">To</th>
+                                                                            <th class="text-center">Nbr</th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                        <!-- name account -->
                                                                         <tr>
-                                                                            <td></td>
-                                                                                <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
-                                                                                <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                            <td class="text-center">{{$transferCorrecting->type}}</td>
+                                                                            <td class="text-center">{{request()->session()->get('debitAccount')}}</td>
+                                                                            <td class="text-center">{{request()->session()->get('creditAccount')}}</td>
+                                                                            <td class="text-center">{{$transferCorrecting->palletsNumber}}</td>
                                                                         </tr>
-                                                                        <!-- actual -->
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Actual
-                                                                            </td>
-                                                                                <td class="text-center">{{request()->session()->get('thPalletsNumberDebitAccount')}}</td>
-                                                                                <td class="text-center">{{request()->session()->get('thPalletsNumberCreditAccount')}}</td>
-                                                                        </tr>
-                                                                        <!-- actual credit acc = credit acc && actual debit acc = debit acc-->
-                                                                        @if($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))
-                                                                            <!--update-->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Update
-                                                                                    number
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!--total-->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Total
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')  + request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!-- actual credit acc <> credit acc && actual debit acc <> debit acc -->
-                                                                        @elseif($actualCreditAccount<>request()->session()->get('creditAccount') && $actualDebitAccount<>request()->session()->get('debitAccount'))
-                                                                            <!-- new transfer -->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    New
-                                                                                    transfer
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        + {{request()->session()->get('palletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!-- total -->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Total
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!--actual credit acc == credit acc && actual debit acc <> debit acc-->
-                                                                        @elseif($actualCreditAccount==request()->session()->get('creditAccount') && $actualDebitAccount<>request()->session()->get('debitAccount'))
-                                                                            <!-- update-->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Update
-                                                                                    number
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        +{{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!-- total -->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Total
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount')- request()->session()->get('actualPalletsNumber') +request()->session()->get('palletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!-- actual credit acc <> credit acc && actual debit acc = debit acc-->
-                                                                        @elseif($actualCreditAccount<>request()->session()->get('creditAccount') && $actualDebitAccount==request()->session()->get('debitAccount'))
-                                                                            <!-- update -->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Update
-                                                                                    number
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        - {{request()->session()->get('palletsNumber')-request()->session()->get('actualPalletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        +{{request()->session()->get('palletsNumber')}}</td>
-                                                                            </tr>
-                                                                            <!-- total-->
-                                                                            <tr>
-                                                                                <td class="text-center">
-                                                                                    Total
-                                                                                </td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberDebitAccount')+ request()->session()->get('actualPalletsNumber') -request()->session()->get('palletsNumber')}}</td>
-                                                                                    <td class="text-center">
-                                                                                        = {{request()->session()->get('thPalletsNumberCreditAccount') +request()->session()->get('palletsNumber')}}</td>
-                                                                            </tr>
-                                                                        @endif
                                                                         </tbody>
                                                                     </table>
-                                                                    <!--display errors signs-->
-                                                                    @foreach($errorsTransfer as $errorTrans)
-                                                                        @if($errorTrans->name=='Correcting_notCompleteNormal')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                    <div class="text-center">
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                        @foreach($errorsTransfer as $errorTrans)
+                                                                            @if($errorTrans->name=='Correcting_notCompleteNormal')
                                                                                 <p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->normalTransferAssociated}}</p>
-                                                                            </div>
-                                                                        @endif
-                                                                            @if($errorTrans->name=='SP-PS_notEnoughTransfers')
-                                                                                <div class="text-center">
-                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                            @endif
+                                                                                @if($errorTrans->name=='SP-PS_notEnoughTransfers')
                                                                                     <p class="text-danger"> A sale-purchase or purchase-sale transfer is missing</p>
-                                                                                </div>
-                                                                            @endif
-                                                                            @if($errorTrans->name=='Correcting_notEnoughTransfers')
-                                                                                <div class="text-center">
-                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                @endif
+                                                                                @if($errorTrans->name=='Correcting_notEnoughTransfers')
                                                                                     <p class="text-danger"> A correcting transfer is missing</p>
-                                                                                </div>
+                                                                                @endif
+                                                                        @endforeach
+                                                                        @if(empty($errorsTransfer))
+                                                                                <p class="text-center">GOOD ! no errors</p>
                                                                             @endif
-                                                                    @endforeach
+                                                                        {{--@if(isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)--}}
+                                                                        {{--<p class="text-center">INFORMATION : Pallets number 1 and pallets number 2 are different</p>--}}
+                                                                        {{--@elseif(isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)--}}
+                                                                        {{--<p class="text-center">INFORMATION : Pallets number 2 doesn't match the loading order</p>--}}
+                                                                        {{--@elseif($palletsNumber <> $loading->anz)--}}
+                                                                        {{--<p class="text-center">INFORMATION : Pallets number 1 doesn't match the loading order</p>--}}
+                                                                        {{--@else--}}
+                                                                        {{--<p class="text-center">GOOD ! no errors</p>--}}
+                                                                        {{--@endif--}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="submit"
-                                                                            @if(!empty($errorsTransfer)) class="btn btn-danger btn-modal"
-                                                                            @else class="btn btn-default btn-form btn-modal"
-                                                                            @endif
-                                                                            value="okSubmitPalletsModal-{{$transferCorrecting->id}}"
-                                                                            name="okSubmitPalletsModal"
-                                                                            id="okSubmitPalletsModalb"
-                                                                            data-toggle="modal"
-                                                                            data-target="#submitPalletsValidate_modal" onclick="formSubmitBlock(this);">
-                                                                        Confirm
-                                                                    </button>
+                                                                    <div class="text-center">
+                                                                        <div class="col-lg-7">
+                                                                            <h5>(Confirm will only affect CONFIRMED pallets number)</h5>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-lg-offset-1">
+                                                                            <button type="submit"
+                                                                                    @if(!empty($errorsTransfer)) class="btn btn-danger btn-modal"
+                                                                                    @else class="btn btn-default btn-form btn-modal"
+                                                                                    @endif value="okSubmitPalletsModal-{{$transferCorrecting->id}}" name="okSubmitPalletsModal" id="okSubmitPalletsModal" onclick="formSubmitBlock(this);">
+                                                                                Confirm
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @endif
+                                            @endif
 
-                                            <!-- Modal update validate -->
-                                                @if((isset($okSubmitPalletsModalCorrecting) && $okSubmitPalletsModalCorrecting==$transferCorrecting->id && $transferCorrecting->state=='Complete Validated'))
-                                                    <div class="modal show"
-                                                         id="submitPalletsValidate_modal"
-                                                         role="dialog">
-                                                        <div class="modal-dialog modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header modalHeaderTransfer">
-                                                                    <button value="closeSubmitPalletsModal-{{$transferCorrecting->id}}"
-                                                                            class="close"
-                                                                            type="submit"
-                                                                            name="closeSubmitPalletsModal" id="closeSubmitPalletsModalbbb" onclick="formSubmitBlock(this);">
-                                                                        &times;
-                                                                    </button>
-                                                                    <h4 class="modal-title text-center">
-                                                                        INFORMATION
-                                                                    </h4>
-                                                                </div>
-                                                                <div class="modal-body center modalBodyTransfer">
-                                                                    <p class="text-center">
-                                                                        Here, CONFIRMED pallets number</p>
-                                                                    @if(count(array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')]))==1)
-                                                                        @php($actualCreditAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualCreditAccount=implode(' - ', array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])))
-                                                                    @endif
+                                            {{--<!-- Modal update validate -->--}}
+                                                {{--@if((isset($okSubmitPalletsModalCorrecting) && $okSubmitPalletsModalCorrecting==$transferCorrecting->id && $transferCorrecting->state=='Complete Validated'))--}}
+                                                    {{--<div class="modal show"--}}
+                                                         {{--id="submitPalletsValidate_modal"--}}
+                                                         {{--role="dialog">--}}
+                                                        {{--<div class="modal-dialog modal-lg">--}}
+                                                            {{--<div class="modal-content">--}}
+                                                                {{--<div class="modal-header modalHeaderTransfer">--}}
+                                                                    {{--<button value="closeSubmitPalletsModal-{{$transferCorrecting->id}}"--}}
+                                                                            {{--class="close"--}}
+                                                                            {{--type="submit"--}}
+                                                                            {{--name="closeSubmitPalletsModal" id="closeSubmitPalletsModalbbb" onclick="formSubmitBlock(this);">--}}
+                                                                        {{--&times;--}}
+                                                                    {{--</button>--}}
+                                                                    {{--<h4 class="modal-title text-center">--}}
+                                                                        {{--INFORMATION--}}
+                                                                    {{--</h4>--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="modal-body center modalBodyTransfer">--}}
+                                                                    {{--<p class="text-center">--}}
+                                                                        {{--Here, CONFIRMED pallets number</p>--}}
+                                                                    {{--@if(count(array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')]))==1)--}}
+                                                                        {{--@php($actualCreditAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])--}}
+                                                                    {{--@else--}}
+                                                                        {{--@php($actualCreditAccount=implode(' - ', array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])))--}}
+                                                                    {{--@endif--}}
 
-                                                                    @if(count(array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')]))==1)
-                                                                        @php($actualDebitAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])
-                                                                    @else
-                                                                        @php($actualDebitAccount=implode( ' - ', array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')])))
-                                                                    @endif
-                                                                    <table class="table table-hover table-bordered">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th></th>
-                                                                                <th class="text-center">
-                                                                                    DEBIT
-                                                                                </th>
-                                                                                <th class="text-center">
-                                                                                    CREDIT
-                                                                                </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td></td>
-                                                                                <td class="text-center">{{$debitAccountValidate}}</td>
-                                                                                <td class="text-center">{{$creditAccountValidate}}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Actual
-                                                                            </td>
-                                                                                <td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>
-                                                                                <td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                New
-                                                                                transfer
-                                                                            </td>
-                                                                                <td class="text-center">
-                                                                                    - {{request()->session()->get('palletsNumber')}}</td>
-                                                                                <td class="text-center">
-                                                                                    + {{request()->session()->get('palletsNumber')}}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="text-center">
-                                                                                Total
-                                                                            </td>
-                                                                                <td class="text-center">
-                                                                                    = {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>
-                                                                                <td class="text-center">
-                                                                                    = {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    @foreach($errorsTransfer as $errorTrans)
-                                                                        @if($errorTrans->name=='Correcting_notCompleteNormal')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->normalTransferAssociated}}</p>
-                                                                            </div>
-                                                                        @endif
-                                                                        @if($errorTrans->name=='SP-PS_notEnoughTransfers')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <p class="text-danger"> A sale-purchase or purchase-sale transfer is missing</p>
-                                                                            </div>
-                                                                        @endif
-                                                                        @if($errorTrans->name=='Correcting_notEnoughTransfers')
-                                                                            <div class="text-center">
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                                <p class="text-danger"> A correcting transfer is missing</p>
-                                                                            </div>
-                                                                        @endif
-                                                                    @endforeach
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit"
-                                                                            @if(!empty($errorsTransfer))
-                                                                            class="btn btn-danger btn-modal"
-                                                                            @else
-                                                                            class="btn btn-default btn-form btn-modal"
-                                                                            @endif
-                                                                            value="okSubmitPalletsValidateModal-{{$transferCorrecting->id}}"
-                                                                            name="okSubmitPalletsValidateModal" id="okSubmitPalletsValidateModalb" onclick="formSubmitBlock(this);">
-                                                                        Confirm
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                                    {{--@if(count(array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')]))==1)--}}
+                                                                        {{--@php($actualDebitAccount=array_diff (request()->session()->get('partsCreditAccount'), [request()->session()->get('typeCreditAccount'), request()->session()->get('idCreditAccount')])[0])--}}
+                                                                    {{--@else--}}
+                                                                        {{--@php($actualDebitAccount=implode( ' - ', array_diff (request()->session()->get('partsDebitAccount'), [request()->session()->get('typeDebitAccount'), request()->session()->get('idDebitAccount')])))--}}
+                                                                    {{--@endif--}}
+                                                                    {{--<table class="table table-hover table-bordered">--}}
+                                                                        {{--<thead>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<th></th>--}}
+                                                                                {{--<th class="text-center">--}}
+                                                                                    {{--DEBIT--}}
+                                                                                {{--</th>--}}
+                                                                                {{--<th class="text-center">--}}
+                                                                                    {{--CREDIT--}}
+                                                                                {{--</th>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--</thead>--}}
+                                                                        {{--<tbody>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td></td>--}}
+                                                                                {{--<td class="text-center">{{$debitAccountValidate}}</td>--}}
+                                                                                {{--<td class="text-center">{{$creditAccountValidate}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td class="text-center">--}}
+                                                                                {{--Actual--}}
+                                                                            {{--</td>--}}
+                                                                                {{--<td class="text-center">{{request()->session()->get('realPalletsNumberDebitAccount')}}</td>--}}
+                                                                                {{--<td class="text-center">{{request()->session()->get('realPalletsNumberCreditAccount')}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td class="text-center">--}}
+                                                                                {{--New--}}
+                                                                                {{--transfer--}}
+                                                                            {{--</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--- {{request()->session()->get('palletsNumber')}}</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--+ {{request()->session()->get('palletsNumber')}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--<tr>--}}
+                                                                            {{--<td class="text-center">--}}
+                                                                                {{--Total--}}
+                                                                            {{--</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--= {{request()->session()->get('realPalletsNumberDebitAccount') -request()->session()->get('palletsNumber')}}</td>--}}
+                                                                                {{--<td class="text-center">--}}
+                                                                                    {{--= {{request()->session()->get('realPalletsNumberCreditAccount')+request()->session()->get('palletsNumber')}}</td>--}}
+                                                                        {{--</tr>--}}
+                                                                        {{--</tbody>--}}
+                                                                    {{--</table>--}}
+                                                                    {{--@foreach($errorsTransfer as $errorTrans)--}}
+                                                                        {{--@if($errorTrans->name=='Correcting_notCompleteNormal')--}}
+                                                                            {{--<div class="text-center">--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->normalTransferAssociated}}</p>--}}
+                                                                            {{--</div>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@if($errorTrans->name=='SP-PS_notEnoughTransfers')--}}
+                                                                            {{--<div class="text-center">--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<p class="text-danger"> A sale-purchase or purchase-sale transfer is missing</p>--}}
+                                                                            {{--</div>--}}
+                                                                        {{--@endif--}}
+                                                                        {{--@if($errorTrans->name=='Correcting_notEnoughTransfers')--}}
+                                                                            {{--<div class="text-center">--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
+                                                                                {{--<p class="text-danger"> A correcting transfer is missing</p>--}}
+                                                                            {{--</div>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="modal-footer">--}}
+                                                                    {{--<button type="submit"--}}
+                                                                            {{--@if(!empty($errorsTransfer))--}}
+                                                                            {{--class="btn btn-danger btn-modal"--}}
+                                                                            {{--@else--}}
+                                                                            {{--class="btn btn-default btn-form btn-modal"--}}
+                                                                            {{--@endif--}}
+                                                                            {{--value="okSubmitPalletsValidateModal-{{$transferCorrecting->id}}"--}}
+                                                                            {{--name="okSubmitPalletsValidateModal" id="okSubmitPalletsValidateModalb" onclick="formSubmitBlock(this);">--}}
+                                                                        {{--Confirm--}}
+                                                                    {{--</button>--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--@endif--}}
                                             @endforeach
                                     </div>
 

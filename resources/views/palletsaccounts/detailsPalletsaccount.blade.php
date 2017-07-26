@@ -585,7 +585,7 @@
                                     <div class="col-lg-2 col-lg-offset-3">
                                         <a href="{{route('showAddPalletstransfer')}}" class="link">
                                             <span class="glyphicon glyphicon-plus-sign"></span>
-                                            Add transfer</a>
+                                            Transfer</a>
                                     </div>
                                     <div class="col-lg-2 col-lg-offset-2">
                                         <input type="submit" class="btn btn-primary btn-block btn-form"

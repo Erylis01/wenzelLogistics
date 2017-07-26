@@ -201,7 +201,6 @@
                                                     @else class="text-egal0" @endif>{{$trucks->theoricalNumberPallets}}</span>
                                         </td>
                                         <td class="colNumber2">{{$trucks->theoricalNumberPallets - $trucks->realNumberPallets}}</td>
-                                        {{--@php($debt=\App\Palletstransfer::where('creditAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber') - \App\Palletstransfer::where('debitAccount', 'like', $trucks->name .'-'.$trucks->licensePlate.'%')->where('type', 'Debt')->sum('palletsNumber'))--}}
                                         <td class="colNumber2"><span @if($trucks->palletsDebt<0) class="text-inf0"
                                                                      @elseif($trucks->palletsDebt>0) class="text-sup0"
                                                                      @else class="text-egal0" @endif>{{$trucks->palletsDebt}}</span>

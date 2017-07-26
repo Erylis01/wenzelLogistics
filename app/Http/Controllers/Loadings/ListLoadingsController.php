@@ -105,6 +105,9 @@ class ListLoadingsController extends Controller
                     $view = 'error';
                 }
                 $refresh = 'false';
+            }else{
+                $errorsColImport=$request->errorColImport;
+                $errorsAtrnrImport=$request->errorAtrnrImport;
             }
 
             if ($view == 'ok') {

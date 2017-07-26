@@ -120,6 +120,8 @@
                         <!--panel errors-->
                         @if(isset($errorsColImport) && isset($errorsAtrnrImport))
                             <div class="row">
+                                <input type="hidden" name="errorColImport" @if(isset($errorColImport)) value="{{$errorColImport}}" @endif/>
+                                <input type="hidden" name="errorAtrnrImport" @if(isset($errorAtrnrImport)) value="{{$errorAtrnrImport}}" @endif/>
                                 <div class="panel panel-errors">
                                     <div class="panel-heading text-left">
                                         <a data-toggle="collapse" href="#errors"
