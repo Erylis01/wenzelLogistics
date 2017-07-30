@@ -28,9 +28,8 @@
 @endsection
 
 @section('scriptBegin')
-    <script src="{{asset('js/bootstrap3-typeahead.min.js')}}"></script>
+
     {{--<script src="{{asset('typeahead.js')}}" type="text-javascript"></script>--}}
-    <script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}"></script>
 @endsection
 
 @section('content')
@@ -376,6 +375,6 @@
     </div>
 @endsection
 @section('scriptEnd')
-    <script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}">
-    </script>
+    <script type="text/javascript" src="{{asset('js/bootstrap3-typeahead.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/addUpdatePalletstransfer.js')}}"></script>
 @endsection
