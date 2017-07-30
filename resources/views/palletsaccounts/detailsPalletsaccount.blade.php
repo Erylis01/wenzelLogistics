@@ -417,16 +417,16 @@
                                             <div class="form-group">
                                                 <!--name contact-->
                                                 <div class="col-lg-2">
-                                                    <label for="namecontact" class="control-label">Contact :</label>
+                                                    <label for="details" class="control-label">Details :</label>
                                                 </div>
                                                 <div class="col-lg-10">
-                                        <textarea rows="2" id="namecontact" type="text" class="form-control"
-                                                  name="namecontact"
-                                                  placeholder="Contact infos (name, job, ...)"
-                                                  autofocus>@if(isset($account->namecontact)) {{$account->namecontact}} @endif</textarea>
-                                                    @if ($errors->has('namecontact'))
+                                        <textarea rows="2" id="details"  class="form-control"
+                                                  name="details"
+                                                  placeholder="Details (contact name, job, ...)"
+                                                  autofocus>@if(isset($account->details)) {{$account->details}} @endif</textarea>
+                                                    @if ($errors->has('details'))
                                                         <span class="help-block">
-                                    <strong>{{ $errors->first('namecontact') }}</strong>
+                                    <strong>{{ $errors->first('details') }}</strong>
                                     </span>
                                                     @endif
                                                 </div>
@@ -583,11 +583,12 @@
                                 <input type="hidden" name="actionClearForm" id="actionClearForm"/>
                                 <div class="form-group">
                                     <div class="col-lg-2 col-lg-offset-3">
-                                        <a href="{{route('showAddPalletstransfer')}}" class="link">
+                                        <a href="{{route('showAddPalletstransfer', ['originalPage'=>'detailsPalletsaccount-'.$account->id])}}" class="link">
                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                             Transfer</a>
                                     </div>
-                                    <div class="col-lg-2 col-lg-offset-2">
+
+                                    <div id="buttonClearTrucks" class="col-lg-2 col-lg-offset-2" @if($account->type=='Carrier') style="display:block" @else style="display:none" @endif>
                                         <input type="submit" class="btn btn-primary btn-block btn-form"
                                                value="Clear trucks" name="clearTrucks" id="clearTrucks"
                                                onclick="formClearSubmitBlock(this);"/>
@@ -715,10 +716,8 @@
                                             </td>
                                             <td class="text-center colDate">{{date('d-m-y', strtotime($transfer->date))}}</td>
                                             <td class="colDanger">
-                                                @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $account->nickname.'-'.'%')->orWhere('debitAccount','LIKE', $account->nickname.'-'.'%')->get())
                                                 @php($k=0)
-                                                @foreach($listPalletstransfers as $transfer)
-                                                    @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
+                                                @php($errorsTransfer= \App\Http\Controllers\PalletstransfersController::actualErrors($transfer))
                                                     @foreach($errorsTransfer as $errorT)
                                                         @if(!empty($errorT)&& $k<2)
                                                             <span class="glyphicon glyphicon-warning-sign text-danger"
@@ -730,7 +729,6 @@
                                                             @php($k=$k+1)
                                                         @endif
                                                     @endforeach
-                                                @endforeach
                                             </td>
                                         </tr>
                                     @endforeach

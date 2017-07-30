@@ -63,11 +63,20 @@
                                 @endif
                             @endforeach
                         </div>
-                        <!--add subloading-->
-                        <div>
-                            <a href="{{route('showAddSubloading', $loading->atrnr)}}" class=" btn btn-add"><span
-                                        class="glyphicon glyphicon-plus-sign"></span> Subloading</a>
-                        </div>
+                        @if(!(Session::has('openAddForm')|| (isset($actionForm) && ($actionForm== 'addTransferForm'||$actionForm=='addPalletstransfer'||explode('-', $actionForm)[0]=='showAddCorrectingTransfer')) || isset($showAddCorrectingTransfer)))
+                            <div>
+                                <button type="submit" class="btn btn-add" value="addTransferForm" name="addTransferForm" id="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="formSubmitBlock(this);">
+                                    Add transfer
+                                </button>
+                            </div>
+                            @else
+                            <div>Adding transfer</div>
+                        @endif
+                        {{--<!--add subloading-->--}}
+                        {{--<div>--}}
+                            {{--<a href="{{route('showAddSubloading', $loading->atrnr)}}" class=" btn btn-add"><span--}}
+                                        {{--class="glyphicon glyphicon-plus-sign"></span> Subloading</a>--}}
+                        {{--</div>--}}
                     </div>
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal" role="form"  method="POST" action="{{route('submitUpdateUpload', $loading->atrnr)}}" enctype="multipart/form-data" id="formSubmitUpdateUpload">
@@ -146,7 +155,7 @@
                                         <div class="col-lg-8">
                                             <div class="input-group details-loading">
                                                 <label for="subfrachter" class="input-group-addon">Subfrachter :</label>
-                                                <input type="text" name="subfrachter" id="subfrachter" @if($loading->subfrachter <> null) class="form-control" @else class="form-control requiredField" @endif @if(isset($subfrachter)) value="{{$subfrachter}}" @else value="{{ $loading->subfrachter }}" @endif placeholder="subfrachter : Carrier name City, Country-Zipcode City" required data-toggle="tooltip" data-placement="top" title="subfrachter : Carrier name City, Country-Zipcode City" />
+                                                <input type="text" name="subfrachter" id="subfrachter" @if($loading->subfrachter <> null) class="form-control" @else class="form-control requiredField" @endif @if(isset($subfrachter)) value="{{$subfrachter}}" @else value="{{ $loading->subfrachter }}" @endif placeholder="subfrachter : Carrier name City" required data-toggle="tooltip" data-placement="top" title="subfrachter : Carrier name City, Country-Zipcode City" />
                                             </div>
                                         </div>
                                         <!--kennzeichen-->
@@ -351,6 +360,7 @@
                                             <div class="modal-body center">
                                                 @if(Session::has('testCarrier'))
                                                     <div class="row">
+                                                        @if(!$listPossibilitiesCarriers->isEmpty())
                                                 <p class="text-center"><strong>Option 1 :</strong></p>
                                                 <p class="text-center">You have made a mistake.</p>
                                                 <p class="text-center">Please check in the carriers list below if you mean one of them</p>
@@ -365,6 +375,7 @@
                                                     </div>
                                                     <br>
                                                 <br>
+                                                @endif
                                                 <div class="row">
                                                 <p class="text-center"><strong>Option 2 :</strong></p>
                                                 <p class="text-center">Create the new carrier</p>
@@ -373,7 +384,8 @@
                                                 </div>
                                                 </div>
                                                 @elseif(Session::has('testTruck'))
-                                                    <div clas="row">
+                                                    <div class="row">
+                                                        @if(!$listPossibilitiesTrucks->isEmpty())
                                                     <p class="text-center"><strong>Option 1 :</strong></p>
                                                     <p class="text-center">You have made a mistake.</p>
                                                     <p class="text-center">Please check in the trucks list below if you mean one of them</p>
@@ -388,6 +400,7 @@
                                                     </div>
                                                     <br>
                                                 <br>
+                                                    @endif
                                                 <div class="row">
                                                     <p class="text-center"><strong>Option 2 :</strong></p>
                                                     <p class="text-center">Create the new truck</p>
@@ -396,7 +409,6 @@
                                                     </div>
                                             </div>
                                                 @endif
-
                                             </div>
                                         </div>
                                     </div>
@@ -421,14 +433,21 @@
                                     <p>order : {{$loading->anz}}</p>
                                 </div>
                                 @if($loading->subfrachter <> null)
-                                <div class="col-lg-offset-4">
+                                <div @if(count($listPalletstransfers)>0) class="col-lg-2" @else class="col-lg-offset-4" @endif>
                                     <p>truck : @if(isset($theoricalNumberPalletsTruck)){{$theoricalNumberPalletsTruck}} @endif (planned) - @if(isset($realNumberPalletsTruck)) {{$realNumberPalletsTruck}} @endif (confirmed)</p>
                                 </div>
                                     @else
-                                    <div class="col-lg-offset-4">
+                                    <div @if(count($listPalletstransfers)>0) class="col-lg-2" @else class="col-lg-offset-4" @endif>
                                       <p class="text-danger">NO TRUCK ASSOCIATED !</p>
                                     </div>
                                     @endif
+                                @if(count($listPalletstransfers)>0)
+                                    <div>
+                                        <span><a class="btn btn-primary btn-add"
+                                              data-toggle="modal" data-target="#clear_modal"><span class="glyphicon glyphicon-trash"></span> All transfers</a></span>
+
+                                    </div>
+                                @endif
                             </div>
                             <div id="Pan2collapse" class="panel-collapse in collapse">
                                 <div class="panel-body">
@@ -446,32 +465,6 @@
                                         @endif
                                     </div>
                                     @endif
-                                    <!--show add form-->
-                                    <div class="row">
-                                        <div class="from-group">
-                                            @if(!(Session::has('openAddForm')|| (isset($actionForm) && ($actionForm== 'addTransferForm'||$actionForm=='addPalletstransfer'||explode('-', $actionForm)[0]=='showAddCorrectingTransfer')) || isset($showAddCorrectingTransfer)))
-                                                <div class="col-lg-3 col-lg-offset-2">
-                                                <button type="submit" class="btn btn-add btn-block" value="addTransferForm" name="addTransferForm" id="addTransferForm" data-toggle="collapse" data-target="#addForm" onclick="formSubmitBlock(this);">
-                                                    Add transfer
-                                                </button>
-                                            </div>
-                                            @if(count($listPalletstransfers)>0)
-                                            <div class="col-lg-3 col-lg-offset-2">
-                                                <input type="button" class="btn btn-primary btn-block btn-form"
-                                                        data-toggle="modal" data-target="#clear_modal" value="Delete all transfers" />
-                                            </div>
-                                            @endif
-                                            @else
-                                                @if(count($listPalletstransfers)>0)
-                                                    <div class="col-lg-3 col-lg-offset-7">
-                                                        <input type="button" class="btn btn-primary btn-block btn-form"
-                                                               data-toggle="modal" data-target="#clear_modal" value="Delete all transfers" />
-                                                    </div>
-                                                @endif
-                                            @endif
-                                        </div>
-                                    </div>
-
 
                                 <!-- Modal Delete -->
                                     <div class="modal fade" id="clear_modal" role="dialog">
@@ -575,18 +568,18 @@
                                                         <div class="col-lg-2">
                                                             <input id="date" type="date" class="form-control" name="date" value="{{ $loading->ladedatum }}" autofocus data-toggle="tooltip" data-placement="top" title="date" />
                                                         </div>
-                                                        <!--transfer normal associated-->
+                                                        <!--transfer to correct-->
                                                         @if(isset($showAddCorrectingTransfer) ||( isset($actionForm) && explode('-', $actionForm)[0]=='showAddCorrectingTransfer'))
                                                             {{--@if(Session::has('messageErrorTransfersAssociated'))--}}
                                                                 {{--<p class="alert alert-danger text-alert text-center"> {{ Session::get('messageErrorTransfersAssociated') }}</p>--}}
                                                                 {{--@endif--}}
                                                             <div class="col-lg-2 text-right">
-                                                                <label for="normalTransferAssociated" class="control-label">*Correction on :</label>
+                                                                <label for="transferToCorrect" class="control-label">Correction on :</label>
                                                             </div>
                                                             <div class="col-lg-1">
-                                                                <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="normalTransferAssociated" id="select-normalTransferAssociated" data-style="requiredField">
+                                                                <select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="transferToCorrect" id="select-transferToCorrect" data-style="requiredField">
                                                                     @foreach($listPalletstransfersNormal as $normalTransfer )
-                                                                        @if((isset($actionForm) && count(explode('-', $actionForm))==2 && explode('-', $actionForm)[1] ==$normalTransfer->id )||(isset($normalTransferAssociated) && $normalTransferAssociated ==$normalTransfer->id))
+                                                                        @if((isset($actionForm) && count(explode('-', $actionForm))==2 && explode('-', $actionForm)[1] ==$normalTransfer->id )||(isset($transferToCorrect) && $transferToCorrect ==$normalTransfer->id))
                                                                             <option value="{{$normalTransfer->id}}" selected>{{$normalTransfer->id}}</option>
                                                                         @else
                                                                             <option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>
@@ -594,11 +587,11 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                                {{--<div class="col-lg-1" id="normalTransferAssociated2" @if(isset($normalTransferAssociated2)) style="display:block;" @else style="display:none;" @endif>--}}
-                                                                    {{--<select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="normalTransferAssociated2" id="select-normalTransferAssociated2" data-style="requiredField">--}}
+                                                                {{--<div class="col-lg-1" id="transferToCorrect2" @if(isset($transferToCorrect2)) style="display:block;" @else style="display:none;" @endif>--}}
+                                                                    {{--<select class="selectpicker show-tick form-control" data-size="5" data-live-search="true" data-live-search-style="startsWith" title="Normal transfer associated" name="transferToCorrect2" id="select-transferToCorrect2" data-style="requiredField">--}}
                                                                         {{--@foreach($listPalletstransfersNormal as $normalTransfer )--}}
                                                                             {{--<option value="0" selected>None</option>--}}
-                                                                            {{--@if(isset($normalTransferAssociated2) && $normalTransferAssociated2 ==$normalTransfer->id)--}}
+                                                                            {{--@if(isset($transferToCorrect2) && $transferToCorrect2 ==$normalTransfer->id)--}}
                                                                                 {{--<option value="{{$normalTransfer->id}}" selected>{{$normalTransfer->id}}</option>--}}
                                                                             {{--@else--}}
                                                                                 {{--<option value="{{$normalTransfer->id}}">{{$normalTransfer->id}}</option>--}}
@@ -743,7 +736,7 @@
                                                                     @endif
                                                                 @endforeach
                                                                 @foreach($listTrucksAccounts as $trucksAccount )
-                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccountDDebtOther') && (strpos(old('creditAccountDDebtOther'), '-') == 5 && explode('-', old('creditAccountD'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('creditAccountDDebtOther'))[1]))|| (isset($creditAccount)&& isset($type) && ($type=='Deposit_Only' || $type=='Debt' || $type=='Other')&& (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') && ($trucksAccount->id==explode('-', $creditAccount)[1])))
+                                                                        @if((Illuminate\Support\Facades\Input::old('creditAccountDDebtOther') && (strpos(old('creditAccountDDebtOther'), '-') == 5 && explode('-', old('creditAccountDDebtOther'))[0] == 'truck') && ($trucksAccount->id==explode('-', old('creditAccountDDebtOther'))[1]))|| (isset($creditAccount)&& isset($type) && ($type=='Deposit_Only' || $type=='Debt' || $type=='Other')&& (strpos($creditAccount, '-') == 5 && explode('-', $creditAccount)[0] == 'truck') && ($trucksAccount->id==explode('-', $creditAccount)[1])))
                                                                             <option value="truck-{{$trucksAccount->id}}" selected>{{$trucksAccount->name}}
                                                                                 - {{$trucksAccount->licensePlate}}</option>
                                                                         @else
@@ -1054,10 +1047,10 @@
                                                         <h4 class="modal-title text-center">TRANSFERS RECAP</h4>
                                                     </div>
                                                     <div class="modal-body center modalBodyTransfer">
-                                                        <p class="text-center">Date : {{$date}}</p>
-                                                        <p class="text-center">Type : {{$type}} </p>
+                                                        <p class="text-center"><strong>Date :</strong> {{$date}}</p>
+                                                        <p class="text-center"><strong>Type :</strong> {{$type}} </p>
                                                         @if(isset($details))
-                                                        <p class="text-center">Details : {{$details}}</p>
+                                                            <p class="text-center"><strong>Details :</strong> {{$details}}</p>
                                                         @endif
                                                         <table class="table table-hover table-bordered">
                                                             <thead>
@@ -1097,22 +1090,20 @@
                                                             @endif
                                                             </tbody>
                                                         </table>
+                                                        @if((isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)|| (isset($palletsNumber2) && $palletsNumber2 <> $loading->anz) || ($palletsNumber <> $loading->anz))
                                                         <div class="text-center">
-                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                            <span class="glyphicon glyphicon-info-sign"></span>
                                                         </div>
                                                         <div class="text-center">
                                                             @if(isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)
-                                                                <p class="text-center">INFORMATION : Pallets number 1 and pallets number 2 are different</p>
+                                                                <p class="text-center">INFORMATION : Pallets number given and pallets number taken are different</p>
                                                                 @elseif(isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)
-                                                                    <p class="text-center">INFORMATION : Pallets number 2 doesn't match the loading order</p>
+                                                                    <p class="text-center">INFORMATION : Pallets number taken doesn't match the loading order</p>
                                                                 @elseif($palletsNumber <> $loading->anz)
-                                                                <p class="text-center">INFORMATION : Pallets number 1 doesn't match the loading order</p>
-                                                                @else
-                                                                <p class="text-center">GOOD ! no errors</p>
+                                                                <p class="text-center">INFORMATION : Pallets number given doesn't match the loading order</p>
                                                             @endif
                                                         </div>
+                                                        @endif
                                                             {{--@if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))--}}
                                                                 {{--<div class="text-center">--}}
                                                                     {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
@@ -1166,7 +1157,7 @@
                                                         @php($idAccount=$partsAccount[count($partsAccount)-1])
                                                         @if($typeAccount=='account')
                                                             @php($nameAccount=\App\Palletsaccount::where('id', $idAccount)->first()->nickname)
-                                                            <th class="text-center" @if(strpos($accountTransfer, 'account-1')<>true) colspan="4" @else colspan="3" @endif class="text-center">
+                                                            <th class="text-center" colspan="4" class="text-center">
                                                                 <a class="link"
                                                                    href="{{route('showDetailsPalletsaccount',$idAccount)}}">{{$nameAccount}}</a>
                                                             </th>
@@ -1185,12 +1176,10 @@
                                                 <tbody>
                                                 <tr>
                                                     @foreach($listAccountsTransfers as  $accountTransfer)
-                                                    <td class="text-center table-accountsColBegin">Total</td>
-                                                    <td class="text-center">Conf.</td>
-                                                    <td class="text-center" @if(strpos($accountTransfer, 'account-1')<>true) class="text-center table-accountsColEnd" @endif>Rest</td>
-                                                        @if(strpos($accountTransfer, 'account-1')<>true)
-                                                            <td class="text-center table-accountsColEnd">Debt</td>
-                                                        @endif
+                                                    <td class="text-center table-accountsColBegin" data-toggle="tooltip" data-placement="top" title="Total of pallets number confirmed">Total</td>
+                                                    <td class="text-center" data-toggle="tooltip" data-placement="top" title="Pallets number confirmed for this loading only">Conf.</td>
+                                                    <td class="text-center" class="text-center table-accountsColEnd" data-toggle="tooltip" data-placement="top" title="Pallets number planned for this loading only">Plan.</td>
+                                                            <td class="text-center table-accountsColEnd" data-toggle="tooltip" data-placement="top" title="The number of pallets the account has to give to Wenzel (debt<0) or inversely (debt>0)">Debt</td>
                                                     @endforeach
                                                 </tr>
                                                 <tr>
@@ -1209,10 +1198,8 @@
 
                                                         <td class="text-center table-accountsColBegin"><span @if($total <0) class="text-inf0" @elseif($total >0) class="text-sup0" @else class="text-egal0" @endif >{{$total}}</span></td>
                                                         <td class="text-center"><span @if($confirmedTransfer <0) class="text-inf0" @elseif($confirmedTransfer >0) class="text-sup0" @else class="text-egal0" @endif>{{$confirmedTransfer}}</span></td>
-                                                        <td class="text-center" @if(strpos($accountTransfer, 'account-1')<>true) class="text-center table-accountsColEnd" @endif><span @if($plannedTransfer<0) class="text-inf0" @elseif($plannedTransfer>0) class="text-sup0" @else class="text-egal0" @endif>{{$plannedTransfer}}</span></td>
-                                                        @if(strpos($accountTransfer, 'account-1')<>true)
-                                                            <td class="text-center table-accountsColEnd"><span @if($debtTransfer <0) class="text-inf0" @elseif($debtTransfer >0) class="text-sup0" @else class="text-egal0" @endif>{{$debtTransfer}}</span></td>
-                                                        @endif
+                                                        <td class="text-center" class="text-center table-accountsColEnd"><span @if($plannedTransfer<0) class="text-inf0" @elseif($plannedTransfer>0) class="text-sup0" @else class="text-egal0" @endif>{{$plannedTransfer}}</span></td>
+                                                       <td class="text-center table-accountsColEnd"><span @if($debtTransfer <0) class="text-inf0" @elseif($debtTransfer >0) class="text-sup0" @else class="text-egal0" @endif>{{$debtTransfer}}</span></td>
                                                     @endforeach
                                                 </tr>
                                                 </tbody>
@@ -1320,7 +1307,7 @@
                                         </div>
                                     </div>
                                     <br>
-{{--@php(dd(request()->session()))--}}
+
                                     <!--PANEL FOR EACH TRANSFER-->
                                     <div class="row">
                                         <!--msg error-->
@@ -1387,7 +1374,7 @@
                                                         <div class="form-group">
                                                             <!--type-->
                                                             <div class="col-lg-1">
-                                                                <label for="type{{$transferNormal->id}}" class="control-label" >*Type :</label>
+                                                                <label for="type{{$transferNormal->id}}" class="control-label" >Type :</label>
                                                             </div>
                                                             <div class="col-lg-2">
                                                                 <input type="text" name="type{{$transferNormal->id}}" class="form-control" value="{{$transferNormal->type}}" id="type{{$transferNormal->id}}" readonly/>
@@ -1395,15 +1382,15 @@
                                                             <!--details-->
                                                             <div class="col-lg-4">
                                                                 @if(isset($transferNormal->details)&&(isset($transferNormal->validate) && $transferNormal->validate==1))
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details" readonly>{{$transferNormal->details}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details (broken pallets, gift, receipt...)" readonly>{{$transferNormal->details}}</textarea>
                                                                 @elseif(isset($transferNormal->details))
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details">{{$transferNormal->details}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details (broken pallets, gift, receipt...)">{{$transferNormal->details}}</textarea>
                                                                 @elseif(Illuminate\Support\Facades\Input::old('details'.$transferNormal->id) && isset($transferNormal->validate) && $transferNormal->validate==1)
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details" readonly>{{old('details'.$transferNormal->id)}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details (broken pallets, gift, receipt...)" readonly>{{old('details'.$transferNormal->id)}}</textarea>
                                                                 @elseif(Illuminate\Support\Facades\Input::old('details'.$transferNormal->id))
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details">{{old('details'.$transferNormal->id)}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details (broken pallets, gift, receipt...)">{{old('details'.$transferNormal->id)}}</textarea>
                                                                 @else
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details"></textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferNormal->id}}" name="details{{$transferNormal->id}}" placeholder="Details (broken pallets, gift, receipt...)"></textarea>
                                                                 @endif
                                                             </div>
                                                             <!--date-->
@@ -1418,7 +1405,7 @@
                                                         <div class="form-group">
                                                             <!--number of pallets-->
                                                             <div class="col-lg-1">
-                                                                <label for="palletsNumber{{$transferNormal->id}}" class="control-label">*Pal. :</label>
+                                                                <label for="palletsNumber{{$transferNormal->id}}" class="control-label">Pal. :</label>
                                                             </div>
                                                             <div class="col-lg-1">
                                                                 <input id="palletsNumber{{$transferNormal->id}}" type="number" class="form-control" name="palletsNumber{{$transferNormal->id}}" value="{{$transferNormal->palletsNumber}}"  placeholder="Nbr" min="0" autofocus readonly/>
@@ -1426,7 +1413,7 @@
 
                                                             <!--debit account-->
                                                             <div class="col-lg-2 text-right" id="debitAccount1{{$transferNormal->id}}">
-                                                                <label for="debitAccount{{$transferNormal->id}}" class="control-label">*From :</label>
+                                                                <label for="debitAccount{{$transferNormal->id}}" class="control-label">From :</label>
                                                             </div>
                                                             <div class="col-lg-3" id="debitAccount2{{$transferNormal->id}}" >
                                                                 <input type="text" name="debitAccount{{$transferNormal->id}}" id="debitAccount{{$transferNormal->id}}" class="form-control" value="{{$debitAccountValidate}}" readonly/>
@@ -1434,7 +1421,7 @@
 
                                                             <!--credit account-->
                                                             <div class="col-lg-1" id="creditAccount1{{$transferNormal->id}}">
-                                                                <label for="creditAccount{{$transferNormal->id}}" class="control-label">*To :</label>
+                                                                <label for="creditAccount{{$transferNormal->id}}" class="control-label">To :</label>
                                                             </div>
                                                             <div class="col-lg-4" id="creditAccount2{{$transferNormal->id}}" >
                                                                 <input type="text" name="creditAccount{{$transferNormal->id}}"  id="creditAccount{{$transferNormal->id}}" class="form-control" value="{{$creditAccountValidate}}" readonly/>
@@ -1443,17 +1430,20 @@
                                                         <!--documents proof upload-->
                                                         <div class="form-group">
                                                             <div class="col-lg-2">
-                                                                <label for="documentsTransfer{{$transferNormal->id}}">*Proof docs ?</label>
+                                                                <label for="documentsTransfer{{$transferNormal->id}}">Proof docs ?</label>
                                                             </div>
                                                             <div class="col-lg-4">
                                                                 <input type="file" name="documentsTransfer{{$transferNormal->id}}[]" multiple id="documentsTransfer{{$transferNormal->id}}"/>
                                                             </div>
-                                                            <!--button upload-->
-                                                            <div class="col-lg-2">
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="upload-{{$transferNormal->id}}" name="upload" id="upload" onclick="formSubmitBlock(this);">
-                                                                    Upload
-                                                                </button>
+                                                            <div class="col-lg-6">
+                                                                <input type="text" data-toggle="tooltip" data-placement="top" title="If no proof necessary, add a comment" placeholder="If no proof necessary, add a comment" class="form-control" name="proof" id="proof" @if(isset($transferNormal->proof)) value="{{$transferNormal->proof}}" @else value="" @endif/>
                                                             </div>
+                                                            {{--<!--button upload-->--}}
+                                                            {{--<div class="col-lg-2">--}}
+                                                                {{--<button type="submit" class="btn btn-primary btn-block btn-form" value="upload-{{$transferNormal->id}}" name="upload" id="upload" onclick="formSubmitBlock(this);">--}}
+                                                                    {{--Upload--}}
+                                                                {{--</button>--}}
+                                                            {{--</div>--}}
                                                         </div>
 
                                                     @php($filesNames= \App\Http\Controllers\DetailsLoadingController::actualDocuments($transferNormal->id))
@@ -1478,22 +1468,22 @@
                                                         </div>
                                                         <!--validation-->
                                                         <div class="form-group">
-                                                            @if(!empty($filesNames)&&isset($transferNormal->palletsNumber)&&isset($transferNormal->creditAccount)&&isset($transferNormal->debitAccount))
+                                                            @if(!empty($filesNames)||isset($transferNormal->proof))
                                                                 <div class="col-lg-2">
                                                                     <label for="validate{{$transferNormal->id}}" class="control-label">Validated ? </label>
                                                                 </div>
                                                                 <div class="col-lg-2 text-left">
                                                                     @if(isset($transferNormal->validate) && $transferNormal->validate==1)
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferNormal->id}}" value="true" checked id="validateYes"/>Yes</label>
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferNormal->id}}" value="false" id="validateNo"/>No</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferNormal->id}}" value="true" checked id="validateYes"/>Yes</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferNormal->id}}" value="false" id="validateNo"/>No</label>
                                                                     @elseif(isset($transferNormal->validate) && $transferNormal->validate==0)
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferNormal->id}}" value="true" id="validateYes">Yes</label>
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferNormal->id}}" value="false" checked id="validateNo"/>No</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferNormal->id}}" value="true" id="validateYes">Yes</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferNormal->id}}" value="false" checked id="validateNo"/>No</label>
                                                                     @endif
                                                                 </div>
                                                             @endif
                                                         <!--submit-->
-                                                            <div @if(!empty($filesNames)&&isset($transferNormal->palletsNumber)&&isset($transferNormal->creditAccount)&&isset($transferNormal->debitAccount)) class="col-lg-2 col-lg-offset-2" @else class="col-lg-2 col-lg-offset-6"  @endif>
+                                                            <div @if(!empty($filesNames)||isset($transferNormal->proof))) class="col-lg-4 col-lg-offset-4" @else class="col-lg-4 col-lg-offset-8"  @endif>
                                                                 <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferNormal->id}}" name="submitPallets" id="submitPallets" data-toggle="modal" data-target="#submitPallets_modal" data-backdrop="static" data-keyboard="false" onclick="formSubmitBlock(this);">
                                                                     Update
                                                                 </button>
@@ -1526,12 +1516,13 @@
                                                                         &times;
                                                                     </button>
                                                                     <h4 class="modal-title text-center">TRANSFERS RECAP</h4>
+                                                                    <h4 class="modal-title text-center">validation</h4>
                                                                 </div>
                                                                 <div class="modal-body center modalBodyTransfer">
-                                                                    <p class="text-center">Date : {{$transferNormal->date}}</p>
-                                                                    <p class="text-center">Type : {{$transferNormal->type}} </p>
+                                                                    <p class="text-center"><strong>Date :</strong> {{$transferNormal->date}}</p>
+                                                                    <p class="text-center"><strong>Type :</strong> {{$transferNormal->type}} </p>
                                                                     @if(isset($transferNormal->details))
-                                                                        <p class="text-center">Details : {{$transferNormal->details}}</p>
+                                                                        <p class="text-center"><strong>Details :</strong> {{$transferNormal->details}}</p>
                                                                     @endif
                                                                     <table class="table table-hover table-bordered">
                                                                         <thead>
@@ -1552,25 +1543,27 @@
                                                                         </tbody>
                                                                     </table>
                                                                     <div class="text-center">
-                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
-                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+
+
                                                                     </div>
                                                                     <div class="text-center">
-                                                                        @foreach($errorsTransfer as $errorTrans)
-                                                                            @if($errorTrans->name=='DW-WD_atLeastOne')
-                                                                                <p class="text-danger"> A with-dep transfer or dep-with transfer is missing</p>
-                                                                            @endif
-                                                                            @if($errorTrans->name=='DW-WD_notNumberLoadingOrder')
+                                                                        @if(!empty($errorsTransfer))
+                                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                            @foreach($errorsTransfer as $errorTrans)
+                                                                                @if($errorTrans->name=='DW-WD_atLeastOne')
+                                                                                    <p class="text-danger"> A with-dep transfer or dep-with transfer is missing</p>
+                                                                                @endif
+                                                                                @if($errorTrans->name=='DW-WD_notNumberLoadingOrder')
                                                                                     <p class="text-danger"> The pallets numbers sum of with-dep transfers or dep-with transfers does NOT MATCH the number in the loading order ({{$loading->anz}})</p>
                                                                                     @endif
                                                                                 @if($errorTrans->name=='Donly-Wonly_notSameNumber')
                                                                                     <p class="text-danger"> Sum of deposit only transfers does NOT MATCH the sum of withdrawal only transfers </p>
                                                                                 @endif
-                                                                        @endforeach
-                                                                            @if(empty($errorsTransfer))
-                                                                                <p class="text-center">GOOD ! no errors</p>
-                                                                            @endif
+                                                                                @if($errorTrans->name=='DW-WD_notSameNumber')
+                                                                                    <p class="text-danger"> Sum of dep-with transfers does NOT MATCH the sum of with-dep transfers </p>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
                                                                                     {{--@if(isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)--}}
                                                                             {{--<p class="text-center">INFORMATION : Pallets number 1 and pallets number 2 are different</p>--}}
                                                                         {{--@elseif(isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)--}}
@@ -1780,7 +1773,7 @@
 
                                         <!-----------------CORRECTING TRANSFERS---------->
                                             <div class="form-group text-center">
-                                                <label for="normal" class="control-label text-center">CORRECTING</label>
+                                                <label for="correcting" class="control-label text-center">CORRECTING</label>
                                             </div>
                                             @foreach($listPalletstransfersCorrecting as $transferCorrecting)
                                                 @php($errorsTransfer=\App\Http\Controllers\PalletstransfersController::actualErrors($transferCorrecting))
@@ -1830,7 +1823,7 @@
                                                         <div class="form-group">
                                                             <!--type-->
                                                             <div class="col-lg-1">
-                                                                <label for="type{{$transferCorrecting->id}}" class="control-label">*Type :</label>
+                                                                <label for="type{{$transferCorrecting->id}}" class="control-label">Type :</label>
                                                             </div>
                                                             <div class="col-lg-2">
                                                                 <input type="text" name="type{{$transferCorrecting->id}}" class="form-control" value="{{$transferCorrecting->type}}" readonly/>
@@ -1838,37 +1831,37 @@
                                                             <!--details-->
                                                             <div class="col-lg-4">
                                                                 @if(isset($transferCorrecting->details)&&(isset($transferCorrecting->validate) && $transferCorrecting->validate==1))
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details" readonly>{{$transferCorrecting->details}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details (broken pallets, gift, receipt...)" readonly>{{$transferCorrecting->details}}</textarea>
                                                                 @elseif(isset($transferCorrecting->details))
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details">{{$transferCorrecting->details}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details (broken pallets, gift, receipt...)">{{$transferCorrecting->details}}</textarea>
                                                                 @elseif(Illuminate\Support\Facades\Input::old('details'.$transferCorrecting->id) && isset($transferCorrecting->validate) && $transferCorrecting->validate==1)
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details" readonly>{{old('details'.$transferCorrecting->id)}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details (broken pallets, gift, receipt...)" readonly>{{old('details'.$transferCorrecting->id)}}</textarea>
                                                                 @elseif(Illuminate\Support\Facades\Input::old('details'.$transferCorrecting->id))
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details">{{old('details'.$transferCorrecting->id)}}</textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details (broken pallets, gift, receipt...)">{{old('details'.$transferCorrecting->id)}}</textarea>
                                                                 @else
-                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details"></textarea>
+                                                                    <textarea class="form-control" rows="1" id="details{{$transferCorrecting->id}}" name="details{{$transferCorrecting->id}}" placeholder="Details (broken pallets, gift, receipt...)"></textarea>
                                                                 @endif
                                                             </div>
                                                             <!--date-->
                                                             <div class="col-lg-2">
                                                                 <input id="date{{$transferCorrecting->id}}" type="date" class="form-control" name="date{{$transferCorrecting->id}}" value="{{ $transferCorrecting->date }}" placeholder="Date" autofocus readonly/>
                                                             </div>
-                                                            <!--transfer normal associated-->
+                                                            <!--transfer to correct-->
                                                             <div class="col-lg-2 text-right">
-                                                                <label for="normalTransferAssociated{{$transferCorrecting->id}}" class="control-label">*Correction on :</label>
+                                                                <label for="transferToCorrect{{$transferCorrecting->id}}" class="control-label">Correction on :</label>
                                                             </div>
-                                                            <div class="col-lg-1">
-                                                                <input type="text" name="normalTransferAssociated{{$transferCorrecting->id}}" class="form-control" value="{{$transferCorrecting->normalTransferAssociated}}" readonly/>
+                                                            <div class="col-lg-1 noPaddingLeft">
+                                                                <input type="text" name="transferToCorrect{{$transferCorrecting->id}}" class="form-control" value="{{$transferCorrecting->transferToCorrect}}" readonly/>
                                                             </div>
                                                             <!--add account-->
                                                             <div class="col-lg-2 col-lg-offset-1">
-                                                                <a href="{{route('showAddPalletsaccount', ['originalPage' => 'detailsLoading-'.$loading->anz])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Add account</a>
+                                                                <a href="{{route('showAddPalletsaccount', ['originalPage' => 'detailsLoading-'.$loading->anz])}}" class="link"><span class="glyphicon glyphicon-plus-sign"></span> Account</a>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <!--number of pallets-->
                                                             <div class="col-lg-1">
-                                                                <label for="palletsNumber{{$transferCorrecting->id}}" class="control-label">*Pal. :</label>
+                                                                <label for="palletsNumber{{$transferCorrecting->id}}" class="control-label">Pal. :</label>
                                                             </div>
                                                             <div class="col-lg-1">
                                                                 <input id="palletsNumber{{$transferCorrecting->id}}" type="number" class="form-control" name="palletsNumber{{$transferCorrecting->id}}" value="{{$transferCorrecting->palletsNumber}}"  placeholder="Nbr" min="0" autofocus readonly/>
@@ -1876,7 +1869,7 @@
 
                                                             <!--debit account-->
                                                             <div class="col-lg-2 text-right" id="debitAccount1{{$transferCorrecting->id}}" >
-                                                                <label for="debitAccount{{$transferCorrecting->id}}" class="control-label">*From :</label>
+                                                                <label for="debitAccount{{$transferCorrecting->id}}" class="control-label">From :</label>
                                                             </div>
                                                             <div class="col-lg-3" id="debitAccount2{{$transferCorrecting->id}}" >
                                                                 <input type="text" name="debitAccount{{$transferCorrecting->id}}" class="form-control" value="{{$debitAccountValidate}}" readonly/>
@@ -1884,7 +1877,7 @@
 
                                                             <!--credit account-->
                                                             <div class="col-lg-1" id="creditAccount1{{$transferCorrecting->id}}">
-                                                                <label for="creditAccount{{$transferCorrecting->id}}" class="control-label">*To :</label>
+                                                                <label for="creditAccount{{$transferCorrecting->id}}" class="control-label">To :</label>
                                                             </div>
                                                             <div class="col-lg-4" id="creditAccount2{{$transferCorrecting->id}}" >
                                                                 <input type="text" name="creditAccount{{$transferCorrecting->id}}" class="form-control" value="{{$creditAccountValidate}}" readonly/>
@@ -1893,17 +1886,20 @@
                                                         <!--documents proof upload-->
                                                         <div class="form-group">
                                                             <div class="col-lg-2">
-                                                                <label for="documentsTransfer{{$transferCorrecting->id}}">*Proof docs ?</label>
+                                                                <label for="documentsTransfer{{$transferCorrecting->id}}">Proof docs ?</label>
                                                             </div>
                                                             <div class="col-lg-4">
                                                                 <input type="file" name="documentsTransfer{{$transferCorrecting->id}}[]" multiple id="documentsTransfer{{$transferCorrecting->id}}"/>
                                                             </div>
-                                                            <!--button upload-->
-                                                            <div class="col-lg-2">
-                                                                <button type="submit" class="btn btn-primary btn-block btn-form" value="upload-{{$transferCorrecting->id}}" name="upload" id="upload" onclick="formSubmitBlock(this);">
-                                                                    Upload
-                                                                </button>
+                                                            <div class="col-lg-6">
+                                                                <input type="text" data-toggle="tooltip" data-placement="top" title="If no proof necessary, add a comment" placeholder="If no proof necessary, add a comment" class="form-control" name="proof" id="proof" @if(isset($transferNormal->proof)) value="{{$transferNormal->proof}}" @else value="" @endif/>
                                                             </div>
+                                                            {{--<!--button upload-->--}}
+                                                            {{--<div class="col-lg-2">--}}
+                                                                {{--<button type="submit" class="btn btn-primary btn-block btn-form" value="upload-{{$transferCorrecting->id}}" name="upload" id="upload" onclick="formSubmitBlock(this);">--}}
+                                                                    {{--Upload--}}
+                                                                {{--</button>--}}
+                                                            {{--</div>--}}
                                                         </div>
 
                                                     @php($filesNames= \App\Http\Controllers\DetailsLoadingController::actualDocuments($transferCorrecting->id))
@@ -1928,22 +1924,22 @@
                                                         </div>
                                                         <!--validation-->
                                                         <div class="form-group">
-                                                            @if(!empty($filesNames)&&isset($transferCorrecting->palletsNumber)&&isset($transferCorrecting->creditAccount)&&isset($transferCorrecting->debitAccount))
+                                                            @if(!empty($filesNames)||isset($transferCorrecting->proof))
                                                                 <div class="col-lg-2">
                                                                     <label for="validate{{$transferCorrecting->id}}" class="control-label">Validated ? </label>
                                                                 </div>
                                                                 <div class="col-lg-2 text-left">
                                                                     @if(isset($transferCorrecting->validate) && $transferCorrecting->validate==1)
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferCorrecting->id}}" value="true" checked id="validateYes"/>Yes</label>
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferCorrecting->id}}" value="false" id="validateNo"/>No</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferCorrecting->id}}" value="true" checked id="validateYes"/>Yes</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferCorrecting->id}}" value="false" id="validateNo"/>No</label>
                                                                     @elseif(isset($transferCorrecting->validate) && $transferCorrecting->validate==0)
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferCorrecting->id}}" value="true" id="validateYes">Yes</label>
-                                                                        <label class="radio-inline"><input type="radio" name="validate{{$transferCorrecting->id}}" value="false" checked id="validateNo"/>No</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferCorrecting->id}}" value="true" id="validateYes">Yes</label>
+                                                                        <label class="radio-inline requiredField"><input type="radio" name="validate{{$transferCorrecting->id}}" value="false" checked id="validateNo"/>No</label>
                                                                     @endif
                                                                 </div>
                                                             @endif
                                                         <!--submit-->
-                                                            <div @if(!empty($filesNames)&&isset($transferCorrecting->palletsNumber)&&isset($transferCorrecting->creditAccount)&&isset($transferCorrecting->debitAccount)) class="col-lg-2 col-lg-offset-2" @else class="col-lg-2 col-lg-offset-6"  @endif>
+                                                            <div @if(!empty($filesNames)||isset($transferCorrecting->proof)) class="col-lg-4 col-lg-offset-4" @else class="col-lg-4 col-lg-offset-8"  @endif>
                                                                 <button type="submit" class="btn btn-primary btn-block btn-form" value="submitPallets-{{$transferCorrecting->id}}" name="submitPallets" id="submitPalletsb" data-toggle="modal" data-target="#submitPallets_modal" data-backdrop="static" data-keyboard="false" onclick="formSubmitBlock(this);">
                                                                     Update
                                                                 </button>
@@ -1976,12 +1972,13 @@
                                                                         &times;
                                                                     </button>
                                                                     <h4 class="modal-title text-center">TRANSFERS RECAP</h4>
+                                                                    <h4 class="modal-title text-center">validation</h4>
                                                                 </div>
                                                                 <div class="modal-body center modalBodyTransfer">
-                                                                    <p class="text-center">Date : {{$transferCorrecting->date}}</p>
-                                                                    <p class="text-center">Type : {{$transferCorrecting->type}} </p>
+                                                                    <p class="text-center"><strong>Date :</strong> {{$transferCorrecting->date}}</p>
+                                                                    <p class="text-center"><strong>Type :</strong> {{$transferCorrecting->type}} </p>
                                                                     @if(isset($transferCorrecting->details))
-                                                                        <p class="text-center">Details : {{$transferCorrecting->details}}</p>
+                                                                        <p class="text-center"><strong>Details :</strong> {{$transferCorrecting->details}}</p>
                                                                     @endif
                                                                     <table class="table table-hover table-bordered">
                                                                         <thead>
@@ -2002,25 +1999,27 @@
                                                                         </tbody>
                                                                     </table>
                                                                     <div class="text-center">
-                                                                        <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+
                                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                         <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                     </div>
                                                                     <div class="text-center">
-                                                                        @foreach($errorsTransfer as $errorTrans)
-                                                                            @if($errorTrans->name=='Correcting_notCompleteNormal')
-                                                                                <p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->normalTransferAssociated}}</p>
-                                                                            @endif
+                                                                        @if(!empty($errorsTransfer))
+                                                                            <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                            @foreach($errorsTransfer as $errorTrans)
+                                                                                @if($errorTrans->name=='Correcting_notCompleteNormal')
+                                                                                    <p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->transferToCorrect}}</p>
+                                                                                @endif
                                                                                 @if($errorTrans->name=='SP-PS_notEnoughTransfers')
+                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
                                                                                     <p class="text-danger"> A sale-purchase or purchase-sale transfer is missing</p>
                                                                                 @endif
-                                                                                @if($errorTrans->name=='Correcting_notEnoughTransfers')
-                                                                                    <p class="text-danger"> A correcting transfer is missing</p>
+                                                                                @if($errorTrans->name=='Debt_notEnoughTransfers')
+                                                                                    <span class="glyphicon glyphicon-warning-sign text-danger"></span>
+                                                                                    <p class="text-danger"> A debt transfer is missing</p>
                                                                                 @endif
-                                                                        @endforeach
-                                                                        @if(empty($errorsTransfer))
-                                                                                <p class="text-center">GOOD ! no errors</p>
-                                                                            @endif
+                                                                            @endforeach
+                                                                        @endif
                                                                         {{--@if(isset($palletsNumber2) && $palletsNumber2 <> $palletsNumber)--}}
                                                                         {{--<p class="text-center">INFORMATION : Pallets number 1 and pallets number 2 are different</p>--}}
                                                                         {{--@elseif(isset($palletsNumber2) && $palletsNumber2 <> $loading->anz)--}}
@@ -2135,7 +2134,7 @@
                                                                             {{--<div class="text-center">--}}
                                                                                 {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
                                                                                 {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
-                                                                                {{--<p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->normalTransferAssociated}}</p>--}}
+                                                                                {{--<p class="text-danger"> Correcting transfers does NOT COMPLETE the normal transfer associated {{$transferCorrecting->transferToCorrect}}</p>--}}
                                                                             {{--</div>--}}
                                                                         {{--@endif--}}
                                                                         {{--@if($errorTrans->name=='SP-PS_notEnoughTransfers')--}}

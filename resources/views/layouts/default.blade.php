@@ -49,10 +49,10 @@
                 </div>
             @else
                 <div class="col-lg-1 text-center navbar-loading navbar-title-link">
-                    <a @yield('classLoadings') href="{{ route('showAllLoadings', ['refresh'=>'false']) }}">Loadings</a>
+                    <a @yield('classLoadings') href="{{ route('showAllLoadings') }}">Loadings</a>
                 </div>
                 <div class="col-lg-2 text-center navbar-warehouse navbar-title-link">
-                    <a @yield('classWarehouses') href="{{ route('showAllWarehouses', 'false') }}">Warehouses</a>
+                    <a @yield('classWarehouses') href="{{ route('showAllWarehouses') }}">Warehouses</a>
                 </div>
                 <div class="col-lg-2 text-center navbar-truck  navbar-title-link dropdown">
                     <a class="dropdown-toggle @yield('classTrucks')" data-toggle="dropdown">Trucks <span class="caret"></span></a>

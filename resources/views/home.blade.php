@@ -38,7 +38,7 @@
                     <p class="text-center">What do you want to do ?</p>
 
                     <!-- All loadings -->
-                    <a href="{{ route('showAllLoadings', ['refresh'=>'false']) }}">
+                    <a href="{{ route('showAllLoadings') }}">
                         <div class="col-lg-2 text-center home">
                             <div class="service-box">
                                 <h3 class="menu-title">Loadings</h3>
@@ -51,7 +51,7 @@
                     </a>
 
                     <!-- All warehouses -->
-                    <a href="{{ route('showAllWarehouses','false') }}">
+                    <a href="{{ route('showAllWarehouses') }}">
                         <div class="col-lg-2 text-center home ">
                             <div class="service-box">
                                 <h3 class="menu-title">Warehouses</h3>
@@ -90,7 +90,7 @@
                     </a>
 
                     <!-- All pallets transfers -->
-                    <a href="{{ route('showAllPalletstransfers', ['type', 'all']) }}">
+                    <a href="{{ route('showAllPalletstransfers', ['type'=> 'all']) }}">
                         <div class="col-lg-2 text-center home">
                             <div class="service-box">
                                 <h3 class="menu-title">Transfers</h3>

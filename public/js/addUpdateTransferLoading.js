@@ -6,9 +6,17 @@ function openClosePanelErrors() {
         $("#errorsPanelLogoPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
     }
 }
-function disabledRefresh(){
-    $('#refreshLink').addClass('disabled');
+// function disabledRefresh(){
+//     $('#refreshLink').addClass('disabled');
+// }
+
+function formUploadSubmitBlock(button) {
+    $('input[id=actionForm]').val(button.value);
+    $("#" + button.id).attr('disabled', 'disabled');
+    $("#uploadImportLoadingsForm").submit();
 }
+
+
 
 //details loading
 function formSubmitBlock(button) {
@@ -979,7 +987,7 @@ function displayFieldsTypeCorrecting(typeChecked) {
 
             document.getElementById("palletsBought").style.display = "block";
             document.getElementById("pallets").style.display = "none";
-            // document.getElementById("$normalTransferAssociated2").style.display = "none";
+            // document.getElementById("$transferToCorrect2").style.display = "none";
         } else {
             if (document.getElementById("typeDebt").value === typeChecked.value || document.getElementById("typeOther").value === typeChecked.value) {
                 //other and debt
@@ -999,9 +1007,9 @@ function displayFieldsTypeCorrecting(typeChecked) {
                 $("#select-debitAccount2PS").selectpicker('refresh');
                 $("#select-debitAccount2PS").selectpicker('render');
                 // if(document.getElementById("typeDebt").value === typeChecked.value){
-                //     document.getElementById("$normalTransferAssociated2").style.display = "block";
+                //     document.getElementById("$transferToCorrect2").style.display = "block";
                 // }else{
-                //     document.getElementById("$normalTransferAssociated2").style.display = "none";
+                //     document.getElementById("$transferToCorrect2").style.display = "none";
                 // }
             }
         }

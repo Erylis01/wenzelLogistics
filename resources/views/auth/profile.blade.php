@@ -46,11 +46,10 @@
                     <div class="panel-body panel-body-general">
                         <form class="form-horizontal" role="form" method="POST" action="">
                             {{ csrf_field() }}
-                            <p class="text-center legend-auth">* required field</p>
 
                             <!--lastname-->
                             <div class="form-group {{ $errors->has('lastname') ? ' has-error' : '' }}">
-                                <label for="lastname" class="col-lg-4 control-label">* Lastname :</label>
+                                <label for="lastname" class="col-lg-4 control-label requiredField">Lastname :</label>
                                 <div class="col-lg-6">
                                     <input id="lastname" type="text" class="form-control" name="lastname"
                                            value="{{ $lastname }}" placeholder="Lastname" required autofocus>
@@ -63,7 +62,7 @@
                             </div>
                             <!--firstname-->
                             <div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
-                                <label for="firstname" class="col-lg-4 control-label">* Firstname :</label>
+                                <label for="firstname" class="col-lg-4 control-label requiredField">Firstname :</label>
                                 <div class="col-lg-6">
                                     <input id="firstname" type="text" class="form-control" name="firstname"
                                            value="{{ $firstname }}" placeholder="Firstname" required autofocus>
@@ -76,8 +75,7 @@
                             </div>
                             <!--username-->
                             <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
-                                <label for="username" class="col-lg-4 control-label" data-toggle="tooltip" data-placement="top" title="Used when you sign in">
-                                    * Username :</label>
+                                <label for="username" class="col-lg-4 control-label requiredField" data-toggle="tooltip" data-placement="top" title="Used when you sign in">Username :</label>
 
                                 <div class="col-lg-6">
                                     <input id="username" type="text" class="form-control" name="username"
@@ -91,24 +89,9 @@
                                 </div>
                             </div>
 
-                            {{--<!-- Modal username -->--}}
-                            {{--<div class="modal fade" id="username_modal" role="dialog">--}}
-                                {{--<div class="modal-dialog modal-sm">--}}
-                                    {{--<div class="modal-content">--}}
-                                        {{--<div class="modal-body center">--}}
-                                            {{--<h4 class="modal-title">Used when you sign in</h4>--}}
-                                        {{--</div>--}}
-                                        {{--<div class="modal-footer">--}}
-                                            {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close--}}
-                                            {{--</button>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-
                             <!--email-->
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                <label for="email" class="col-lg-4 control-label">* E-Mail Address :</label>
+                                <label for="email" class="col-lg-4 control-label requiredField">E-Mail Address :</label>
 
                                 <div class="col-lg-6">
                                     <input id="email" type="email" class="form-control" name="email"

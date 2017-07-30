@@ -49,18 +49,16 @@
                             <input type="hidden" name="actionAddForm" id="actionAddForm" />
                             <input type="hidden" name="originalPage" id="originalPage" @if(isset($originalPage))value="{{$originalPage}}" @endif/>
 
-                            <p class="text-center legend-auth">* required field</p>
-
                             @if(Session::has('messageRefuseAddWarehouse'))
                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('messageRefuseAddWarehouse') }}</div>
                             @endif
                             <div class="form-group">
                                 <!--name-->
                                 <div class="col-lg-3">
-                                    <label for="name" class="control-label">*Name :</label>
+                                    <label for="name" class="control-label">Name :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                        <input id="name" type="text" class="form-control" name="name"
+                                        <input id="name" type="text" class="form-control requiredField" name="name"
                                                @if(isset($name)) value="{{$name}}" @else value="{{ old('name') }}" @endif placeholder="Name" required autofocus onchange="writeNickname(this);">
                                     @if ($errors->has('name'))
                                         <span class="help-block">
@@ -95,21 +93,18 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-lg-3">
-                                    <label for="adress*" class="control-label" id="adress*">*</label>
-                                </div>
                                 <!--country-->
-                                <div class="col-lg-2">
-                                    <input id="country" type="text" class="form-control" name="country" @if(isset($country)) value="{{$country}}" @else value="{{old('country')}}" @endif placeholder="Country" data-toggle="tooltip" data-placement="top" title="Country" required autofocus/>
+                                <div class="col-lg-2 col-lg-offset-3">
+                                    <input id="country" type="text" class="form-control requiredField" name="country" @if(isset($country)) value="{{$country}}" @else value="{{old('country')}}" @endif placeholder="Country" data-toggle="tooltip" data-placement="top" title="Country" required autofocus/>
                                 </div>
                                 <!--zipcode-->
                                 <div class="col-lg-2">
-                                    <input id="zipcode" type="number" min="0" class="form-control" name="zipcode"
+                                    <input id="zipcode" type="number" min="0" class="form-control requiredField" name="zipcode"
                                            @if(isset($zipcode)) value="{{$zipcode}}" @else value="{{old('zipcode')}}" @endif placeholder="Zipcode" data-toggle="tooltip" data-placement="top" title="Zipcode" required autofocus/>
                                 </div>
                                 <!--town-->
                                 <div class="col-lg-3">
-                                    <input id="town" type="text" class="form-control" name="town"
+                                    <input id="town" type="text" class="form-control requiredField" name="town"
                                            @if(isset($town)) value="{{$town}}" @else value="{{old('town')}}" @endif placeholder="Town" data-toggle="tooltip" data-placement="top" title="Town" required autofocus/>
                                 </div>
                             </div>
@@ -177,22 +172,22 @@
 
                             <div class="form-group">
                                 <!--contact name-->
-                                <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Contact Infos :</label>
+                                <div class="col-lg-2">
+                                    <label for="details" class="control-label">Details :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    @if(isset($namecontact))
+                                    @if(isset($details))
                                         <textarea
-                                                class="form-control" name="namecontact"
-                                                id="namecontact"
+                                                class="form-control" name="details"
+                                                id="details"
                                                 rows="2"
-                                                placeholder="Contact Infos (name, ...)" autofocus>{{$namecontact}}</textarea>
+                                                placeholder="Details (contact name, ...)" autofocus>{{$details}}</textarea>
                                     @else
                                         <textarea
-                                                class="form-control" name="namecontact"
-                                                id="namecontact"
+                                                class="form-control" name="details"
+                                                id="details"
                                                 rows="2"
-                                                placeholder="Contact Infos (name, ...)" autofocus>{{old('namecontact')}}</textarea>
+                                                placeholder="Details (contact name, ...)" autofocus>{{old('details')}}</textarea>
                                     @endif
                                 </div>
                             </div>
@@ -200,7 +195,7 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="namepalletsaccounts" class="control-label"><span>*</span> Pallets Account
+                                    <label for="namepalletsaccounts" class="control-label">Pallets Account
                                         :</label>
                                 </div>
                                 <div class="col-lg-6">
@@ -208,7 +203,7 @@
                                         <select class="selectpicker show-tick form-control" data-size="5"
                                                 data-live-search="true" data-live-search-style="startsWith"
                                                 title="Pallets Accounts" name="namepalletsaccounts[]"
-                                                multiple>
+                                                multiple required data-style="requiredField">
                                             @foreach($listPalletsAccounts as $palletsAccount )
                                                 @php($list[]=null)
                                                 @if(Illuminate\Support\Facades\Input::old('namepalletsaccounts'))

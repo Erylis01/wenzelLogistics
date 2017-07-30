@@ -59,7 +59,6 @@
                               action="{{route('updateTruck', $truck->id)}}" id="formUpdateTruck">
                             {{ csrf_field() }}
                             <input type="hidden" name="actionUpdateForm" id="actionUpdateForm"/>
-                            <p class="text-center legend-auth">* required field</p>
 
                             @if(Session::has('messageErrorUpdateTruck'))
                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpdateTruck') }}</div>
@@ -72,7 +71,7 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-2">
-                                    <label for="palletsaccount_name" class="control-label">*Pallets Account :</label>
+                                    <label for="palletsaccount_name" class="control-label">Pallets Account :</label>
                                 </div>
                                 <div class="col-lg-7">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
@@ -214,7 +213,7 @@
                                 </div>
                             </form>
                             <div class="col-lg-2 text-right addTransfer">
-                                <a href="{{route('showAddPalletstransfer')}}" class="link">
+                                <a href="{{route('showAddPalletstransfer',['originalPage'=>'detailsTruck-'.$truck->id])}}" class="link">
                                     <span class="glyphicon glyphicon-plus-sign"></span>
                                     Transfer</a>
                             </div>

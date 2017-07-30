@@ -246,6 +246,9 @@
 .noPadding{
     padding:0px;
 }
+.noPaddingLeft{
+    padding-left:0px;
+}
 
 /*TABLE HOVER*/
 
@@ -267,4 +270,29 @@
 
 .completevalidated{
     background-color: rgba(0, 255, 0, 0.2);
+}
+
+/*!* typeahead *!*/
+/*.typeahead {*/
+    /*border: 2px solid #CCCCCC;*/
+    /*border-radius: 8px;*/
+    /*font-size: 22px; !* Set input font size *!*/
+    /*height: 30px;*/
+    /*line-height: 30px;*/
+    /*outline: medium none;*/
+    /*padding: 8px 12px;*/
+    /*width: 396px;*/
+/*}*/
+/*.typeahead {*/
+    /*background-color: #FFFFFF;*/
+/*}*/
+/*.typeahead:focus {*/
+    /*border: 2px solid #0097CF;*/
+/*}*/
+
+.requiredField{
+    border-color:darkred ;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
 }

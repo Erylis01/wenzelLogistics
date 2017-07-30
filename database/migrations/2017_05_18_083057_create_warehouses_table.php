@@ -18,13 +18,14 @@ class CreateWarehousesTable extends Migration
             $table->string('name')->unique();
             $table->string('nickname')->unique()->nullable();
             $table->string('adress')->nullable();
-            $table->string('zipcode', 10);
+            $table->string('zipcode', 20);
             $table->string('town');
             $table->string('country');
             $table->string('phone', 20)->nullable();
             $table->string('fax', 20)->nullable();
             $table->string('email')->nullable();
-            $table->string('namecontact')->nullable();
+            $table->string('details')->nullable();
+            $table->string('activated')->default(true);
 
             $table->timestamps();
 

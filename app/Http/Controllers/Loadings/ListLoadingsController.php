@@ -21,9 +21,11 @@ class ListLoadingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $refresh)
+    public function show(Request $request)
     {
         if (Auth::check()) {
+            $errorsAtrnrImport = $request->errorsAtrnrImport;
+            $errorsColImport = $request->errorsColImport;
             //search key and search columns
             $searchQuery = $request->get('search');
             $searchQueryArray = explode(' ', $searchQuery);
@@ -95,28 +97,38 @@ class ListLoadingsController extends Controller
                     $links = '';
                 }
             }
-            $view = 'ok';
-            //to import all new loadings in excel files
-            if ($refresh == 'true') {
-                $data = $this->importData();
-                if (count($data[0]) > 0) {
-                    $errorsAtrnrImport = $data[0];
-                    $errorsColImport = $data[1];
-                    $view = 'error';
-                }
-                $refresh = 'false';
-            }else{
-                $errorsColImport=$request->errorColImport;
-                $errorsAtrnrImport=$request->errorAtrnrImport;
-            }
-
-            if ($view == 'ok') {
-                return view('loadings.loadings', compact('refresh', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
-            } elseif ($view == 'error') {
-                return view('loadings.loadings', compact('errorsAtrnrImport', 'errorsColImport', 'refresh', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
-            }
+            return view('loadings.loadings', compact('errorsColImport', 'errorsAtrnrImport', 'listLoadings', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
+        }
+    }
+
+    public function uploadImport(Request $request)
+    {
+        $documents = $request->file('documentsLoadings');
+        if (isset($documents)) {
+            foreach ($documents as $doc) {
+                $filename = $doc->getClientOriginalName();
+                $extension = $doc->getClientOriginalExtension();
+                $size = $doc->getSize();
+                //if file is an image, a pdf or an email
+                if (($extension == 'xlsx' || $extension == 'xls') && $size < 2000000) {
+                    Storage::putFileAs('/../../resources/assets/excel/Hypertrans', $doc, $filename);
+                } else {
+                    session()->flash('messageErrorUpload', 'Error ! The file type is not supported (xlsx or xls only');
+                }
+            }
+            $data = $this->importData();
+            $listLoadings = Loading::where('pt', 'ja')->get();
+            if (count($data[0]) > 0) {
+                $errorsAtrnrImport = $data[0];
+                $errorsColImport = $data[1];
+                return view('loadings.loadings', compact('errorsAtrnrImport', 'errorsColImport', 'listLoadings'));
+            } else {
+                return redirect('/loadings');
+            }
+        } else {
+            return redirect('/loadings');
         }
     }
 
@@ -138,7 +150,6 @@ class ListLoadingsController extends Controller
                 });
                 $sheet = $data->getSheet(0)->toArray();
                 $nbrows = count($sheet);
-
                 for ($r = 4; $r < $nbrows; $r++) {
                     if (trim($sheet[$r][26]) <> '') {
                         $licensePlate = trim($sheet[$r][26]);
@@ -321,7 +332,6 @@ class ListLoadingsController extends Controller
                 }
             }
         }
-//        dd([$errorsAtrnrImport, $errorsColImport]);
         return [$errorsAtrnrImport, $errorsColImport];
     }
 }

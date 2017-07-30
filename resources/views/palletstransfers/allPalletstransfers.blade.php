@@ -86,7 +86,7 @@
                                             class="glyphicon glyphicon-search"></span></button>
                             </div>
                                 <div>
-                                <a href="{{route('showAddPalletstransfer')}}" class="btn btn-add"><span
+                                <a href="{{route('showAddPalletstransfer', ['originalPage'=> 'allPalletstransfers-'.$type])}}" class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Transfers</a>
                         </div>
                         </form>
@@ -218,7 +218,7 @@
                                             @php($typeDebitAccount=$partsDebitAccount[count($partsDebitAccount)-2])
                                             @php($idDebitAccount=$partsDebitAccount[count($partsDebitAccount)-1])
                                             @if($typeDebitAccount=='account')
-                                                @php($nameDebitAccount=\App\Palletsaccount::where('id', $idDebitAccount)->first()->name)
+                                                @php($nameDebitAccount=\App\Palletsaccount::where('id', $idDebitAccount)->first()->nickname)
                                                     <a class="link"
                                                        href="{{route('showDetailsPalletsaccount',$idDebitAccount)}}">{{$nameDebitAccount}}</a>
                                             @elseif($typeDebitAccount=='truck')
@@ -236,7 +236,7 @@
                                             @php($typeCreditAccount=$partsCreditAccount[count($partsCreditAccount)-2])
                                             @php($idCreditAccount=$partsCreditAccount[count($partsCreditAccount)-1])
                                             @if($typeCreditAccount=='account')
-                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->name)
+                                                @php($nameCreditAccount=\App\Palletsaccount::where('id', $idCreditAccount)->first()->nickname)
                                                     <a class="link"
                                                        href="{{route('showDetailsPalletsaccount',$idCreditAccount)}}">{{$nameCreditAccount}}</a>
                                             @elseif($typeCreditAccount=='truck')

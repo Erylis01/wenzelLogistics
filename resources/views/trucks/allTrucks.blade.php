@@ -92,7 +92,7 @@
                                             class="glyphicon glyphicon-refresh"></span></a>
                             </div>
                             <div>
-                                <a href="{{route('showAddTruck', ['originalPage'=>'allTrucks'])}}"
+                                <a href="{{route('showAddTruck', ['originalPage'=>'allTrucks-'.$nb])}}"
                                    class="btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Truck</a>
                             </div>

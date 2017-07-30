@@ -96,7 +96,7 @@
                                 </div>
 
                                 <div>
-                                <a href="{{route('showAddPalletsaccount', ['originalPage'=>'allPalletsaccounts-all'])}}" class=" btn btn-add"><span
+                                <a href="{{route('showAddPalletsaccount', ['originalPage'=>'allPalletsaccounts-'.$nb])}}" class=" btn btn-add"><span
                                             class="glyphicon glyphicon-plus-sign"></span> Account</a>
                             </div>
 

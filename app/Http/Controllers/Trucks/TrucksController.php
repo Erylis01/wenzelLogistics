@@ -122,64 +122,63 @@ class TrucksController extends Controller
                 Excel::load($file, function ($reader) {
                     if (!empty($reader)) {
                         $reader->noHeading();
-                        $sheet = $reader->getSheet(0)->toArray();
-                        $nbrows = count($sheet);
-
-                        for ($r = 4; $r < $nbrows; $r++) {
-                            if (trim($sheet[$r][26]) <> '') {
-                                $licensePlate = trim($sheet[$r][26]);
-                            } else {
-                                $licensePlate = 'OTHER';
-                            }
-                            if ($sheet[$r][25] <> null) {
-                                if(count(explode(',', $sheet[$r][25]))>2){
-                                    $adress = trim(explode(',', $sheet[$r][25])[count(explode(',', $sheet[$r][25]))-1]);
-                                    $name = trim(str_replace($adress, '', $sheet[$r][25]));
-                                    $country = null;
-                                    $zipcode = null;
-                                    $town = null;
-                                }else{
-                                    $name = trim(explode(',', $sheet[$r][25])[0]);
-                                    $adress = trim(explode(',', $sheet[$r][25])[1]);
-                                    $country = trim(explode('-', $adress)[0]);
-                                    $zipTown = trim(explode('-', $adress)[1]);
-                                    $zipcode = trim(explode(' ', $zipTown)[0]);
-                                    $town = str_replace($zipcode, '', $zipTown);
+                        foreach ($reader->get() as $sheet) {
+                            for ($r = 4; $r < count($sheet); $r++) {
+                                if (trim($sheet[$r][26]) <> '') {
+                                    $licensePlate = trim($sheet[$r][26]);
+                                } else {
+                                    $licensePlate = 'OTHER';
                                 }
+                                if ($sheet[$r][25] <> null) {
+                                    if (count(explode(',', $sheet[$r][25])) > 2) {
+                                        $adress = trim(explode(',', $sheet[$r][25])[count(explode(',', $sheet[$r][25])) - 1]);
+                                        $name = trim(str_replace($adress, '', $sheet[$r][25]));
+                                        $country = null;
+                                        $zipcode = null;
+                                        $town = null;
+                                    } else {
+                                        $name = trim(explode(',', $sheet[$r][25])[0]);
+                                        $adress = trim(explode(',', $sheet[$r][25])[1]);
+                                        $country = trim(explode('-', $adress)[0]);
+                                        $zipTown = trim(explode('-', $adress)[1]);
+                                        $zipcode = trim(explode(' ', $zipTown)[0]);
+                                        $town = str_replace($zipcode, '', $zipTown);
+                                    }
 
-                                $testAccount = Palletsaccount::where('type', 'Carrier')->where(function ($q) use($name){
-                                    $q->where('name', $name)->orWhere('nickname', $name);
-                                })->first();
-                                if ($testAccount == null) {
-                                    Palletsaccount::firstOrCreate([
-                                        'name' => $name,
-                                        'nickname' => $name,
-                                        'adress' => $adress,
-                                        'country' => $country,
-                                        'zipcode' => $zipcode,
-                                        'town' => $town,
-                                        'type' => 'Carrier',
-                                    ]);
-                                }
+                                    $testAccount = Palletsaccount::where('type', 'Carrier')->where(function ($q) use ($name) {
+                                        $q->where('name', $name)->orWhere('nickname', $name);
+                                    })->first();
+                                    if ($testAccount == null) {
+                                        Palletsaccount::firstOrCreate([
+                                            'name' => $name,
+                                            'nickname' => $name,
+                                            'adress' => $adress,
+                                            'country' => $country,
+                                            'zipcode' => $zipcode,
+                                            'town' => $town,
+                                            'type' => 'Carrier',
+                                        ]);
+                                    }
 
-                                $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
+                                    $testTruckStock = Truck::where('licensePlate', '=', 'STOCK')->where('name', $name)->first();
 
-                                if ($testTruckStock == null) {
-                                    Truck::firstOrCreate([
-                                        'name' => $name,
-                                        'licensePlate' => 'STOCK',
-                                        'palletsaccount_name' => $name,
-                                    ]);
-                                }
-                                $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
+                                    if ($testTruckStock == null) {
+                                        Truck::firstOrCreate([
+                                            'name' => $name,
+                                            'licensePlate' => 'STOCK',
+                                            'palletsaccount_name' => $name,
+                                        ]);
+                                    }
+                                    $testTruck = Truck::where('licensePlate', '=', $licensePlate)->where('name', $name)->first();
 
-                                if ($testTruck == null) {
-                                    //not double
-                                    Truck::firstOrCreate([
-                                        'name' => $name,
-                                        'licensePlate' => $licensePlate,
-                                        'palletsaccount_name' => $name,
-                                    ]);
+                                    if ($testTruck == null) {
+                                        //not double
+                                        Truck::firstOrCreate([
+                                            'name' => $name,
+                                            'licensePlate' => $licensePlate,
+                                            'palletsaccount_name' => $name,
+                                        ]);
+                                    }
                                 }
                             }
                         }
@@ -188,6 +187,21 @@ class TrucksController extends Controller
             }
         }
     }
+
+    /**
+     * show the add form
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showAdd($originalPage)
+    {
+        if (Auth::check()) {
+            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('nickname', 'asc')->get();
+            return view('trucks.addTruck', compact('listPalletsAccounts', 'originalPage'));
+        } else {
+            return view('auth.login');
+        }
+    }
+
 
     /**
      * add a new wharehouse to the list
@@ -235,24 +249,9 @@ class TrucksController extends Controller
                 }
                 session()->flash('openPanelInformation', 'openPanelInformation');
                 return redirect('/detailsLoading/' . explode('-', $originalPage)[1]);
-            } else {
-                return redirect('/allTrucks/false');
+            } elseif (explode('-', $originalPage)[0] == 'allTrucks') {
+                return redirect('/allTrucks/false/'.explode('-', $originalPage)[1]);
             }
-        }
-    }
-
-
-    /**
-     * show the add form
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showAdd($originalPage)
-    {
-        if (Auth::check()) {
-            $listPalletsAccounts = DB::table('palletsaccounts')->where('type', 'Carrier')->orderBy('nickname', 'asc')->get();
-            return view('trucks.addTruck', compact('listPalletsAccounts', 'originalPage'));
-        } else {
-            return view('auth.login');
         }
     }
 

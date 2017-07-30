@@ -39,7 +39,6 @@ class LoadingTableSeeder extends Seeder
                         $reader->noHeading();
                         $sheet = $reader->getSheet(0)->toArray();
                         $nbrows = count($sheet);
-
                         for ($r = 4; $r < $nbrows; $r++) {
                             $loadingsTest = DB::table('loadings')->where('atrnr', '=', trim($sheet[$r][3]))->first();
                             if ($loadingsTest == null) {
@@ -62,11 +61,11 @@ class LoadingTableSeeder extends Seeder
                                     'auftraggeber' => trim($sheet[$r][5]),
                                     'beladestelle' => trim($sheet[$r][6]),
                                     'landb' => trim($sheet[$r][7]),
-                                    'plzb' => trim(intval(str_replace('-', '',$sheet[$r][8]))),
+                                    'plzb' => trim(intval(str_replace('-', '', $sheet[$r][8]))),
                                     'ortb' => trim($sheet[$r][9]),
                                     'entladestelle' => trim($sheet[$r][10]),
                                     'lande' => trim($sheet[$r][11]),
-                                    'plze' => trim(intval(str_replace('-', '',$sheet[$r][12]))),
+                                    'plze' => trim(intval(str_replace('-', '', $sheet[$r][12]))),
                                     'orte' => trim($sheet[$r][13]),
                                     'anz' => trim($sheet[$r][14]),
                                     'art' => trim($sheet[$r][15]),

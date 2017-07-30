@@ -154,7 +154,7 @@ class PalletsaccountsController extends Controller
         $phone = Input::get('phone');
         $fax = Input::get('fax');
         $email = Input::get('email');
-        $namecontact = Input::get('namecontact');
+        $details = Input::get('details');
 
         $atrnr = Input::get('atrnr');
 
@@ -197,14 +197,14 @@ class PalletsaccountsController extends Controller
 
             } elseif ($type == 'Network') {
                 Palletsaccount::create(
-                    ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
+                    ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]
                 );
                 if (isset($oneWarehouse)) {
-                    Warehouse::create(['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                    Warehouse::create(['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]);
                 }
             } elseif ($type == 'Carrier') {
                 Palletsaccount::create(
-                    ['name' => $name, 'nickname' => $nickname, 'type' => $type, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'email' => $email, 'phone' => $phone, 'fax' => $fax, 'namecontact' => $namecontact]
+                    ['name' => $name, 'nickname' => $nickname, 'type' => $type, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'email' => $email, 'phone' => $phone, 'fax' => $fax, 'details' => $details]
                 );
                 Truck::create(['name' => $nickname, 'licensePlate' => 'STOCK', 'palletsaccount_name' => $nickname]);
                 Truck::create(['name' => $nickname, 'licensePlate' => 'OTHER', 'palletsaccount_name' => $nickname]);
@@ -215,8 +215,8 @@ class PalletsaccountsController extends Controller
             }
 //redirect
             session()->flash('messageAddPalletsaccount', 'Successfully added new pallets account');
-            if ($originalPage == 'allPalletsaccounts-all') {
-                return redirect('/allPalletsaccounts/all');
+            if (explode('-', $originalPage)[0] =='allPalletsaccounts') {
+                return redirect('/allPalletsaccounts/'.explode('-', $originalPage)[1]);
             } elseif (explode('-', $originalPage)[0] == 'detailsLoading') {
                 if (isset($atrnr)) {
                     Loading::where('atrnr', $atrnr)->update(['subfrachter' => $nickname . ', ' . $country.'-'.$zipcode.' '.$town]);
@@ -231,6 +231,10 @@ class PalletsaccountsController extends Controller
                 return redirect('/addTruck');
             } elseif (explode('-', $originalPage)[0] == 'detailsTruck') {
                 return redirect('/detailsTruck/' . explode('-', $originalPage)[1]);
+            }elseif (explode('-', $originalPage)[0] == 'detailsPalletstransfer') {
+                return redirect('/detailsPalletstransfer/' . explode('-', $originalPage)[1]);
+            }elseif ($originalPage == 'addPalletstransfer') {
+                return redirect('/addPalletstransfer');
             }
         }
     }
@@ -408,7 +412,7 @@ class PalletsaccountsController extends Controller
                     $phone = Input::get('phone');
                     $fax=Input::get('fax');
                     $email = Input::get('email');
-                    $namecontact = Input::get('namecontact');
+                    $details = Input::get('details');
 
                     if (isset($adress)) {
                         Palletsaccount::where('id', $id)->update(['adress' => $adress]);
@@ -422,8 +426,8 @@ class PalletsaccountsController extends Controller
                     if (isset($email)) {
                         Palletsaccount::where('id', $id)->update(['email' => $email]);
                     }
-                    if (isset($namecontact)) {
-                        Palletsaccount::where('id', $id)->update(['namecontact' => $namecontact]);
+                    if (isset($details)) {
+                        Palletsaccount::where('id', $id)->update(['details' => $details]);
                     }
                     if (isset($country)) {
                         Palletsaccount::where('id', $id)->update(['country' => $country]);

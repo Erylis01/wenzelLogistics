@@ -63,9 +63,9 @@
 }
 
 .col8{
-    max-width:60px;
-    min-width: 60px;
-    width:60px;
+    max-width:65px;
+    min-width: 65px;
+    width:65px;
 }
 
 .col3{
@@ -92,11 +92,3 @@
 #loading_atrnrLink, #creditAccount1, #creditAccount2, #debitAccount2, #debitAccount1, #deposit-withdrawal1, #deposit-withdrawal2, #DW, #withdrawal-deposit1, #withdrawal-deposit2{
     display:none;
 }
-
-/*#creditAccount{*/
-    /*display:none;*/
-/*}*/
-
-/*#debitAccount{*/
-    /*display:none;*/
-/*}*/

@@ -16,6 +16,12 @@ function formDeleteSubmitBlock(button) {
     $("#formDeleteWarehouse").submit();
 }
 
+function formUploadSubmitBlock(button) {
+    $('input[id=actionForm]').val(button.value);
+    $("#"+button.id).attr('disabled','disabled');
+    $("#uploadImportWarehousesForm").submit();
+}
+
 function writeNickname(nameWritten){
     $('input[id=nickname]').val(nameWritten.value);
     $('input[id=nickname]').change();

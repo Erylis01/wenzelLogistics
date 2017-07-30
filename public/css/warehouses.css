@@ -1,8 +1,13 @@
 /*PANEL WAREHOUSE*/
 
-.panel-warehouses>.panel-heading{
-    padding:5px;
+/*.panel-warehouses>.panel-heading{*/
+    /*padding:5px;*/
+/*}*/
+.upload{
+    font-size:15px;
+    margin-top: 8px;
 }
+
 
 .warehouses-wrapper{
     width: auto;

@@ -4,7 +4,10 @@
     pointer-events: none;
     cursor: default;
 }
-
+.upload{
+    font-size:15px;
+    margin-top: 8px;
+}
 /* panel errors */
 .displayColErrors{
     -webkit-column-count: 3;
@@ -29,6 +32,8 @@
     color:black;
 }
 /*table*/
+
+
 
 .loadings-wrapper {
     width: auto;
@@ -136,12 +141,7 @@
     font-size:18px;
 }
 
-.requiredField{
-    border-color:black ;
-    border-style: solid;
-    border-width: 1px;
-    background-color: white;
-}
+
 
 /*pallets transfers*/
 

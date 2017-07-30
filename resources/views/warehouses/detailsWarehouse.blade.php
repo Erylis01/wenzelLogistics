@@ -54,7 +54,6 @@
                               action="{{route('updateWarehouse', $id)}}" id="formUpdateWarehouse">
                             {{ csrf_field() }}
                             <input type="hidden" name="actionUpdateForm" id="actionUpdateForm" />
-                            <p class="text-center legend-auth">* required field</p>
 
                             @if(Session::has('messageRefuseUpdateWarehouse'))
                                 <p class="alert alert-danger text-alert text-center">{{ Session::get('messageRefuseUpdateWarehouse') }}</p>
@@ -65,7 +64,7 @@
                             <div class="form-group">
                                 <!--nickname-->
                                 <div class="col-lg-3">
-                                    <label for="nickname" class="control-label">*Nickname :</label>
+                                    <label for="nickname" class="control-label">Nickname :</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <input id="nickname" type="text" class="form-control" name="nickname"
@@ -89,11 +88,8 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-lg-3">
-                                    <label for="adress*" class="control-label" id="adress*">*</label>
-                                </div>
                                 <!--country-->
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 col-lg-offset-3">
                                     <input id="country" type="text" class="form-control" name="country" @if(isset($country)) value="{{$country}}" @else value="{{old('country')}}" @endif placeholder="Country" data-toggle="tooltip" data-placement="top" title="Country" required autofocus/>
                                 </div>
                                 <!--zipcode-->
@@ -173,20 +169,19 @@
                             <div class="form-group">
                                 <!--contact name-->
                                 <div class="col-lg-3">
-                                    <label for="namecontact" class="control-label">Contact Infos :</label>
+                                    <label for="details" class="control-label">Details :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                        <textarea class="form-control" name="namecontact"
-                                                id="namecontact" rows="2" placeholder="Contact Infos (name, ...)"
-                                                autofocus>{{$namecontact}}</textarea>
+                                        <textarea class="form-control" name="details"
+                                                id="details" rows="2" placeholder="Details (contact name, ...)"
+                                                autofocus>{{$details}}</textarea>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <!--pallets accounts associated-->
                                 <div class="col-lg-3">
-                                    {{--<label for="namecontact" class="control-label"><a href="{{route('showDetailsPalletsaccount', \App\Palletsaccount::where('name',$namepalletsaccount)->first()->id)}}" class="link">Pallets Account :</a></label>--}}
-                                    <label for="namecontact" class="control-label"><span>*</span> Pallets Account :
+                                    <label for="details" class="control-label">Pallets Account :
                                     </label>
                                 </div>
                                 <div class="col-lg-6">

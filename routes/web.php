@@ -23,15 +23,16 @@ Route::post('/profile', 'ProfileController@update')->name('updateProfile');
 Route::delete('/profile', 'ProfileController@destroy')->name('destroyProfile');
 
 //LOADINGS
-Route::get('/loadings/{refresh}','ListLoadingsController@show')->name('showAllLoadings');
+Route::get('/loadings','ListLoadingsController@show')->name('showAllLoadings');
+Route::post('/loadings','ListLoadingsController@uploadImport')->name('uploadImportLoadings');
 Route::get('/detailsLoading/{atrnr}', 'DetailsLoadingController@show')->name('showDetailsLoading');
 Route::post('/detailsLoading/{atrnr}', 'DetailsLoadingController@submitUpdateUpload')->name('submitUpdateUpload');
 Route::get('/addSubloading/{atrnr}', 'DetailsLoadingController@showAdd')->name('showAddSubloading');
 Route::post('/addSubloading/{atrnr}', 'DetailsLoadingController@add')->name('addSubloading');
 
 //WAREHOUSES
-Route::get('/allWarehouses/{refresh}', 'WarehousesController@showAll')->name('showAllWarehouses');
-//Route::get('/allWarehouses', 'WarehousesController@refreshListWarehouses')->name('refreshListWarehouses');
+Route::get('/allWarehouses', 'WarehousesController@showAll')->name('showAllWarehouses');
+Route::post('/allWarehouses', 'WarehousesController@uploadImport')->name('uploadImportWarehouses');
 Route::get('/detailsWarehouse/{id}', 'WarehousesController@showDetails')->name('showDetailsWarehouse');
 Route::post('/detailsWarehouse/{id}', 'WarehousesController@update')->name('updateWarehouse');
 Route::delete('/detailsWarehouse/{id}', 'WarehousesController@delete')->name('deleteWarehouse');
@@ -57,11 +58,14 @@ Route::get('/addPalletsaccount/{originalPage}', 'PalletsaccountsController@showA
 //PALLETS TRANSFERS
 Route::get('/allPalletstransfers/{type}', 'PalletstransfersController@showAll')->name('showAllPalletstransfers');
 Route::post('/addPalletstransfer', 'PalletstransfersController@add')->name('addPalletstransfer');
-Route::get('/addPalletstransfer', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
+Route::get('/addPalletstransfer/{originalPage}', 'PalletstransfersController@showAdd')->name('showAddPalletstransfer');
 //Route::get('/addPalletstransfer/{nameAccount}', 'PalletstransfersController@showAddAccount')->name('showAddPalletstransferAccount');
 Route::get('/detailsPalletstransfer/{id}', 'PalletstransfersController@showDetails')->name('showDetailsPalletstransfer');
 Route::post('/detailsPalletstransfer/{id}', 'PalletstransfersController@update')->name('updatePalletstransfer');
 Route::delete('/detailsPalletstransfer/{id}', 'PalletstransfersController@delete')->name('deletePalletstransfer');
+
+//TYPEAHED
+Route::get('autocompleteAccount', 'PalletstransfersController@autocompleteAccount')->name('autocompleteAccount');
 
 //MAILS
 //validate registration

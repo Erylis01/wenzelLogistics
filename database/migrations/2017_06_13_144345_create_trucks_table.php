@@ -22,7 +22,8 @@ class CreateTrucksTable extends Migration
             $table->string('palletsaccount_name');
             $table->integer('realNumberPallets')->nullable();
             $table->integer('theoricalNumberPallets')->nullable();
-            $table->integer('palletsDebt')->nullable();
+            $table->integer('theoricalPalletsDebt')->nullable();
+            $table->integer('realPalletsDebt')->nullable();
             $table->boolean('activated')->default(true);
             $table->timestamps();
             $table->foreign('palletsaccount_name')->references('nickname')->on('palletsaccount');

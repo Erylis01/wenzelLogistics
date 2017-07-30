@@ -87,6 +87,7 @@ function displayFieldsUpdate(typeSelected) {
             document.getElementById("trucksAssociated").style.display = "block";
             document.getElementById("warehousesAssociated").style.display = "none";
             document.getElementById("truckAsso").style.display = "block";
+            document.getElementById("buttonClearTrucks").style.display = "block";
             $("#select-warehouses :selected").each(function(){
                $(this).prop('selected', false);
             });
@@ -97,16 +98,19 @@ function displayFieldsUpdate(typeSelected) {
                 document.getElementById("warehousesAssociated").style.display = "block";
                 document.getElementById("trucksAssociated").style.display = "none";
                 document.getElementById("truckAsso").style.display = "none";
+                document.getElementById("buttonClearTrucks").style.display = "none";
             } else {
                 if (otherOptionValue == typeSelected.value) {
                     document.getElementById("warehousesAssociated").style.display = "none";
                     document.getElementById("trucksAssociated").style.display = "none";
                     document.getElementById("truckAsso").style.display = "none";
+                    document.getElementById("buttonClearTrucks").style.display = "none";
                     $("#select-warehouses").find(':selected').removeAttr('selected');
                 } else {
                     document.getElementById("warehousesAssociated").style.display = "none";
                     document.getElementById("trucksAssociated").style.display = "none";
                     document.getElementById("truckAsso").style.display = "none";
+                    document.getElementById("buttonClearTrucks").style.display = "none";
                     $("#select-warehouses").find(':selected').removeAttr('selected');
                 }
             }
@@ -116,6 +120,7 @@ function displayFieldsUpdate(typeSelected) {
         document.getElementById("warehousesAssociated").style.display = "none";
         document.getElementById("trucksAssociated").style.display = "none";
         document.getElementById("truckAsso").style.display = "none";
+        document.getElementById("buttonClearTrucks").style.display = "none";
         $("#select-warehouses").find(':selected').removeAttr('selected');
     }
 }

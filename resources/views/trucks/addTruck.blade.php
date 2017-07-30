@@ -49,8 +49,6 @@
                             <input type="hidden" name="originalPage" id="originalPage" @if(isset($originalPage))value="{{$originalPage}}" @endif/>
                             <input type="hidden" name="atrnr" id="atrnr" @if(isset($atrnr))value="{{$atrnr}}" @endif/>
 
-                            <p class="text-center legend-auth">* required field</p>
-
                             @if(Session::has('messageErrorAddTruck'))
                                 <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorAddTruck') }}</div>
                             @endif
@@ -59,14 +57,14 @@
                             <div class="form-group">
                                 <!--pallet account associated-->
                                 <div class="col-lg-3">
-                                    <label for="palletsaccount_name" class="control-label">*Carrier Account :</label>
+                                    <label for="palletsaccount_name" class="control-label">Carrier Account :</label>
                                 </div>
                                 <div class="col-lg-6">
                                     <!-- if mistake in the adding form you are redirected with field already filled-->
                                     <select class="selectpicker show-tick form-control" data-size="5"
                                             data-live-search="true" data-live-search-style="startsWith"
                                             title="Pallets Account" name="palletsaccount_name" id="select-palletsaccount_name"
-                                            required onchange="writeName();">
+                                            required onchange="writeName();" data-style="requiredField">
                                         @foreach($listPalletsAccounts as $palletsAccount )
                                             @if(Illuminate\Support\Facades\Input::old('palletsaccount_name') && $palletsAccount->nickname==old('palletsaccount_name'))
                                                 <option selected>{{$palletsAccount->nickname}}</option>
@@ -86,10 +84,10 @@
                             <div class="form-group">
                                 <!--name-->
                                 <div class="col-lg-3">
-                                    <label for="name" class="control-label">*Name :</label>
+                                    <label for="name" class="control-label">Name :</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="name" type="text" class="form-control" name="name"
+                                    <input id="name" type="text" class="form-control requiredField" name="name"
                                            @if(isset($name)) value="{{$name}}" @else value="{{ old('name') }}"
                                            @endif placeholder="Name" required autofocus readonly >
                                 </div>

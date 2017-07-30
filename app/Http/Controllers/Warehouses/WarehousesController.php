@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -19,18 +20,13 @@ class WarehousesController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showAll(Request $request, $refresh)
+    public function showAll(Request $request)
     {
-        //import new warehouses when the user wants
-        if ($refresh == 'true') {
-            $this->refreshListWarehouses($request);
-            $refresh='false';
-        }
         //search keys and columns
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
-        $listColumns = ['id', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact'];
+        $listColumns = ['nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'details'];
 
         if (Auth::check()) {
             $query = DB::table('warehouses');
@@ -96,12 +92,76 @@ class WarehousesController extends Controller
                     $links = '';
                 }
             }
-            return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns','refresh'));
+            return view('warehouses.allWarehouses', compact('listWarehouses', 'sortby', 'order', 'links', 'count', 'searchQuery', 'searchColumns', 'searchColumnsString', 'listColumns'));
         } else {
             return view('auth.login');
         }
 
     }
+
+
+    public function uploadImport(Request $request){
+        $documents = $request->file('documentsWarehouses');
+        if (isset($documents)) {
+            foreach ($documents as $doc) {
+                $filename = $doc->getClientOriginalName();
+                $extension = $doc->getClientOriginalExtension();
+                $size = $doc->getSize();
+                //if file is an image, a pdf or an email
+                if ($extension == 'xlsx' && $size < 2000000) {
+                    Storage::putFileAs('/../../resources/assets/excel/ListWarehouses', $doc, $filename);
+                } else {
+                    session()->flash('messageErrorUpload', 'Error ! The file type is not supported (xlsx only');
+                }
+            }
+            $this->importDataAll();
+        }
+    }
+
+    /**
+     * import data from the excel file for others : standard format
+     */
+    public function importDataAll()
+    {
+        $path = '../resources/assets/excel/ListWarehouses';
+        $files = File::allFiles($path);
+        foreach ($files as $file) {
+            if (strpos((string)$file, '.xls') !== false) {
+                Excel::load($file, function ($reader) {
+                    if (!empty($reader)) {
+                        $reader->noHeading();
+                        foreach ($reader->get() as $sheet) {
+                            $nameAccount = $sheet->getTitle();
+                            for ($r = 1; $r < count($sheet); $r++) {
+                                $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
+                                if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
+                                    //not double
+                                    $k = count(Warehouse::get()) + 1;
+                                    $id = Palletsaccount::where('name', $nameAccount)->first()->id;
+
+                                    Warehouse::firstOrCreate([
+                                        'id' => $k,
+                                        'name' => trim($sheet[$r][0]),
+                                        'nickname' => trim($sheet[$r][0]),
+                                        'adress' => trim($sheet[$r][1]),
+                                        'zipcode' => trim(substr($sheet[$r][2], 0, 20)),
+                                        'town' => trim($sheet[$r][3]),
+                                        'country' => trim($sheet[$r][4]),
+                                        'phone' => trim(substr(str_replace(' ', '', $sheet[$r][5]), 0, 20)),
+                                        'fax' => trim(substr(str_replace(' ', '', $sheet[$r][6]), 0, 20)),
+                                        'email' => trim($sheet[$r][7]),
+                                        'details' => trim($sheet[$r][8]),
+                                    ])->palletsaccounts()->sync($id);
+                                }
+                            }
+                        }
+                    }
+                }, 'ASCII');
+            }
+        }
+    }
+
+
 
     /**
      * add a new wharehouse to the list
@@ -120,7 +180,7 @@ class WarehousesController extends Controller
         $phone = Input::get('phone');
         $fax = Input::get('fax');
         $email = Input::get('email');
-        $namecontact = Input::get('namecontact');
+        $details = Input::get('details');
         $namepalletsaccounts = Input::get('namepalletsaccounts');
 $originalPage=Input::get('originalPage');
 
@@ -162,7 +222,7 @@ $originalPage=Input::get('originalPage');
                 if (isset($actionAddForm)&& $actionAddForm=='validateAddWarehouse') {
                     //you validate creating a new warehouse even if there is an other one in the city
                     Warehouse::create(
-                        ['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
+                        ['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]
                     )->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
                     return redirect('/allWarehouses');
@@ -170,17 +230,17 @@ $originalPage=Input::get('originalPage');
                     //if after the warning message you refuse to add this warehouse : redirect with filled field to change them
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseAddWarehouse', 'Please change the warehouse');
-                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name','nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'name','nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'details', 'namepalletsaccounts'));
                 } else {
                     //redirect to the add form with a pop up warning about the zipcode
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
-                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name','nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+                    return view('warehouses.addWarehouse', compact('listPalletsAccounts', 'zipcodeWarehouses', 'name','nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'details', 'namepalletsaccounts'));
                 }
             } else {
                 //if no other warehouse in the city
                 Warehouse::create(
-                    ['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]
+                    ['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]
                 )->palletsaccounts()->sync($idpalletsaccounts);
 
                 session()->flash('messageAddWarehouse', 'Successfully added new warehouse');
@@ -191,7 +251,7 @@ $originalPage=Input::get('originalPage');
                 }elseif(explode('-', $originalPage)[0]=='detailsPalletsaccount'){
                     return redirect('/detailsPalletsaccount/'.explode('-', $originalPage)[1]);
                 }else{
-                    return redirect('/allWarehouses/false');
+                    return redirect('/allWarehouses');
                 }
 
             }
@@ -234,14 +294,14 @@ $originalPage=Input::get('originalPage');
             $phone = $warehouse->phone;
             $fax = $warehouse->fax;
             $email = $warehouse->email;
-            $namecontact = $warehouse->namecontact;
+            $details = $warehouse->details;
 
             $palletsaccounts = DB::table('palletsaccount_warehouse')->where('warehouse_id', $id)->get();
             foreach ($palletsaccounts as $palletsaccount) {
                 $namepalletsaccounts[] = Palletsaccount::where('id', $palletsaccount->palletsaccount_id)->value('nickname');
             }
 
-            return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+            return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'details', 'namepalletsaccounts'));
         } else {
             return view('auth.login');
         }
@@ -273,7 +333,7 @@ $originalPage=Input::get('originalPage');
         $phone = Input::get('phone');
         $fax = Input::get('fax');
         $email = Input::get('email');
-        $namecontact = Input::get('namecontact');
+        $details = Input::get('details');
 
         //validation
         $rules = array(
@@ -304,21 +364,21 @@ $originalPage=Input::get('originalPage');
             //same warning as in the add form when there is already an other warehouse in the same city
             if (isset($zipcodeWarehouses) && !$zipcodeWarehouses->isEmpty()) {
                 if (isset($actionUpdateForm)&& $actionUpdateForm=='validateUpdateWarehouse') {
-                    Warehouse::where('id', $id)->update(['nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                    Warehouse::where('id', $id)->update(['nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]);
                     Warehouse::where('id', $id)->first()->palletsaccounts()->sync($idpalletsaccounts);
                     session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
                     return redirect()->back();
                 } elseif (isset($actionUpdateForm)&& $actionUpdateForm=='refuseUpdateWarehouse') {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('messageRefuseUpdateWarehouse', 'Please change the warehouse');
-                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'details', 'namepalletsaccounts'));
                 } else {
                     $listPalletsAccounts = DB::table('palletsaccounts')->get();
                     session()->flash('testZipcode', true);
-                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'zipcodeWarehouses', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'namecontact', 'namepalletsaccounts'));
+                    return view('warehouses.detailsWarehouse', compact('listPalletsAccounts', 'id', 'zipcodeWarehouses', 'name', 'nickname', 'adress', 'zipcode', 'town', 'country', 'phone', 'fax', 'email', 'details', 'namepalletsaccounts'));
                 }
             } else {
-                Warehouse::where('id', $id)->update(['nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'namecontact' => $namecontact]);
+                Warehouse::where('id', $id)->update(['nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]);
                 Warehouse::where('id', $id)->first()->palletsaccounts()->sync($idpalletsaccounts);
 
                 session()->flash('messageUpdateWarehouse', 'Successfully updated warehouse');
@@ -337,206 +397,164 @@ $originalPage=Input::get('originalPage');
         DB::table('warehouses')->where('id', $id)->delete();
         // redirect
         session()->flash('messageDeleteWarehouse', 'Successfully deleted the warehouse!');
-        return redirect('/allWarehouses/false');
+        return redirect('/allWarehouses');
     }
 
-    /**
-     * import warehouses data from excel files. Different import because of different kind of excel files
-     * @param Request $request
-     */
-    public function refreshListWarehouses(Request $request)
-    {
-        $this->importDataPFM();
-        $this->importDataSystempo();
-        $this->importDataDPL();
-        $this->importDataAll();
-    }
+//    /**
+//     * import warehouses data from excel files. Different import because of different kind of excel files
+//     * @param Request $request
+//     */
+//    public function refreshListWarehouses(Request $request)
+//    {
+//        $this->importDataPFM();
+//        $this->importDataSystempo();
+//        $this->importDataDPL();
+//        $this->importDataAll();
+//    }
 
 
-    /**
-     * import data from the excel file for PFM
-     */
-    public function importDataPFM()
-    {
-        $path = '../resources/assets/excel/ListWarehouses/PFM';
-        $files = File::allFiles($path);
-        foreach ($files as $file) {
-            if (strpos((string)$file, '.xls') !== false) {
-                Excel::load($file, function ($reader) {
-                    if (!empty($reader)) {
-                        $reader->noHeading();
-                        $sheet = $reader->getSheet(1)->toArray();
-                        $nbrows = count($sheet);
+//    /**
+//     * import data from the excel file for PFM
+//     */
+//    public function importDataPFM()
+//    {
+//        $path = '../resources/assets/excel/ListWarehouses/PFM';
+//        $files = File::allFiles($path);
+//        foreach ($files as $file) {
+//            if (strpos((string)$file, '.xls') !== false) {
+//                Excel::load($file, function ($reader) {
+//                    if (!empty($reader)) {
+//                        $reader->noHeading();
+//                        $sheet = $reader->getSheet(1)->toArray();
+//                        $nbrows = count($sheet);
+//
+//                        for ($r = 1; $r < $nbrows; $r++) {
+//                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
+//                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
+//                                //if the warehouse doesn't exist yet
+//                                $k = count(Warehouse::get()) + 1;
+//                                $id = Palletsaccount::where('name', 'PFM - FR')->first()->id;
+//
+//                                $name = trim($sheet[$r][3]);
+//                                $nickname = $name;
+//                                if (intval(trim($sheet[$r][0])) <> 0) {
+//                                    $country = 'FR';
+//                                } else {
+//                                    $country = trim($sheet[$r][0]);
+//                                }
+//
+//                                $cell7 = str_replace(' - ', ' ', trim($sheet[$r][7]));
+//                                $cell7 = str_replace('-', ' ', $cell7);
+//                                if (substr($cell7, 5, 1) == ' ') {
+//                                    $zipcode = trim(substr($cell7, 0, 5));
+//                                } else {
+//                                    $zipcode = trim(substr($cell7, 0, 7));
+//                                }
+//                                $town = trim(str_replace($zipcode, '', $cell7));
+//
+//                                Warehouse::firstOrCreate([
+//                                    'id' => $k,
+//                                    'name' => $name,
+//                                    'nickname' => $nickname,
+//                                    'adress' => trim($sheet[$r][6]),
+//                                    'zipcode' => $zipcode,
+//                                    'town' => $town,
+//                                    'country' => $country,
+//                                    'phone' => trim(substr(str_replace(' ', '', $sheet[$r][8]), 0, 14)),
+//                                    'fax' => trim(substr(str_replace(' ', '', $sheet[$r][9]), 0, 14)),
+//                                    'email' => trim($sheet[$r][12]),
+//                                    'details' => trim($sheet[$r][4]) . ' - ' . trim($sheet[$r][5]),
+//                                ])->palletsaccounts()->sync($id);
+//                            }
+//                        }
+//                    }
+//                }, 'ASCII');
+//            }
+//        }
+//    }
+//
+//    /**
+//     * import data from the excel file for Systempo AT
+//     */
+//    public function importDataSystempo()
+//    {
+//        $path = '../resources/assets/excel/ListWarehouses/Systempo';
+//        $files = File::allFiles($path);
+//        foreach ($files as $file) {
+//            if (strpos((string)$file, '.xls') !== false) {
+//                Excel::load($file, function ($reader) {
+//                    if (!empty($reader)) {
+//                        $reader->noHeading();
+//                        $sheet = $reader->getSheet(0)->toArray();
+//                        $nbrows = count($sheet);
+//
+//                        for ($r = 1; $r < $nbrows; $r++) {
+//                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
+//                            if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
+//                                //if the warehouse doesn't exist yet
+//                                $k = count(Warehouse::get()) + 1;
+//                                $id = Palletsaccount::where('name', 'Systempo AT')->first()->id;
+//
+//                                Warehouse::firstOrCreate([
+//                                    'id' => $k,
+//                                    'name' => trim($sheet[$r][0]),
+//                                    'nickname' => trim($sheet[$r][0]),
+//                                    'adress' => trim($sheet[$r][1]),
+//                                    'zipcode' => intval(trim($sheet[$r][3])),
+//                                    'town' => trim($sheet[$r][4]),
+//                                    'country' => trim($sheet[$r][2]),
+//                                    'phone' => trim(str_replace(' ', '', $sheet[$r][5])),
+//                                    'email' => trim($sheet[$r][6]),
+//                                    'details' => trim($sheet[$r][7]),
+//                                ])->palletsaccounts()->sync($id);
+//                            }
+//                        }
+//                    }
+//                }, 'ASCII');
+//            }
+//        }
+//    }
+//
+//    /**
+//     * import data from the excel file for DPL
+//     */
+//    public function importDataDPL()
+//    {
+//        $path = '../resources/assets/excel/ListWarehouses/DPL';
+//        $files = File::allFiles($path);
+//        foreach ($files as $file) {
+//            if (strpos((string)$file, '.xls') !== false) {
+//                Excel::load($file, function ($reader) {
+//                    if (!empty($reader)) {
+//                        $reader->noHeading();
+//                        $sheet = $reader->getSheet(0)->toArray();
+//                        $nbrows = count($sheet);
+//
+//                        for ($r = 1; $r < $nbrows; $r++) {
+//                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
+//                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
+//                                //if the warehouse doesn't exist yet
+//                                $k = count(Warehouse::get()) + 1;
+//                                $id = Palletsaccount::where('name', 'DPL')->first()->id;
+//
+//                                Warehouse::firstOrCreate([
+//                                    'id' => $k,
+//                                    'name' => trim($sheet[$r][3]),
+//                                    'nickname' => trim($sheet[$r][3]),
+//                                    'adress' => trim($sheet[$r][2]),
+//                                    'zipcode' => intval(trim(explode('-', $sheet[$r][0])[1])),
+//                                    'town' => trim($sheet[$r][1]),
+//                                    'country' => 'D',
+//                                    'phone' => trim(str_replace(' ', '', $sheet[$r][6])),
+//                                    'email' => trim($sheet[$r][7]),
+//                                ])->palletsaccounts()->sync($id);
+//                            }
+//                        }
+//                    }
+//                }, 'ASCII');
+//            }
+//        }
+//    }
 
-                        for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
-                                //if the warehouse doesn't exist yet
-                                $k = count(Warehouse::get()) + 1;
-                                $id = Palletsaccount::where('name', 'PFM - FR')->first()->id;
 
-                                $name = trim($sheet[$r][3]);
-                                $nickname = $name;
-                                if (intval(trim($sheet[$r][0])) <> 0) {
-                                    $country = 'FR';
-                                } else {
-                                    $country = trim($sheet[$r][0]);
-                                }
-
-                                $cell7 = str_replace(' - ', ' ', trim($sheet[$r][7]));
-                                $cell7 = str_replace('-', ' ', $cell7);
-                                if (substr($cell7, 5, 1) == ' ') {
-                                    $zipcode = trim(substr($cell7, 0, 5));
-                                } else {
-                                    $zipcode = trim(substr($cell7, 0, 7));
-                                }
-                                $town = trim(str_replace($zipcode, '', $cell7));
-
-                                Warehouse::firstOrCreate([
-                                    'id' => $k,
-                                    'name' => $name,
-                                    'nickname' => $nickname,
-                                    'adress' => trim($sheet[$r][6]),
-                                    'zipcode' => $zipcode,
-                                    'town' => $town,
-                                    'country' => $country,
-                                    'phone' => trim(substr(str_replace(' ', '', $sheet[$r][8]), 0, 14)),
-                                    'fax' => trim(substr(str_replace(' ', '', $sheet[$r][9]), 0, 14)),
-                                    'email' => trim($sheet[$r][12]),
-                                    'namecontact' => trim($sheet[$r][4]) . ' - ' . trim($sheet[$r][5]),
-                                ])->palletsaccounts()->sync($id);
-                            }
-                        }
-                    }
-                }, 'ASCII');
-            }
-        }
-    }
-
-    /**
-     * import data from the excel file for Systempo AT
-     */
-    public function importDataSystempo()
-    {
-        $path = '../resources/assets/excel/ListWarehouses/Systempo';
-        $files = File::allFiles($path);
-        foreach ($files as $file) {
-            if (strpos((string)$file, '.xls') !== false) {
-                Excel::load($file, function ($reader) {
-                    if (!empty($reader)) {
-                        $reader->noHeading();
-                        $sheet = $reader->getSheet(0)->toArray();
-                        $nbrows = count($sheet);
-
-                        for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
-                                //if the warehouse doesn't exist yet
-                                $k = count(Warehouse::get()) + 1;
-                                $id = Palletsaccount::where('name', 'Systempo AT')->first()->id;
-
-                                Warehouse::firstOrCreate([
-                                    'id' => $k,
-                                    'name' => trim($sheet[$r][0]),
-                                    'nickname' => trim($sheet[$r][0]),
-                                    'adress' => trim($sheet[$r][1]),
-                                    'zipcode' => intval(trim($sheet[$r][3])),
-                                    'town' => trim($sheet[$r][4]),
-                                    'country' => trim($sheet[$r][2]),
-                                    'phone' => trim(str_replace(' ', '', $sheet[$r][5])),
-                                    'email' => trim($sheet[$r][6]),
-                                    'namecontact' => trim($sheet[$r][7]),
-                                ])->palletsaccounts()->sync($id);
-                            }
-                        }
-                    }
-                }, 'ASCII');
-            }
-        }
-    }
-
-    /**
-     * import data from the excel file for DPL
-     */
-    public function importDataDPL()
-    {
-        $path = '../resources/assets/excel/ListWarehouses/DPL';
-        $files = File::allFiles($path);
-        foreach ($files as $file) {
-            if (strpos((string)$file, '.xls') !== false) {
-                Excel::load($file, function ($reader) {
-                    if (!empty($reader)) {
-                        $reader->noHeading();
-                        $sheet = $reader->getSheet(0)->toArray();
-                        $nbrows = count($sheet);
-
-                        for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][3]))->orWhere('nickname', '=', trim($sheet[$r][3]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][3]) <> '') {
-                                //if the warehouse doesn't exist yet
-                                $k = count(Warehouse::get()) + 1;
-                                $id = Palletsaccount::where('name', 'DPL')->first()->id;
-
-                                Warehouse::firstOrCreate([
-                                    'id' => $k,
-                                    'name' => trim($sheet[$r][3]),
-                                    'nickname' => trim($sheet[$r][3]),
-                                    'adress' => trim($sheet[$r][2]),
-                                    'zipcode' => intval(trim(explode('-', $sheet[$r][0])[1])),
-                                    'town' => trim($sheet[$r][1]),
-                                    'country' => 'D',
-                                    'phone' => trim(str_replace(' ', '', $sheet[$r][6])),
-                                    'email' => trim($sheet[$r][7]),
-                                ])->palletsaccounts()->sync($id);
-                            }
-                        }
-                    }
-                }, 'ASCII');
-            }
-        }
-    }
-
-    /**
-     * import data from the excel file for others : standard format
-     */
-    public function importDataAll()
-    {
-        $path = '../resources/assets/excel/ListWarehouses/Others';
-        $files = File::allFiles($path);
-        foreach ($files as $file) {
-            if (strpos((string)$file, '.xls') !== false) {
-                Excel::load($file, function ($reader) {
-                    if (!empty($reader)) {
-                        $reader->noHeading();
-                        $sheet = $reader->getSheet(0)->toArray();
-                        $nameAccount=$reader->getSheet(0)->getTitle();
-                        $nbrows = count($sheet);
-
-                        for ($r = 1; $r < $nbrows; $r++) {
-                            $warehouseTest = Warehouse::where('name', '=', trim($sheet[$r][0]))->orWhere('nickname', '=', trim($sheet[$r][0]))->first();
-                            if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
-                                //if the warehouse doesn't exist yet
-                                $k = count(Warehouse::get()) + 1;
-                                $id = Palletsaccount::where('name', $nameAccount)->first()->id;
-
-                                Warehouse::firstOrCreate([
-                                    'id' => $k,
-                                    'name' => trim($sheet[$r][0]),
-                                    'nickname' => trim($sheet[$r][0]),
-                                    'adress' => trim($sheet[$r][1]),
-                                    'zipcode' => intval(trim($sheet[$r][0])[2]),
-                                    'town' => trim($sheet[$r][3]),
-                                    'country' => trim($sheet[$r][4]),
-                                    'phone' => trim(str_replace(' ', '', $sheet[$r][5])),
-                                    'phone' => trim(str_replace(' ', '', $sheet[$r][6])),
-                                    'email' => trim($sheet[$r][7]),
-                                    'namecontact' => trim($sheet[$r][8]),
-                                ])->palletsaccounts()->sync($id);
-                            }
-                        }
-                    }
-                }, 'ASCII');
-            }
-        }
-    }
 }
