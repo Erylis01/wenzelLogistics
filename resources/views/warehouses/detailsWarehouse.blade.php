@@ -37,24 +37,28 @@
         @if(Auth::guest())
             <h4>You need to login to see the content</h4>
         @else
-            <div class="col-lg-10 col-lg-offset-1">
-
+            <div class="col-lg-14">
+                <form class="form-horizontal text-right" role="form" method="POST"
+                      action="{{route('updateWarehouse', $id)}}" id="formUpdateWarehouse">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="actionUpdateForm" id="actionUpdateForm" />
                 <div class="panel panel-general">
                     <div class="panel-heading">
-                        <div class="col-lg-11 text-left">Details of the warehouse : {{$id}} - {{ $name }}
-                        </div>
+                        <div class="col-lg-10 text-left">{{ $name }}</div>
                         <div>
-                            <button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-trash"
-                                    data-toggle="modal" data-target="#deleteWarehouse_modal" value="{{$id}}"
-                                    name="deleteWarehouse_modal"></button>
+                            @if($activate==1)
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <button type="submit" class="btn-add btn" id="desactivate" name="desactivate" value="desactivate" onclick="formUpdateSubmitBlock(this);">Desactivate</button>
+                            @else
+                                <span class="glyphicon glyphicon-eye-close"></span>
+                                <button type="submit" class="btn-add btn" id="activate" name="activate" value="activate" onclick="formUpdateSubmitBlock(this);">Activate</button>
+                            @endif
+                            {{--<button type="button" class=" btn btn-primary btn-form glyphicon glyphicon-trash"--}}
+                                    {{--data-toggle="modal" data-target="#deleteWarehouse_modal" value="{{$id}}"--}}
+                                    {{--name="deleteWarehouse_modal"></button>--}}
                         </div>
                     </div>
                     <div class="panel-body panel-body-general">
-                        <form class="form-horizontal text-right" role="form" method="POST"
-                              action="{{route('updateWarehouse', $id)}}" id="formUpdateWarehouse">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="actionUpdateForm" id="actionUpdateForm" />
-
                             @if(Session::has('messageRefuseUpdateWarehouse'))
                                 <p class="alert alert-danger text-alert text-center">{{ Session::get('messageRefuseUpdateWarehouse') }}</p>
                             @elseif (Session::has('messageUpdateWarehouse'))
@@ -98,7 +102,7 @@
                                            @if(isset($zipcode)) value="{{$zipcode}}" @else value="{{old('zipcode')}}" @endif placeholder="Zipcode" data-toggle="tooltip" data-placement="top" title="Zipcode" required autofocus/>
                                 </div>
                                 <!--town-->
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <input id="town" type="text" class="form-control" name="town"
                                            @if(isset($town)) value="{{$town}}" @else value="{{old('town')}}" @endif placeholder="Town" data-toggle="tooltip" data-placement="top" title="Town" required autofocus/>
                                 </div>
@@ -181,7 +185,10 @@
                             <div class="form-group">
                                 <!--pallets accounts associated-->
                                 <div class="col-lg-3">
-                                    <label for="details" class="control-label">Pallets Account :
+                                    <label for="details" class="control-label">@if(isset($namepalletsaccounts))
+                                            <a class="link" data-toggle="modal" data-target="#palletsaccounts_modal">
+                                                Pallets Account :</a>
+                                        @else Pallets Account :@endif
                                     </label>
                                 </div>
                                 <div class="col-lg-6">
@@ -232,6 +239,30 @@
                                 </div>
                             </div>
 
+                                <!-- Modal palletsaccounts -->
+                                <div class="modal fade" id="palletsaccounts_modal" role="dialog">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            @if(isset($namepalletsaccounts))
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;
+                                                    </button>
+                                                    <h4 class="modal-title text-center">List of pallets accounts</h4>
+                                                </div>
+                                                <div class="modal-body text-left">
+                                                    @foreach($namepalletsaccounts as $namePA)
+                                                        <li>
+                                                            @php($idPA=\App\Palletsaccount::where('nickname', $namePA)->first()->id)
+                                                            <a href="{{route('showDetailsPalletsaccount', $idPA)}}"
+                                                               class="link">{{$namePA}}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
                             @if(Session::has('testZipcode'))
                             <!-- Modal Add -->
                                 <div class="modal show" id="updateWarehouse_modal" role="dialog">
@@ -281,44 +312,45 @@
                                     </div>
                                 </div>
                             @endif
-                        </form>
 
-                        <!-- Modal Delete -->
-                        <div class="modal fade" id="deleteWarehouse_modal" role="dialog">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title text-center">Are you sure to delete this warehouse ?</h4>
-                                    </div>
-                                    <div class="modal-body center">
-                                        <form method="post" action="{{route('deleteWarehouse',$id)}}" id="formDeleteWarehouse">
-                                            <input type="hidden" name="_method" value="delete">
-                                            <input type="hidden" name="actionDeleteForm" id="actionDeleteForm" />
-                                            {{ csrf_field() }}
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-danger btn-modal" value="deleteWarehouse"
-                                                        name="deleteWarehouse" id="deleteWarehouse" onclick="formDeleteSubmitBlock(this);">
-                                                    Yes
-                                                </button>
-                                                <button type="button" class="btn btn-success btn-modal"
-                                                        data-dismiss="modal">No
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default btn-modal"
-                                                data-dismiss="modal">
-                                            Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                        {{--<!-- Modal Delete -->--}}
+                        {{--<div class="modal fade" id="deleteWarehouse_modal" role="dialog">--}}
+                            {{--<div class="modal-dialog modal-sm">--}}
+                                {{--<div class="modal-content">--}}
+                                    {{--<div class="modal-header">--}}
+                                        {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+                                        {{--<h4 class="modal-title text-center">Are you sure to delete this warehouse ?</h4>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="modal-body center">--}}
+                                        {{--<form method="post" action="{{route('deleteWarehouse',$id)}}" id="formDeleteWarehouse">--}}
+                                            {{--<input type="hidden" name="_method" value="delete">--}}
+                                            {{--<input type="hidden" name="actionDeleteForm" id="actionDeleteForm" />--}}
+                                            {{--{{ csrf_field() }}--}}
+                                            {{--<div class="text-center">--}}
+                                                {{--<button type="submit" class="btn btn-danger btn-modal" value="deleteWarehouse"--}}
+                                                        {{--name="deleteWarehouse" id="deleteWarehouse" onclick="formDeleteSubmitBlock(this);">--}}
+                                                    {{--Yes--}}
+                                                {{--</button>--}}
+                                                {{--<button type="button" class="btn btn-success btn-modal"--}}
+                                                        {{--data-dismiss="modal">No--}}
+                                                {{--</button>--}}
+                                            {{--</div>--}}
+                                        {{--</form>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="modal-footer">--}}
+                                        {{--<button type="button" class="btn btn-default btn-modal"--}}
+                                                {{--data-dismiss="modal">--}}
+                                            {{--Close--}}
+                                        {{--</button>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         @php(session()->pull('testZipcode'))
                     </div>
                 </div>
+                </form>
             </div>
         @endif
     </div>

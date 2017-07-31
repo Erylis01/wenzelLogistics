@@ -43,7 +43,7 @@
                      @else class="panel panelUntreated" @endif>
                     <div class="panel-heading">
                         {{--<div class="col-lg-9 text-left">--}}
-                        Details of the account : {{$account->name}}
+                        {{$account->name}}
                         {{--</div>--}}
 
                         {{--@if($account->type=='Network' && isset($namewarehouses))--}}
@@ -129,6 +129,12 @@
                                            class="link"><span class="glyphicon glyphicon-plus-sign"></span>
                                             Truck</a>
                                     </div>
+                                <div class="col-lg-2 text-center" id="warehouseAsso" @if($account->type=='Network') style="display: block;" @else style="display: none;" @endif>
+                                    <a href="{{route('showAddWarehouse', ['originalPage'=>'detailsPalletsaccount-'.$account->id])}}"
+                                       class="link">
+                                        <span class="glyphicon glyphicon-plus-sign"></span>
+                                        Warehouse</a>
+                                </div>
                             </div>
 
                             <div id="warehousesAssociated" @if($account->type=='Network') style="display: block"
@@ -137,12 +143,11 @@
                                     <!--warehouses associated-->
                                     <div class="col-lg-2">
                                         <label for="namewarehouses" class="control-label">
-                                            @if(isset($namewarehouses))
-                                                <a class="link" data-toggle="modal" data-target="#warehouses_modal">
-                                                    Warehouses :</a>
-                                            @else Warehouses :@endif</label>
+                                            {{--@if(isset($namewarehouses))--}}
+                                            {{--<a class="link" data-toggle="modal" data-target="#warehouses_modal">--}}
+                                            {{--Warehouses :</a>--}}
+                                            Warehouses :</label>
                                     </div>
-
                                     <div class="col-lg-8">
                                         <select class="selectpicker show-tick form-control"
                                                 data-size="5" data-live-search="true"
@@ -177,13 +182,98 @@
                                         </select>
 
                                     </div>
-                                    <div class="col-lg-2 text-left">
-                                        <a href="{{route('showAddWarehouse', ['originalPage'=>'detailsPalletsaccount-'.$account->id])}}"
-                                           class="link">
-                                            <span class="glyphicon glyphicon-plus-sign"></span>
-                                            Warehouse</a>
-                                    </div>
                                 </div>
+
+                                @if(isset($warehousesActivated))
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-networkAccount">
+                                            <div class="panel-heading text-left">
+                                                <a data-toggle="collapse" href="#warehousesActivated"
+                                                   onclick="openClosePanelWarehousesActivated();"><span
+                                                            id="warehousesActivatedPanelLogo"
+                                                            class="glyphicon glyphicon-menu-down"></span> Warehouses
+                                                    activated ({{count($warehousesActivated)}})</a>
+                                            </div>
+                                            <div id="warehousesActivated" class="panel-collapse collapse">
+                                                <div class="panel-body-general panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-bordered table-activated">
+                                                            <thead>
+                                                            <tr>
+                                                                <th class="text-center">Desactivate</th>
+                                                                <th class="text-center">Name</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($warehousesActivated as $warehouse)
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <button type="submit" name="desactivate" id="desactivateWarehouse"
+                                                                                value="warehouse-desactivate-{{$warehouse->id}}"
+                                                                                class="btn-activated btn" onclick="formUpdateSubmitBlock(this);">
+                                                                            <span class="glyphicon glyphicon-remove"></span>
+                                                                        </button>
+                                                                    </td>
+                                                                    <td class="text-center"><a
+                                                                                href="{{route('showDetailsWarehouse', $warehouse->id)}}"
+                                                                                class="link">{{$warehouse->nickname}}</a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if(isset($warehousesInactivated))
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-networkAccount">
+                                            <div class="panel-heading text-left">
+                                                <a data-toggle="collapse" href="#warehousesInactivated"
+                                                   onclick="openClosePanelWarehousesInactivated();"><span
+                                                            id="warehousesInactivatedPanelLogo"
+                                                            class="glyphicon glyphicon-menu-down"></span> Warehouses inactivated
+                                                    ({{count($warehousesInactivated)}})</a>
+                                            </div>
+                                            <div id="warehousesInactivated" class="panel-collapse collapse">
+                                                <div class="panel-body-general panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-bordered table-activated">
+                                                            <thead>
+                                                            <tr>
+                                                                <th class="text-center">Activate</th>
+                                                                <th class="text-center">Name</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($warehousesInactivated as $warehouse)
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <button type="submit" name="activate"
+                                                                                id="activateWarehouse"
+                                                                                value="warehouse-activate-{{$warehouse->id}}"
+                                                                                class="btn-activated btn" onclick="formUpdateSubmitBlock(this);">
+                                                                            <span class="glyphicon glyphicon-ok"></span>
+                                                                        </button>
+                                                                    </td>
+                                                                    <td class="text-center"><a
+                                                                                href="{{route('showDetailsWarehouse', $warehouse->id)}}"
+                                                                                class="link">{{$warehouse->nickname}}</a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
 
                             <div id="trucksAssociated" @if($account->type=='Carrier') style="display: block"
@@ -191,34 +281,44 @@
                                 @if(isset($trucksActivated))
                                     <div class="panel panel-carrierAccount">
                                         <div class="panel-heading text-left">
-                                            <a data-toggle="collapse" href="#trucksAcitvated"
+                                            <a data-toggle="collapse" href="#trucksActivated"
                                                onclick="openClosePanelTrucksActivated();"><span
                                                         id="trucksActivatedPanelLogo"
                                                         class="glyphicon glyphicon-menu-down"></span> Trucks
                                                 activated ({{count($trucksActivated)}})</a>
                                         </div>
-                                        <div id="trucksAcitvated" class="panel-collapse collapse">
+                                        <div id="trucksActivated" class="panel-collapse collapse">
                                             <div class="panel-body-general panel-body">
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered table-truckActivated">
+                                                    <table class="table table-hover table-bordered table-activated">
                                                         <thead>
                                                         <tr>
-                                                            <th class="text-center">Desactivate</th>
-                                                            <th class="text-center">License plate</th>
-                                                            <th class="text-center">Confirmed<br> pallets nbr
-                                                            </th>
-                                                            <th class="text-center">Planned<br> pallets nbr</th>
-                                                            <th class="text-center">Rest<br> to confirm</th>
-                                                            <th class="text-center">Debt<br></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center" colspan="2">Truck situation by WENZEL</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
+                                                        <tr>
+                                                            <th class="text-center">Desactivate</th>
+                                                            <th class="text-center">License plate</th>
+                                                            <th class="text-center">Confirmed</th>
+                                                            <th class="text-center">Planned</th>
+                                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The number of pallets that hasn't been confirmed yet">Rest</th>
+                                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The confirmed number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Confirmed</th>
+                                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The planned number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Planned</th>
+                                                        </tr>
                                                         @foreach($trucksActivated as $truck)
                                                             <tr>
                                                                 <td class="text-center">
                                                                     <button type="submit" name="desactivate"
-                                                                            value="{{$truck->id}}"
-                                                                            class="btn-activated btn">
+                                                                            value="truck-desactivate-{{$truck->id}}"
+                                                                            id="desactivateTruck"
+                                                                            class="btn-activated btn"
+                                                                    onclick="formUpdateSubmitBlock(this);">
                                                                         <span class="glyphicon glyphicon-remove"></span>
                                                                     </button>
                                                                 </td>
@@ -231,7 +331,8 @@
                                                                 <td class="text-center ">
                                                                     <strong>{{$truck->theoricalNumberPallets-$truck->realNumberPallets}}</strong>
                                                                 </td>
-                                                                <td class="text-center">{{$truck->palletsDebt}}</td>
+                                                                <td class="text-center">{{$truck->realPalletsDebt}}</td>
+                                                                <td class="text-center">{{$truck->theoricalPalletsDebt}}</td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
@@ -244,34 +345,43 @@
                                 @if(isset($trucksInactivated))
                                     <div class="panel panel-carrierAccount">
                                         <div class="panel-heading text-left">
-                                            <a data-toggle="collapse" href="#trucksInacitvated"
+                                            <a data-toggle="collapse" href="#trucksInactivated"
                                                onclick="openClosePanelTrucksInactivated();"><span
                                                         id="trucksInactivatedPanelLogo"
                                                         class="glyphicon glyphicon-menu-down"></span> Trucks inactivated
                                                 ({{count($trucksInactivated)}})</a>
                                         </div>
-                                        <div id="trucksInacitvated" class="panel-collapse collapse">
+                                        <div id="trucksInactivated" class="panel-collapse collapse">
                                             <div class="panel-body-general panel-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-hover table-bordered table-truckActivated">
                                                         <thead>
                                                         <tr>
-                                                            <th class="text-center">Activate</th>
-                                                            <th class="text-center">License plate</th>
-                                                            <th class="text-center">Confirmed<br> pallets nbr
-                                                            </th>
-                                                            <th class="text-center">Planned<br> pallets nbr</th>
-                                                            <th class="text-center">Rest<br> to confirm</th>
-                                                            <th class="text-center">Debt<br></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center" colspan="2">Truck situation by WENZEL</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
+                                                        <tr>
+                                                            <th class="text-center">Activate</th>
+                                                            <th class="text-center">License plate</th>
+                                                            <th class="text-center">Confirmed</th>
+                                                            <th class="text-center">Planned</th>
+                                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The number of pallets that hasn't been confirmed yet">Rest</th>
+                                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The confirmed number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Confirmed</th>
+                                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The planned number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Planned</th>
+                                                        </tr>
                                                         @foreach($trucksInactivated as $truck)
                                                             <tr>
                                                                 <td class="text-center">
                                                                     <button type="submit" name="activate"
-                                                                            value="{{$truck->id}}"
-                                                                            class="btn-activated btn">
+                                                                            value="truck-activate-{{$truck->id}}"
+                                                                            class="btn-activated btn"
+                                                                    id="activateTruck" onclick="formUpdateSubmitBlock(this);">
                                                                         <span class="glyphicon glyphicon-ok"></span>
                                                                     </button>
                                                                 </td>
@@ -284,7 +394,8 @@
                                                                 <td class="text-center ">
                                                                     <strong>{{$truck->theoricalNumberPallets-$truck->realNumberPallets}}</strong>
                                                                 </td>
-                                                                <td class="text-center">{{$truck->palletsDebt}}</td>
+                                                                <td class="text-center">{{$truck->realPalletsDebt}}</td>
+                                                                <td class="text-center">{{$truck->theoricalPalletsDebt}}</td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
@@ -457,22 +568,29 @@
                                     <table class="table table-hover table-bordered">
                                         <thead>
                                         <tr>
-                                            <th class="text-center">Confirmed<br> pallets nbr
-                                            </th>
-                                            <th class="text-center">Planned<br> pallets nbr</th>
-                                            <th class="text-center">Rest<br> to confirm</th>
-                                            <th class="text-center">Debt<br></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center" colspan="2">Account situation by WENZEL</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td class="text-center">{{$account->realNumberPallets}}</td>
-                                            <td class="text-center">{{$account->theoricalNumberPallets}}</td>
-                                            <td class="text-center ">
-                                                <strong>{{$account->theoricalNumberPallets-$account->realNumberPallets}}</strong>
-                                            </td>
-                                            <td class="text-center">{{$account->palletsDebt}}</td>
+                                            <th class="text-center">Confirmed</th>
+                                            <th class="text-center">Planned</th>
+                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The number of pallets that hasn't been confirmed yet">Rest</th>
+                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The confirmed number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Confirmed</th>
+                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The planned number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Planned</th>
                                         </tr>
+                                            <tr>
+                                                <td class="text-center">{{$account->realNumberPallets}}</td>
+                                                <td class="text-center">{{$account->theoricalNumberPallets}}</td>
+                                                <td class="text-center ">
+                                                    <strong>{{$account->theoricalNumberPallets-$account->realNumberPallets}}</strong>
+                                                </td>
+                                                <td class="text-center">{{$account->realPalletsDebt}}</td>
+                                                <td class="text-center">{{$account->theoricalPalletsDebt}}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -666,7 +784,7 @@
                                                @else href="{{url('/detailsPalletsaccount/'.$account->id.'?sortby=date&order=desc')}}"
                                                     @endif></a>
                                         </th>
-                                        <th class="colDanger text-center">Errors</th>
+                                        <th class="colDanger text-center">Errors<br>?</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -737,35 +855,35 @@
                             </div>
                         </div>
 
-                        <!-- Modal warehouses -->
-                        <div class="modal fade" id="warehouses_modal" role="dialog">
-                            <div class="modal-dialog modal-md">
-                                <div class="modal-content">
-                                    @if($account->type=='Network' && isset($namewarehouses))
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;
-                                            </button>
-                                            <h4 class="modal-title text-center">List of warehouses</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            @foreach($namewarehouses as $nameW)
-                                                <li>
-                                                    @php($idW=\App\Warehouse::where('name', $nameW)->first()->id)
-                                                    <a href="{{route('showDetailsWarehouse', $idW)}}"
-                                                       class="link">{{$nameW}}</a>
-                                                </li>
-                                            @endforeach
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default btn-modal"
-                                                    data-dismiss="modal">
-                                                Close
-                                            </button>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                        {{--<!-- Modal warehouses -->--}}
+                        {{--<div class="modal fade" id="warehouses_modal" role="dialog">--}}
+                            {{--<div class="modal-dialog modal-md">--}}
+                                {{--<div class="modal-content">--}}
+                                    {{--@if($account->type=='Network' && isset($namewarehouses))--}}
+                                        {{--<div class="modal-header">--}}
+                                            {{--<button type="button" class="close" data-dismiss="modal">&times;--}}
+                                            {{--</button>--}}
+                                            {{--<h4 class="modal-title text-center">List of warehouses</h4>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="modal-body">--}}
+                                            {{--@foreach($namewarehouses as $nameW)--}}
+                                                {{--<li>--}}
+                                                    {{--@php($idW=\App\Warehouse::where('name', $nameW)->first()->id)--}}
+                                                    {{--<a href="{{route('showDetailsWarehouse', $idW)}}"--}}
+                                                       {{--class="link">{{$nameW}}</a>--}}
+                                                {{--</li>--}}
+                                            {{--@endforeach--}}
+                                        {{--</div>--}}
+                                        {{--<div class="modal-footer">--}}
+                                            {{--<button type="button" class="btn btn-default btn-modal"--}}
+                                                    {{--data-dismiss="modal">--}}
+                                                {{--Close--}}
+                                            {{--</button>--}}
+                                        {{--</div>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
 
                         {{--<!-- Modal Send Email -->--}}

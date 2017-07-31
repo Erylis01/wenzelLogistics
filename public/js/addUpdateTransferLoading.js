@@ -6,9 +6,6 @@ function openClosePanelErrors() {
         $("#errorsPanelLogoPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
     }
 }
-// function disabledRefresh(){
-//     $('#refreshLink').addClass('disabled');
-// }
 
 function formUploadSubmitBlock(button) {
     $('input[id=actionForm]').val(button.value);
@@ -220,6 +217,7 @@ function updateFieldsNormal() {
             //update fields 1
             $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
             $("#select-debitAccountDWD").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
+            $("#select-debitAccountDWD").attr('disabled', true);
 
             //update fields 2
             $("#input-creditAccount2DW").val(valueWenzel);
@@ -414,6 +412,7 @@ function updateFieldsNormal() {
             //update fields 1
             $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
             $("#select-debitAccountDWD").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
+            $("#select-debitAccountDWD").attr('disabled', false);
 
             //update fields 2
             $("#input-creditAccount2DW").val('truck-' + truckAssociatedId);
@@ -437,6 +436,7 @@ function updateFieldsNormal() {
             if ($("#notExchanging").is(":checked")) {
                 $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
                 $("#select-debitAccountDWD").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
+                $("#select-debitAccountDWD").attr('disabled', true);
                 document.getElementById("debt").style.display = "block";
                 document.getElementById("debt1").style.display = "none";
                 document.getElementById("debt2").style.display = "block";
@@ -452,6 +452,7 @@ function updateFieldsNormal() {
                 $("#palletsNumber3b").val();
                 $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
                 $("#select-debitAccountDWD").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
+                $("#select-debitAccountDWD").attr('disabled', false);
             }
             $("#input-debitAccountDWD").val($("#select-debitAccountDWD").find(":selected").val());
             $("#input-debitAccountDWD").change();
@@ -479,6 +480,7 @@ function updateFieldsNormal() {
                 if ($("#notExchanging").is(":checked")) {
                     $("#select-creditAccountW").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
                     $("#select-creditAccountW").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
+                    $("#select-creditAccountW").attr('disabled', true);
                     document.getElementById("debt").style.display = "block";
                     document.getElementById("debt1").style.display = "block";
                     document.getElementById("debt2").style.display = "none";
@@ -495,6 +497,7 @@ function updateFieldsNormal() {
                     $("#debitAccount3a").val('');
                     $("#select-creditAccountW").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
                     $("#select-creditAccountW").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
+                    $("#select-creditAccountW").attr('disabled', false);
                 }
                 $("#input-creditAccountW").val($("#select-creditAccountW").find(":selected").val());
                 $("#input-creditAccountW").change();
@@ -602,6 +605,7 @@ function displayFieldsTypeNormal(typeChecked) {
             if ($("#notExchanging").is(":checked")) {
                 $("#select-creditAccountW").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
                 $("#select-creditAccountW").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
+                $("#select-creditAccountW").attr('disabled', true);
                 document.getElementById("debt").style.display = "block";
                 document.getElementById("debt1").style.display = "block";
                 document.getElementById("debt2").style.display = "none";
@@ -618,6 +622,7 @@ function displayFieldsTypeNormal(typeChecked) {
                 $("#debitAccount3a").val('');
                 $("#select-creditAccountW").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
                 $("#select-creditAccountW").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
+                $("#select-creditAccountW").attr('disabled', false);
             }
             $("#input-creditAccountW").val($("#select-creditAccountW").find(":selected").val());
             $("#input-creditAccountW").change();
@@ -658,6 +663,7 @@ function displayFieldsTypeNormal(typeChecked) {
                 if ($("#notExchanging").is(":checked")) {
                     $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
                     $("#select-debitAccountDWD").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
+                    $("#select-debitAccountDWD").attr('disabled', true);
                     document.getElementById("debt").style.display = "block";
                     document.getElementById("debt1").style.display = "none";
                     document.getElementById("debt2").style.display = "block";
@@ -674,6 +680,7 @@ function displayFieldsTypeNormal(typeChecked) {
                     $("#palletsNumber3b").val();
                     $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
                     $("#select-debitAccountDWD").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
+                    $("#select-debitAccountDWD").attr('disabled', false);
                 }
                 $("#input-debitAccountDWD").val($("#select-debitAccountDWD").find(":selected").val());
                 $("#input-debitAccountDWD").change();
@@ -731,7 +738,7 @@ function displayFieldsTypeNormal(typeChecked) {
                         //update fields 1
                         $("#select-debitAccountDWD").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
                         $("#select-debitAccountDWD").find("option[value=\'" + valueWenzel + "\']").attr('selected', true);
-
+                        $("#select-debitAccountDWD").attr('disabled', true);
                         //update fields 2
                         $("#input-creditAccount2DW").val(valueWenzel);
                         $("#select-creditAccount2DW").append($('<option></option>').attr("value", valueWenzel).text(textWenzel));
@@ -925,6 +932,7 @@ function displayFieldsTypeNormal(typeChecked) {
                         //update fields 1
                         $("#select-debitAccountDWD").append($('<option></option>').attr("value", 'truck-' + truckAssociatedId).text(truckAssociatedName + '-' + truckAssociatedLicensePlate));
                         $("#select-debitAccountDWD").find("option[value=\'truck-" + truckAssociatedId + "\']").attr('selected', true);
+                        $("#select-debitAccountDWD").attr('disabled', false);
 
                         //update fields 2
                         $("#input-creditAccount2DW").val('truck-' + truckAssociatedId);
@@ -973,44 +981,73 @@ function displayFieldsTypeNormal(typeChecked) {
 }
 
 function displayFieldsTypeCorrecting(typeChecked) {
+    var valueNumb = $("#palletsNumber").val();
+    var notSelectedValue = null;
+    var selectedValue = null;
     console.log(typeChecked);
     if (typeChecked) {
         if (document.getElementById("typePS").value === typeChecked.value) {
-            document.getElementById("creditAccountPS").style.display = "block";
-            document.getElementById("debitAccountPS").style.display = "block";
-            document.getElementById("creditAccountDDebtOther").style.display = "none";
-            document.getElementById("debitAccountWDebtOther").style.display = "none";
-
-            document.getElementById("purchase-sale1").style.display = "block";
-            document.getElementById("purchase-sale2").style.display = "block";
+            // document.getElementById("creditAccountPS").style.display = "block";
+            // document.getElementById("debitAccountPS").style.display = "block";
+            // document.getElementById("creditAccountDDebtOther").style.display = "none";
+            // document.getElementById("debitAccountWDebtOther").style.display = "none";
+            // document.getElementById("Purchase1").style.display = "block";
+            document.getElementById("sale").style.display = "block";
             document.getElementById("PS").style.display = "block";
+            document.getElementById("debt").style.display = "none";
+            document.getElementById("debt1").style.display = "none";
+            $("#palletsNumber3a").val();
+            $("#palletsNumber3a").change();
+            $("#creditAccount3a").removeAttr('selected');
+            $("#creditAccount3a").selectpicker('refresh');
+            $("#creditAccount3a").selectpicker('render');
 
-            document.getElementById("palletsBought").style.display = "block";
-            document.getElementById("pallets").style.display = "none";
-            // document.getElementById("$transferToCorrect2").style.display = "none";
+            $("#select-creditAccountPS > option").each(function() {
+                if($(this).prop('selected') !== true && $(this).val() !== 'Account (purchases pallets)'){
+                    notSelectedValue=this.value;
+                }else if($(this).prop('selected') === true){
+                    selectedValue=this.value;
+                }
+            });
+            if (selectedValue !== ''){
+                $("#select-creditAccount2PS").find("option[value=\'" + notSelectedValue + "\']").attr('selected', true);
+                $('#select-creditAccount2PS').selectpicker('refresh');
+                $('#select-creditAccount2PS').selectpicker('render');
+            }
+
         } else {
             if (document.getElementById("typeDebt").value === typeChecked.value || document.getElementById("typeOther").value === typeChecked.value) {
                 //other and debt
-                document.getElementById("creditAccountDDebtOther").style.display = "block";
-                document.getElementById("debitAccountWDebtOther").style.display = "block";
-                document.getElementById("pallets").style.display = "block";
+                // document.getElementById("creditAccountDDebtOther").style.display = "block";
+                // document.getElementById("debitAccountWDebtOther").style.display = "block";
+               document.getElementById("debt").style.display = "block";
+                document.getElementById("debt1").style.display = "block";
 
-                document.getElementById("creditAccountPS").style.display = "none";
-                document.getElementById("debitAccountPS").style.display = "none";
-                document.getElementById("purchase-sale1").style.display = "none";
-                document.getElementById("purchase-sale2").style.display = "none";
+                $("#palletsNumber3a").val(valueNumb);
+                    $("#select-creditAccountPS > option").each(function() {
+                        if($(this).prop('selected') !== true && $(this).val() !== 'Account (purchases pallets)'){
+                            notSelectedValue=this.value;
+                        }else if($(this).prop('selected') === true){
+                            selectedValue=this.value;
+                        }
+                    });
+
+                if (selectedValue !== ''){
+                    $("#creditAccount3a").find("option[value=\'" + notSelectedValue + "\']").attr('selected', true);
+                    $('#creditAccount3a').selectpicker('refresh');
+                    $('#creditAccount3a').selectpicker('render');
+                }
+
+                // document.getElementById("creditAccountPS").style.display = "none";
+                // document.getElementById("debitAccountPS").style.display = "none";
+                // document.getElementById("purchase").style.display = "none";
+                document.getElementById("sale").style.display = "none";
                 document.getElementById("PS").style.display = "none";
-                document.getElementById("palletsBought").style.display = "none";
                 $("#palletsNumber2PS").val();
                 $("#palletsNumber2PS").change();
-                $("#select-debitAccount2PS").removeAttr('selected');
-                $("#select-debitAccount2PS").selectpicker('refresh');
-                $("#select-debitAccount2PS").selectpicker('render');
-                // if(document.getElementById("typeDebt").value === typeChecked.value){
-                //     document.getElementById("$transferToCorrect2").style.display = "block";
-                // }else{
-                //     document.getElementById("$transferToCorrect2").style.display = "none";
-                // }
+                $("#select-creditAccount2PS").removeAttr('selected');
+                $("#select-creditAccount2PS").selectpicker('refresh');
+                $("#select-creditAccount2PS").selectpicker('render');
             }
         }
     }
@@ -1020,8 +1057,8 @@ function displayFieldsTypeCorrecting(typeChecked) {
     //     document.getElementById("creditAccountDDebtOther").style.display = "none";
     //     document.getElementById("debitAccountWDebtOther").style.display = "none";
     //
-    //     document.getElementById("purchase-sale1").style.display = "block";
-    //     document.getElementById("purchase-sale2").style.display = "block";
+    //     document.getElementById("purchase").style.display = "block";
+    //     document.getElementById("sale").style.display = "block";
     //     document.getElementById("PS").style.display = "block";
     //
     //     document.getElementById("palletsBought").style.display = "block";
@@ -1035,13 +1072,20 @@ function displayFieldsTypeCorrecting(typeChecked) {
 function selectAccountCorrecting(){
     var notSelectedValue = null;
     $("#select-creditAccountPS > option").each(function() {
-        if($(this).prop('selected') !== true && $(this).val() !== 'Account (purchases pallets)'){
+        if($(this).prop('selected') !== true && $(this).val() !== 'Account (needs pallets)'){
             notSelectedValue=this.value;
         }
     });
-    $("#select-debitAccount2PS").find("option[value=\'" + notSelectedValue + "\']").attr('selected', true);
-    $('#select-debitAccount2PS').selectpicker('refresh');
-    $('#select-debitAccount2PS').selectpicker('render');
+    if($("#typePS").is(":checked")){
+        $("#select-creditAccount2PS").find("option[value=\'" + notSelectedValue + "\']").attr('selected', true);
+        $('#select-creditAccount2PS').selectpicker('refresh');
+        $('#select-creditAccount2PS').selectpicker('render');
+    }else if($("#typeDebt").is(":checked")){
+        $("#creditAccount3a").find("option[value=\'" + notSelectedValue + "\']").attr('selected', true);
+        $('#creditAccount3a').selectpicker('refresh');
+        $('#creditAccount3a').selectpicker('render');
+    }
+
 }
 
 // function inverseAccounts(numberTransfer){
@@ -1178,7 +1222,7 @@ function selectAccountCorrecting(){
 //             $('#select-credit' + id).find("option[value='account-1']").attr('selected', false);
 //             $('#select-credit' + id).change();
 //         } else {
-//             if (document.getElementById("Sale-PurchaseOption" + id).value == typeSelected.value) {
+//             if (document.getElementById("SaleOption" + id).value == typeSelected.value) {
 //                 $('#select-debit' + id).find("option[value='account-1']").attr('selected', false);
 //                 $('#select-debit' + id).change();
 //                 $('#select-credit' + id).find("option[value='account-1']").attr('selected', true);

@@ -52,7 +52,7 @@
                                 <div class="col-lg-3">
                                     <label for="name" class="control-label">Name :</label>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-7">
                                     <input id="name" type="text" class="form-control requiredField" name="name"
                                            @if(isset($name)) value="{{$name}}" @else value="{{old('name')}}" @endif placeholder="Name" required autofocus onchange="writeNickname(this);">
                                     @if ($errors->has('name'))
@@ -67,7 +67,7 @@
                                 <div class="col-lg-3">
                                     <label for="nickname" class="control-label">Nickname :</label>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-7">
                                     <input id="nickname" type="text" class="form-control" name="nickname"
                                            @if(isset($nickname)) value="{{$nickname}}" @else value="{{old('nickname')}}" @endif placeholder="Nickname" autofocus>
                                     @if ($errors->has('nickname'))
@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="form-group">
                                     <!--contact infos-->
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-3">
                                         <label for="details" class="control-label">Details :</label>
                                     </div>
                                     <div class="col-lg-7">

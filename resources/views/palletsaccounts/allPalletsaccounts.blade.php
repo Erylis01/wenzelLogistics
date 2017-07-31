@@ -38,7 +38,7 @@
                     <div class="panel-heading">
                         <form class="form-horizontal" role="form" method="GET" action="{{route('showAllPalletsaccounts', ['nb'=> $nb])}}">
                             {{ csrf_field() }}
-                        <div class="col-lg-4">List of pallets account - @if($nb=='all') all @elseif($nb=='debt only') debt @endif</div>
+                        <div class="col-lg-4">@if($nb=='all') All pallets account @elseif($nb=='debt only') Pallets account with debt @endif</div>
                             <div class="col-lg-1">
                                 @if($nb=='all')
                              <a href="{{route('showAllPalletstransfers', ['type'=>'all'])}}"
@@ -114,37 +114,100 @@
                             <table class="table table-hover table-bordered table-palletsaccounts">
                                 <thead>
                                 <tr>
-                                        <th class="text-center colName1">Name<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=name&order=asc')}}"
-                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"
-                                                @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"
-                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"
-                                                @endif></a>
+                                        <th class="text-center colName1">
+                                            {{--Name<br>--}}
+                                            {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                               {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=name&order=asc')}}"--}}
+                                            {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"--}}
+                                                {{--@endif></a>--}}
+                                            {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                               {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"--}}
+                                            {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"--}}
+                                                {{--@endif></a>--}}
                                         </th>
-                                        <th class="text-center colType1">Type<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=type&order=asc')}}"
-                                               @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=type&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=type&order=desc')}}"
-                                               @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=type&order=desc')}}"
-                                                    @endif></a>
-                                            </th>
-                                        <th class="text-center colNbr1">Confirmed<br>
-                                            <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=asc')}}"
-                                               @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=asc')}}"
-                                                    @endif></a>
-                                            <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                               @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=desc')}}"
-                                               @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=desc')}}"
-                                                    @endif></a>
-                                            </th>
-                                    <th class="text-center colNbr1">Planned<br>
+                                        <th class="text-center colType1">
+                                            {{--Type<br>--}}
+                                            {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                               {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=type&order=asc')}}"--}}
+                                               {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=type&order=asc')}}"--}}
+                                                    {{--@endif></a>--}}
+                                            {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                               {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=type&order=desc')}}"--}}
+                                               {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=type&order=desc')}}"--}}
+                                                    {{--@endif></a>--}}
+                                            {{--</th>--}}
+                                        <th class="text-center colNbr1">
+                                            {{--Confirmed<br>--}}
+                                            {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                               {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=asc')}}"--}}
+                                               {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=asc')}}"--}}
+                                                    {{--@endif></a>--}}
+                                            {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                               {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=desc')}}"--}}
+                                               {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=desc')}}"--}}
+                                                    {{--@endif></a>--}}
+                                            {{--</th>--}}
+                                    <th class="text-center colNbr1">
+                                        {{--Planned<br>--}}
+                                        {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                           {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"--}}
+                                           {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"--}}
+                                                {{--@endif></a>--}}
+                                        {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                           {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"--}}
+                                           {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"--}}
+                                                {{--@endif></a>--}}
+                                    </th>
+                                    <th class="text-center colNbr1">
+                                        {{--Rest<br><br>--}}
+                                    </th>
+                                    <th class="text-center" colspan="2">Account situation by WENZEL
+                                        {{--Debt<br>--}}
+                                        {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
+                                           {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=asc')}}"--}}
+                                           {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=asc')}}"--}}
+                                                {{--@endif></a>--}}
+                                        {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
+                                           {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=desc')}}"--}}
+                                           {{--@else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=desc')}}"--}}
+                                                {{--@endif></a>--}}
+                                    </th>
+                                    <th class="colDanger"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th class="text-center colName1">Name<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=name&order=asc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=nickname&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colType1">Type<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=type&order=asc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=type&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=type&order=desc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=type&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colNbr1">Conf.<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=asc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=desc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realNumberPallets&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="text-center colNbr1">Plan.<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
                                            @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=asc')}}"
@@ -154,38 +217,39 @@
                                            @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalNumberPallets&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="text-center colNbr2">Rest<br><br>
-                                        {{--<a class="glyphicon glyphicon-chevron-up general-sorting"--}}
-                                           {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=theoricalNumberPallets&order=asc')}}"--}}
-                                           {{--@else href="{{url('/allPalletsaccounts?sortby=theoricalNumberPallets&order=asc')}}"--}}
-                                                {{--@endif></a>--}}
-                                        {{--<a class="glyphicon glyphicon-chevron-down general-sorting"--}}
-                                           {{--@if(isset($searchQuery)) href="{{url('/allPalletsaccounts?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=theoricalNumberPallets&order=desc')}}"--}}
-                                           {{--@else href="{{url('/allPalletsaccounts?sortby=theoricalNumberPallets&order=desc')}}"--}}
-                                                {{--@endif></a>--}}
+                                    <th class="text-center colNbr1" data-toggle="tooltip" data-placement="top" title="The number of pallets that hasn't been confirmed yet">Rest<br><br>
                                     </th>
-                                    <th class="text-center colNbr2">Debt<br>
+                                    <th class="text-center colNbr2" data-toggle="tooltip" data-placement="top" title="The confirmed number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Confirmed<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=asc')}}"
-                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=asc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realPalletsDebt&order=asc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realPalletsDebt&order=asc')}}"
                                                 @endif></a>
                                         <a class="glyphicon glyphicon-chevron-down general-sorting"
-                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=desc')}}"
-                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=palletsDebt&order=desc')}}"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=realPalletsDebt&order=desc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=realPalletsDebt&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="colDanger"></th>
+                                    <th class="text-center colNbr2" data-toggle="tooltip" data-placement="top" title="The planned number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Planned<br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=theoricalPalletsDebt&order=asc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalPalletsDebt&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allPalletsaccounts/'.$nb.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listPalletsaccounts->currentPage().'&sortby=theoricalPalletsDebt&order=desc')}}"
+                                           @else href="{{url('/allPalletsaccounts/'.$nb.'?page='.$listPalletsaccounts->currentPage().'&sortby=theoricalPalletsDebt&order=desc')}}"
+                                                @endif></a>
+                                    </th>
+                                    <th class="colDanger text-center">Errors<br>?</th>
                                 </tr>
-                                </thead>
-                                <tbody>
                                 @foreach($listPalletsaccounts as $palletsaccount)
                                     <tr>
                                         <td class="text-center colName1"><a href="{{route('showDetailsPalletsaccount', $palletsaccount->id)}}" class="link">{{$palletsaccount->nickname}}</a></td>
                                         <td class="text-center colType1">{{$palletsaccount->type}}</td>
                                         <td class="text-center colNbr1"><span  @if($palletsaccount->realNumberPallets<0) class="text-inf0" @elseif($palletsaccount->realNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->realNumberPallets}}</span></td>
                                         <td class="text-center colNbr1"><span  @if($palletsaccount->theoricalNumberPallets<0) class="text-inf0" @elseif($palletsaccount->theoricalNumberPallets>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->theoricalNumberPallets}}</span></td>
-                                        <td class="text-center colNbr2">{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</td>
-                                        <td class="text-center colNbr2"><span  @if($palletsaccount->palletsDebt<0) class="text-inf0" @elseif($palletsaccount->palletsDebt>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->palletsDebt}}</span></td>
+                                        <td class="text-center colNbr1">{{$palletsaccount->theoricalNumberPallets-$palletsaccount->realNumberPallets}}</td>
+                                        <td class="text-center colNbr2"><span  @if($palletsaccount->realPalletsDebt<0) class="text-inf0" @elseif($palletsaccount->realPalletsDebt>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->realPalletsDebt}}</span></td>
+                                        <td class="text-center colNbr2"><span  @if($palletsaccount->theoricalPalletsDebt<0) class="text-inf0" @elseif($palletsaccount->theoricalPalletsDebt>0) class="text-sup0" @else class="text-egal0" @endif>{{$palletsaccount->theoricalPalletsDebt}}</span></td>
                                         <td class="colDanger">
                                             @php($listPalletstransfers=\App\Palletstransfer::where('creditAccount','LIKE', $palletsaccount->nickname.'-'.'%')->orWhere('debitAccount','LIKE', $palletsaccount->nickname.'-'.'%')->get())
                                             @php($k=0)

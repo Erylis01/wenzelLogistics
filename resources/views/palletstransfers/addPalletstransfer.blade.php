@@ -66,13 +66,13 @@
                                         <label class="radio-inline" data-toggle="tooltip" data-placement="top"
                                                title="Purchase of pallets from an account to other account">
                                             <input type="radio" name="type" value="Purchase-Sale"
-                                                   @if(strcmp(old('type'),'Purchase-Sale')==0 || strcmp($type,'Purchase-Sale')==0) checked
+                                                   @if(strcmp(old('type'),'Purchase')==0 || strcmp($type,'Purchase')==0) checked
                                                    @endif id="typePS" onchange="displayFieldsType(this);"
                                                    required/>Purchase</label>
                                         <label class="radio-inline" data-toggle="tooltip" data-placement="top"
                                                title="Sale of pallets from an account to another account">
-                                            <input type="radio" name="type" value="Sale-Purchase"
-                                                   @if(strcmp(old('type'),'Sale-Purchase')==0 || strcmp($type,'Sale-Purchase')==0) checked
+                                            <input type="radio" name="type" value="Sale"
+                                                   @if(strcmp(old('type'),'Sale')==0 || strcmp($type,'Sale')==0) checked
                                                    @endif id="typeSP" onchange="displayFieldsType(this);"/>Sale</label>
                                         <label class="radio-inline" data-toggle="tooltip" data-placement="top"
                                                title="Purchase of pallets from an account to an external account not in the database">
@@ -99,12 +99,12 @@
                                     @else
                                         <label class="radio-inline" data-toggle="tooltip" data-placement="top"
                                                title="Purchase of pallets from an account to other account">
-                                            <input type="radio" name="type" value="Purchase-Sale" checked id="typePS"
+                                            <input type="radio" name="type" value="Purchase" checked id="typePS"
                                                    onchange="displayFieldsType(this);"
                                                    required/>Purchase</label>
                                         <label class="radio-inline" data-toggle="tooltip" data-placement="top"
                                                title="Sale of pallets from an account to another account">
-                                            <input type="radio" name="type" value="Sale-Purchase" id="typeSP"
+                                            <input type="radio" name="type" value="Sale" id="typeSP"
                                                    onchange="displayFieldsType(this);"/>Sale</label>
                                         <label class="radio-inline" data-toggle="tooltip" data-placement="top"
                                                title="Purchase of pallets from an account to an external account not in the database">
@@ -326,7 +326,7 @@
                                                     </tbody>
                                                 </table>
 
-                                                {{--@if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase-Sale')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))--}}
+                                                {{--@if(($type=='Deposit-Withdrawal' || $type=='Withdrawal-Deposit'|| $type=='Purchase')&&(Session::has('creditAccount2')&&Session::has('debitAccount2')&&Session::has('palletsNumber2')&& (request()->session()->get('palletsNumber2')<>request()->session()->get('palletsNumber'))))--}}
                                                 {{--<div class="text-center">--}}
                                                 {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span>--}}
                                                 {{--<span class="glyphicon glyphicon-warning-sign text-danger"></span><p--}}

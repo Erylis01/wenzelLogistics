@@ -36,18 +36,18 @@ class ErrorTableSeeder extends Seeder
             'description'=>"on Deposit-Withdrawal transfers and Withdrawal-Deposit transfers, the pallets numbers have to match"
         ]);
         //errors on correcting transfers
-        Error::create([
-            'id'=>6,
-            'name'=>'SP-PS_notEnoughTransfers',
-            'description'=>"There must be same number of SP and PS transfers"
-        ]);
+//        Error::create([
+//            'id'=>6,
+//            'name'=>'SP-PS_notEnoughTransfers',
+//            'description'=>"There must be same number of SP and PS transfers"
+//        ]);
         Error::create([
             'id'=>5,
-            'name'=>'Debt_notEnoughTransfers',
+            'name'=>'Correcting_notEnoughTransfers',
             'description'=>"There must be an even number of correcting transfers"
         ]);
         Error::create([
-            'id'=>7,
+            'id'=>6,
             'name'=>'Correcting_notCompleteNormal',
             'description'=>"The correcting transfer doesn't complete the normal transfer"
         ]);

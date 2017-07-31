@@ -211,7 +211,7 @@
                                             @endif
                                         </td>
                                         <td class="text-center colHeight col2">{{date('d-m-y', strtotime($transfer->date))}}</td>
-                                        <td class="text-center colHeight col3">@if($transfer->type=='Deposit-Withdrawal') Dep-With @elseif($transfer->type=='Withdrawal-Deposit') With-Dep @elseif($transfer->type=='Withdrawal_Only') With_only @elseif($transfer->type=='Deposit_Only') Dep_only @elseif($transfer->type=='Sale-Purchase') Sale-Purch @elseif($transfer->type=='Purchase-Sale') Purch-Sale @elseif($transfer->type=='Other') Other @elseif($transfer->type=='Debt') Debt @endif</td>
+                                        <td class="text-center colHeight col3">@if($transfer->type=='Deposit-Withdrawal') Dep-With @elseif($transfer->type=='Withdrawal-Deposit') With-Dep @elseif($transfer->type=='Withdrawal_Only') With_only @elseif($transfer->type=='Deposit_Only') Dep_only @elseif($transfer->type=='Sale') Sale-Purch @elseif($transfer->type=='Purchase') Purch-Sale @elseif($transfer->type=='Other') Other @elseif($transfer->type=='Debt') Debt @endif</td>
                                         <td class="text-center colHeight col4">
                                         @if(isset($transfer->debitAccount))
                                             @php($partsDebitAccount=explode('-', $transfer->debitAccount))

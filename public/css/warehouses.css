@@ -33,6 +33,11 @@
     min-width: 250px;
     max-width: 250px;
 }
+.col1{
+    width:50px;
+    min-width:50px;
+    max-width:50px;
+}
 .colHeightTitle{
     min-height:58px;
     height:58px;
@@ -81,3 +86,4 @@
 }
 
 
+/*details*/

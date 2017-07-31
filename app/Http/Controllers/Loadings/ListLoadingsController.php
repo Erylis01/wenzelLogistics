@@ -151,6 +151,7 @@ class ListLoadingsController extends Controller
                 $sheet = $data->getSheet(0)->toArray();
                 $nbrows = count($sheet);
                 for ($r = 4; $r < $nbrows; $r++) {
+                    if (trim($sheet[$r][24]) == 'JA') {
                     if (trim($sheet[$r][26]) <> '') {
                         $licensePlate = trim($sheet[$r][26]);
                     } else {
@@ -206,7 +207,7 @@ class ListLoadingsController extends Controller
                                 'palletsaccount_name' => $name,
                             ]);
                         }
-
+                    }
                     }
 
                     //check if importation is possible or not

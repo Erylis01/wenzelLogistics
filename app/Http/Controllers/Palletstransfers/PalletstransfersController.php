@@ -1059,8 +1059,8 @@ class PalletstransfersController extends Controller
         //////CORRECTING TRANSFERS//////
         //check if there is enough correcting transfers (even number)
         $listTransfersDebt = Palletstransfer::where('type', 'Debt')->where('loading_atrnr', $loading->atrnr)->get();
-        $listTransfersSP = Palletstransfer::where('type', 'Purchase-Sale')->where('loading_atrnr', $loading->atrnr)->get();
-        $listTransfersPS = Palletstransfer::where('type', 'Sale-Purchase')->where('loading_atrnr', $loading->atrnr)->get();
+        $listTransfersSP = Palletstransfer::where('type', 'Purchase')->where('loading_atrnr', $loading->atrnr)->get();
+        $listTransfersPS = Palletstransfer::where('type', 'Sale')->where('loading_atrnr', $loading->atrnr)->get();
 
         if (count($listTransfersSP) <> count($listTransfersPS)) {
             foreach ($listTransfersSP as $transferSP) {
@@ -1099,10 +1099,10 @@ class PalletstransfersController extends Controller
         $sum2CorrectingTransferD = 0;
         foreach ($listTransfersD as $transferD) {
             $sum1CorrectingTransferD = $sum1CorrectingTransferD + Palletstransfer::where('transferToCorrect', $transferD->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Purchase-Sale');
+                    $q->where('type', 'Debt')->orWhere('type', 'Purchase');
                 })->sum('palletsNumber');
             $sum2CorrectingTransferD = $sum2CorrectingTransferD + Palletstransfer::where('transferToCorrect', $transferD->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Sale-Purchase');
+                    $q->where('type', 'Debt')->orWhere('type', 'Sale');
                 })->sum('palletsNumber');
             $sumD = $sumD + $transferD->palletsNumber;
         }
@@ -1112,10 +1112,10 @@ class PalletstransfersController extends Controller
         $sum2CorrectingTransferW = 0;
         foreach ($listTransfersW as $transferW) {
             $sum1CorrectingTransferW = $sum1CorrectingTransferW + Palletstransfer::where('transferToCorrect', $transferW->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Purchase-Sale');
+                    $q->where('type', 'Debt')->orWhere('type', 'Purchase');
                 })->sum('palletsNumber');
             $sum2CorrectingTransferW = $sum2CorrectingTransferW + Palletstransfer::where('transferToCorrect', $transferW->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Sale-Purchase');
+                    $q->where('type', 'Debt')->orWhere('type', 'Sale');
                 })->sum('palletsNumber');
             $sumW = $sumW + $transferW->palletsNumber;
         }
@@ -1130,14 +1130,14 @@ class PalletstransfersController extends Controller
         if ($sum1D <> $sum1W) {
             foreach ($listTransfersD as $transferD) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferD->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Purchase-Sale');
+                    $q->where('type', 'Debt')->orWhere('type', 'Purchase');
                 })->get() as $transferCorrecting1D) {
                     $transferCorrecting1D->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                 }
             }
             foreach ($listTransfersW as $transferW) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferW->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Purchase-Sale');
+                    $q->where('type', 'Debt')->orWhere('type', 'Purchase');
                 })->get() as $transferCorrecting1W) {
                     $transferCorrecting1W->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                 }
@@ -1146,7 +1146,7 @@ class PalletstransfersController extends Controller
         if ($sum1D <> $sum2W) {
             foreach ($listTransfersD as $transferD) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferD->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Purchase-Sale');
+                    $q->where('type', 'Debt')->orWhere('type', 'Purchase');
                 })->get() as $transferCorrecting1D) {
                     $transferCorrecting1D->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                     $transferCorrecting1D->errors()->attach($idErrorCorrecting_NotCompleteNormal);
@@ -1154,7 +1154,7 @@ class PalletstransfersController extends Controller
             }
             foreach ($listTransfersW as $transferW) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferW->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Sale-Purchase');
+                    $q->where('type', 'Debt')->orWhere('type', 'Sale');
                 })->get() as $transferCorrecting2W) {
                     $transferCorrecting2W->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                     $transferCorrecting2W->errors()->attach($idErrorCorrecting_NotCompleteNormal);
@@ -1164,7 +1164,7 @@ class PalletstransfersController extends Controller
         if ($sum2D <> $sum1W) {
             foreach ($listTransfersD as $transferD) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferD->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Sale-Purchase');
+                    $q->where('type', 'Debt')->orWhere('type', 'Sale');
                 })->get() as $transferCorrecting2D) {
                     $transferCorrecting2D->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                     $transferCorrecting2D->errors()->attach($idErrorCorrecting_NotCompleteNormal);
@@ -1172,7 +1172,7 @@ class PalletstransfersController extends Controller
             }
             foreach ($listTransfersW as $transferW) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferW->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Purchase-Sale');
+                    $q->where('type', 'Debt')->orWhere('type', 'Purchase');
                 })->get() as $transferCorrecting1W) {
                     $transferCorrecting1W->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                     $transferCorrecting1W->errors()->attach($idErrorCorrecting_NotCompleteNormal);
@@ -1182,7 +1182,7 @@ class PalletstransfersController extends Controller
         if ($sum2D <> $sum2W) {
             foreach ($listTransfersD as $transferD) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferD->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Sale-Purchase');
+                    $q->where('type', 'Debt')->orWhere('type', 'Sale');
                 })->get() as $transferCorrecting2D) {
                     $transferCorrecting2D->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                     $transferCorrecting2D->errors()->attach($idErrorCorrecting_NotCompleteNormal);
@@ -1190,7 +1190,7 @@ class PalletstransfersController extends Controller
             }
             foreach ($listTransfersW as $transferW) {
                 foreach (Palletstransfer::where('transferToCorrect', $transferW->id)->where('loading_atrnr', $loading->atrnr)->where(function ($q) {
-                    $q->where('type', 'Debt')->orWhere('type', 'Sale-Purchase');
+                    $q->where('type', 'Debt')->orWhere('type', 'Sale');
                 })->get() as $transferCorrecting2W) {
                     $transferCorrecting2W->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                     $transferCorrecting2W->errors()->attach($idErrorCorrecting_NotCompleteNormal);
@@ -1254,13 +1254,13 @@ class PalletstransfersController extends Controller
             $sum1DW = 0;
             $sum2DW = 0;
             foreach ($listTransfersDW_acc as $transferDW_acc) {
-                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
+                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
                 if ($transferDW_acc->palletsNumber <= $loading->anz) {
                     $sum1DW = $sum1DW + $sumTransfersPSAssociated + $transferDW_acc->palletsNumber;
                 } else {
                     $sum1DW = $sum1DW - $sumTransfersPSAssociated + $transferDW_acc->palletsNumber;
                 }
-                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
+                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
                 if ($transferDW_acc->palletsNumber <= $loading->anz) {
                     $sum2DW = $sum2DW + $sumTransfersSPAssociated + $transferDW_acc->palletsNumber;
                 } else {
@@ -1288,13 +1288,13 @@ class PalletstransfersController extends Controller
             $sum1WD = 0;
             $sum2WD = 0;
             foreach ($listTransfersWD_acc as $transferWD_acc) {
-                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
+                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
                 if ($transferWD_acc->palletsNumber <= $loading->anz) {
                     $sum1WD = $sum1WD + $sumTransfersPSAssociated + $transferWD_acc->palletsNumber;
                 } else {
                     $sum1WD = $sum1WD - $sumTransfersPSAssociated + $transferWD_acc->palletsNumber;
                 }
-                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
+                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
                 if ($transferWD_acc->palletsNumber <= $loading->anz) {
                     $sum2WD = $sum2WD + $sumTransfersSPAssociated + $transferWD_acc->palletsNumber;
                 } else {
@@ -1323,7 +1323,7 @@ class PalletstransfersController extends Controller
             //errors
             if ($sum1DW <> $sum1WD) {
                 foreach ($listTransfersDW_acc as $transferDW_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->get() as $transferCorrecting1DW) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->get() as $transferCorrecting1DW) {
                         $transferCorrecting1DW->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
                     foreach (Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Debt')->where(function ($q) use ($transferDW_acc) {
@@ -1333,7 +1333,7 @@ class PalletstransfersController extends Controller
                     }
                 }
                 foreach ($listTransfersWD_acc as $transferWD_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->get() as $transferCorrecting1WD) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->get() as $transferCorrecting1WD) {
                         $transferCorrecting1WD->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
                     foreach (Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Debt')->where(function ($q) use ($transferWD_acc) {
@@ -1346,7 +1346,7 @@ class PalletstransfersController extends Controller
             }
             if ($sum1DW <> $sum2WD) {
                 foreach ($listTransfersDW_acc as $transferDW_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->get() as $transferCorrecting1DW) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->get() as $transferCorrecting1DW) {
                         $transferCorrecting1DW->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting1DW->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1358,7 +1358,7 @@ class PalletstransfersController extends Controller
                     }
                 }
                 foreach ($listTransfersWD_acc as $transferWD_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->get() as $transferCorrecting2WD) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->get() as $transferCorrecting2WD) {
                         $transferCorrecting2WD->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting2WD->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1372,7 +1372,7 @@ class PalletstransfersController extends Controller
             }
             if ($sum2DW <> $sum1WD) {
                 foreach ($listTransfersDW_acc as $transferDW_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->get() as $transferCorrecting2DW) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->get() as $transferCorrecting2DW) {
                         $transferCorrecting2DW->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting2DW->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1384,7 +1384,7 @@ class PalletstransfersController extends Controller
                     }
                 }
                 foreach ($listTransfersWD_acc as $transferWD_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->get() as $transferCorrecting1WD) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->get() as $transferCorrecting1WD) {
                         $transferCorrecting1WD->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting1WD->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1398,7 +1398,7 @@ class PalletstransfersController extends Controller
             }
             if ($sum2DW <> $sum2WD) {
                 foreach ($listTransfersDW_acc as $transferDW_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->get() as $transferCorrecting2DW) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->get() as $transferCorrecting2DW) {
                         $transferCorrecting2DW->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting2DW->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1410,7 +1410,7 @@ class PalletstransfersController extends Controller
                     }
                 }
                 foreach ($listTransfersWD_acc as $transferWD_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->get() as $transferCorrecting2WD) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->get() as $transferCorrecting2WD) {
                         $transferCorrecting2WD->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting2WD->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1448,13 +1448,13 @@ class PalletstransfersController extends Controller
             $sum1DW = 0;
             $sum2DW = 0;
             foreach ($listTransfersDW_acc as $transferDW_acc) {
-                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
+                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
                 if ($transferDW_acc->palletsNumber <= $loading->anz) {
                     $sum1DW = $sum1DW + $sumTransfersPSAssociated + $transferDW_acc->palletsNumber;
                 } else {
                     $sum1DW = $sum1DW - $sumTransfersPSAssociated + $transferDW_acc->palletsNumber;
                 }
-                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
+                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->where('transferToCorrect', $transferDW_acc->id)->sum('palletsNumber');
                 if ($transferDW_acc->palletsNumber <= $loading->anz) {
                     $sum2DW = $sum2DW + $sumTransfersSPAssociated + $transferDW_acc->palletsNumber;
                 } else {
@@ -1483,13 +1483,13 @@ class PalletstransfersController extends Controller
             $sum1WD = 0;
             $sum2WD = 0;
             foreach ($listTransfersWD_acc as $transferWD_acc) {
-                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
+                $sumTransfersPSAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
                 if ($transferWD_acc->palletsNumber <= $loading->anz) {
                     $sum1WD = $sum1WD + $sumTransfersPSAssociated + $transferWD_acc->palletsNumber;
                 } else {
                     $sum1WD = $sum1WD - $sumTransfersPSAssociated + $transferWD_acc->palletsNumber;
                 }
-                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
+                $sumTransfersSPAssociated = Palletstransfer::where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->where('transferToCorrect', $transferWD_acc->id)->sum('palletsNumber');
                 if ($transferWD_acc->palletsNumber <= $loading->anz) {
                     $sum2WD = $sum2WD + $sumTransfersSPAssociated + $transferWD_acc->palletsNumber;
                 } else {
@@ -1518,7 +1518,7 @@ class PalletstransfersController extends Controller
             //errors
             if ($sum1DW <> $loading->anz) {
                 foreach ($listTransfersDW_acc as $transferDW_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->get() as $transferCorrecting1DW) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->get() as $transferCorrecting1DW) {
                         $transferCorrecting1DW->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting1DW->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1532,7 +1532,7 @@ class PalletstransfersController extends Controller
             }
             if ($sum1WD <> $loading->anz) {
                 foreach ($listTransfersWD_acc as $transferWD_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase-Sale')->get() as $transferCorrecting1WD) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Purchase')->get() as $transferCorrecting1WD) {
                         $transferCorrecting1WD->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting1WD->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1546,7 +1546,7 @@ class PalletstransfersController extends Controller
             }
             if ($sum2DW <> $loading->anz) {
                 foreach ($listTransfersDW_acc as $transferDW_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->get() as $transferCorrecting2DW) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferDW_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->get() as $transferCorrecting2DW) {
                         $transferCorrecting2DW->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting2DW->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }
@@ -1560,7 +1560,7 @@ class PalletstransfersController extends Controller
             }
             if ($sum2WD <> $loading->anz) {
                 foreach ($listTransfersWD_acc as $transferWD_acc) {
-                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale-Purchase')->get() as $transferCorrecting2WD) {
+                    foreach (Palletstransfer::where('transferToCorrect', $transferWD_acc->id)->where('loading_atrnr', $loading->atrnr)->where('type', 'Sale')->get() as $transferCorrecting2WD) {
                         $transferCorrecting2WD->errors()->detach($idErrorCorrecting_NotCompleteNormal);
                         $transferCorrecting2WD->errors()->attach($idErrorCorrecting_NotCompleteNormal);
                     }

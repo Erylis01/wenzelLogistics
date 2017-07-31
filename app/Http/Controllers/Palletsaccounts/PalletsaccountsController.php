@@ -31,10 +31,10 @@ class PalletsaccountsController extends Controller
         $searchQuery = $request->get('search');
         $searchQueryArray = explode(' ', $searchQuery);
         $searchColumns = $request->get('searchColumns');
-        $listColumns = ['nickname', 'type', 'realNumberPallets', 'theoricalNumberPallets', 'palletsDebt'];
+        $listColumns = ['nickname', 'type', 'realNumberPallets', 'theoricalNumberPallets', 'realPalletsDebt', 'theoricalPalletsDebt'];
         if (Auth::check()) {
             $totalpallets = DB::table('palletsaccounts')->sum('realNumberPallets');
-            $totalDebtpallets = DB::table('palletsaccounts')->sum('palletsDebt');
+            $totalDebtpallets = DB::table('palletsaccounts')->sum('realPalletsDebt');
 
             if ($nb == 'all') {
                 $query = DB::table('palletsaccounts');
@@ -196,11 +196,15 @@ class PalletsaccountsController extends Controller
                 )->warehouses()->sync($idwarehouses);
 
             } elseif ($type == 'Network') {
-                Palletsaccount::create(
-                    ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]
-                );
                 if (isset($oneWarehouse)) {
+                    Palletsaccount::create(
+                        ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]
+                    );
                     Warehouse::create(['name' => $name, 'nickname' => $nickname, 'adress' => $adress, 'zipcode' => $zipcode, 'town' => $town, 'country' => $country, 'phone' => $phone, 'fax' => $fax, 'email' => $email, 'details' => $details]);
+                }else{
+                    Palletsaccount::create(
+                        ['name' => $name, 'nickname' => $nickname, 'realNumberPallets' => $realNumberPallets, 'theoricalNumberPallets' => $theoricalNumberPallets, 'type' => $type]
+                    );
                 }
             } elseif ($type == 'Carrier') {
                 Palletsaccount::create(
@@ -257,10 +261,19 @@ class PalletsaccountsController extends Controller
             if ($account->type == 'Network') {
                 $warehousesAssociated = DB::table('palletsaccount_warehouse')->where('palletsaccount_id', $id)->get();
                 if (!$warehousesAssociated->isEmpty()) {
+                    $warehousesActivated=[];
+                    $warehousesInactivated=[];
                     foreach ($warehousesAssociated as $warehouse) {
                         $namewarehouses[] = Warehouse::where('id', $warehouse->warehouse_id)->value('nickname');
+                        if(Warehouse::where('id', $warehouse->warehouse_id)->first()->activated==1){
+                            $warehousesActivated []=Warehouse::where('id', $warehouse->warehouse_id)->first();
+                        }elseif(Warehouse::where('id', $warehouse->warehouse_id)->first()->activated==0){
+                            $warehousesInactivated []=Warehouse::where('id', $warehouse->warehouse_id)->first();
+                        }
                     }
                     asort($namewarehouses);
+                    asort($warehousesActivated);
+                    asort($warehousesInactivated);
                 }
             } elseif ($account->type == 'Carrier') {
                 $trucksActivated = Truck::where('palletsaccount_name', $nickname)->where('activated',1)->orderBy('licensePlate', 'asc')->get();
@@ -343,7 +356,7 @@ class PalletsaccountsController extends Controller
                 $listTransfers = $query->orderBy('id', 'asc')->get();
             }
 
-            return view('palletsaccounts.detailsPalletsaccount', compact('searchQuery', 'listColumns', 'searchColumnsString', 'searchColumns', 'listTransfers', 'listWarehouses', 'account', 'namewarehouses', 'trucksActivated', 'trucksInactivated'));
+            return view('palletsaccounts.detailsPalletsaccount', compact('searchQuery', 'listColumns', 'searchColumnsString', 'searchColumns', 'listTransfers', 'listWarehouses', 'account', 'namewarehouses', 'trucksActivated', 'trucksInactivated', 'warehousesInactivated', 'warehousesActivated'));
         } else {
             return view('auth.login');
         }
@@ -360,9 +373,7 @@ class PalletsaccountsController extends Controller
         $actionClearForm = $request->actionClearForm;
         $actualNickname=Palletsaccount::where('id', $id)->first()->nickname;
         $listTrucks = Truck::where('palletsaccount_name', $actualNickname)->get();
-
-        $desactivate=$request->desactivate;
-        $activate=$request->activate;
+$actionUpdateForm=$request->actionUpdateForm;
 
         if (isset($actionClearForm) && $actionClearForm == 'Clear trucks') {
             //CARRIER ONLY : this button will clear every pallets number for ervery truck and put the sum in the "truck" STOCK that is the stock of the carrier
@@ -379,10 +390,14 @@ class PalletsaccountsController extends Controller
                 }
             }
             session()->flash('messageClearTrucks', 'Successfully cleared trucks');
-        } elseif(isset($desactivate)){
-            Truck::where('id', $desactivate)->update(['activated'=> false]);
-        }elseif(isset($activate)){
-            Truck::where('id', $activate)->update(['activated'=> true]);
+        } elseif(isset($actionUpdateForm) && strpos($actionUpdateForm, '-')==5 && explode('-', $actionUpdateForm)[1]=='desactivate'){
+            Truck::where('id', explode('-', $actionUpdateForm)[2])->update(['activated'=> false]);
+        }elseif(isset($actionUpdateForm) && strpos($actionUpdateForm, '-')==5 && explode('-', $actionUpdateForm)[1]=='activate'){
+            Truck::where('id', explode('-', $actionUpdateForm)[2])->update(['activated'=> true]);
+        }elseif(isset($actionUpdateForm) && strpos($actionUpdateForm, '-')==9 && explode('-', $actionUpdateForm)[1]=='desactivate'){
+            Warehouse::where('id', explode('-', $actionUpdateForm)[2])->update(['activated'=> false]);
+        }elseif(isset($actionUpdateForm) && strpos($actionUpdateForm, '-')==9 && explode('-', $actionUpdateForm)[1]=='activate'){
+            Warehouse::where('id', explode('-', $actionUpdateForm)[2])->update(['activated'=> true]);
         }else {
             //update data
             $nickname = Input::get('nickname');

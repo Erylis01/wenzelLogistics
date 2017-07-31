@@ -117,6 +117,8 @@
                             <div class="alert alert-success text-alert text-center">{{ Session::get('messageAddWarehouse') }}</div>
                         @elseif(Session::has('messageErrorUpload'))
                             <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorUpload') }}</div>
+                        @elseif(Session::has('messageErrorImport'))
+                            <div class="alert alert-danger text-alert text-center">{{ Session::get('messageErrorImport') }}</div>
                     @endif
 
                     <!-- Table -->
@@ -141,6 +143,16 @@
                                                     @endif></a>
                                         </th>
                                         <th class="colNameb colHeightTitle"></th>
+                                    <th class="text-center col1 colHeightTitle"><br>
+                                        <a class="glyphicon glyphicon-chevron-up general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allWarehouses?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listWarehouses->currentPage().'&sortby=activated&order=asc')}}"
+                                           @else href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=activated&order=asc')}}"
+                                                @endif></a>
+                                        <a class="glyphicon glyphicon-chevron-down general-sorting"
+                                           @if(isset($searchQuery)) href="{{url('/allWarehouses?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listWarehouses->currentPage().'&sortby=activated&order=desc')}}"
+                                           @else href="{{url('/allWarehouses?page='.$listWarehouses->currentPage().'&sortby=activated&order=desc')}}"
+                                                @endif></a>
+                                    </th>
                                         <th class="text-center colAdress colHeightTitle">Adress<br>
                                             <a class="glyphicon glyphicon-chevron-up general-sorting"
                                                @if(isset($searchQuery)) href="{{url('/allWarehouses?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&page='.$listWarehouses->currentPage().'&sortby=adress&order=asc')}}"
@@ -231,6 +243,7 @@
                                         {{--</td>--}}
                                         <td class="text-center colHeight colName"><a class="link" href="{{route('showDetailsWarehouse',$warehouse->id)}}">{{$warehouse->nickname}}</a></td>
                                         <td class="colHeight colNameb"></td>
+                                        <td class="col1 colHeight"><span @if($warehouse->activated==1) class="glyphicon glyphicon-eye-open" @elseif($warehouse->activated==0) class="glyphicon glyphicon-eye-close" @endif></span></td>
                                         <td class="text-center colHeight colAdress">{{$warehouse->adress}}</td>
                                         <td class="text-center colHeight colZipcode">{{$warehouse->zipcode}}</td>
                                         <td class="text-center colHeight colTown">{{$warehouse->town}}</td>

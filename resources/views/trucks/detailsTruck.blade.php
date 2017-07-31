@@ -41,7 +41,7 @@
 
                 <div class="panel panel-general">
                     <div class="panel-heading">
-                        <div class="col-lg-11 text-left">Details of the truck : {{ $truck->name }} - {{$truck->licensePlate}}
+                        <div class="col-lg-11 text-left">{{ $truck->name }} - {{$truck->licensePlate}}
                         </div>
                         <div>
                             @if($truck->activated==1)
@@ -126,21 +126,28 @@
                                     <table class="table table-hover table-bordered table-truck">
                                         <thead>
                                         <tr>
-                                            <th class="text-center">Confirmed<br> pallets nbr
-                                            </th>
-                                            <th class="text-center">Planned<br> pallets nbr</th>
-                                            <th class="text-center">Rest<br> to confirm</th>
-                                            <th class="text-center">Debt<br></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center" colspan="2">Truck situation by WENZEL</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <tr>
+                                            <th class="text-center">Confirmed</th>
+                                            <th class="text-center">Planned</th>
+                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The number of pallets that hasn't been confirmed yet">Rest</th>
+                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The confirmed number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Confirmed</th>
+                                            <th class="text-center" data-toggle="tooltip" data-placement="top" title="The planned number of pallets the account has to give to Wenzel (<0) or inversely (>0)">Planned</th>
+                                        </tr>
                                         <tr>
                                             <td class="text-center">{{$truck->realNumberPallets}}</td>
                                             <td class="text-center">{{$truck->theoricalNumberPallets}}</td>
                                             <td class="text-center ">
                                                 <strong>{{$truck->theoricalNumberPallets-$truck->realNumberPallets}}</strong>
                                             </td>
-                                            <td class="text-center">{{$truck->palletsDebt}}</td>
+                                            <td class="text-center">{{$truck->realPalletsDebt}}</td>
+                                            <td class="text-center">{{$truck->theoricalPalletsDebt}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -245,7 +252,7 @@
                                            @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=type&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="text-center colNumber">Pal. nbr<br>
+                                    <th class="text-center colPalNumber">Pal. nbr<br>
                                         <a class="glyphicon glyphicon-chevron-up general-sorting"
                                            @if(isset($searchQuery)) href="{{url('/detailsPalletsaccount/'.$truck->id.'?search='.$searchQuery.'&searchColumnsString='.$searchColumnsString.'&sortby=palletsNumber&order=asc')}}"
                                            @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=palletsNumber&order=asc')}}"
@@ -275,7 +282,7 @@
                                            @else href="{{url('/detailsPalletsaccount/'.$truck->id.'?sortby=date&order=desc')}}"
                                                 @endif></a>
                                     </th>
-                                    <th class="text-center colDanger2">Errors</th>
+                                    <th class="text-center colDanger2">Errors<br>?</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -292,7 +299,7 @@
                                                                          href="{{route('showDetailsPalletstransfer',$transfer->id)}}">{{$transfer->id}}</a>
                                         </td>
                                         <td class="text-center colType">{{$transfer->type}}</td>
-                                        <td class="text-center colNumber">{{$transfer->palletsNumber}}</td>
+                                        <td class="text-center colPalNumber">{{$transfer->palletsNumber}}</td>
                                         <td class="text-center colAtrnr"><a class="link"
                                                                             href="{{route('showDetailsLoading',$transfer->loading_atrnr)}}">{{$transfer->loading_atrnr}}</a>
                                         </td>

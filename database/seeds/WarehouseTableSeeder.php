@@ -172,21 +172,24 @@ class WarehouseTableSeeder extends Seeder
                                 if ($warehouseTest == null && trim($sheet[$r][0]) <> '') {
                                     //not double
                                     $k = count(Warehouse::get()) + 1;
-                                    $id = Palletsaccount::where('name', $nameAccount)->first()->id;
+                                    if(Palletsaccount::where('name', $nameAccount)->first() <> null){
+                                        $id = Palletsaccount::where('name', $nameAccount)->first()->id;
 
-                                    Warehouse::firstOrCreate([
-                                        'id' => $k,
-                                        'name' => trim($sheet[$r][0]),
-                                        'nickname' => trim($sheet[$r][0]),
-                                        'adress' => trim($sheet[$r][1]),
-                                        'zipcode' => trim(substr($sheet[$r][2], 0, 20)),
-                                        'town' => trim($sheet[$r][3]),
-                                        'country' => trim($sheet[$r][4]),
-                                        'phone' => trim(substr(str_replace(' ', '', $sheet[$r][5]), 0, 20)),
-                                        'fax' => trim(substr(str_replace(' ', '', $sheet[$r][6]), 0, 20)),
-                                        'email' => trim($sheet[$r][7]),
-                                        'details' => trim($sheet[$r][8]),
-                                    ])->palletsaccounts()->sync($id);
+                                        Warehouse::firstOrCreate([
+                                            'id' => $k,
+                                            'name' => trim($sheet[$r][0]),
+                                            'nickname' => trim($sheet[$r][0]),
+                                            'adress' => trim($sheet[$r][1]),
+                                            'zipcode' => trim(substr($sheet[$r][2], 0, 20)),
+                                            'town' => trim($sheet[$r][3]),
+                                            'country' => trim($sheet[$r][4]),
+                                            'phone' => trim(substr(str_replace(' ', '', $sheet[$r][5]), 0, 20)),
+                                            'fax' => trim(substr(str_replace(' ', '', $sheet[$r][6]), 0, 20)),
+                                            'email' => trim($sheet[$r][7]),
+                                            'details' => trim($sheet[$r][8]),
+                                        ])->palletsaccounts()->sync($id);
+                                    }
+
                                 }
                             }
                         }

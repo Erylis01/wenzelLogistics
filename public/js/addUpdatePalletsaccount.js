@@ -13,12 +13,13 @@ function displayFields(typeSelected) {
         else {
             if (networkOptionValue == typeSelected.value) {
                 document.getElementById("warehouse").style.display = "block";
+                document.getElementById("createWarehouse").style.display = "block";
                 if ($("#oneWarehouse").is(":checked")) {
                     document.getElementById("contactInfos").style.display = "block";
                 } else {
                     document.getElementById("contactInfos").style.display = "none";
                 }
-                document.getElementById("createWarehouse").style.display = "block";
+
             } else {
                 if (otherOptionValue == typeSelected.value) {
                     document.getElementById("warehouse").style.display = "none";
@@ -45,11 +46,9 @@ function displayFields(typeSelected) {
 function hideWarehousesAssociated() {
     if ($("#oneWarehouse").is(":checked")) {
         document.getElementById("warehousesAssociated").style.display = "none";
-        document.getElementById("adress*").style.display = "block";
         document.getElementById("contactInfos").style.display = "block";
     } else {
         document.getElementById("warehousesAssociated").style.display = "block";
-        document.getElementById("adress*").style.display = "none";
         document.getElementById("contactInfos").style.display = "none";
     }
 }
@@ -87,6 +86,7 @@ function displayFieldsUpdate(typeSelected) {
             document.getElementById("trucksAssociated").style.display = "block";
             document.getElementById("warehousesAssociated").style.display = "none";
             document.getElementById("truckAsso").style.display = "block";
+            document.getElementById("warehouseAsso").style.display = "none";
             document.getElementById("buttonClearTrucks").style.display = "block";
             $("#select-warehouses :selected").each(function(){
                $(this).prop('selected', false);
@@ -98,12 +98,14 @@ function displayFieldsUpdate(typeSelected) {
                 document.getElementById("warehousesAssociated").style.display = "block";
                 document.getElementById("trucksAssociated").style.display = "none";
                 document.getElementById("truckAsso").style.display = "none";
+                document.getElementById("warehouseAsso").style.display = "block";
                 document.getElementById("buttonClearTrucks").style.display = "none";
             } else {
                 if (otherOptionValue == typeSelected.value) {
                     document.getElementById("warehousesAssociated").style.display = "none";
                     document.getElementById("trucksAssociated").style.display = "none";
                     document.getElementById("truckAsso").style.display = "none";
+                    document.getElementById("warehouseAsso").style.display = "none";
                     document.getElementById("buttonClearTrucks").style.display = "none";
                     $("#select-warehouses").find(':selected').removeAttr('selected');
                 } else {
@@ -120,6 +122,7 @@ function displayFieldsUpdate(typeSelected) {
         document.getElementById("warehousesAssociated").style.display = "none";
         document.getElementById("trucksAssociated").style.display = "none";
         document.getElementById("truckAsso").style.display = "none";
+        document.getElementById("warehouseAsso").style.display = "none";
         document.getElementById("buttonClearTrucks").style.display = "none";
         $("#select-warehouses").find(':selected').removeAttr('selected');
     }
@@ -133,15 +136,30 @@ function displayRowsTable() {
     }
 }
 
+function openClosePanelWarehousesActivated() {
+    if ($('#warehousesActivated').hasClass('in')) {
+        $("#warehousesActivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#warehousesActivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+function openClosePanelWarehousesInactivated() {
+    if ($('#warehousesInactivated').hasClass('in')) {
+        $("#warehousesInactivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
+    } else {
+        $("#warehousesInactivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
+    }
+}
+
 function openClosePanelTrucksActivated() {
-    if ($('#trucksAcitvated').hasClass('in')) {
+    if ($('#trucksActivated').hasClass('in')) {
         $("#trucksActivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
     } else {
         $("#trucksActivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');
     }
 }
 function openClosePanelTrucksInactivated() {
-    if ($('#trucksInacitvated').hasClass('in')) {
+    if ($('#trucksInactivated').hasClass('in')) {
         $("#trucksInactivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-down');
     } else {
         $("#trucksInactivatedPanelLogo").attr('class', 'glyphicon glyphicon-menu-up');

@@ -23,15 +23,15 @@
 /*}*/
 
 .col1{
-    width:25px;
-    min-width:25px;
-    max-width:25px;
+    width:27px;
+    min-width:27px;
+    max-width:27px;
 }
 
 .colName{
-    width:540px;
-    min-width:540px;
-    max-width:540px;
+    width:500px;
+    min-width:500px;
+    max-width:500px;
 }
 
 .colLicense{
@@ -41,15 +41,15 @@
 
 }
 .colNumber{
-    min-width:100px;
-    width:100px;
-    max-width:100px;
+    min-width:55px;
+    width:55px;
+    max-width:55px;
 }
 
 .colNumber2{
-    min-width:70px;
-    width:70px;
-    max-width:70px;
+    min-width:110px;
+    width:110px;
+    max-width:110px;
 }
 
 .colDate{
@@ -69,22 +69,24 @@
 .table-trucks>tbody>tr>td{
     padding:5px;
 }
+.table-trucks>thead>tr>th{
+    font-size:15px;
+    padding:1px;
+}
 
 /*DETAILS TRUCK*/
 .addTransfer{
     margin-top:5px;
 }
 
-btn-eye{
-    color:rgba(0, 160, 0, 0.8);
-    background-color: white;
-    font-size: 20px;
-}
-
 .table-truck{
     font-size:16px;
 }
-
+.colPalNumber{
+    width:100px;
+    min-width:100px;
+    max-width:100px;
+}
 
 /*.table-transfers>table>tbody>tr>td{*/
     /*font-size:16px;*/
