@@ -104,9 +104,8 @@ class PalletstransfersController extends Controller
 
     public function autocompleteAccount(Request $request)
     {
-        dd('test');
         $data = array();
-        $accountName = Palletsaccount::select('nickname')->where('nickname', 'LIKE', "%{$request->input('query')}%")->get();
+        $accountName = DB::table('palletsaccounts')->select('nickname')->where('nickname', 'LIKE', "%{$request->input('query')}%")->get();
         foreach ($accountName as $account) {
             $data[] = $account->nickname;
         }

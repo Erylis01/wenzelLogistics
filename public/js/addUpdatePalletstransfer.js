@@ -22,7 +22,7 @@
 // }
 
 $(document).ready(function () {
-    $('input[id=input-debitAccount]').typeahead({
+    $('#input-debitAccount').typeahead({
         source: function (query, process) {
             return $.get("{{ route('autocompleteAccount') }}", {query: query}, function (data) {
                 return process(data);
